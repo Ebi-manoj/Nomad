@@ -1,10 +1,6 @@
-import type React from 'react';
+import { Outlet } from 'react-router-dom';
 
-export const AuthLayout = (props: {
-  children: React.ReactNode;
-  title: string;
-  subtitle: string;
-}) => {
+export const AuthLayout = () => {
   return (
     <div className="h-full bg-white text-slate-100 font-sans">
       <header className="w-full border-b border-slate-800">
@@ -30,15 +26,7 @@ export const AuthLayout = (props: {
                   <img src="/nomad-logo.png" alt="" />
                 </div>
               </div>
-
-              <div className="mt-4 text-center">
-                <h1 className="text-2xl font-semibold text-gray-800 leading-tight text-pretty">
-                  {props.title}
-                </h1>
-                <p className="mt-1 text-sm text-slate-400">{props.subtitle}</p>
-              </div>
-
-              {props.children}
+              <Outlet />
             </div>
           </section>
         </section>
