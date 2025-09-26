@@ -7,7 +7,10 @@ export class Email {
     this.value = normalized;
   }
 
-  isValid(email: string) {
+  isValid(email: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+  getValue() {
+    return this.value;
   }
 }
