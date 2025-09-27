@@ -1,5 +1,6 @@
+import { LoginUserUsecase } from '../../../application/usecases/LoginUserCase';
 import { RegisterUserUseCase } from '../../../application/usecases/RegisterUserUseCase';
-import { RegisterUserResponseDTO } from '../../../domain/dto/authDTO';
+import { UserResponseDTO } from '../../../domain/dto/authDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
@@ -7,7 +8,10 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IauthController } from './Icontroller';
 
 export class AuthController implements IauthController {
-  constructor(private readonly registerUserUseCase: RegisterUserUseCase) {}
+  constructor(
+    private readonly registerUserUseCase: RegisterUserUseCase,
+    private readonly loginUserUseCase: LoginUserUsecase
+  ) {}
 
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as {
@@ -18,7 +22,17 @@ export class AuthController implements IauthController {
     };
 
     const user = await this.registerUserUseCase.execute(dto);
-    const response = ApiDTO.success<RegisterUserResponseDTO>(user);
+    const response = ApiDTO.success<UserResponseDTO>(user);
     return new HttpResponse(HttpStatus.CREATED, response);
+  }
+  async login(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const dto = httpRequest.body as {
+      email: string;
+      password: string;
+    };
+    console.log(dto);
+    const user = await this.loginUserUseCase.execute(dto);
+    const response = ApiDTO.success<UserResponseDTO>(user);
+    return new HttpResponse(HttpStatus.OK, response);
   }
 }

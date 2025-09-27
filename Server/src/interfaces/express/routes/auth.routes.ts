@@ -11,4 +11,11 @@ router.post('/signup', async (req: Request, res: Response) => {
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
+router.post('/login', async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpRequest =>
+    authComposer().login(httpRequest)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
 export default router;

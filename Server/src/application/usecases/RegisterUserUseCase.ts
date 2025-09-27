@@ -1,12 +1,12 @@
 import {
   RegisterUserRequestDTO,
-  RegisterUserResponseDTO,
+  UserResponseDTO,
 } from '../../domain/dto/authDTO';
 import { User } from '../../domain/entities/User';
 import { UserAlreadyExist } from '../../domain/errors/CustomError';
 import { Email } from '../../domain/value-objects/email';
 import { Mobile } from '../../domain/value-objects/mobile';
-import { registerUserMapper } from '../mappers/RegisterUser.mapper';
+import { userMapper } from '../mappers/RegisterUser.mapper';
 import { PasswordHasher } from '../providers/IpasswordHasher';
 import { UserRepository } from '../repositories/UserRepository';
 
@@ -16,9 +16,7 @@ export class RegisterUserUseCase {
     private readonly passwordHasher: PasswordHasher
   ) {}
 
-  async execute(
-    data: RegisterUserRequestDTO
-  ): Promise<RegisterUserResponseDTO> {
+  async execute(data: RegisterUserRequestDTO): Promise<UserResponseDTO> {
     console.log('Reached here');
     const email = new Email(data.email);
     const mobile = new Mobile(data.mobile);
@@ -43,6 +41,6 @@ export class RegisterUserUseCase {
     });
 
     const savedUser = await this.userRepository.create(user);
-    return registerUserMapper(savedUser);
+    return userMapper(savedUser);
   }
 }

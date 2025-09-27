@@ -1,7 +1,7 @@
-import { RegisterUserResponseDTO } from '../../domain/dto/authDTO';
+import { UserResponseDTO } from '../../domain/dto/authDTO';
 import { User } from '../../domain/entities/User';
 
-export function registerUserMapper(user: User): RegisterUserResponseDTO {
+export function userMapper(user: User): UserResponseDTO {
   return {
     id: user.getId()!,
     fullName: user.getFullName(),

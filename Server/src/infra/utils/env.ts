@@ -11,4 +11,5 @@ function getEnvVariables(key: string, defaultValue?: string): string {
 export const env = {
   PORT: getEnvVariables('PORT', '3000'),
   MONGO_URI: getEnvVariables('MONGO_URI', 'mongodb://localhost:27017/Nomad'),
+  JWT_SECERT: getEnvVariables('JWT_SECRET'),
 };

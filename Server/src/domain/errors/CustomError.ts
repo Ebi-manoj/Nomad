@@ -14,3 +14,9 @@ export class UserAlreadyExist extends CustomError {
     super(HttpStatus.CONFLICT, message);
   }
 }
+
+export class InvalidCredindatials extends CustomError {
+  constructor(message: string = ErrorMessages.INVALID_CREDINTIALS) {
+    super(HttpStatus.UNAUTHORIZED, message);
+  }
+}
