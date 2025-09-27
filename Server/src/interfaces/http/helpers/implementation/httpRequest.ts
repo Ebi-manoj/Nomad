@@ -1,4 +1,4 @@
-import { IhttpRequest } from '../IhttpRequest';
+import { IhttpRequest } from '../IHttpRequest';
 
 export class HttpRequest implements IhttpRequest {
   header?: unknown;

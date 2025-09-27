@@ -20,3 +20,9 @@ export class InvalidCredindatials extends CustomError {
     super(HttpStatus.UNAUTHORIZED, message);
   }
 }
+
+export class InvalidInputData extends CustomError {
+  constructor(message: string = ErrorMessages.INVALID_INPUT) {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
