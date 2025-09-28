@@ -11,7 +11,7 @@ export const Login = () => {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(loginSchema) });
+  } = useForm<loginFormData>({ resolver: zodResolver(loginSchema) });
 
   function onSubmit(data: loginFormData) {
     console.log(data);
@@ -30,19 +30,19 @@ export const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="mt-6 grid gap-4">
         <GoogleAuthBtn />
 
-        <div className="flex items-center mb-6">
+        <div className="flex items-center mb-4">
           <div className="flex-grow h-px bg-gray-300"></div>
           <span className="px-3 text-gray-500 text-sm">OR</span>
           <div className="flex-grow h-px bg-gray-300"></div>
         </div>
-        <AuthInput<loginFormData>
+        <AuthInput
           type="text"
           label="Email"
           name="email"
           register={register}
           error={errors.email}
         />
-        <AuthInput<loginFormData>
+        <AuthInput
           type="password"
           label="Password"
           name="password"

@@ -1,16 +1,14 @@
-import type { FieldError, Path, UseFormRegister } from 'react-hook-form';
+import type { FieldError } from 'react-hook-form';
 
-type inputType<T extends Record<string, any>> = {
+type inputType = {
   type: string;
   label: string;
-  name: Path<T>;
+  name: string;
   error?: FieldError;
-  register: UseFormRegister<T>;
+  register: any;
 };
 
-export const AuthInput = <T extends Record<string, any>>(
-  props: inputType<T>
-) => {
+export const AuthInput = (props: inputType) => {
   return (
     <div>
       <label className="block text-sm mb-1 text-gray-700">{props.label}</label>

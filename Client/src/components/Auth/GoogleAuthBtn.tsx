@@ -2,7 +2,7 @@ export const GoogleAuthBtn = () => {
   return (
     <button
       type="button"
-      className="cursor-pointer w-full border text-black border-gray-300 rounded-md py-2 px-4 flex items-center justify-center mb-6 hover:bg-gray-50"
+      className="cursor-pointer w-full border text-black border-gray-300 rounded-md py-2 px-4 flex items-center justify-center mb-4 hover:bg-gray-50"
     >
       <svg
         className="w-6 h-6"
