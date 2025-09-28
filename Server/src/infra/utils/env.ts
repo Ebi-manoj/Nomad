@@ -12,4 +12,7 @@ export const env = {
   PORT: getEnvVariables('PORT', '3000'),
   MONGO_URI: getEnvVariables('MONGO_URI', 'mongodb://localhost:27017/Nomad'),
   JWT_SECERT: getEnvVariables('JWT_SECRET'),
+  REDIS_URI: getEnvVariables('REDIS_URI', 'redis://localhost:6379'),
+  GOOGLE_APP_PASSWORD: getEnvVariables('GOOGLE_APP_PASSWORD'),
+  EMAIL_ADDRESS: getEnvVariables('EMAIL_ADDRESS'),
 };

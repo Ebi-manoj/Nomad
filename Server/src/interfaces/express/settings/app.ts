@@ -2,8 +2,10 @@ import express from 'express';
 import { connectMongo } from '../../../infra/database/connectMongo';
 import authRouter from '../routes/auth.routes';
 import { errorHandling } from '../middlewares/errorHandlingMiddleware';
+import { connectRedis } from '../../../infra/database/connectRedis';
 
 connectMongo();
+connectRedis();
 const app = express();
 app.use(express.json());
 

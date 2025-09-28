@@ -24,3 +24,23 @@ export interface LoginuserResponseDTO {
   refreshToken: string;
   user: UserResponseDTO;
 }
+
+export interface SentOTPRequestDTO {
+  email: string;
+}
+
+export interface SentOTPResponseDTO {
+  email: string;
+  message: string;
+}
+
+export interface VerifyOTPRequestDTO {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyOTPResponseDTO {
+  email: string;
+  verificationToken: string;
+  message: string;
+}
