@@ -30,6 +30,14 @@ export const signupSchema = z.object({
   email: z.email({ message: 'Invalid Email address' }),
 });
 
+export const verifyOTPSchema = z.object({
+  otp: z
+    .string()
+    .min(6, { message: 'Invalid OTP format' })
+    .regex(/\d{6}/, { message: 'Invalid OTP format' }),
+});
+
 export type signupDetailsFormData = z.infer<typeof signupDetailsSchema>;
 export type loginFormData = z.infer<typeof loginSchema>;
 export type signUpFormData = z.infer<typeof signupSchema>;
+export type verifyOTPData = z.infer<typeof verifyOTPSchema>;

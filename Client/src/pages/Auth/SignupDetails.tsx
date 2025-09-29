@@ -63,7 +63,7 @@ export const SignupDetails = () => {
           />
         </div>
 
-        <SubmitBtn text="Sign up" />
+        <SubmitBtn text="Submit" />
         <p className="mt-2 text-xs text-slate-400 text-center">
           By signing up, you agree to our{' '}
           <a className="text-blue-500 hover:underline">Terms of Service </a>
