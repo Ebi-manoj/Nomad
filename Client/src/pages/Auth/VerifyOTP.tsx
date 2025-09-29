@@ -9,20 +9,79 @@ import {
   InputOTPSlot,
 } from '../../components/ui/input-otp';
 
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSendOTP } from '@/hooks/useSendOTP';
+
 export const VerifyOTP = () => {
+  const [email, setEmail] = useState<string | null>(null);
+  const [remainingSeconds, setSeconds] = useState(0);
+  const [expired, setExpired] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const navigate = useNavigate();
   const {
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<{ otp: string }>({
     resolver: zodResolver(verifyOTPSchema),
     defaultValues: { otp: '' },
   });
 
-  function onSubmit(data: { otp: string }) {
-    console.log('OTP submitted:', data.otp);
+  function initiliazeTimer() {
+    const sessionDetails = sessionStorage.getItem('otpDetails');
+
+    if (!sessionDetails) {
+      navigate('/auth/sign-up');
+      return;
+    }
+    const otpDetails: { email: string; expiry: number } =
+      JSON.parse(sessionDetails);
+    const expiryLeft = (otpDetails.expiry - Date.now()) / 1000;
+    setSeconds(Math.floor(expiryLeft));
+    setEmail(otpDetails.email);
+    setExpired(Math.floor(expiryLeft) <= 0);
   }
 
+  function onSubmit(data: { otp: string }) {
+    console.log(data);
+  }
+
+  async function resendOTP() {
+    if (!email) return;
+    try {
+      setIsResending(true);
+      const result = await useSendOTP({ email });
+      if (!result.success) return;
+      initiliazeTimer();
+    } finally {
+      setIsResending(false);
+    }
+  }
+
+  useEffect(() => {
+    initiliazeTimer();
+  }, [navigate]);
+
+  useEffect(() => {
+    if (remainingSeconds <= 0) return;
+    const interval = setInterval(() => {
+      setSeconds(prev => {
+        if (prev <= 1) {
+          setExpired(true);
+          sessionStorage.removeItem('otpDetails');
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [remainingSeconds]);
+
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
   return (
     <>
       <div className="mt-4 text-center">
@@ -32,7 +91,16 @@ export const VerifyOTP = () => {
         <p className="mt-1 text-sm text-slate-400">
           Enter the 6-digit code we sent to your email
         </p>
-        <p className="mt-4 text-sm font-medium text-black">2:00</p>
+
+        {!expired && (
+          <p className="mt-4 text-sm font-medium text-black">
+            {minutes}:{seconds < 10 ? '0' : ''}
+            {seconds}
+          </p>
+        )}
+        {expired && (
+          <p className="mt-4 text-sm font-medium text-gray-600">OTP Expired</p>
+        )}
       </div>
 
       <form
@@ -60,22 +128,24 @@ export const VerifyOTP = () => {
           <p className="text-red-500 text-xs mx-auto">{errors.otp.message}</p>
         )}
 
-        <SubmitBtn text="Verify" />
+        <SubmitBtn text="Verify" isLoading={isSubmitting || isResending} />
 
         <p className="text-center text-sm text-slate-400">
           Didn’t get the code?
           <button
             type="button"
-            className="text-black hover:text-gray-600 font-medium ml-1 underline cursor-pointer"
-            onClick={() => console.log('Resend OTP clicked')}
+            className="text-black hover:text-gray-600 font-medium ml-1 underline cursor-pointer
+            disabled:cursor-not-allowed disabled:opacity-30"
+            disabled={!expired}
+            onClick={resendOTP}
           >
             Resend
           </button>
         </p>
         <p className="text-center text-xs text-slate-400 mt-2">
           We’ve sent a 6-digit verification code to{' '}
-          <span className="font-medium">ema@gmail.com</span>. Please check your
-          inbox and spam folder.
+          <span className="font-medium">{email}</span>. Please check your inbox
+          and spam folder.
         </p>
       </form>
     </>

@@ -33,8 +33,8 @@ export const signupSchema = z.object({
 export const verifyOTPSchema = z.object({
   otp: z
     .string()
-    .min(6, { message: 'Invalid OTP format' })
-    .regex(/\d{6}/, { message: 'Invalid OTP format' }),
+    .min(6, { message: 'Provide a valid OTP' })
+    .regex(/\d{6}/, { message: 'Provide a valid OTP' }),
 });
 
 export type signupDetailsFormData = z.infer<typeof signupDetailsSchema>;

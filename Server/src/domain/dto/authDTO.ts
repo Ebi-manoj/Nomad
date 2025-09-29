@@ -31,6 +31,7 @@ export interface SentOTPRequestDTO {
 
 export interface SentOTPResponseDTO {
   email: string;
+  expiry: number;
   message: string;
 }
 

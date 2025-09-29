@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GoogleAuthBtn } from '../../components/Auth/GoogleAuthBtn';
 import { AuthInput } from '../../components/Auth/Input';
 import { SubmitBtn } from '../../components/Auth/SubmitBtn';
@@ -6,16 +6,20 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema } from '../../validation/auth';
 import type { signUpFormData } from '../../validation/auth';
+import { useSendOTP } from '@/hooks/useSendOTP';
 
 export const Signup = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<signUpFormData>({ resolver: zodResolver(signupSchema) });
 
-  function onSubmit(data: signUpFormData) {
-    console.log(data);
+  async function onSubmit(data: signUpFormData) {
+    const result = await useSendOTP(data);
+    if (!result.success) return;
+    navigate('/auth/verify-otp');
   }
 
   return (
@@ -41,7 +45,7 @@ export const Signup = () => {
           register={register}
         />
 
-        <SubmitBtn text="Continue" />
+        <SubmitBtn text="Continue" isLoading={isSubmitting} />
 
         <div className="flex items-center mb-4">
           <div className="flex-grow h-px bg-gray-300"></div>

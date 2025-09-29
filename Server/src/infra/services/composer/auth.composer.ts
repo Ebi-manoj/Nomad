@@ -38,7 +38,8 @@ export function authComposer(): IauthController {
 
   const sentOtpUseCase: SendOTPUseCase = new SendOTPUseCase(
     emailTransporter,
-    otpRepository
+    otpRepository,
+    userRepository
   );
 
   const verifyOtpUseCase: VerifyOTPUseCase = new VerifyOTPUseCase(
