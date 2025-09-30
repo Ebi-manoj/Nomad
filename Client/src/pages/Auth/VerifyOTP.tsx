@@ -12,6 +12,8 @@ import {
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSendOTP } from '@/hooks/useSendOTP';
+import axiosInstance from '@/utils/axiosInstance';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 export const VerifyOTP = () => {
   const [email, setEmail] = useState<string | null>(null);
@@ -43,8 +45,20 @@ export const VerifyOTP = () => {
     setExpired(Math.floor(expiryLeft) <= 0);
   }
 
-  function onSubmit(data: { otp: string }) {
+  async function onSubmit(data: { otp: string }) {
     console.log(data);
+    try {
+      if (!email) return;
+      const requestDTO: { otp: string; email: string } = { ...data, email };
+      const res = await axiosInstance.post('/auth/verify-otp', requestDTO);
+      const resData = res.data.data;
+      sessionStorage.removeItem('otpDetails');
+      navigate('/auth/details', {
+        state: { email, token: resData.verificationToken },
+      });
+    } catch (error) {
+      useHandleApiError(error);
+    }
   }
 
   async function resendOTP() {
@@ -70,8 +84,6 @@ export const VerifyOTP = () => {
         if (prev <= 1) {
           setExpired(true);
           sessionStorage.removeItem('otpDetails');
-          clearInterval(interval);
-          return 0;
         }
         return prev - 1;
       });

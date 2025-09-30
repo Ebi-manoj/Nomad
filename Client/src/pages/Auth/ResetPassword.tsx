@@ -1,14 +1,12 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { GoogleAuthBtn } from '../../components/Auth/GoogleAuthBtn';
-import { AuthInput } from '../../components/Auth/Input';
-import { SubmitBtn } from '../../components/Auth/SubmitBtn';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { emailSchema } from '../../validation/auth';
-import type { emailFormData } from '../../validation/auth';
+import { AuthInput } from '@/components/Auth/Input';
+import { SubmitBtn } from '@/components/Auth/SubmitBtn';
 import { useSendOTP } from '@/hooks/useSendOTP';
+import { emailSchema, type emailFormData } from '@/validation/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 
-export const Signup = () => {
+export const ResetPassword = () => {
   const navigate = useNavigate();
   const {
     register,
@@ -26,12 +24,14 @@ export const Signup = () => {
     <>
       <div className="mt-4 text-center">
         <h1 className="text-2xl font-semibold text-gray-800 leading-tight text-pretty">
-          Create your account
+          Reset your password
         </h1>
         <p className="mt-1 text-sm text-slate-400">
-          Join Nomad to move faster, safer, and smarter.
+          Enter your email address and we’ll send you a link to reset your
+          password.
         </p>
       </div>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         method="post"
@@ -45,17 +45,10 @@ export const Signup = () => {
           register={register}
         />
 
-        <SubmitBtn text="Continue" isLoading={isSubmitting} />
-
-        <div className="flex items-center mb-4">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <span className="px-3 text-gray-500 text-sm">OR</span>
-          <div className="flex-grow h-px bg-gray-300"></div>
-        </div>
-        <GoogleAuthBtn />
+        <SubmitBtn text="Send reset link" isLoading={isSubmitting} />
 
         <p className="text-center text-sm text-slate-400">
-          Already have an account?
+          Remember your password?
           <Link to={'/auth/sign-in'}>
             <span className="text-black hover:text-gray-600 font-medium ml-1 underline cursor-pointer">
               Log in

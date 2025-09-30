@@ -1,7 +1,7 @@
 import axiosInstance from '@/utils/axiosInstance';
 import type { signUpFormData } from '@/validation/auth';
-import { isAxiosError } from 'axios';
-import { toast } from 'sonner';
+
+import { useHandleApiError } from './useHandleApiError';
 
 export async function useSendOTP(
   data: signUpFormData
@@ -13,18 +13,7 @@ export async function useSendOTP(
     sessionStorage.setItem('otpDetails', JSON.stringify({ email, expiry }));
     return { success: true };
   } catch (error) {
-    if (isAxiosError(error)) {
-      const message =
-        error.response?.data?.error.message ||
-        'An error occurred during sign in';
-      toast.error(message, {
-        description: 'Please contact support for more',
-      });
-      console.log('isAxios');
-    } else {
-      toast.error('Unable to connect to the server. Please try again.');
-      console.log('not axios');
-    }
+    useHandleApiError(error);
     return { success: false };
   }
 }

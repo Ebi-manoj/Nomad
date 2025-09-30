@@ -29,7 +29,7 @@ export class MongoUserRepository implements UserRepository {
     if (!found) return null;
     return new User({
       id: found._id.toString(),
-      fullName: found.email,
+      fullName: found.fullName,
       email: new Email(found.email),
       mobile: new Mobile(found.mobile),
       password: found.password,
@@ -50,5 +50,11 @@ export class MongoUserRepository implements UserRepository {
       createdAt: found.createdAt,
       updatedAt: found.updatedAt,
     });
+  }
+  async updateUser(user: User): Promise<void> {
+    const found = await UserModel.findById(user.getId());
+    if (!found) return;
+    found.password = user.getPassword() || found.password;
+    await found.save();
   }
 }

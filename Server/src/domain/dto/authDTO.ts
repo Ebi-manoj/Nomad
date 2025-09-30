@@ -45,3 +45,8 @@ export interface VerifyOTPResponseDTO {
   verificationToken: string;
   message: string;
 }
+
+export interface ResetPasswordRequestDTO {
+  email: string;
+  password: string;
+}

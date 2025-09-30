@@ -53,4 +53,7 @@ export class User {
   getUpdatedAt() {
     return this.createdAt;
   }
+  setPassword(newPassword: string) {
+    this.password = newPassword;
+  }
 }

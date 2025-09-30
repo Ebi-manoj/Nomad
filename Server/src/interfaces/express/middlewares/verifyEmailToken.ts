@@ -4,7 +4,7 @@ import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { env } from '../../../infra/utils/env';
 
-export function verifyRegisterUserToken(
+export function verifyEmailToken(
   req: Request,
   res: Response,
   next: NextFunction

@@ -1,12 +1,13 @@
 import { LoginUserUsecase } from '../../../application/usecases/LoginUserCase';
 import { RegisterUserUseCase } from '../../../application/usecases/RegisterUserUseCase';
-import { SendOTPUseCase } from '../../../application/usecases/SendOTPUseCase';
+import { ResetPasswordUseCase } from '../../../application/usecases/ResetPasswordUseCase';
+import { SendSignupOTPUseCase } from '../../../application/usecases/SendOTPSignupUseCase';
+import { SendResetOTPUseCase } from '../../../application/usecases/SendResetOTPUseCase';
 import { VerifyOTPUseCase } from '../../../application/usecases/VerifyOTPUseCase';
 import {
   LoginUserRequestDTO,
   LoginuserResponseDTO,
   RegisterUserRequestDTO,
-  SentOTPRequestDTO,
   SentOTPResponseDTO,
   UserResponseDTO,
   VerifyOTPResponseDTO,
@@ -26,8 +27,10 @@ export class AuthController implements IauthController {
   constructor(
     private readonly registerUserUseCase: RegisterUserUseCase,
     private readonly loginUserUseCase: LoginUserUsecase,
-    private readonly sendOTPUseCase: SendOTPUseCase,
-    private readonly verifyOTPUseCase: VerifyOTPUseCase
+    private readonly sendSignupOTPUseCase: SendSignupOTPUseCase,
+    private readonly sendResetOTPuseCase: SendResetOTPUseCase,
+    private readonly verifyOTPUseCase: VerifyOTPUseCase,
+    private readonly resetPasswordUseCase: ResetPasswordUseCase
   ) {}
 
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -52,14 +55,24 @@ export class AuthController implements IauthController {
     return new HttpResponse(HttpStatus.OK, response);
   }
 
-  async sendOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async sendSignupOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as {
       email: string;
     };
-    const message = await this.sendOTPUseCase.execute(dto);
+    const message = await this.sendSignupOTPUseCase.execute(dto);
     const response = ApiDTO.success<SentOTPResponseDTO>(message);
     return new HttpResponse(HttpStatus.OK, response);
   }
+
+  async sendResetOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const dto = httpRequest.body as {
+      email: string;
+    };
+    const message = await this.sendResetOTPuseCase.execute(dto);
+    const response = ApiDTO.success<SentOTPResponseDTO>(message);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
   async verifyOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as {
       email: string;
@@ -67,6 +80,16 @@ export class AuthController implements IauthController {
     };
     const result = await this.verifyOTPUseCase.execute(dto);
     const response = ApiDTO.success<VerifyOTPResponseDTO>(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async resetPassword(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const dto = httpRequest.body as {
+      email: string;
+      password: string;
+    };
+    const result = await this.resetPasswordUseCase.execute(dto);
+    const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

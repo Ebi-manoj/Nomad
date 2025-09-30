@@ -2,7 +2,7 @@ import z from 'zod';
 
 export const signupDetailsSchema = z
   .object({
-    name: z
+    fullName: z
       .string()
       .min(3, { message: 'Name must be at least 3 characters long' })
       .regex(/^[A-Za-z ]+$/, 'Name must contain only letters and spaces'),
@@ -26,7 +26,7 @@ export const loginSchema = z.object({
   email: z.email({ message: 'Invalid Email address' }),
   password: z.string().min(6, { message: 'Invalid credintials' }),
 });
-export const signupSchema = z.object({
+export const emailSchema = z.object({
   email: z.email({ message: 'Invalid Email address' }),
 });
 
@@ -39,5 +39,5 @@ export const verifyOTPSchema = z.object({
 
 export type signupDetailsFormData = z.infer<typeof signupDetailsSchema>;
 export type loginFormData = z.infer<typeof loginSchema>;
-export type signUpFormData = z.infer<typeof signupSchema>;
+export type emailFormData = z.infer<typeof emailSchema>;
 export type verifyOTPData = z.infer<typeof verifyOTPSchema>;

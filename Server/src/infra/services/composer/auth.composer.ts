@@ -4,7 +4,9 @@ import { IOTPRepository } from '../../../application/repositories/IOTPRepository
 import { UserRepository } from '../../../application/repositories/UserRepository';
 import { LoginUserUsecase } from '../../../application/usecases/LoginUserCase';
 import { RegisterUserUseCase } from '../../../application/usecases/RegisterUserUseCase';
-import { SendOTPUseCase } from '../../../application/usecases/SendOTPUseCase';
+import { ResetPasswordUseCase } from '../../../application/usecases/ResetPasswordUseCase';
+import { SendSignupOTPUseCase } from '../../../application/usecases/SendOTPSignupUseCase';
+import { SendResetOTPUseCase } from '../../../application/usecases/SendResetOTPUseCase';
 import { VerifyOTPUseCase } from '../../../application/usecases/VerifyOTPUseCase';
 import { AuthController } from '../../../interfaces/http/controllers/auth.controller';
 import { IauthController } from '../../../interfaces/http/controllers/IAuthcontroller';
@@ -36,7 +38,13 @@ export function authComposer(): IauthController {
   const otpRepository: IOTPRepository = new RedisOTPRepository();
   const emailTransporter: IEmailTransporter = new NodemailerTransporter();
 
-  const sentOtpUseCase: SendOTPUseCase = new SendOTPUseCase(
+  const sentSignupOtpUseCase: SendSignupOTPUseCase = new SendSignupOTPUseCase(
+    emailTransporter,
+    otpRepository,
+    userRepository
+  );
+
+  const sentResetOtpUseCase: SendResetOTPUseCase = new SendResetOTPUseCase(
     emailTransporter,
     otpRepository,
     userRepository
@@ -46,12 +54,20 @@ export function authComposer(): IauthController {
     otpRepository,
     tokenGenerator
   );
+
+  //////////////////RESET PASSWORD///////////////////
+  const resetPasswordUsecase: ResetPasswordUseCase = new ResetPasswordUseCase(
+    userRepository,
+    passwordHasher
+  );
   /////////AUTH CONTROLLER////////////////////////
   const controller: IauthController = new AuthController(
     registerUseCase,
     loginUseCase,
-    sentOtpUseCase,
-    verifyOtpUseCase
+    sentSignupOtpUseCase,
+    sentResetOtpUseCase,
+    verifyOtpUseCase,
+    resetPasswordUsecase
   );
   return controller;
 }

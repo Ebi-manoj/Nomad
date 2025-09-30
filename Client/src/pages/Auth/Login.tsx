@@ -10,7 +10,7 @@ export const Login = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<loginFormData>({ resolver: zodResolver(loginSchema) });
 
   function onSubmit(data: loginFormData) {
@@ -50,7 +50,12 @@ export const Login = () => {
           register={register}
         />
 
-        <SubmitBtn text="Log in" />
+        <Link to="/auth/reset-password">
+          <p className="text-right text-xs text-slate-400 cursor-pointer hover:text-black transition duration-200">
+            Forgot Password?
+          </p>
+        </Link>
+        <SubmitBtn text="Log in" isLoading={isSubmitting} />
 
         <p className="text-center text-sm text-slate-400">
           Don’t have an account?

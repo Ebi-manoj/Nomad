@@ -5,6 +5,7 @@ import { AuthLayout } from './layouts/AuthLayout';
 import { Login } from './pages/Auth/Login';
 import { SignupDetails } from './pages/Auth/SignupDetails';
 import { VerifyOTP } from './pages/Auth/VerifyOTP';
+import { ResetPassword } from './pages/Auth/ResetPassword';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="sign-up" element={<Signup />} />
         <Route path="verify-otp" element={<VerifyOTP />} />
         <Route path="details" element={<SignupDetails />} />
+        <Route path="reset-password" element={<ResetPassword />} />
       </Route>
     </Routes>
   );

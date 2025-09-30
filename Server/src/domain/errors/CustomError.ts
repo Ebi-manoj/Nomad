@@ -15,6 +15,12 @@ export class UserAlreadyExist extends CustomError {
   }
 }
 
+export class UserNotFound extends CustomError {
+  constructor(message: string = ErrorMessages.USER_NOT_FOUND) {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
+
 export class InvalidCredindatials extends CustomError {
   constructor(message: string = ErrorMessages.INVALID_CREDINTIALS) {
     super(HttpStatus.UNAUTHORIZED, message);

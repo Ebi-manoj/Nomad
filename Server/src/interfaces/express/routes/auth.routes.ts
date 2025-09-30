@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express';
 import { expressAdapter } from '../../adapters/express';
 import { authComposer } from '../../../infra/services/composer/auth.composer';
-import { verifyRegisterUserToken } from '../middlewares/verifyRegisterUserToken';
+import { verifyEmailToken } from '../middlewares/verifyEmailToken';
 
 const router = express.Router();
 
 router.post(
   '/signup',
-  verifyRegisterUserToken,
+  verifyEmailToken,
   async (req: Request, res: Response) => {
     const adapter = await expressAdapter(req, httpRequest =>
       authComposer().signup(httpRequest)
@@ -23,9 +23,16 @@ router.post('/login', async (req: Request, res: Response) => {
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
-router.post('/send-otp', async (req: Request, res: Response) => {
+router.post('/send-otp/signup', async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpRequest =>
-    authComposer().sendOTP(httpRequest)
+    authComposer().sendSignupOTP(httpRequest)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
+router.post('/send-otp/reset', async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpRequest =>
+    authComposer().sendResetOTP(httpRequest)
   );
   return res.status(adapter.statusCode).json(adapter.body);
 });
@@ -36,5 +43,16 @@ router.post('/verify-otp', async (req: Request, res: Response) => {
   );
   return res.status(adapter.statusCode).json(adapter.body);
 });
+
+router.post(
+  '/reset-password',
+  verifyEmailToken,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpRequest =>
+      authComposer().resetPassword(httpRequest)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;
