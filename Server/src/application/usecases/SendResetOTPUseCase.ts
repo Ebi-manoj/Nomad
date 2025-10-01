@@ -23,7 +23,7 @@ export class SendResetOTPUseCase {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpVO = new OTP(otp);
 
-    const isExist = this.userRepostiroy.findByEmail(emailVO.getValue());
+    const isExist = await this.userRepostiroy.findByEmail(emailVO.getValue());
     if (!isExist) throw new UserNotFound();
 
     await this.otpRepository.saveOTP(

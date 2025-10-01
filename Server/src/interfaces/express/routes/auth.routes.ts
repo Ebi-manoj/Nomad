@@ -20,7 +20,16 @@ router.post('/login', async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpRequest =>
     authComposer().login(httpRequest)
   );
-  return res.status(adapter.statusCode).json(adapter.body);
+  const { accessToken, refreshToken, user } = adapter.body.data;
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+  return res
+    .status(adapter.statusCode)
+    .json({ ...adapter.body, data: { user, accessToken } });
 });
 
 router.post('/send-otp/signup', async (req: Request, res: Response) => {

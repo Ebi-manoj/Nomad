@@ -26,7 +26,6 @@ export const SignupDetails = () => {
   } = useForm({ resolver: zodResolver(signupDetailsSchema) });
 
   useEffect(() => {
-    console.log(email, token);
     if (!email || !token) {
       navigate('/auth/sign-up');
       return;

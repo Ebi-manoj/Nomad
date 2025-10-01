@@ -1,20 +1,31 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GoogleAuthBtn } from '../../components/Auth/GoogleAuthBtn';
 import { AuthInput } from '../../components/Auth/Input';
 import { SubmitBtn } from '../../components/Auth/SubmitBtn';
 import { loginSchema, type loginFormData } from '../../validation/auth';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { login } from '@/store/features/auth/authSlice';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { toast } from 'sonner';
 
 export const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm<loginFormData>({ resolver: zodResolver(loginSchema) });
 
-  function onSubmit(data: loginFormData) {
+  async function onSubmit(data: loginFormData) {
     console.log(data);
+    try {
+      await dispatch(login(data)).unwrap();
+      navigate('/home');
+    } catch (error: unknown) {
+      toast.success(typeof error == 'string' ? error : 'Something went wrong');
+    }
   }
 
   return (

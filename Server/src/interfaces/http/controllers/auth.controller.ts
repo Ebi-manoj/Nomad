@@ -35,7 +35,6 @@ export class AuthController implements IauthController {
 
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {
     const result = signUpShema.safeParse(httpRequest.body);
-    console.log(result);
     if (!result.success) throw new InvalidInputData();
 
     const dto: RegisterUserRequestDTO = result.data;
@@ -49,9 +48,10 @@ export class AuthController implements IauthController {
     if (!result.success) throw new InvalidCredindatials();
 
     const dto: LoginUserRequestDTO = result.data;
-    const user = await this.loginUserUseCase.execute(dto);
+    const loginDetails = await this.loginUserUseCase.execute(dto);
 
-    const response = ApiDTO.success<LoginuserResponseDTO>(user);
+    const response = ApiDTO.success<LoginuserResponseDTO>(loginDetails);
+
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -89,6 +89,7 @@ export class AuthController implements IauthController {
       password: string;
     };
     const result = await this.resetPasswordUseCase.execute(dto);
+
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

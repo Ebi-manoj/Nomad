@@ -13,5 +13,7 @@ export async function expressAdapter(
     query: req.query,
   });
   const httpResponse = await controllerMethod(httpRequest);
+  console.log(httpResponse);
+
   return httpResponse;
 }

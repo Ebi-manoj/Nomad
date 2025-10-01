@@ -14,9 +14,14 @@ import { useNavigate } from 'react-router-dom';
 import { useSendOTP } from '@/hooks/useSendOTP';
 import axiosInstance from '@/utils/axiosInstance';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
+import type { otpPurpose } from '@/types/auth';
+
+type VerifyOTPDTO = { otp: string; email: string };
+type OTPDetails = { email: string; expiry: number; purpose: otpPurpose };
 
 export const VerifyOTP = () => {
   const [email, setEmail] = useState<string | null>(null);
+  const [purpose, setPurpose] = useState<otpPurpose | null>(null);
   const [remainingSeconds, setSeconds] = useState(0);
   const [expired, setExpired] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -37,11 +42,11 @@ export const VerifyOTP = () => {
       navigate('/auth/sign-up');
       return;
     }
-    const otpDetails: { email: string; expiry: number } =
-      JSON.parse(sessionDetails);
+    const otpDetails: OTPDetails = JSON.parse(sessionDetails);
     const expiryLeft = (otpDetails.expiry - Date.now()) / 1000;
     setSeconds(Math.floor(expiryLeft));
     setEmail(otpDetails.email);
+    setPurpose(otpDetails.purpose);
     setExpired(Math.floor(expiryLeft) <= 0);
   }
 
@@ -49,11 +54,13 @@ export const VerifyOTP = () => {
     console.log(data);
     try {
       if (!email) return;
-      const requestDTO: { otp: string; email: string } = { ...data, email };
+      const requestDTO: VerifyOTPDTO = { ...data, email };
       const res = await axiosInstance.post('/auth/verify-otp', requestDTO);
       const resData = res.data.data;
       sessionStorage.removeItem('otpDetails');
-      navigate('/auth/details', {
+      const navRoute =
+        purpose == 'signup' ? '/auth/details' : '/auth/change-password';
+      navigate(navRoute, {
         state: { email, token: resData.verificationToken },
       });
     } catch (error) {
@@ -62,10 +69,10 @@ export const VerifyOTP = () => {
   }
 
   async function resendOTP() {
-    if (!email) return;
+    if (!email || !purpose) return;
     try {
       setIsResending(true);
-      const result = await useSendOTP({ email });
+      const result = await useSendOTP({ email }, purpose);
       if (!result.success) return;
       initiliazeTimer();
     } finally {

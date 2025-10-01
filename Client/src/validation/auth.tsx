@@ -37,7 +37,23 @@ export const verifyOTPSchema = z.object({
     .regex(/\d{6}/, { message: 'Provide a valid OTP' }),
 });
 
+export const changePasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(6, { message: 'Password must be at least 6 characters long' }),
+
+    confirmPassword: z
+      .string()
+      .min(6, { message: 'Please confirm your password' }),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
+
 export type signupDetailsFormData = z.infer<typeof signupDetailsSchema>;
 export type loginFormData = z.infer<typeof loginSchema>;
 export type emailFormData = z.infer<typeof emailSchema>;
 export type verifyOTPData = z.infer<typeof verifyOTPSchema>;
+export type changePasswordData = z.infer<typeof changePasswordSchema>;

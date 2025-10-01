@@ -15,7 +15,7 @@ export const ResetPassword = () => {
   } = useForm<emailFormData>({ resolver: zodResolver(emailSchema) });
 
   async function onSubmit(data: emailFormData) {
-    const result = await useSendOTP(data);
+    const result = await useSendOTP(data, 'reset');
     if (!result.success) return;
     navigate('/auth/verify-otp');
   }

@@ -1,158 +1,294 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>NOMAD — Sign up</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nomad - Ride Booking</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+
+      .map-placeholder {
+        background: linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 100%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .map-placeholder::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 35px,
+            rgba(0, 0, 0, 0.03) 35px,
+            rgba(0, 0, 0, 0.03) 36px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 35px,
+            rgba(0, 0, 0, 0.03) 35px,
+            rgba(0, 0, 0, 0.03) 36px
+          );
+      }
+
+      .car-icon {
+        position: absolute;
+        font-size: 24px;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+    </style>
   </head>
-  <body class="h-full bg-slate-900 text-slate-100 font-sans">
-    <header class="w-full border-b border-slate-800">
-      <nav
-        class="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between"
-      >
-        <div class="text-teal-400 tracking-widest font-semibold">NOMAD</div>
-        <div aria-hidden="true" class="text-slate-500 text-sm hidden sm:block">
-          Ride smarter
-        </div>
-      </nav>
-    </header>
-
-    <main class="mx-auto max-w-6xl px-4 py-8 md:py-12">
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-        <figure
-          class="rounded-xl overflow-hidden border border-slate-800 bg-slate-950"
-        >
-          <img
-            src="/public/header-img.png"
-            alt="Dark-themed ride-hailing app screens with teal accents"
-            class="h-full w-full object-cover"
-          />
-        </figure>
-
-        <section
-          class="rounded-xl border border-slate-800 bg-slate-950/80 backdrop-blur p-6 md:p-8 lg:p-10 flex"
-        >
-          <div class="w-full max-w-md mx-auto">
-            <div class="flex justify-center">
-              <div
-                class="h-10 w-10 rounded-full bg-teal-500/90 text-slate-900 grid place-content-center font-bold"
-              >
-                N
-              </div>
-            </div>
-
-            <div class="mt-4 text-center">
-              <h1 class="text-2xl font-semibold leading-tight text-pretty">
-                Create your account
-              </h1>
-              <p class="mt-1 text-sm text-slate-400">
-                Join Nomad to move faster, safer, and smarter.
-              </p>
-            </div>
-
-            <form action="#" method="post" class="mt-6 grid gap-4">
-              <div>
-                <label for="name" class="block text-sm mb-1 text-slate-300"
-                  >Full name</label
-                >
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autocomplete="name"
-                  placeholder="John Doe"
-                  class="w-full rounded-lg bg-slate-800 text-slate-100 placeholder-slate-500 border border-slate-700 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 px-3 py-2.5"
-                  required
-                />
-              </div>
-
-              <div>
-                <label for="email" class="block text-sm mb-1 text-slate-300"
-                  >Email</label
-                >
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autocomplete="email"
-                  placeholder="you@example.com"
-                  class="w-full rounded-lg bg-slate-800 text-slate-100 placeholder-slate-500 border border-slate-700 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 px-3 py-2.5"
-                  required
-                />
-              </div>
-
-              <div>
-                <label for="mobile" class="block text-sm mb-1 text-slate-300"
-                  >Mobile</label
-                >
-                <input
-                  id="mobile"
-                  name="mobile"
-                  type="tel"
-                  inputmode="tel"
-                  placeholder="+1 555 000 1234"
-                  class="w-full rounded-lg bg-slate-800 text-slate-100 placeholder-slate-500 border border-slate-700 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 px-3 py-2.5"
-                  required
-                />
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    for="password"
-                    class="block text-sm mb-1 text-slate-300"
-                    >Password</label
-                  >
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autocomplete="new-password"
-                    placeholder="••••••••"
-                    class="w-full rounded-lg bg-slate-800 text-slate-100 placeholder-slate-500 border border-slate-700 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 px-3 py-2.5"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="confirm" class="block text-sm mb-1 text-slate-300"
-                    >Confirm password</label
-                  >
-                  <input
-                    id="confirm"
-                    name="confirm"
-                    type="password"
-                    autocomplete="new-password"
-                    placeholder="••••••••"
-                    class="w-full rounded-lg bg-slate-800 text-slate-100 placeholder-slate-500 border border-slate-700 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 px-3 py-2.5"
-                    required
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                class="mt-2 w-full rounded-lg bg-teal-500 text-slate-900 font-semibold py-2.5 hover:bg-teal-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 focus:ring-offset-slate-900 transition"
-              >
-                Sign up
-              </button>
-
-              <p class="text-center text-sm text-slate-400">
-                Already have an account?
-                <a
-                  href="#"
-                  class="text-teal-400 hover:text-teal-300 font-medium"
-                  >Log in</a
-                >
-              </p>
-            </form>
+  <body class="bg-white text-gray-900">
+    <nav class="border-b border-gray-200 bg-white sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex-shrink-0">
+            <h1 class="text-2xl font-bold tracking-tight">nomad</h1>
           </div>
-        </section>
-      </section>
+
+          <div class="hidden md:flex items-center space-x-8">
+            <a
+              href="#"
+              class="text-gray-900 font-medium border-b-2 border-black pb-1"
+            >
+              <i class="fas fa-walking mr-2"></i>Hike
+            </a>
+            <a
+              href="#"
+              class="text-gray-500 hover:text-gray-900 font-medium transition-colors"
+            >
+              <i class="fas fa-car mr-2"></i>Ride
+            </a>
+          </div>
+
+          <div class="hidden md:flex items-center space-x-4">
+            <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-bell text-gray-700"></i>
+            </button>
+            <button
+              class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+            >
+              <i class="fas fa-chart-line mr-2"></i>Activity
+            </button>
+            <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-user text-gray-700"></i>
+            </button>
+          </div>
+          <button
+            id="mobile-menu-button"
+            class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden border-t border-gray-200 bg-white"
+      >
+        <div class="px-4 py-3 space-y-3">
+          <a
+            href="#"
+            class="block py-2 text-gray-900 font-medium border-l-4 border-black pl-3"
+          >
+            <i class="fas fa-walking mr-2"></i>Hike
+          </a>
+          <a
+            href="#"
+            class="block py-2 text-gray-500 hover:text-gray-900 font-medium pl-3"
+          >
+            <i class="fas fa-car mr-2"></i>Ride
+          </a>
+          <div class="pt-3 border-t border-gray-200 space-y-2">
+            <button
+              class="w-full text-left py-2 px-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <i class="fas fa-bell mr-2"></i>Notifications
+            </button>
+            <button
+              class="w-full text-left py-2 px-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <i class="fas fa-chart-line mr-2"></i>Activity
+            </button>
+            <button
+              class="w-full text-left py-2 px-3 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <i class="fas fa-user mr-2"></i>Profile
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div
+          class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm"
+        >
+          <h2 class="text-2xl font-bold mb-6">Find Your Next Ride</h2>
+
+          <form class="space-y-4">
+            <div class="relative">
+              <div
+                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              >
+                <i class="fas fa-circle text-xs"></i>
+              </div>
+              <input
+                type="text"
+                placeholder="Enter location"
+                class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              />
+              <button
+                type="button"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <i class="fas fa-location-arrow"></i>
+              </button>
+            </div>
+
+            <div class="relative">
+              <div
+                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              >
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <input
+                type="text"
+                placeholder="Enter destination"
+                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              />
+            </div>
+
+            <div class="pt-2 space-y-3">
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="helmets"
+                  class="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
+                />
+                <label for="helmets" class="ml-3 text-sm text-gray-700">
+                  Do you have helmets?
+                </label>
+              </div>
+
+              <div class="flex items-center space-x-3">
+                <label for="seats" class="text-sm text-gray-700">
+                  No of Seats
+                </label>
+                <input
+                  type="number"
+                  id="seats"
+                  min="1"
+                  max="4"
+                  value="1"
+                  class="w-16 px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-center"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors mt-6"
+            >
+              Find rides
+            </button>
+
+            <p class="text-xs text-gray-500 text-center mt-3">
+              <i>*All rides are KYC verified for your safety</i>
+            </p>
+          </form>
+        </div>
+
+        <div
+          class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm h-[500px] lg:h-[600px]"
+        >
+          <div class="map-placeholder w-full h-full relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center text-gray-400">
+                <i class="fas fa-map text-6xl mb-4"></i>
+                <p class="text-lg font-medium">Interactive Map View</p>
+                <p class="text-sm mt-2">Available rides will appear here</p>
+              </div>
+            </div>
+
+            <div
+              class="car-icon"
+              style="top: 20%; left: 30%; color: #ffd700; animation-delay: 0s"
+            >
+              <i class="fas fa-taxi"></i>
+            </div>
+            <div
+              class="car-icon"
+              style="top: 60%; left: 70%; color: #ffd700; animation-delay: 1s"
+            >
+              <i class="fas fa-taxi"></i>
+            </div>
+            <div
+              class="car-icon"
+              style="top: 40%; left: 50%; color: #ffd700; animation-delay: 2s"
+            >
+              <i class="fas fa-taxi"></i>
+            </div>
+            <div
+              class="car-icon"
+              style="top: 75%; left: 25%; color: #ffd700; animation-delay: 1.5s"
+            >
+              <i class="fas fa-taxi"></i>
+            </div>
+
+            <div class="absolute bottom-4 right-4 flex flex-col space-y-2">
+              <button
+                class="bg-white border border-gray-300 w-10 h-10 rounded-lg shadow-md hover:bg-gray-50 transition-colors"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+              <button
+                class="bg-white border border-gray-300 w-10 h-10 rounded-lg shadow-md hover:bg-gray-50 transition-colors"
+              >
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
-    <footer class="mx-auto max-w-6xl px-4 py-6 text-xs text-slate-500">
-      © <span aria-hidden="true">2025</span> NOMAD. All rights reserved.
-    </footer>
+    <script>
+      // Mobile menu toggle
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        const icon = mobileMenuButton.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+      });
+    </script>
   </body>
 </html>

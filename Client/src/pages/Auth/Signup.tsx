@@ -17,7 +17,7 @@ export const Signup = () => {
   } = useForm<emailFormData>({ resolver: zodResolver(emailSchema) });
 
   async function onSubmit(data: emailFormData) {
-    const result = await useSendOTP(data);
+    const result = await useSendOTP(data, 'signup');
     if (!result.success) return;
     navigate('/auth/verify-otp');
   }
