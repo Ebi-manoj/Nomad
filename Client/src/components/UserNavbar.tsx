@@ -1,8 +1,9 @@
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { RiMotorbikeFill } from 'react-icons/ri';
 import { LuNotebookText } from 'react-icons/lu';
-import { FaUserLarge } from 'react-icons/fa6';
 import { IoNotificationsSharp } from 'react-icons/io5';
+
+import { ProfilePopover } from './ProfilePopover';
 
 export const UserNavbar = () => {
   return (
@@ -34,9 +35,7 @@ export const UserNavbar = () => {
               <LuNotebookText />
               Activity
             </button>
-            <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-colors">
-              <FaUserLarge />
-            </button>
+            <ProfilePopover />
           </div>
         </div>
       </div>

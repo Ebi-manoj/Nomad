@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { expressAdapter } from '../../adapters/express';
 import { authComposer } from '../../../infra/services/composer/auth.composer';
 import { verifyEmailToken } from '../middlewares/verifyEmailToken';
+import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 
 const router = express.Router();
 
@@ -69,6 +70,17 @@ router.get('/refreshtoken', async (req: Request, res: Response) => {
     authComposer().refreshToken(httpRequest)
   );
   return res.status(adapter.statusCode).json(adapter.body);
+});
+
+router.post('/logout', async (req: Request, res: Response) => {
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
+  res
+    .status(HttpStatus.OK)
+    .json({ success: true, data: { message: 'Logout successfully' } });
 });
 
 export default router;

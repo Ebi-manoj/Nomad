@@ -5,14 +5,17 @@ import App from './App.tsx';
 import { Toaster } from './components/ui/sonner.tsx';
 import { Provider } from 'react-redux';
 import store from './store/store.ts';
+import { AuthProvider } from './routes/AuthProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-      <Toaster position="bottom-right" />
-    </BrowserRouter>
+    <Provider store={store}>
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
+    </Provider>
+    <Toaster position="bottom-right" />
   </StrictMode>
 );

@@ -22,7 +22,7 @@ export const Login = () => {
     console.log(data);
     try {
       await dispatch(login(data)).unwrap();
-      navigate('/home');
+      navigate('/hike');
     } catch (error: unknown) {
       toast.success(typeof error == 'string' ? error : 'Something went wrong');
     }

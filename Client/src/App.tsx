@@ -7,9 +7,10 @@ import { SignupDetails } from './pages/Auth/SignupDetails';
 import { VerifyOTP } from './pages/Auth/VerifyOTP';
 import { ResetPassword } from './pages/Auth/ResetPassword';
 import { ChangePassword } from './pages/Auth/ChangePassword';
-import { Home } from './pages/User/Home';
 import { Protected } from './routes/Protected';
 import { IsAuthenticated } from './routes/IsAuthenticated';
+import { HomeLayout } from './layouts/HomeLayout';
+import { Hike } from './pages/User/Hike';
 
 function App() {
   return (
@@ -39,13 +40,15 @@ function App() {
       </Route>
 
       <Route
-        path="/home"
+        path="/"
         element={
           <Protected>
-            <Home />
+            <HomeLayout />
           </Protected>
         }
-      />
+      >
+        <Route path="hike" element={<Hike />} />
+      </Route>
     </Routes>
   );
 }
