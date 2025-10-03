@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { GoogleAuthBtn } from '../../components/Auth/GoogleAuthBtn';
-import { AuthInput } from '../../components/Auth/Input';
-import { SubmitBtn } from '../../components/Auth/SubmitBtn';
+import { GoogleAuthBtn } from '../../components/GoogleAuthBtn';
+import { AuthInput } from '../../components/Input';
+import { SubmitBtn } from '../../components/SubmitBtn';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { emailSchema } from '../../validation/auth';

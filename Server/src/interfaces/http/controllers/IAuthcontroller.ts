@@ -8,4 +8,5 @@ export interface IauthController {
   sendResetOTP(httpRequest: HttpRequest): Promise<HttpResponse>;
   verifyOTP(httpRequest: HttpRequest): Promise<HttpResponse>;
   resetPassword(httpRequest: HttpRequest): Promise<HttpResponse>;
+  refreshToken(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

@@ -50,3 +50,7 @@ export interface ResetPasswordRequestDTO {
   email: string;
   password: string;
 }
+
+export interface RefreshTokenRequestDTO {
+  refreshToken: string;
+}

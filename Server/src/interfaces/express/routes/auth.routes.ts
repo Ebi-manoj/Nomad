@@ -64,4 +64,11 @@ router.post(
   }
 );
 
+router.get('/refreshtoken', async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpRequest =>
+    authComposer().refreshToken(httpRequest)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
 export default router;

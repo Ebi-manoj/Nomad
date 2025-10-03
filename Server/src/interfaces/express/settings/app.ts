@@ -4,11 +4,13 @@ import authRouter from '../routes/auth.routes';
 import { errorHandling } from '../middlewares/errorHandlingMiddleware';
 import { connectRedis } from '../../../infra/database/connectRedis';
 import cors from 'cors';
+import cookieparser from 'cookie-parser';
 
 connectMongo();
 connectRedis();
 const app = express();
 app.use(express.json());
+app.use(cookieparser());
 app.use(
   cors({
     credentials: true,

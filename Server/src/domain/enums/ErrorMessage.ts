@@ -4,4 +4,6 @@ export const ErrorMessages = {
   INVALID_INPUT: 'Invalid input data',
   SERVER_ERROR: 'Internal server error',
   INVALID_CREDINTIALS: 'Invalid Credintails',
+  INVALID_OTP: 'Invalid OTP',
+  INVALID_TOKEN: 'Invalid Token',
 } as const;

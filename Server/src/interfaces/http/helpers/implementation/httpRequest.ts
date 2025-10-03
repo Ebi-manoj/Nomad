@@ -1,3 +1,4 @@
+import { unknown } from 'zod';
 import { IhttpRequest } from '../IHttpRequest';
 
 export class HttpRequest implements IhttpRequest {
@@ -5,6 +6,7 @@ export class HttpRequest implements IhttpRequest {
   body?: unknown;
   query?: unknown;
   path?: unknown;
+  cookies?: unknown;
 
   constructor(init?: HttpRequest) {
     Object.assign(this, init);

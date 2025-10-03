@@ -3,6 +3,7 @@ import { PasswordHasher } from '../../../application/providers/IpasswordHasher';
 import { IOTPRepository } from '../../../application/repositories/IOTPRepository';
 import { UserRepository } from '../../../application/repositories/UserRepository';
 import { LoginUserUsecase } from '../../../application/usecases/LoginUserCase';
+import { RefreshTokenUseCase } from '../../../application/usecases/RefreshTokenUseCase';
 import { RegisterUserUseCase } from '../../../application/usecases/RegisterUserUseCase';
 import { ResetPasswordUseCase } from '../../../application/usecases/ResetPasswordUseCase';
 import { SendSignupOTPUseCase } from '../../../application/usecases/SendOTPSignupUseCase';
@@ -60,6 +61,14 @@ export function authComposer(): IauthController {
     userRepository,
     passwordHasher
   );
+
+  /////////////////////REFRESH TOKEN////////////////////////////////
+
+  const refreshTokenUseCase: RefreshTokenUseCase = new RefreshTokenUseCase(
+    tokenGenerator,
+    userRepository
+  );
+
   /////////AUTH CONTROLLER////////////////////////
   const controller: IauthController = new AuthController(
     registerUseCase,
@@ -67,7 +76,8 @@ export function authComposer(): IauthController {
     sentSignupOtpUseCase,
     sentResetOtpUseCase,
     verifyOtpUseCase,
-    resetPasswordUsecase
+    resetPasswordUsecase,
+    refreshTokenUseCase
   );
   return controller;
 }

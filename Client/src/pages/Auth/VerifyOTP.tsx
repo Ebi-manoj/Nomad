@@ -1,4 +1,4 @@
-import { SubmitBtn } from '../../components/Auth/SubmitBtn';
+import { SubmitBtn } from '../../components/SubmitBtn';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { verifyOTPSchema } from '../../validation/auth';

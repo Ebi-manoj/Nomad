@@ -3,4 +3,5 @@ export interface IhttpRequest {
   body?: unknown;
   query?: unknown;
   path?: unknown;
+  cookies?: unknown;
 }

@@ -34,7 +34,13 @@ export class InvalidInputData extends CustomError {
 }
 
 export class InvalidOTP extends CustomError {
-  constructor(message: string = 'Invalid OTP') {
+  constructor(message: string = ErrorMessages.INVALID_OTP) {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
+
+export class InvalidToken extends CustomError {
+  constructor(message: string = ErrorMessages.INVALID_TOKEN) {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }

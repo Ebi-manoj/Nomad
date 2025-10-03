@@ -1,5 +1,5 @@
-import { AuthInput } from '@/components/Auth/Input';
-import { SubmitBtn } from '@/components/Auth/SubmitBtn';
+import { AuthInput } from '@/components/Input';
+import { SubmitBtn } from '@/components/SubmitBtn';
 import { useSendOTP } from '@/hooks/useSendOTP';
 import { emailSchema, type emailFormData } from '@/validation/auth';
 import { zodResolver } from '@hookform/resolvers/zod';

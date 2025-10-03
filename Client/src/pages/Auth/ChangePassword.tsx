@@ -1,5 +1,5 @@
-import { AuthInput } from '@/components/Auth/Input';
-import { SubmitBtn } from '@/components/Auth/SubmitBtn';
+import { AuthInput } from '@/components/Input';
+import { SubmitBtn } from '@/components/SubmitBtn';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 import axiosInstance from '@/utils/axiosInstance';
 import {

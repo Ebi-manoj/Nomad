@@ -1,0 +1,16 @@
+import { User } from '../../domain/entities/User';
+import { Email } from '../../domain/value-objects/email';
+import { Mobile } from '../../domain/value-objects/mobile';
+import { IUserModel } from '../database/user.model';
+
+export function userDomainMapper(userDoc: IUserModel): User {
+  return new User({
+    id: userDoc._id.toString(),
+    fullName: userDoc.fullName,
+    email: new Email(userDoc.email),
+    mobile: new Mobile(userDoc.mobile),
+    password: userDoc.password,
+    createdAt: userDoc.createdAt,
+    updatedAt: userDoc.updatedAt,
+  });
+}

@@ -1,4 +1,5 @@
 import { LoginUserUsecase } from '../../../application/usecases/LoginUserCase';
+import { RefreshTokenUseCase } from '../../../application/usecases/RefreshTokenUseCase';
 import { RegisterUserUseCase } from '../../../application/usecases/RegisterUserUseCase';
 import { ResetPasswordUseCase } from '../../../application/usecases/ResetPasswordUseCase';
 import { SendSignupOTPUseCase } from '../../../application/usecases/SendOTPSignupUseCase';
@@ -30,7 +31,8 @@ export class AuthController implements IauthController {
     private readonly sendSignupOTPUseCase: SendSignupOTPUseCase,
     private readonly sendResetOTPuseCase: SendResetOTPUseCase,
     private readonly verifyOTPUseCase: VerifyOTPUseCase,
-    private readonly resetPasswordUseCase: ResetPasswordUseCase
+    private readonly resetPasswordUseCase: ResetPasswordUseCase,
+    private readonly refreshTokenUseCase: RefreshTokenUseCase
   ) {}
 
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -90,6 +92,13 @@ export class AuthController implements IauthController {
     };
     const result = await this.resetPasswordUseCase.execute(dto);
 
+    const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async refreshToken(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const dto = httpRequest.cookies as { refreshToken: string };
+    const result = await this.refreshTokenUseCase.execute(dto);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

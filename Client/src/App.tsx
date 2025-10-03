@@ -8,20 +8,44 @@ import { VerifyOTP } from './pages/Auth/VerifyOTP';
 import { ResetPassword } from './pages/Auth/ResetPassword';
 import { ChangePassword } from './pages/Auth/ChangePassword';
 import { Home } from './pages/User/Home';
+import { Protected } from './routes/Protected';
+import { IsAuthenticated } from './routes/IsAuthenticated';
 
 function App() {
   return (
     <Routes>
       <Route path="/auth" element={<AuthLayout />}>
         <Route index element={<Navigate to="sign-in" replace />} />
-        <Route path="sign-in" element={<Login />} />
-        <Route path="sign-up" element={<Signup />} />
+        <Route
+          path="sign-in"
+          element={
+            <IsAuthenticated>
+              <Login />
+            </IsAuthenticated>
+          }
+        />
+        <Route
+          path="sign-up"
+          element={
+            <IsAuthenticated>
+              <Signup />
+            </IsAuthenticated>
+          }
+        />
         <Route path="verify-otp" element={<VerifyOTP />} />
         <Route path="details" element={<SignupDetails />} />
         <Route path="reset-password" element={<ResetPassword />} />
         <Route path="change-password" element={<ChangePassword />} />
       </Route>
-      <Route path="/home" element={<Home />} />
+
+      <Route
+        path="/home"
+        element={
+          <Protected>
+            <Home />
+          </Protected>
+        }
+      />
     </Routes>
   );
 }
