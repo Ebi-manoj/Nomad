@@ -14,7 +14,6 @@ export async function expressAdapter(
     cookies: req.cookies,
   });
   const httpResponse = await controllerMethod(httpRequest);
-  console.log(httpResponse);
 
   return httpResponse;
 }

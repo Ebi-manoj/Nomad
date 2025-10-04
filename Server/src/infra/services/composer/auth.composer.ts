@@ -2,6 +2,7 @@ import { IEmailTransporter } from '../../../application/providers/IEmailTranspor
 import { PasswordHasher } from '../../../application/providers/IpasswordHasher';
 import { IOTPRepository } from '../../../application/repositories/IOTPRepository';
 import { UserRepository } from '../../../application/repositories/UserRepository';
+import { GoogleSignupUseCase } from '../../../application/usecases/GoogleSignupUseCase.ts';
 import { LoginUserUsecase } from '../../../application/usecases/LoginUserCase';
 import { RefreshTokenUseCase } from '../../../application/usecases/RefreshTokenUseCase';
 import { RegisterUserUseCase } from '../../../application/usecases/RegisterUserUseCase';
@@ -12,6 +13,7 @@ import { VerifyOTPUseCase } from '../../../application/usecases/VerifyOTPUseCase
 import { AuthController } from '../../../interfaces/http/controllers/auth.controller';
 import { IauthController } from '../../../interfaces/http/controllers/IAuthcontroller';
 import { NodemailerTransporter } from '../../providers/emailTransporter';
+import { GoogleClient } from '../../providers/googleClient';
 import { BcryptService } from '../../providers/passwordHasher';
 import { TokenGenerator } from '../../providers/tokenGenrator';
 import { RedisOTPRepository } from '../../repositories/RedisOTP.repository';
@@ -69,6 +71,10 @@ export function authComposer(): IauthController {
     userRepository
   );
 
+  ////////////////////////GOOGLE SIGNUP//////////////////////////////////
+  const googleClient = new GoogleClient();
+  const googleSignupUseCase = new GoogleSignupUseCase(googleClient);
+
   /////////AUTH CONTROLLER////////////////////////
   const controller: IauthController = new AuthController(
     registerUseCase,
@@ -77,7 +83,8 @@ export function authComposer(): IauthController {
     sentResetOtpUseCase,
     verifyOtpUseCase,
     resetPasswordUsecase,
-    refreshTokenUseCase
+    refreshTokenUseCase,
+    googleSignupUseCase
   );
   return controller;
 }

@@ -11,6 +11,7 @@ import { Protected } from './routes/Protected';
 import { IsAuthenticated } from './routes/IsAuthenticated';
 import { HomeLayout } from './layouts/HomeLayout';
 import { Hike } from './pages/User/Hike';
+import { Landing } from './pages/Landing';
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
         <Route path="reset-password" element={<ResetPassword />} />
         <Route path="change-password" element={<ChangePassword />} />
       </Route>
-
+      <Route path="/" element={<Landing />} />
       <Route
         path="/"
         element={

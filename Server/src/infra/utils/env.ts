@@ -15,4 +15,6 @@ export const env = {
   REDIS_URI: getEnvVariables('REDIS_URI', 'redis://localhost:6379'),
   GOOGLE_APP_PASSWORD: getEnvVariables('GOOGLE_APP_PASSWORD'),
   EMAIL_ADDRESS: getEnvVariables('EMAIL_ADDRESS'),
+  GOOGLE_CLIENT_ID: getEnvVariables('GOOGLE_CLIENT_ID'),
+  GOOGLE_CLIENT_SECRET: getEnvVariables('GOOGLE_CLIENT_SECRET'),
 };

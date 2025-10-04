@@ -83,4 +83,11 @@ router.post('/logout', async (req: Request, res: Response) => {
     .json({ success: true, data: { message: 'Logout successfully' } });
 });
 
+router.post('/google', async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpRequest =>
+    authComposer().googleSingup(httpRequest)
+  );
+  res.status(adapter.statusCode).json(adapter.body);
+});
+
 export default router;

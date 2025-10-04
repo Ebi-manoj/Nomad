@@ -9,4 +9,5 @@ export interface IauthController {
   verifyOTP(httpRequest: HttpRequest): Promise<HttpResponse>;
   resetPassword(httpRequest: HttpRequest): Promise<HttpResponse>;
   refreshToken(httpRequest: HttpRequest): Promise<HttpResponse>;
+  googleSingup(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

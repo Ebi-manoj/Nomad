@@ -1,3 +1,4 @@
+import { GoogleSignupUseCase } from '../../../application/usecases/GoogleSignupUseCase.ts';
 import { LoginUserUsecase } from '../../../application/usecases/LoginUserCase';
 import { RefreshTokenUseCase } from '../../../application/usecases/RefreshTokenUseCase';
 import { RegisterUserUseCase } from '../../../application/usecases/RegisterUserUseCase';
@@ -32,7 +33,8 @@ export class AuthController implements IauthController {
     private readonly sendResetOTPuseCase: SendResetOTPUseCase,
     private readonly verifyOTPUseCase: VerifyOTPUseCase,
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
-    private readonly refreshTokenUseCase: RefreshTokenUseCase
+    private readonly refreshTokenUseCase: RefreshTokenUseCase,
+    private readonly googleSignupUseCase: GoogleSignupUseCase
   ) {}
 
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -99,6 +101,13 @@ export class AuthController implements IauthController {
   async refreshToken(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.cookies as { refreshToken: string };
     const result = await this.refreshTokenUseCase.execute(dto);
+    const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async googleSingup(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const dto = httpRequest.body as { code: string };
+    const result = await this.googleSignupUseCase.execute(dto);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

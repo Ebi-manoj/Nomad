@@ -1,6 +1,5 @@
-import { decode } from 'punycode';
 import { ITOkenGenerator } from '../../application/providers/ITokenGenerator';
-import jwt, { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 
 export class TokenGenerator implements ITOkenGenerator {
   constructor(private readonly secret: Secret) {}
