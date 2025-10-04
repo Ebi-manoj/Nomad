@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { refreshToken } from '@/store/features/auth/authSlice';
+import { refreshToken } from '@/store/features/auth/auth.thunks';
 import type { RootState } from '@/store/store';
 import { useEffect, useState, type ReactNode } from 'react';
 import { useSelector } from 'react-redux';

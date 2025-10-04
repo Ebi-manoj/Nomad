@@ -1,13 +1,21 @@
-import axiosInstance from '@/utils/axiosInstance';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { googleSignup } from '@/store/features/auth/auth.thunks';
 import { useGoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export const GoogleAuthBtn = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   async function googleCallback(code: string) {
     try {
-      const res = await axiosInstance.post('/auth/google', { code });
-      console.log(res);
-    } catch (error) {}
+      await dispatch(googleSignup(code)).unwrap();
+      navigate('/hike');
+    } catch (error) {
+      toast.error(typeof error == 'string' ? error : 'Login Failed');
+    }
   }
+
   const login = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: response => googleCallback(response.code),

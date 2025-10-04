@@ -4,8 +4,8 @@ export interface IUserModel {
   _id: string;
   fullName: string;
   email: string;
-  mobile: string;
-  password: string;
+  mobile?: string;
+  password?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -22,11 +22,11 @@ const userSchema = new Schema<IUserModel>(
     },
     mobile: {
       type: String,
-      required: true,
+      default: null,
     },
     password: {
       type: String,
-      required: true,
+      default: null,
     },
   },
   { timestamps: true }

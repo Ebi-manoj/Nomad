@@ -87,7 +87,16 @@ router.post('/google', async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpRequest =>
     authComposer().googleSingup(httpRequest)
   );
-  res.status(adapter.statusCode).json(adapter.body);
+  const { accessToken, refreshToken, user } = adapter.body.data;
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+  return res
+    .status(adapter.statusCode)
+    .json({ ...adapter.body, data: { user, accessToken } });
 });
 
 export default router;

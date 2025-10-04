@@ -5,9 +5,9 @@ import { SubmitBtn } from '../../components/SubmitBtn';
 import { loginSchema, type loginFormData } from '../../validation/auth';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { login } from '@/store/features/auth/authSlice';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { toast } from 'sonner';
+import { login } from '@/store/features/auth/auth.thunks';
 
 export const Login = () => {
   const navigate = useNavigate();

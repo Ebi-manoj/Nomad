@@ -73,7 +73,11 @@ export function authComposer(): IauthController {
 
   ////////////////////////GOOGLE SIGNUP//////////////////////////////////
   const googleClient = new GoogleClient();
-  const googleSignupUseCase = new GoogleSignupUseCase(googleClient);
+  const googleSignupUseCase = new GoogleSignupUseCase(
+    googleClient,
+    userRepository,
+    tokenGenerator
+  );
 
   /////////AUTH CONTROLLER////////////////////////
   const controller: IauthController = new AuthController(

@@ -21,18 +21,20 @@ export class LoginUserUsecase {
     const user = await this.userRepository.findByEmail(email.getValue());
     if (!user) throw new InvalidCredindatials();
     console.log('User Found');
-    const isMatch = await this.passwordHasher.compare(
-      data.password,
-      user.getPassword()
-    );
+
+    const password = user.getPassword();
+    if (!password) throw new InvalidCredindatials();
+
+    const isMatch = await this.passwordHasher.compare(data.password, password);
     if (!isMatch) throw new InvalidCredindatials();
+
     const accessToken = this.tokenGenerator.generateToken(
       { userId: user.getId() },
       '5min'
     );
     const refreshToken = this.tokenGenerator.generateToken(
       { userId: user.getId() },
-      '1h'
+      '7d'
     );
     return { accessToken, refreshToken, user: userMapper(user) };
   }

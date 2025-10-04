@@ -12,9 +12,9 @@ import { RiProfileLine } from 'react-icons/ri';
 import { IoIosWarning } from 'react-icons/io';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { logout } from '@/store/features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { logout } from '@/store/features/auth/auth.thunks';
 
 export function ProfilePopover() {
   const dispatch = useAppDispatch();

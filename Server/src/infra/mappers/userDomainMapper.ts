@@ -8,7 +8,7 @@ export function userDomainMapper(userDoc: IUserModel): User {
     id: userDoc._id.toString(),
     fullName: userDoc.fullName,
     email: new Email(userDoc.email),
-    mobile: new Mobile(userDoc.mobile),
+    mobile: userDoc.mobile ? new Mobile(userDoc.mobile) : undefined,
     password: userDoc.password,
     createdAt: userDoc.createdAt,
     updatedAt: userDoc.updatedAt,

@@ -1,3 +1,3 @@
 export interface IGoogleClient {
-  getAuthDetails(code: string): Promise<object | null>;
+  getAuthDetails(code: string): Promise<{ email: string; name: string } | null>;
 }

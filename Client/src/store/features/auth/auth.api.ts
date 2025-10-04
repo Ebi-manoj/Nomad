@@ -15,3 +15,8 @@ export async function logoutApi() {
   const res = await axiosInstance.post('/auth/logout');
   return res.data.data;
 }
+
+export async function googleSignupApi(code: string) {
+  const res = await axiosInstance.post('/auth/google', { code });
+  return res.data.data;
+}

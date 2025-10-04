@@ -12,7 +12,9 @@ export class GoogleClient implements IGoogleClient {
       'postmessage'
     );
   }
-  async getAuthDetails(code: string): Promise<object | null> {
+  async getAuthDetails(
+    code: string
+  ): Promise<{ email: string; name: string } | null> {
     console.log('Reached Client');
     try {
       const { tokens } = await this.client.getToken(code);
@@ -25,7 +27,7 @@ export class GoogleClient implements IGoogleClient {
       if (!payload) throw new InvalidToken();
 
       const { email, name } = payload;
-      console.log(payload);
+      if (!email || !name) throw new InvalidToken();
       return { email, name };
     } catch (error) {
       console.log(error);

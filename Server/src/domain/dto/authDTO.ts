@@ -9,9 +9,9 @@ export interface UserResponseDTO {
   id: string;
   fullName: string;
   email: string;
-  mobile: string;
+  mobile: string | undefined;
   createdAt: Date;
-  updateAdt: Date;
+  updatedAt: Date;
 }
 
 export interface LoginUserRequestDTO {

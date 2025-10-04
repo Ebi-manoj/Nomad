@@ -6,8 +6,8 @@ export function userMapper(user: User): UserResponseDTO {
     id: user.getId()!,
     fullName: user.getFullName(),
     email: user.getEmail(),
-    mobile: user.getMobile(),
+    mobile: user.getMobile() || undefined,
     createdAt: user.getCreatedAt(),
-    updateAdt: user.getUpdatedAt(),
+    updatedAt: user.getUpdatedAt(),
   };
 }

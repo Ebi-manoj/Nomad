@@ -5,8 +5,8 @@ export interface UserProps {
   id?: string;
   fullName: string;
   email: Email;
-  mobile: Mobile;
-  password: string;
+  mobile?: Mobile;
+  password?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -15,8 +15,8 @@ export class User {
   private readonly id?: string;
   private fullName: string;
   private email: Email;
-  private mobile: Mobile;
-  private password: string;
+  private mobile: Mobile | null;
+  private password: string | null;
   private readonly createdAt: Date;
   private updatedAt: Date;
 
@@ -24,8 +24,8 @@ export class User {
     this.id = props.id;
     this.fullName = props.fullName;
     this.email = props.email;
-    this.mobile = props.mobile;
-    this.password = props.password;
+    this.mobile = props.mobile || null;
+    this.password = props.password || null;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
   }
@@ -42,7 +42,7 @@ export class User {
   }
 
   getMobile() {
-    return this.mobile.getValue();
+    return this.mobile && this.mobile.getValue();
   }
   getPassword() {
     return this.password;
