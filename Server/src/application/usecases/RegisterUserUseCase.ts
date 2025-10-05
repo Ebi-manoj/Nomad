@@ -7,7 +7,7 @@ import { USER } from '../../domain/enums/Constants';
 import { UserAlreadyExist } from '../../domain/errors/CustomError';
 import { Email } from '../../domain/value-objects/email';
 import { Mobile } from '../../domain/value-objects/mobile';
-import { userMapper } from '../mappers/RegisterUser.mapper';
+import { userMapper } from '../mappers/UserResponse.mapper';
 import { PasswordHasher } from '../providers/IpasswordHasher';
 import { UserRepository } from '../repositories/UserRepository';
 

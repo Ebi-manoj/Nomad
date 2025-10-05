@@ -1,7 +1,5 @@
 import { UserRepository } from '../../application/repositories/UserRepository';
 import { User } from '../../domain/entities/User';
-import { Email } from '../../domain/value-objects/email';
-import { Mobile } from '../../domain/value-objects/mobile';
 import { UserModel } from '../database/user.model';
 import { userDomainMapper } from '../mappers/userDomainMapper';
 

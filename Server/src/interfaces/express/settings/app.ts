@@ -1,6 +1,7 @@
 import express from 'express';
 import { connectMongo } from '../../../infra/database/connectMongo';
 import authRouter from '../routes/auth.routes';
+import adminRouter from '../routes/admin.routes';
 import { errorHandling } from '../middlewares/errorHandlingMiddleware';
 import { connectRedis } from '../../../infra/database/connectRedis';
 import cors from 'cors';
@@ -18,6 +19,7 @@ app.use(
   })
 );
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/admin', adminRouter);
 
 app.use(errorHandling);
 

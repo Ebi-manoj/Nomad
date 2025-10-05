@@ -2,6 +2,7 @@ import {
   VerifyOTPRequestDTO,
   VerifyOTPResponseDTO,
 } from '../../domain/dto/authDTO';
+import { ACCESS_TOKEN_EXPIRY } from '../../domain/enums/Constants';
 import { SuccessMessages } from '../../domain/enums/SuccessMessage';
 import { InvalidOTP } from '../../domain/errors/CustomError';
 import { Email } from '../../domain/value-objects/email';
@@ -22,7 +23,7 @@ export class VerifyOTPUseCase {
     if (!storedOtp || storedOtp !== otpVO.getValue()) throw new InvalidOTP();
     const verificationToken = this.tokenGenerator.generateToken(
       { email: emailVO.getValue() },
-      '5min'
+      ACCESS_TOKEN_EXPIRY
     );
     return {
       email: emailVO.getValue(),
