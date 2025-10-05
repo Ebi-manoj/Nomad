@@ -27,7 +27,7 @@ export class AdminLoginUseCase {
     const found = await this.adminRepository.findByEmail(email.getValue());
     if (!found) throw new InvalidCredindatials();
 
-    const isMatched = this.passwordHasher.compare(
+    const isMatched = await this.passwordHasher.compare(
       data.password,
       found.getPassword()
     );
