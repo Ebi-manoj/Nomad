@@ -1,10 +1,11 @@
 import { LoginuserResponseDTO } from '../../domain/dto/authDTO';
 import { User } from '../../domain/entities/User';
-import { USER } from '../../domain/enums/Constants';
 import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
 } from '../../domain/enums/Constants';
+
+import { USER } from '../../domain/enums/Constants';
 
 import { InvalidToken } from '../../domain/errors/CustomError';
 import { Email } from '../../domain/value-objects/email';

@@ -12,7 +12,7 @@ import { IsAuthenticated } from './routes/IsAuthenticated';
 import { HomeLayout } from './layouts/HomeLayout';
 import { Hike } from './pages/User/Hike';
 import { Landing } from './pages/Landing';
-import { AdminDashboard } from './pages/Admin/adminDashboard';
+import { AdminDashboard } from './pages/Admin/AdminDashboard';
 
 function App() {
   return (
