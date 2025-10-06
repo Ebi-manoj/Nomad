@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import store from './store/store.ts';
 import { AuthProvider } from './routes/AuthProvider.tsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { injectStore } from './utils/axiosInstance.ts';
+injectStore(store);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
