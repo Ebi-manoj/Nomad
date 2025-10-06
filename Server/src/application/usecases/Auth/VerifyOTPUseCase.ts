@@ -1,14 +1,14 @@
 import {
   VerifyOTPRequestDTO,
   VerifyOTPResponseDTO,
-} from '../../domain/dto/authDTO';
-import { ACCESS_TOKEN_EXPIRY } from '../../domain/enums/Constants';
-import { SuccessMessages } from '../../domain/enums/SuccessMessage';
-import { InvalidOTP } from '../../domain/errors/CustomError';
-import { Email } from '../../domain/value-objects/email';
-import { OTP } from '../../domain/value-objects/otp';
-import { ITOkenGenerator } from '../providers/ITokenGenerator';
-import { IOTPRepository } from '../repositories/IOTPRepository';
+} from '../../../domain/dto/authDTO';
+import { ACCESS_TOKEN_EXPIRY } from '../../../domain/enums/Constants';
+import { SuccessMessages } from '../../../domain/enums/SuccessMessage';
+import { InvalidOTP } from '../../../domain/errors/CustomError';
+import { Email } from '../../../domain/value-objects/email';
+import { OTP } from '../../../domain/value-objects/otp';
+import { ITOkenGenerator } from '../../providers/ITokenGenerator';
+import { IOTPRepository } from '../../repositories/IOTPRepository';
 
 export class VerifyOTPUseCase {
   constructor(

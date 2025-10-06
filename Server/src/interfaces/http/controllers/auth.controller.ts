@@ -1,11 +1,11 @@
-import { GoogleSignupUseCase } from '../../../application/usecases/GoogleSignupUseCase.ts';
-import { LoginUserUsecase } from '../../../application/usecases/LoginUserCase';
-import { RefreshTokenUseCase } from '../../../application/usecases/RefreshTokenUseCase';
-import { RegisterUserUseCase } from '../../../application/usecases/RegisterUserUseCase';
-import { ResetPasswordUseCase } from '../../../application/usecases/ResetPasswordUseCase';
-import { SendSignupOTPUseCase } from '../../../application/usecases/SendOTPSignupUseCase';
-import { SendResetOTPUseCase } from '../../../application/usecases/SendResetOTPUseCase';
-import { VerifyOTPUseCase } from '../../../application/usecases/VerifyOTPUseCase';
+import { GoogleSignupUseCase } from '../../../application/usecases/Auth/GoogleSignupUseCase.ts.js';
+import { LoginUserUsecase } from '../../../application/usecases/Auth/LoginUserCase.js';
+import { RefreshTokenUseCase } from '../../../application/usecases/Auth/RefreshTokenUseCase.js';
+import { RegisterUserUseCase } from '../../../application/usecases/Auth/RegisterUserUseCase.js';
+import { ResetPasswordUseCase } from '../../../application/usecases/Auth/ResetPasswordUseCase.js';
+import { SendSignupOTPUseCase } from '../../../application/usecases/Auth/SendOTPSignupUseCase.js';
+import { SendResetOTPUseCase } from '../../../application/usecases/Auth/SendResetOTPUseCase.js';
+import { VerifyOTPUseCase } from '../../../application/usecases/Auth/VerifyOTPUseCase.js';
 import {
   LoginUserRequestDTO,
   LoginuserResponseDTO,

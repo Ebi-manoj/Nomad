@@ -1,9 +1,9 @@
-import { ResetPasswordRequestDTO } from '../../domain/dto/authDTO';
-import { SuccessMessages } from '../../domain/enums/SuccessMessage';
-import { UserNotFound } from '../../domain/errors/CustomError';
-import { Email } from '../../domain/value-objects/email';
-import { PasswordHasher } from '../providers/IpasswordHasher';
-import { UserRepository } from '../repositories/UserRepository';
+import { ResetPasswordRequestDTO } from '../../../domain/dto/authDTO';
+import { SuccessMessages } from '../../../domain/enums/SuccessMessage';
+import { UserNotFound } from '../../../domain/errors/CustomError';
+import { Email } from '../../../domain/value-objects/email';
+import { PasswordHasher } from '../../providers/IpasswordHasher';
+import { UserRepository } from '../../repositories/UserRepository';
 
 export class ResetPasswordUseCase {
   constructor(

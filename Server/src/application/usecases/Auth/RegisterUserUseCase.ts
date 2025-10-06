@@ -1,15 +1,15 @@
 import {
   RegisterUserRequestDTO,
   UserResponseDTO,
-} from '../../domain/dto/authDTO';
-import { User } from '../../domain/entities/User';
-import { USER } from '../../domain/enums/Constants';
-import { UserAlreadyExist } from '../../domain/errors/CustomError';
-import { Email } from '../../domain/value-objects/email';
-import { Mobile } from '../../domain/value-objects/mobile';
-import { userMapper } from '../mappers/UserResponse.mapper';
-import { PasswordHasher } from '../providers/IpasswordHasher';
-import { UserRepository } from '../repositories/UserRepository';
+} from '../../../domain/dto/authDTO';
+import { User } from '../../../domain/entities/User';
+import { USER } from '../../../domain/enums/Constants';
+import { UserAlreadyExist } from '../../../domain/errors/CustomError';
+import { Email } from '../../../domain/value-objects/email';
+import { Mobile } from '../../../domain/value-objects/mobile';
+import { userMapper } from '../../mappers/UserResponse.mapper';
+import { PasswordHasher } from '../../providers/IpasswordHasher';
+import { UserRepository } from '../../repositories/UserRepository';
 
 export class RegisterUserUseCase {
   constructor(

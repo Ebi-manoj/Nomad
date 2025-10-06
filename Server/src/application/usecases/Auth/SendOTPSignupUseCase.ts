@@ -1,15 +1,15 @@
 import {
   SentOTPRequestDTO,
   SentOTPResponseDTO,
-} from '../../domain/dto/authDTO';
-import { OTP_EXPIRY } from '../../domain/enums/Constants';
-import { SuccessMessages } from '../../domain/enums/SuccessMessage';
-import { UserAlreadyExist } from '../../domain/errors/CustomError';
-import { Email } from '../../domain/value-objects/email';
-import { OTP } from '../../domain/value-objects/otp';
-import { IEmailTransporter } from '../providers/IEmailTransporter';
-import { IOTPRepository } from '../repositories/IOTPRepository';
-import { UserRepository } from '../repositories/UserRepository';
+} from '../../../domain/dto/authDTO';
+import { OTP_EXPIRY } from '../../../domain/enums/Constants';
+import { SuccessMessages } from '../../../domain/enums/SuccessMessage';
+import { UserAlreadyExist } from '../../../domain/errors/CustomError';
+import { Email } from '../../../domain/value-objects/email';
+import { OTP } from '../../../domain/value-objects/otp';
+import { IEmailTransporter } from '../../providers/IEmailTransporter';
+import { IOTPRepository } from '../../repositories/IOTPRepository';
+import { UserRepository } from '../../repositories/UserRepository';
 
 export class SendSignupOTPUseCase {
   constructor(

@@ -36,4 +36,23 @@ export class MongoUserRepository implements UserRepository {
     found.password = user.getPassword() || found.password;
     await found.save();
   }
+  async fetchUsers(
+    limit: number,
+    skip: number,
+    search?: string
+  ): Promise<User[] | []> {
+    const query: any = { role: { $ne: 'admin' } };
+    if (search) {
+      query.fullName = { $regex: search, $options: 'i' };
+    }
+    const users = await UserModel.find(query).skip(skip).limit(limit).lean();
+    return users.map(userDoc => userDomainMapper(userDoc));
+  }
+  countUsers(search?: string): Promise<number> {
+    const query: any = { role: { $ne: 'ADMIN' } };
+    if (search) {
+      query.name = { $regex: search, $options: 'i' };
+    }
+    return UserModel.countDocuments(query);
+  }
 }

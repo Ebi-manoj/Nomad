@@ -1,18 +1,18 @@
-import { LoginuserResponseDTO } from '../../domain/dto/authDTO';
-import { User } from '../../domain/entities/User';
+import { LoginuserResponseDTO } from '../../../domain/dto/authDTO';
+import { User } from '../../../domain/entities/User';
 import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
-} from '../../domain/enums/Constants';
+} from '../../../domain/enums/Constants';
 
-import { USER } from '../../domain/enums/Constants';
+import { USER } from '../../../domain/enums/Constants';
 
-import { InvalidToken } from '../../domain/errors/CustomError';
-import { Email } from '../../domain/value-objects/email';
-import { userMapper } from '../mappers/UserResponse.mapper';
-import { IGoogleClient } from '../providers/IGoogleClient';
-import { ITOkenGenerator } from '../providers/ITokenGenerator';
-import { UserRepository } from '../repositories/UserRepository';
+import { InvalidToken } from '../../../domain/errors/CustomError';
+import { Email } from '../../../domain/value-objects/email';
+import { userMapper } from '../../mappers/UserResponse.mapper';
+import { IGoogleClient } from '../../providers/IGoogleClient';
+import { ITOkenGenerator } from '../../providers/ITokenGenerator';
+import { UserRepository } from '../../repositories/UserRepository';
 
 export class GoogleSignupUseCase {
   constructor(

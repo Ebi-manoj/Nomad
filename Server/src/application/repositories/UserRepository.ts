@@ -6,4 +6,10 @@ export interface UserRepository {
   findById(id: string): Promise<User | null>;
   findByMobile(mobile: string): Promise<User | null>;
   updateUser(user: User): Promise<void>;
+  fetchUsers(
+    limit: number,
+    skip: number,
+    search?: string
+  ): Promise<User[] | []>;
+  countUsers(search?: string): Promise<number>;
 }

@@ -1,9 +1,9 @@
-import { RefreshTokenRequestDTO } from '../../domain/dto/authDTO';
-import { ACCESS_TOKEN_EXPIRY } from '../../domain/enums/Constants';
-import { InvalidToken } from '../../domain/errors/CustomError';
-import { userMapper } from '../mappers/UserResponse.mapper';
-import { ITOkenGenerator } from '../providers/ITokenGenerator';
-import { UserRepository } from '../repositories/UserRepository';
+import { RefreshTokenRequestDTO } from '../../../domain/dto/authDTO';
+import { ACCESS_TOKEN_EXPIRY } from '../../../domain/enums/Constants';
+import { InvalidToken } from '../../../domain/errors/CustomError';
+import { userMapper } from '../../mappers/UserResponse.mapper';
+import { ITOkenGenerator } from '../../providers/ITokenGenerator';
+import { UserRepository } from '../../repositories/UserRepository';
 
 export class RefreshTokenUseCase {
   constructor(
