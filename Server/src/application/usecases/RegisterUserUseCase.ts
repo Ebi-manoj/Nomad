@@ -3,6 +3,7 @@ import {
   UserResponseDTO,
 } from '../../domain/dto/authDTO';
 import { User } from '../../domain/entities/User';
+import { USER } from '../../domain/enums/Constants';
 import { UserAlreadyExist } from '../../domain/errors/CustomError';
 import { Email } from '../../domain/value-objects/email';
 import { Mobile } from '../../domain/value-objects/mobile';
@@ -38,6 +39,7 @@ export class RegisterUserUseCase {
       email,
       mobile,
       password: hashedPassword,
+      role: USER,
     });
 
     const savedUser = await this.userRepository.create(user);

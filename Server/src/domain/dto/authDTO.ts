@@ -10,6 +10,7 @@ export interface UserResponseDTO {
   fullName: string;
   email: string;
   mobile: string | undefined;
+  role: string;
   createdAt: Date;
   updatedAt: Date;
 }

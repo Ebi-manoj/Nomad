@@ -1,5 +1,6 @@
 import { LoginuserResponseDTO } from '../../domain/dto/authDTO';
 import { User } from '../../domain/entities/User';
+import { USER } from '../../domain/enums/Constants';
 import { InvalidToken } from '../../domain/errors/CustomError';
 import { Email } from '../../domain/value-objects/email';
 import { userMapper } from '../mappers/RegisterUser.mapper';
@@ -25,17 +26,17 @@ export class GoogleSignupUseCase {
     if (isExist) {
       savedUser = isExist;
     } else {
-      const user = new User({ email, fullName: payload.name });
+      const user = new User({ email, fullName: payload.name, role: USER });
       savedUser = await this.userRepository.create(user);
     }
 
     const accessToken = this.tokenGenerator.generateToken(
-      { userId: savedUser.getId() },
+      { userId: savedUser.getId(), role: savedUser.getRole() },
       '5min'
     );
 
     const refreshToken = this.tokenGenerator.generateToken(
-      { userId: savedUser.getId() },
+      { userId: savedUser.getId(), role: savedUser.getRole() },
       '7d'
     );
     return {

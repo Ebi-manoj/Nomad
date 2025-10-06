@@ -6,6 +6,7 @@ export interface IUserModel {
   email: string;
   mobile?: string;
   password?: string;
+  role: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +28,11 @@ const userSchema = new Schema<IUserModel>(
     password: {
       type: String,
       default: null,
+    },
+    role: {
+      type: String,
+      default: 'user',
+      enum: ['user', 'admin'],
     },
   },
   { timestamps: true }

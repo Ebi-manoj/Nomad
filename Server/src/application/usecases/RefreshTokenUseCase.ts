@@ -14,13 +14,12 @@ export class RefreshTokenUseCase {
     const payload = this.tokenGenerator.verifyToken<{ userId: string }>(
       data.refreshToken
     );
-    console.log(payload);
     if (!payload) throw new InvalidToken();
     const user = await this.userRepostiory.findById(payload.userId);
     if (!user) throw new InvalidToken();
 
     const accessToken = this.tokenGenerator.generateToken(
-      { userId: user.getId() },
+      { userId: user.getId(), role: user.getRole() },
       '5min'
     );
 

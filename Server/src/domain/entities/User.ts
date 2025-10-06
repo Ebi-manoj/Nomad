@@ -7,6 +7,7 @@ export interface UserProps {
   email: Email;
   mobile?: Mobile;
   password?: string;
+  role: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -17,6 +18,7 @@ export class User {
   private email: Email;
   private mobile: Mobile | null;
   private password: string | null;
+  private role: string;
   private readonly createdAt: Date;
   private updatedAt: Date;
 
@@ -26,6 +28,7 @@ export class User {
     this.email = props.email;
     this.mobile = props.mobile || null;
     this.password = props.password || null;
+    this.role = props.role;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
   }
@@ -46,6 +49,9 @@ export class User {
   }
   getPassword() {
     return this.password;
+  }
+  getRole() {
+    return this.role;
   }
   getCreatedAt() {
     return this.createdAt;

@@ -29,11 +29,11 @@ export class LoginUserUsecase {
     if (!isMatch) throw new InvalidCredindatials();
 
     const accessToken = this.tokenGenerator.generateToken(
-      { userId: user.getId() },
+      { userId: user.getId(), role: user.getRole() },
       '5min'
     );
     const refreshToken = this.tokenGenerator.generateToken(
-      { userId: user.getId() },
+      { userId: user.getId(), role: user.getRole() },
       '7d'
     );
     return { accessToken, refreshToken, user: userMapper(user) };

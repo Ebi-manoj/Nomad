@@ -10,6 +10,7 @@ export function userDomainMapper(userDoc: IUserModel): User {
     email: new Email(userDoc.email),
     mobile: userDoc.mobile ? new Mobile(userDoc.mobile) : undefined,
     password: userDoc.password,
+    role: userDoc.role,
     createdAt: userDoc.createdAt,
     updatedAt: userDoc.updatedAt,
   });
