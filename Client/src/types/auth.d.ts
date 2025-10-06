@@ -5,6 +5,7 @@ export interface User {
   email: string;
   fullName: string;
   mobile: string;
+  isBlocked: boolean;
   createdAt: string;
 }
 

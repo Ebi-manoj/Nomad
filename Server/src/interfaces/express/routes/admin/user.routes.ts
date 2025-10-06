@@ -5,8 +5,6 @@ import { userManagementComposer } from '../../../../infra/services/composer/admi
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  console.log('Reached');
-
   const adapter = await expressAdapter(req, httpReq =>
     userManagementComposer().getAllUsers(httpReq)
   );
@@ -18,6 +16,7 @@ router.patch('/:userId/block', async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpReq =>
     userManagementComposer().blockUser(httpReq)
   );
+
   return res.status(adapter.statusCode).json(adapter.body);
 });
 

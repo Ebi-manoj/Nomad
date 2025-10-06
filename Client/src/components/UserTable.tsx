@@ -2,9 +2,20 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ToggleButton } from './ToogleButton';
 import type { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { toggleBlock } from '@/store/features/admin/users/usersSlice.thunk';
+import { toast } from 'sonner';
 
 export function UserTable() {
   const { users } = useSelector((state: RootState) => state.users);
+  const dispatch = useAppDispatch();
+  async function handleToggler(id: string) {
+    try {
+      await dispatch(toggleBlock(id)).unwrap();
+    } catch (error) {
+      typeof error == 'string' && toast.error(error);
+    }
+  }
 
   return (
     <div className="space-y-4">
@@ -54,8 +65,8 @@ export function UserTable() {
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
                   <ToggleButton
-                    state={false}
-                    clickHandler={() => {}}
+                    state={user.isBlocked}
+                    clickHandler={() => handleToggler(user.id)}
                   ></ToggleButton>
                 </td>
               </tr>

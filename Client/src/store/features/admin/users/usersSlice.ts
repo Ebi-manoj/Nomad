@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { userState } from './userSlice';
-import { fetchUsers } from './usersSlice.thunk';
+import { fetchUsers, toggleBlock } from './usersSlice.thunk';
+import type { User } from '@/types/auth';
 
 const initialState: userState = {
   loading: false,
@@ -21,6 +22,12 @@ const usersSlice = createSlice({
       state.loading = false;
       state.users = action.payload.users;
       state.totalPages = action.payload.totalPages;
+    });
+    builder.addCase(toggleBlock.fulfilled, (state, action) => {
+      const updatedUser: User = action.payload;
+      console.log(updatedUser);
+      const index = state.users.findIndex(u => u.id == updatedUser.id);
+      if (index != -1) state.users[index] = updatedUser;
     });
   },
 });
