@@ -44,3 +44,15 @@ export class InvalidToken extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+
+export class UpdateFailed extends CustomError {
+  constructor(message: string = ErrorMessages.UPDATE_FAILED) {
+    super(HttpStatus.INTERNAL_SERVER_ERROR, message);
+  }
+}
+
+export class SuspendedAccount extends CustomError {
+  constructor(message: string = ErrorMessages.SUSPENDED_ACCOUNT) {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

@@ -5,7 +5,7 @@ export interface UserRepository {
   findByEmail(email: string): Promise<User | null>;
   findById(id: string): Promise<User | null>;
   findByMobile(mobile: string): Promise<User | null>;
-  updateUser(user: User): Promise<void>;
+  updateUser(user: User): Promise<User | void>;
   fetchUsers(
     limit: number,
     skip: number,

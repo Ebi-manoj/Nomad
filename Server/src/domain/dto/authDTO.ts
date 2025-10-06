@@ -11,6 +11,7 @@ export interface UserResponseDTO {
   email: string;
   mobile: string | undefined;
   role: string;
+  isBlocked: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -54,20 +55,4 @@ export interface ResetPasswordRequestDTO {
 
 export interface RefreshTokenRequestDTO {
   refreshToken: string;
-}
-
-export interface AdminResponseDTO {
-  id: string;
-  email: string;
-}
-
-export interface LoginAdminRequestDTO {
-  email: string;
-  password: string;
-}
-
-export interface LoginAdminResponseDTO {
-  accessToken: string;
-  refreshToken: string;
-  admin: AdminResponseDTO;
 }

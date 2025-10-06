@@ -8,6 +8,7 @@ export interface UserProps {
   mobile?: Mobile;
   password?: string;
   role: string;
+  isBlocked: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -19,6 +20,7 @@ export class User {
   private mobile: Mobile | null;
   private password: string | null;
   private role: string;
+  private isBlocked: boolean;
   private readonly createdAt: Date;
   private updatedAt: Date;
 
@@ -29,6 +31,7 @@ export class User {
     this.mobile = props.mobile || null;
     this.password = props.password || null;
     this.role = props.role;
+    this.isBlocked = props.isBlocked || false;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
   }
@@ -59,7 +62,13 @@ export class User {
   getUpdatedAt() {
     return this.createdAt;
   }
+  getIsBlocked() {
+    return this.isBlocked;
+  }
   setPassword(newPassword: string) {
     this.password = newPassword;
+  }
+  toggleIsBlocked() {
+    this.isBlocked = !this.isBlocked;
   }
 }

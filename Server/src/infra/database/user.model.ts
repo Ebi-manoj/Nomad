@@ -7,6 +7,7 @@ export interface IUserModel {
   mobile?: string;
   password?: string;
   role: string;
+  isBlocked: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,6 +34,10 @@ const userSchema = new Schema<IUserModel>(
       type: String,
       default: 'user',
       enum: ['user', 'admin'],
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

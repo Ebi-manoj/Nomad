@@ -40,6 +40,7 @@ export class RegisterUserUseCase {
       mobile,
       password: hashedPassword,
       role: USER,
+      isBlocked: false,
     });
 
     const savedUser = await this.userRepository.create(user);

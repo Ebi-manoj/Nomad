@@ -7,7 +7,10 @@ import {
 
 import { USER } from '../../../domain/enums/Constants';
 
-import { InvalidToken } from '../../../domain/errors/CustomError';
+import {
+  InvalidToken,
+  SuspendedAccount,
+} from '../../../domain/errors/CustomError';
 import { Email } from '../../../domain/value-objects/email';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { IGoogleClient } from '../../providers/IGoogleClient';
@@ -30,9 +33,15 @@ export class GoogleSignupUseCase {
     const isExist = await this.userRepository.findByEmail(email.getValue());
     let savedUser: User;
     if (isExist) {
+      if (isExist.getIsBlocked()) throw new SuspendedAccount();
       savedUser = isExist;
     } else {
-      const user = new User({ email, fullName: payload.name, role: USER });
+      const user = new User({
+        email,
+        fullName: payload.name,
+        role: USER,
+        isBlocked: false,
+      });
       savedUser = await this.userRepository.create(user);
     }
 

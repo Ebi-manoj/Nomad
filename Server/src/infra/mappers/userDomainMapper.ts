@@ -11,6 +11,7 @@ export function userDomainMapper(userDoc: IUserModel): User {
     mobile: userDoc.mobile ? new Mobile(userDoc.mobile) : undefined,
     password: userDoc.password,
     role: userDoc.role,
+    isBlocked: userDoc.isBlocked,
     createdAt: userDoc.createdAt,
     updatedAt: userDoc.updatedAt,
   });

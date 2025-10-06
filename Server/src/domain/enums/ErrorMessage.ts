@@ -6,4 +6,6 @@ export const ErrorMessages = {
   INVALID_CREDINTIALS: 'Invalid Credintails',
   INVALID_OTP: 'Invalid OTP',
   INVALID_TOKEN: 'Invalid Token',
+  UPDATE_FAILED: 'Update Failed',
+  SUSPENDED_ACCOUNT: 'Your account has been suspended',
 } as const;

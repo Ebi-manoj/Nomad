@@ -6,7 +6,10 @@ import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
 } from '../../../domain/enums/Constants';
-import { InvalidCredindatials } from '../../../domain/errors/CustomError';
+import {
+  InvalidCredindatials,
+  SuspendedAccount,
+} from '../../../domain/errors/CustomError';
 import { Email } from '../../../domain/value-objects/email';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { PasswordHasher } from '../../providers/IpasswordHasher';
@@ -25,7 +28,7 @@ export class LoginUserUsecase {
     const user = await this.userRepository.findByEmail(email.getValue());
     if (!user) throw new InvalidCredindatials();
     console.log('User Found');
-
+    if (user.getIsBlocked()) throw new SuspendedAccount();
     const password = user.getPassword();
     if (!password) throw new InvalidCredindatials();
 

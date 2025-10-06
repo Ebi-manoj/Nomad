@@ -30,11 +30,13 @@ export class MongoUserRepository implements UserRepository {
     if (!found) return null;
     return userDomainMapper(found);
   }
-  async updateUser(user: User): Promise<void> {
+  async updateUser(user: User): Promise<User | void> {
     const found = await UserModel.findById(user.getId());
     if (!found) return;
     found.password = user.getPassword() || found.password;
+    found.isBlocked = user.getIsBlocked();
     await found.save();
+    return userDomainMapper(found);
   }
   async fetchUsers(
     limit: number,

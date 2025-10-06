@@ -3,4 +3,5 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 
 export interface IUserManagementController {
   getAllUsers(httpRequest: HttpRequest): Promise<HttpResponse>;
+  blockUser(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

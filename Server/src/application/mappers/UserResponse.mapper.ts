@@ -8,6 +8,7 @@ export function userMapper(user: User): UserResponseDTO {
     email: user.getEmail(),
     mobile: user.getMobile() || undefined,
     role: user.getRole(),
+    isBlocked: user.getIsBlocked(),
     createdAt: user.getCreatedAt(),
     updatedAt: user.getUpdatedAt(),
   };

@@ -1,4 +1,6 @@
+import { BlockUserUseCase } from '../../../application/usecases/Admin/BlockUserUseCase';
 import { GetAllUsersUseCase } from '../../../application/usecases/Admin/GetAllUsersUseCase';
+import { UserResponseDTO } from '../../../domain/dto/authDTO';
 import {
   GetAllUsersRequestDTO,
   GetAllUsersResponseDTO,
@@ -10,7 +12,10 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IUserManagementController } from './IUserManagementController';
 
 export class userManagementController implements IUserManagementController {
-  constructor(private readonly getAllUserUseCase: GetAllUsersUseCase) {}
+  constructor(
+    private readonly getAllUserUseCase: GetAllUsersUseCase,
+    private readonly blockUserUseCase: BlockUserUseCase
+  ) {}
 
   async getAllUsers(httpRequest: HttpRequest): Promise<HttpResponse> {
     const parsed = httpRequest.query as Record<string, unknown>;
@@ -21,6 +26,14 @@ export class userManagementController implements IUserManagementController {
     const dto: GetAllUsersRequestDTO = { page, limit, search };
     const result = await this.getAllUserUseCase.execute(dto);
     const response = ApiDTO.success<GetAllUsersResponseDTO>(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async blockUser(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { userId } = httpRequest.path as { userId: string };
+
+    const result = await this.blockUserUseCase.execute(userId);
+    const response = ApiDTO.success<UserResponseDTO>(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }
