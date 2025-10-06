@@ -21,7 +21,7 @@ export class RefreshTokenUseCase {
 
     const accessToken = this.tokenGenerator.generateToken(
       { userId: user.getId(), role: user.getRole() },
-      '5min'
+      ACCESS_TOKEN_EXPIRY
     );
 
     return {

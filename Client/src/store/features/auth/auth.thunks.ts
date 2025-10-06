@@ -5,22 +5,20 @@ import {
   refreshTokenApi,
 } from './auth.api';
 import type { loginFormData } from '@/validation/auth';
-import { isAxiosError } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { ErrorMessage } from '@/utils/constants';
+
 export const login = createAsyncThunk(
   'auth/login',
   async (data: loginFormData, { rejectWithValue }) => {
     try {
       return await loginApi(data);
     } catch (error) {
-      if (isAxiosError(error)) {
-        return rejectWithValue(
-          error.response?.data?.error?.message ||
-            'An error occurred during sign in'
-        );
-      }
-      return rejectWithValue(
-        'Unable to connect to the server. Please try again.'
+      return useHandleThunkError(
+        error,
+        rejectWithValue,
+        ErrorMessage.SIGNUP_ERROR
       );
     }
   }
@@ -32,13 +30,10 @@ export const refreshToken = createAsyncThunk(
     try {
       return await refreshTokenApi();
     } catch (error) {
-      if (isAxiosError(error)) {
-        return rejectWithValue(
-          error.response?.data?.error?.message || 'Session expired'
-        );
-      }
-      return rejectWithValue(
-        'Unable to connect to the server. Please try again.'
+      return useHandleThunkError(
+        error,
+        rejectWithValue,
+        ErrorMessage.SESSION_EXPIRED
       );
     }
   }
@@ -50,13 +45,10 @@ export const googleSignup = createAsyncThunk(
     try {
       return await googleSignupApi(code);
     } catch (error) {
-      if (isAxiosError(error)) {
-        return rejectWithValue(
-          error.response?.data?.error?.message || 'Login Failed'
-        );
-      }
-      return rejectWithValue(
-        'Unable to connect to the server. Please try again.'
+      return useHandleThunkError(
+        error,
+        rejectWithValue,
+        ErrorMessage.LOGIN_FAILED
       );
     }
   }
@@ -68,13 +60,10 @@ export const logout = createAsyncThunk(
     try {
       return await logoutApi();
     } catch (error) {
-      if (isAxiosError(error)) {
-        return rejectWithValue(
-          error.response?.data?.error?.message || 'Logout Failed'
-        );
-      }
-      return rejectWithValue(
-        'Unable to connect to the server. Please try again.'
+      return useHandleThunkError(
+        error,
+        rejectWithValue,
+        ErrorMessage.LOGOUT_FAILED
       );
     }
   }

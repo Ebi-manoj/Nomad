@@ -34,11 +34,11 @@ export class LoginUserUsecase {
 
     const accessToken = this.tokenGenerator.generateToken(
       { userId: user.getId(), role: user.getRole() },
-      '5min'
+      ACCESS_TOKEN_EXPIRY
     );
     const refreshToken = this.tokenGenerator.generateToken(
       { userId: user.getId(), role: user.getRole() },
-      '7d'
+      REFRESH_TOKEN_EXPIRY
     );
     return { accessToken, refreshToken, user: userMapper(user) };
   }
