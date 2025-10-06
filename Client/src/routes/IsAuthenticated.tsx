@@ -1,10 +1,10 @@
-import type { RootState } from '@/store/store';
+import { useAuthRole } from '@/hooks/useAuthRole';
 import type { ReactNode } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 export const IsAuthenticated = ({ children }: { children: ReactNode }) => {
-  const { token } = useSelector((state: RootState) => state.auth);
-  if (token) return <Navigate to={'/home'} replace />;
+  const { role } = useAuthRole();
+  if (role == 'admin') return <Navigate to={'/admin'} replace />;
+  if (role == 'user') return <Navigate to={'/hike'} replace />;
   return <>{children}</>;
 };

@@ -1,10 +1,15 @@
-import type { RootState } from '@/store/store';
+import { useAuthRole } from '@/hooks/useAuthRole';
 import type { ReactNode } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-export const Protected = ({ children }: { children: ReactNode }) => {
-  const { token } = useSelector((state: RootState) => state.auth);
-  if (!token) return <Navigate to={'/auth/sign-in'} replace />;
+interface protectedProps {
+  children: ReactNode;
+  allowedRole: 'user' | 'admin';
+}
+
+export const Protected = ({ children, allowedRole }: protectedProps) => {
+  const payload = useAuthRole();
+  if (!payload.role || payload.role !== allowedRole)
+    return <Navigate to={'/auth/sign-in'} replace />;
   return <>{children}</>;
 };

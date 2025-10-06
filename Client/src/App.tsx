@@ -12,6 +12,7 @@ import { IsAuthenticated } from './routes/IsAuthenticated';
 import { HomeLayout } from './layouts/HomeLayout';
 import { Hike } from './pages/User/Hike';
 import { Landing } from './pages/Landing';
+import { AdminDashboard } from './pages/Admin/adminDashboard';
 
 function App() {
   return (
@@ -43,13 +44,22 @@ function App() {
       <Route
         path="/"
         element={
-          <Protected>
+          <Protected allowedRole="user">
             <HomeLayout />
           </Protected>
         }
       >
         <Route path="hike" element={<Hike />} />
       </Route>
+
+      <Route
+        path="/admin"
+        element={
+          <Protected allowedRole="admin">
+            <AdminDashboard />
+          </Protected>
+        }
+      />
     </Routes>
   );
 }
