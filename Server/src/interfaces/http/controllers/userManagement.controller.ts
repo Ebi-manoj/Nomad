@@ -15,7 +15,7 @@ export class userManagementController implements IUserManagementController {
   async getAllUsers(httpRequest: HttpRequest): Promise<HttpResponse> {
     const parsed = httpRequest.query as Record<string, unknown>;
     const page = Number(parsed.page) || 1;
-    const limit = Number(parsed.limit) || 10;
+    const limit = Number(parsed.limit) || 2;
     const search = parsed.search as string | undefined;
 
     const dto: GetAllUsersRequestDTO = { page, limit, search };

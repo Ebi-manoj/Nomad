@@ -13,6 +13,8 @@ import { HomeLayout } from './layouts/HomeLayout';
 import { Hike } from './pages/User/Hike';
 import { Landing } from './pages/Landing';
 import { AdminDashboard } from './pages/Admin/AdminDashboard';
+import { AdminLayout } from './layouts/AdminLayout';
+import { UserMangement } from './pages/Admin/UserManagement';
 
 function App() {
   return (
@@ -56,10 +58,13 @@ function App() {
         path="/admin"
         element={
           <Protected allowedRole="admin">
-            <AdminDashboard />
+            <AdminLayout />
           </Protected>
         }
-      />
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="users" element={<UserMangement />} />
+      </Route>
     </Routes>
   );
 }

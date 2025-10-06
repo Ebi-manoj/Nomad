@@ -5,6 +5,8 @@ import { userManagementComposer } from '../../../../infra/services/composer/admi
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
+  console.log('Reached');
+
   const adapter = await expressAdapter(req, httpReq =>
     userManagementComposer().getAllUsers(httpReq)
   );

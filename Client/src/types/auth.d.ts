@@ -13,14 +13,3 @@ export interface AuthState {
   token: string | null;
   user: User | null;
 }
-
-export interface Admin {
-  id: string;
-  email: string;
-}
-
-export interface AdminAuthState {
-  loading: boolean;
-  token: string | null;
-  admin: Admin | null;
-}

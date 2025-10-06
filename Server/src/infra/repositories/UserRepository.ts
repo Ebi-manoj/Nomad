@@ -48,11 +48,11 @@ export class MongoUserRepository implements UserRepository {
     const users = await UserModel.find(query).skip(skip).limit(limit).lean();
     return users.map(userDoc => userDomainMapper(userDoc));
   }
-  countUsers(search?: string): Promise<number> {
-    const query: any = { role: { $ne: 'ADMIN' } };
+  async countUsers(search?: string): Promise<number> {
+    const query: any = { role: { $ne: 'admin' } };
     if (search) {
-      query.name = { $regex: search, $options: 'i' };
+      query.fullName = { $regex: search, $options: 'i' };
     }
-    return UserModel.countDocuments(query);
+    return await UserModel.countDocuments(query);
   }
 }
