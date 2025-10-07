@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { CustomError } from '../../../domain/errors/CustomError';
 import { ApiDTO } from '../../http/helpers/implementation/apiDTO';
+import { ZodError } from 'zod';
 
 export function errorHandling(
   err: unknown,
@@ -15,6 +16,9 @@ export function errorHandling(
   if (err instanceof CustomError) {
     message = err.message;
     statusCode = err.statusCode;
+  } else if (err instanceof ZodError) {
+    message = err.issues[0].message;
+    statusCode = HttpStatus.BAD_REQUEST;
   }
   console.error(err);
   const response = ApiDTO.error(message);

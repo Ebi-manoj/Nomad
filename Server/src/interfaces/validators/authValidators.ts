@@ -1,4 +1,4 @@
-import z, { email } from 'zod';
+import z from 'zod';
 
 export const signUpShema = z.object({
   fullName: z
@@ -20,4 +20,27 @@ export const loginSchema = z.object({
   password: z
     .string()
     .min(6, { message: 'Password must be at least 6 characters long' }),
+});
+
+export const emailSchema = z.object({
+  email: z.email({ message: 'Invalid email address' }),
+});
+
+export const verifyOTPSchema = z.object({
+  email: z.email({ message: 'Invalid email address' }),
+  otp: z.string().min(6, { message: 'Invalid otp' }),
+});
+
+export const resetPasswordSchema = z.object({
+  email: z.email({ message: 'Invalid email address' }),
+  password: z
+    .string()
+    .min(6, { message: 'Password must be at least 6 characters long' }),
+});
+
+export const refreshTokenSchema = z.object({
+  refreshToken: z.string({ message: 'Invalid token or expired' }),
+});
+export const googleCodeSchema = z.object({
+  code: z.string({ message: 'Invalid authorization code' }),
 });
