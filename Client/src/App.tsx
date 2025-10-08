@@ -1,13 +1,8 @@
-import { useState } from 'react';
 import './index.css';
-import { Signup } from './signup';
+import { AppRouter } from './routes/index.routes';
 
 function App() {
-  return (
-    <div>
-      <Signup />
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;
