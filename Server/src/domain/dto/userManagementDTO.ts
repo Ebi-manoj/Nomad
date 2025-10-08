@@ -1,4 +1,3 @@
-import { User } from '../entities/User';
 import { UserResponseDTO } from './authDTO';
 
 export interface GetAllUsersRequestDTO {
