@@ -15,10 +15,14 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { logout } from '@/store/features/auth/auth.thunks';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
 
 export function ProfilePopover() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state: RootState) => state.auth);
+
   async function handleLogout() {
     try {
       await dispatch(logout()).unwrap();
@@ -44,7 +48,11 @@ export function ProfilePopover() {
               <AvatarImage src="" alt="Cristiano" />
               <AvatarFallback>
                 <div className="w-20 h-20 rounded-full bg-gray-400 flex items-center justify-center text-white">
-                  LM
+                  {user?.fullName
+                    ?.split(' ')
+                    ?.map(w => w[0])
+                    .join('')
+                    .toUpperCase()}
                 </div>
               </AvatarFallback>
             </Avatar>

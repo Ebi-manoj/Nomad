@@ -1,5 +1,5 @@
-import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { logout, refreshToken } from '@/store/features/auth/auth.thunks';
+import type { AppDispatch } from '@/store/store';
 import type { Store } from '@reduxjs/toolkit';
 import axios from 'axios';
 let store: Store;
@@ -27,17 +27,18 @@ axiosInstance.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
+    const state = store.getState();
+    const token = state.auth.token;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && token && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const dispatch = useAppDispatch();
+      const dispatch: AppDispatch = store.dispatch;
       try {
         await dispatch(refreshToken()).unwrap();
-        const state = store.getState();
-        const token = state.auth.token;
+        const newToken = store.getState().auth.token;
 
-        originalRequest.headers.Authorization = `Bearer ${token}`;
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
         await dispatch(logout());

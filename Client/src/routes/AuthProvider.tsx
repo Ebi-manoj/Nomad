@@ -1,3 +1,4 @@
+import { HomeSkeleton } from '@/components/skeletons/HomeSkeleton';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { refreshToken } from '@/store/features/auth/auth.thunks';
 import type { RootState } from '@/store/store';
@@ -20,7 +21,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, [token]);
   if (isChecking || loading) {
-    return <div>Loading...</div>;
+    return <HomeSkeleton />;
   }
   return <>{children}</>;
 };

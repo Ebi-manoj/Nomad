@@ -4,7 +4,7 @@ import { fetchUsers, toggleBlock } from './usersSlice.thunk';
 import type { User } from '@/types/auth';
 
 const initialState: userState = {
-  loading: false,
+  loading: true,
   users: [],
   totalPages: 0,
 };
@@ -25,7 +25,6 @@ const usersSlice = createSlice({
     });
     builder.addCase(toggleBlock.fulfilled, (state, action) => {
       const updatedUser: User = action.payload;
-      console.log(updatedUser);
       const index = state.users.findIndex(u => u.id == updatedUser.id);
       if (index != -1) state.users[index] = updatedUser;
     });
