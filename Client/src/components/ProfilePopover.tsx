@@ -12,7 +12,7 @@ import { RiProfileLine } from 'react-icons/ri';
 import { IoIosWarning } from 'react-icons/io';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { logout } from '@/store/features/auth/auth.thunks';
 import { useSelector } from 'react-redux';
@@ -22,6 +22,8 @@ export function ProfilePopover() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
+  const location = useLocation();
+  const path = location.pathname;
 
   async function handleLogout() {
     try {
@@ -34,8 +36,12 @@ export function ProfilePopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-colors">
-          <FaUserLarge />
+        <button
+          className={`p-2 cursor-pointer group transition-colors ${
+            path == '/profile' && 'border-b-2'
+          }  border-black`}
+        >
+          <FaUserLarge className="transition-colors group-hover:text-gray-600" />
         </button>
       </PopoverTrigger>
 
@@ -65,7 +71,10 @@ export function ProfilePopover() {
 
         {/* Menu Options */}
         <div className="flex flex-col gap-3 text-sm">
-          <button className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors">
+          <button
+            className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
+            onClick={() => navigate('/profile')}
+          >
             <span className="flex items-center gap-2">
               <RiProfileLine size={18} />
               Profile management

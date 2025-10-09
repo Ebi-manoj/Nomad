@@ -4,8 +4,11 @@ import { LuNotebookText } from 'react-icons/lu';
 import { IoNotificationsSharp } from 'react-icons/io5';
 
 import { ProfilePopover } from './ProfilePopover';
+import { Link, useLocation } from 'react-router-dom';
 
 export const UserNavbar = () => {
+  const location = useLocation();
+  const path = location.pathname;
   return (
     <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,10 +20,15 @@ export const UserNavbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-20">
-            <a className="flex items-center gap-1 text-gray-900 font-medium border-b-2 border-black pb-1 cursor-pointer">
+            <Link
+              to={'/hike'}
+              className={`flex items-center gap-1 text-gray-900 font-medium ${
+                path == '/hike' && 'border-b-2'
+              }  border-black pb-1 cursor-pointer`}
+            >
               <PiPersonSimpleHikeBold className="w-5 h-5" />
               Hike
-            </a>
+            </Link>
             <a className="flex items-center gap-1 text-gray-900 font-medium  border-black pb-1 cursor-pointer">
               <RiMotorbikeFill className="w-5 h-5" />
               Ride
@@ -31,7 +39,11 @@ export const UserNavbar = () => {
             <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-colors">
               <IoNotificationsSharp />
             </button>
-            <button className="cursor-pointer flex items-center gap-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">
+            <button
+              className={`cursor-pointer flex items-center gap-1 px-4 py-2 ${
+                path == '/activity' && 'border-b-2'
+              } bg-gray-100 border-black hover:bg-gray-200 rounded-lg font-medium transition-colors`}
+            >
               <LuNotebookText />
               Activity
             </button>
