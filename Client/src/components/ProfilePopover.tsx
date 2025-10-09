@@ -57,7 +57,7 @@ export function ProfilePopover() {
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="font-medium">Lionel</span>
+              <span className="font-medium">{user?.fullName}</span>
             </div>
           </div>
         </div>
