@@ -3,3 +3,9 @@ export const USER = 'user';
 export const ADMIN = 'admin';
 export const REFRESH_TOKEN_EXPIRY = '7d';
 export const ACCESS_TOKEN_EXPIRY = '7d';
+export const allowedMimeTypes = [
+  'image/jpeg',
+  'image/jpeg',
+  'image/png',
+  'application/pdf',
+];
