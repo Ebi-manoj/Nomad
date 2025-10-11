@@ -15,6 +15,13 @@ import { DialogDescription } from '@radix-ui/react-dialog';
 import axiosInstance from '@/utils/axiosInstance';
 import { PRESIGNED_URL_API } from '@/api/fileuplods';
 import axios from 'axios';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { uploadDocs } from '@/store/features/user/documents/docs.thunk';
+import type { uploadDocsRequest } from '@/store/features/user/documents/doc';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
+import { toast } from 'sonner';
+import { SubmitBtn } from './SubmitBtn';
 
 type docType = 'aadhaar' | 'license';
 
@@ -29,6 +36,9 @@ interface verifyItemProps {
   status: 'verified' | 'not verified';
   onVerify: () => void;
 }
+
+///////////////////////////////////////////////////////
+///Verification section
 
 export function VerificationSection() {
   const [modalType, setModalType] = useState<docType | null>(null);
@@ -54,7 +64,7 @@ export function VerificationSection() {
         />
         <VerifyItem
           label="LICENCE VERIFIED"
-          status="not verified"
+          status="verified"
           onVerify={() => openModal('license')}
         />
       </ul>
@@ -66,6 +76,9 @@ export function VerificationSection() {
     </section>
   );
 }
+
+////////////////////////////////////////////////////////////
+////Verification Item
 
 function VerifyItem({ label, status, onVerify }: verifyItemProps) {
   const isVerified = status === 'verified';
@@ -107,6 +120,9 @@ function VerifyItem({ label, status, onVerify }: verifyItemProps) {
   );
 }
 
+///////////////////////////////////////////////////////
+////Verification Modal
+
 export const VerificationModal = ({
   type,
   open,
@@ -115,9 +131,11 @@ export const VerificationModal = ({
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<docSchemaType>({ resolver: zodResolver(docSchema) });
 
+  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
   if (!type) return null;
 
   async function onSubmit(data: docSchemaType) {
@@ -132,16 +150,29 @@ export const VerificationModal = ({
         fileName,
         fileType,
       });
+
       console.log(signedURL);
       const { uploadURL, fileURL } = signedURL.data.data;
       console.log(uploadURL);
-      const res = await axios.put(uploadURL, file, {
+
+      await axios.put(uploadURL, file, {
         headers: {
           'Content-Type': fileType,
         },
       });
-      console.log(res);
-    } catch (error) {}
+
+      const reqDto: uploadDocsRequest = {
+        userId: user?.id!,
+        fileURL,
+        doc_number: data.doc_number,
+        type: type!,
+      };
+      await dispatch(uploadDocs(reqDto)).unwrap();
+      onClose();
+      toast.success('Document uploaded successfully');
+    } catch (error) {
+      toast.error(typeof error == 'string' && error);
+    }
   }
 
   return (
@@ -194,9 +225,7 @@ export const VerificationModal = ({
             </p>
           )}
 
-          <Button className="w-full mt-2 cursor-pointer" type="submit">
-            Upload & Verify
-          </Button>
+          <SubmitBtn text="Upload & Verify" isLoading={isSubmitting} />
         </form>
       </DialogContent>
     </Dialog>

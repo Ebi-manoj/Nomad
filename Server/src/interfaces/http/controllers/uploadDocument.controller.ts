@@ -9,6 +9,8 @@ import { IUploadDocumentController } from './IUploadDocumentController';
 export class UploadDocumentController implements IUploadDocumentController {
   constructor(private readonly uploadDocument: UploadDocumentUseCase) {}
   async verifyDocument(httpRequest: HttpRequest): Promise<HttpResponse> {
+    console.log('Reached upload Doc controller');
+
     const dto = uploadDocSchema.parse(httpRequest.body);
     const result = await this.uploadDocument.execute(dto);
     const response = ApiDTO.success(result);
