@@ -9,8 +9,12 @@ import {
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { imageSchema, type imageSchemaType } from '@/validation/image';
+import { docSchema, type docSchemaType } from '@/validation/docSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { DialogDescription } from '@radix-ui/react-dialog';
+import axiosInstance from '@/utils/axiosInstance';
+import { PRESIGNED_URL_API } from '@/api/fileuplods';
+import axios from 'axios';
 
 type docType = 'aadhaar' | 'license';
 
@@ -112,12 +116,32 @@ export const VerificationModal = ({
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<imageSchemaType>({ resolver: zodResolver(imageSchema) });
+  } = useForm<docSchemaType>({ resolver: zodResolver(docSchema) });
 
   if (!type) return null;
 
-  function onSubmit(data: imageSchemaType) {
+  async function onSubmit(data: docSchemaType) {
     console.log(data);
+    const file = data.file?.[0];
+    if (!file) return;
+    const fileName = file.name;
+    const fileType = file.type;
+
+    try {
+      const signedURL = await axiosInstance.post(PRESIGNED_URL_API, {
+        fileName,
+        fileType,
+      });
+      console.log(signedURL);
+      const { uploadURL, fileURL } = signedURL.data.data;
+      console.log(uploadURL);
+      const res = await axios.put(uploadURL, file, {
+        headers: {
+          'Content-Type': fileType,
+        },
+      });
+      console.log(res);
+    } catch (error) {}
   }
 
   return (
@@ -129,13 +153,32 @@ export const VerificationModal = ({
               ? 'Aadhaar Verification'
               : 'License Verification'}
           </DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground mt-6">
+            Please upload your {type} card photo for verification.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Please upload your {type} card photo for verification.
-          </p>
-
+          <div>
+            <label
+              htmlFor="doc_number"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Document Number
+            </label>
+            <input
+              type="text"
+              id="doc_number"
+              placeholder={`Enter ${type} Number`}
+              {...register('doc_number')}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            />
+            {errors.doc_number && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.doc_number.message?.toString()}
+              </p>
+            )}
+          </div>
           <div className="flex items-center gap-3 p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition">
             <Upload className="size-6 text-gray-500" aria-hidden="true" />
             <input

@@ -3,9 +3,14 @@ import {
   presignedURLRequestDTO,
   presignURLResponseDTO,
 } from '../../domain/dto/fileuploadDTO';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { env } from '../utils/env';
+import { Stream } from 'nodemailer/lib/xoauth2';
 
 export class S3Fileuploader implements IFileuploadGateway {
   private readonly s3Client;
@@ -36,5 +41,32 @@ export class S3Fileuploader implements IFileuploadGateway {
 
     const fileURL = `https://${env.AWS_BUCKET_NAME}.s3.${env.AWS_S3_REGION}.amazonaws.com/${fileName}`;
     return { uploadURL, fileURL };
+  }
+
+  async getImageBuffer(fileURL: string): Promise<Buffer | undefined> {
+    const url = new URL(fileURL);
+    const bucket = url.hostname.split('.')[0];
+    const key = decodeURIComponent(url.pathname.substring(1));
+    console.log(bucket);
+    console.log(key);
+
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    });
+    let readableStream: Stream.Readable;
+    try {
+      const { Body } = await this.s3Client.send(command);
+      readableStream = Body as Stream.Readable;
+    } catch (error) {
+      return undefined;
+    }
+
+    const chunks: Buffer[] = [];
+    for await (const chunk of readableStream) {
+      chunks.push(Buffer.from(chunk));
+    }
+    Buffer.concat(chunks);
+    console.log(chunks);
   }
 }

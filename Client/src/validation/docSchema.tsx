@@ -1,6 +1,7 @@
 import z from 'zod';
 
-export const imageSchema = z.object({
+export const docSchema = z.object({
+  doc_number: z.string().min(5, { message: 'Provide a valid doc number' }),
   file: z
     .any()
     .refine(file => file?.length > 0, 'Image is required')
@@ -13,4 +14,4 @@ export const imageSchema = z.object({
     ),
 });
 
-export type imageSchemaType = z.infer<typeof imageSchema>;
+export type docSchemaType = z.infer<typeof docSchema>;

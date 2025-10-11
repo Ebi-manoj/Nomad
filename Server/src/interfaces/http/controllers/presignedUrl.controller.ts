@@ -3,9 +3,9 @@ import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
-import { IFileUploaderController } from './IFileuploaderController';
+import { IGetPresignedURLController } from './IGetPresignedUrlController';
 
-export class FileuploadController implements IFileUploaderController {
+export class PresignedUrlController implements IGetPresignedURLController {
   constructor(private readonly presignedUrlService: PresignedUrlService) {}
 
   async getPresignedUrl(httpRequest: HttpRequest): Promise<HttpResponse> {
