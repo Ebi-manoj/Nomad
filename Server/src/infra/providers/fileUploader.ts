@@ -11,6 +11,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { env } from '../utils/env';
 import { Stream } from 'nodemailer/lib/xoauth2';
+import { v4 as uuidv4 } from 'uuid';
 
 export class S3Fileuploader implements IFileuploadGateway {
   private readonly s3Client;
@@ -29,9 +30,10 @@ export class S3Fileuploader implements IFileuploadGateway {
   ): Promise<presignURLResponseDTO> {
     const { fileName, fileType } = data;
 
+    const key = `${uuidv4()}-${fileName}`;
     const command = new PutObjectCommand({
       Bucket: env.AWS_BUCKET_NAME,
-      Key: fileName,
+      Key: key,
       ContentType: fileType,
     });
 
@@ -39,7 +41,7 @@ export class S3Fileuploader implements IFileuploadGateway {
       expiresIn: 120,
     });
 
-    const fileURL = `https://${env.AWS_BUCKET_NAME}.s3.${env.AWS_S3_REGION}.amazonaws.com/${fileName}`;
+    const fileURL = `https://${env.AWS_BUCKET_NAME}.s3.${env.AWS_S3_REGION}.amazonaws.com/${key}`;
     return { uploadURL, fileURL };
   }
 

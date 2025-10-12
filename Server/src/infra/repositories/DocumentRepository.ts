@@ -16,4 +16,9 @@ export class DocumentRepository implements IDocumentRepository {
 
     return documentDomainMapper(created);
   }
+
+  async findDocsByUserId(data: string): Promise<Document[] | []> {
+    const userDocs = await DocumentModel.find({ user_id: data });
+    return userDocs.map(docs => documentDomainMapper(docs));
+  }
 }

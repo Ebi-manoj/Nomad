@@ -1,4 +1,3 @@
-import { unknown } from 'zod';
 import { IhttpRequest } from '../IHttpRequest';
 
 export class HttpRequest implements IhttpRequest {
@@ -7,8 +6,9 @@ export class HttpRequest implements IhttpRequest {
   query?: unknown;
   path?: unknown;
   cookies?: unknown;
+  user?: { id: string; role: string };
 
-  constructor(init?: HttpRequest) {
+  constructor(init?: IhttpRequest) {
     Object.assign(this, init);
   }
 }
