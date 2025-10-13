@@ -27,3 +27,8 @@ export interface fetchAllDocsQuery {
   search?: string;
   limit?: string;
 }
+
+export interface verifyDocReqDTO {
+  document_id: string;
+  status: 'verified' | 'rejected';
+}

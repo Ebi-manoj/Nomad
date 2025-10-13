@@ -14,11 +14,11 @@ export class Document {
   private readonly id?: string;
   private readonly user_id: string;
   private readonly document_type: 'aadhaar' | 'license';
-  private readonly document_number: string;
+  private document_number: string;
   private verified: boolean;
   private fileUrl: string;
   private status: 'pending' | 'verified' | 'rejected';
-  private readonly createdAt: Date;
+  private createdAt: Date;
   private updatedAt: Date;
 
   constructor(props: DocumentProps) {
@@ -70,10 +70,19 @@ export class Document {
   getUpdatedAt() {
     return this.updatedAt;
   }
-  setStatus(status: 'verified' | 'rejected') {
+  setStatus(status: 'pending' | 'verified' | 'rejected') {
     this.status = status;
   }
   setVerified(data: boolean) {
     this.verified = data;
+  }
+  setFileUrl(url: string) {
+    this.fileUrl = url;
+  }
+  setDocumentNumber(num: string) {
+    this.document_number = num;
+  }
+  setCreatedAt(date: Date) {
+    this.createdAt = date;
   }
 }

@@ -22,7 +22,10 @@ const docSlice = createSlice({
     });
     builder.addCase(uploadDocs.fulfilled, (state, action) => {
       state.loading = false;
-      state.documents.push(action.payload);
+      const newDoc = action.payload;
+      state.documents = state.documents.map(doc =>
+        doc.id != newDoc.id ? { ...doc } : newDoc
+      );
     });
   },
 });

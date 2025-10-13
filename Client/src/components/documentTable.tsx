@@ -1,9 +1,18 @@
-import { SubmitBtn } from './SubmitBtn';
 import { StatusBadge } from './StatusBadge';
 import { Eye } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import type { AdminDocument } from '@/store/features/admin/documents/adminDoc';
+import type {
+  AdminDocument,
+  verifyDocReqDTO,
+} from '@/store/features/admin/documents/adminDoc';
 import { formatDate } from '@/utils/dateFormater';
+import { Button } from './ui/button';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { verifyDocument } from '@/store/features/admin/documents/adminDoc.thunk';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
+import { toast } from 'sonner';
+import { ErrorMessage } from '@/utils/constants';
 
 type docTableProps = {
   documents: AdminDocument[];
@@ -11,6 +20,18 @@ type docTableProps = {
 };
 
 export function DocumentTable({ documents, handleImageModal }: docTableProps) {
+  const dispatch = useAppDispatch();
+  const { loading } = useSelector((state: RootState) => state.documents);
+  const handleVerify = async (data: verifyDocReqDTO) => {
+    try {
+      await dispatch(verifyDocument(data)).unwrap();
+      toast.success('Document status updated');
+    } catch (error) {
+      toast.error(
+        typeof error == 'string' ? error : ErrorMessage.SOMETHING_WENT_WRONG
+      );
+    }
+  };
   return (
     <div className="rounded-lg border border-border bg-white shadow-sm overflow-x-auto">
       <table className="w-full border-separate border-spacing-0 text-sm">
@@ -83,16 +104,43 @@ export function DocumentTable({ documents, handleImageModal }: docTableProps) {
 
               <td className="px-5 py-4 text-right">
                 <div className="flex justify-end gap-2">
-                  <SubmitBtn
-                    text="Verify"
-                    isLoading={false}
-                    className="w-auto px-4 py-1.5 text-sm"
-                  />
-                  <SubmitBtn
-                    text="Reject"
-                    isLoading={false}
-                    className="w-auto px-4 py-1.5 text-sm bg-red-500 hover:bg-red-400"
-                  />
+                  {doc.status == 'pending' ? (
+                    <>
+                      {' '}
+                      <Button
+                        type="button"
+                        disabled={loading}
+                        className="w-auto px-4 py-0 text-xs bg-black hover:bg-gray-800 text-white cursor-pointer"
+                        size="sm"
+                        onClick={() =>
+                          handleVerify({
+                            document_id: doc.id,
+                            status: 'verified',
+                          })
+                        }
+                      >
+                        Verify
+                      </Button>
+                      <Button
+                        type="button"
+                        disabled={loading}
+                        className="w-auto px-4 py-0 text-xs bg-red-500 hover:bg-red-400 text-white cursor-pointer"
+                        size="sm"
+                        onClick={() =>
+                          handleVerify({
+                            document_id: doc.id,
+                            status: 'rejected',
+                          })
+                        }
+                      >
+                        Reject
+                      </Button>
+                    </>
+                  ) : (
+                    <p className="text-gray-600 text-xs">
+                      Verification Completed
+                    </p>
+                  )}
                 </div>
               </td>
             </tr>

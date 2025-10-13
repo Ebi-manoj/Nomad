@@ -4,7 +4,7 @@ import {
   DocumentsWithUserDTO,
 } from '../../domain/dto/DocumentsDTO';
 import { Document } from '../../domain/entities/Document';
-import { DocumentModel } from '../database/document.model';
+import { DocumentModel, IDocumentModel } from '../database/document.model';
 import { documentDomainMapper } from '../mappers/documentDomainMapper';
 
 export class DocumentRepository implements IDocumentRepository {
@@ -39,6 +39,14 @@ export class DocumentRepository implements IDocumentRepository {
     );
     if (!updated) return;
     return documentDomainMapper(updated);
+  }
+
+  async findOne(
+    query: Partial<Record<keyof IDocumentModel, any>>
+  ): Promise<Document | null> {
+    const found = await DocumentModel.findOne(query);
+    if (!found) return null;
+    return documentDomainMapper(found);
   }
 
   async findDocsByUserId(data: string): Promise<Document[] | []> {
