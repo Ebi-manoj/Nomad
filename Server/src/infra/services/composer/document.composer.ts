@@ -8,6 +8,7 @@ import { DocumentController } from '../../../interfaces/http/controllers/Documen
 import { MongoUserRepository } from '../../repositories/UserRepository';
 import { DocumentRepository } from '../../repositories/DocumentRepository';
 import { FetchUserDocsUseCase } from '../../../application/usecases/User/FetchUserDocsUseCase';
+import { FetchAllDocsUseCase } from '../../../application/usecases/Admin/FetchAllDocsUseCase';
 
 export function presignedURLComposer(): IGetPresignedURLController {
   const fileUploaderGateway = new S3Fileuploader();
@@ -25,6 +26,11 @@ export function DocumentComposer(): IDocumentController {
   );
 
   const fetchUserDocsUseCase = new FetchUserDocsUseCase(documentRepository);
+  const fetchAllDocsUseCase = new FetchAllDocsUseCase(documentRepository);
 
-  return new DocumentController(uploadDocumentUseCase, fetchUserDocsUseCase);
+  return new DocumentController(
+    uploadDocumentUseCase,
+    fetchUserDocsUseCase,
+    fetchAllDocsUseCase
+  );
 }

@@ -1,7 +1,7 @@
 import {
   uploadDocRequestDTO,
   uploadDocResponseDTO,
-} from '../../../domain/dto/fileuploadDTO';
+} from '../../../domain/dto/DocumentsDTO';
 import { Document } from '../../../domain/entities/Document';
 import { UserNotFound } from '../../../domain/errors/CustomError';
 import { documentMapper } from '../../mappers/DocumentResponseMapper';

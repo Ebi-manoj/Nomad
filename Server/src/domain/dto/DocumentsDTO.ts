@@ -26,3 +26,25 @@ export interface uploadDocResponseDTO {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface FetchDocsQuery {
+  status?: string;
+  search?: string;
+  limit: number;
+  skip: number;
+}
+
+export interface DocumentsWithUserDTO {
+  id: string;
+  type: 'aadhaar' | 'license';
+  doc_number: string;
+  fileURL: string;
+  verified: boolean;
+  status: 'pending' | 'verified' | 'rejected';
+  user: {
+    id: string;
+    fullName: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}

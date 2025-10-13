@@ -1,13 +1,12 @@
 import { ShieldCheck, Upload } from 'lucide-react';
 import { Button } from './ui/button';
-import { cn } from '@/lib/utils';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { docSchema, type docSchemaType } from '@/validation/docSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,7 +15,10 @@ import axiosInstance from '@/utils/axiosInstance';
 import { PRESIGNED_URL_API } from '@/api/fileuplods';
 import axios from 'axios';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { uploadDocs } from '@/store/features/user/documents/docs.thunk';
+import {
+  fetchDocs,
+  uploadDocs,
+} from '@/store/features/user/documents/docs.thunk';
 import type { uploadDocsRequest } from '@/store/features/user/documents/doc';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
@@ -31,21 +33,24 @@ interface VerificationModalProps {
   onClose: () => void;
 }
 
-interface verifyItemProps {
-  label: string;
-  status: 'verified' | 'not verified';
-  onVerify: () => void;
-}
-
 ///////////////////////////////////////////////////////
 ///Verification section
 
 export function VerificationSection() {
   const [modalType, setModalType] = useState<docType | null>(null);
-
+  const { documents } = useSelector((state: RootState) => state.documents);
+  console.log(documents);
+  const dispatch = useAppDispatch();
   const openModal = (type: docType) => setModalType(type);
   const closeModal = () => setModalType(null);
-
+  useEffect(() => {
+    const loadDocs = async () => {
+      await dispatch(fetchDocs()).unwrap();
+    };
+    loadDocs();
+  }, []);
+  const aadharDoc = documents.find(doc => doc.type == 'aadhaar');
+  const licenseDoc = documents.find(doc => doc.type == 'license');
   return (
     <section aria-labelledby="verification" className="space-y-4">
       <h2 id="verification" className="text-lg font-semibold">
@@ -59,12 +64,12 @@ export function VerificationSection() {
       <ul className="mt-4 grid gap-3">
         <VerifyItem
           label="AADHAR VERIFIED"
-          status="not verified"
+          status={`${aadharDoc ? aadharDoc.status : 'not verified'}`}
           onVerify={() => openModal('aadhaar')}
         />
         <VerifyItem
           label="LICENCE VERIFIED"
-          status="verified"
+          status={`${licenseDoc ? licenseDoc.status : 'not verified'}`}
           onVerify={() => openModal('license')}
         />
       </ul>
@@ -79,40 +84,75 @@ export function VerificationSection() {
 
 ////////////////////////////////////////////////////////////
 ////Verification Item
+interface verifyItemProps {
+  label: string;
+  status: 'not verified' | 'pending' | 'verified' | 'rejected';
+  onVerify: () => void;
+}
 
 function VerifyItem({ label, status, onVerify }: verifyItemProps) {
-  const isVerified = status === 'verified';
+  // Determine styling and content based on status
+  const shieldColor =
+    status === 'verified'
+      ? 'text-chart-2'
+      : status === 'pending'
+      ? 'text-yellow-500'
+      : status === 'rejected'
+      ? 'text-red-500'
+      : 'text-muted-foreground';
+
+  const showButton = status === 'not verified';
+  const showPending = status === 'pending';
+  const showVerified = status === 'verified';
+  const showRejected = status === 'rejected';
+
   return (
     <li className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3">
       <div className="flex items-center gap-3">
-        <ShieldCheck
-          className={cn(
-            'size-5',
-            isVerified ? 'text-chart-2' : 'text-muted-foreground'
-          )}
-          aria-hidden="true"
-        />
+        <ShieldCheck className={`size-5 ${shieldColor}`} aria-hidden="true" />
         <div className="text-sm">
           <p className="font-medium">{label}</p>
           <p className="text-xs text-muted-foreground">
-            {isVerified ? 'verified' : 'not verified'}
+            {status === 'pending'
+              ? 'pending'
+              : status === 'verified'
+              ? 'verified'
+              : status === 'rejected'
+              ? 'rejected'
+              : 'not verified'}
           </p>
         </div>
       </div>
 
       <div className="flex items-center gap-2">
-        {isVerified ? (
+        {showVerified && (
           <span className="rounded-md bg-chart-2/10 px-2 py-1 text-xs font-medium text-chart-2">
             Verified
           </span>
-        ) : (
+        )}
+        {showPending && (
+          <span className="rounded-md bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-500">
+            Pending
+          </span>
+        )}
+        {showRejected && (
           <Button
             size="sm"
             variant="secondary"
             className="px-3 cursor-pointer"
             onClick={onVerify}
           >
-            verify
+            Verify again
+          </Button>
+        )}
+        {showButton && (
+          <Button
+            size="sm"
+            variant="secondary"
+            className="px-3 cursor-pointer"
+            onClick={onVerify}
+          >
+            Verify
           </Button>
         )}
       </div>
@@ -131,6 +171,7 @@ export const VerificationModal = ({
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<docSchemaType>({ resolver: zodResolver(docSchema) });
 
@@ -169,6 +210,7 @@ export const VerificationModal = ({
       };
       await dispatch(uploadDocs(reqDto)).unwrap();
       onClose();
+      reset();
       toast.success('Document uploaded successfully');
     } catch (error) {
       toast.error(typeof error == 'string' && error);

@@ -1,7 +1,7 @@
 import {
   presignedURLRequestDTO,
   presignURLResponseDTO,
-} from '../../domain/dto/fileuploadDTO';
+} from '../../domain/dto/DocumentsDTO';
 import { allowedMimeTypes } from '../../domain/enums/Constants';
 import { InvalidFileFormat } from '../../domain/errors/FileuploadErrors';
 import { IFileuploadGateway } from '../providers/IFileuploadGateway';

@@ -2,7 +2,7 @@ import { IFileuploadGateway } from '../../application/providers/IFileuploadGatew
 import {
   presignedURLRequestDTO,
   presignURLResponseDTO,
-} from '../../domain/dto/fileuploadDTO';
+} from '../../domain/dto/DocumentsDTO';
 import {
   S3Client,
   PutObjectCommand,

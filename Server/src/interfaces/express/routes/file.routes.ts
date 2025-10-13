@@ -3,7 +3,7 @@ import { expressAdapter } from '../../adapters/express';
 import {
   presignedURLComposer,
   DocumentComposer,
-} from '../../../infra/services/composer/file.composer';
+} from '../../../infra/services/composer/document.composer';
 
 const router = express.Router();
 

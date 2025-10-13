@@ -1,7 +1,7 @@
 import {
   presignedURLRequestDTO,
   presignURLResponseDTO,
-} from '../../domain/dto/fileuploadDTO';
+} from '../../domain/dto/DocumentsDTO';
 
 export interface IFileuploadGateway {
   getPresignedURL(data: presignedURLRequestDTO): Promise<presignURLResponseDTO>;

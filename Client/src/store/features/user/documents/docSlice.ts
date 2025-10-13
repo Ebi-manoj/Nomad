@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { uploadDocs } from './docs.thunk';
+import { fetchDocs, uploadDocs } from './docs.thunk';
 import type { DocState } from './doc';
 
 const initialState: DocState = {
@@ -12,6 +12,14 @@ const docSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
+    builder.addCase(fetchDocs.pending, state => {
+      state.loading = true;
+      state.documents = [];
+    });
+    builder.addCase(fetchDocs.fulfilled, (state, action) => {
+      state.loading = false;
+      state.documents = action.payload;
+    });
     builder.addCase(uploadDocs.fulfilled, (state, action) => {
       state.loading = false;
       state.documents.push(action.payload);

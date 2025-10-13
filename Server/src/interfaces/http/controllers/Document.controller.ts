@@ -1,3 +1,4 @@
+import { FetchAllDocsUseCase } from '../../../application/usecases/Admin/FetchAllDocsUseCase';
 import { FetchUserDocsUseCase } from '../../../application/usecases/User/FetchUserDocsUseCase';
 import { UploadDocumentUseCase } from '../../../application/usecases/User/UploadDocumentsUseCase';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
@@ -10,7 +11,8 @@ import { IDocumentController } from './IDocumentController';
 export class DocumentController implements IDocumentController {
   constructor(
     private readonly uploadDocumentUseCase: UploadDocumentUseCase,
-    private readonly fetchUserDocsUseCase: FetchUserDocsUseCase
+    private readonly fetchUserDocsUseCase: FetchUserDocsUseCase,
+    private readonly fetchAllDocsUseCase: FetchAllDocsUseCase
   ) {}
   async verifyDocument(httpRequest: HttpRequest): Promise<HttpResponse> {
     console.log('Reached upload Doc controller');
@@ -25,6 +27,19 @@ export class DocumentController implements IDocumentController {
     const dto = httpRequest.user?.id!;
     console.log(dto);
     const result = await this.fetchUserDocsUseCase.execute(dto);
+    const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async findAllDocuments(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const parsed = httpRequest.query as Record<string, unknown>;
+    const page = Number(parsed.page) || 1;
+    const limit = Number(parsed.limit) || 2;
+    const search = parsed.search as string | undefined;
+    const status = parsed.status as string | undefined;
+
+    const dto = { page, limit, search, status };
+    const result = await this.fetchAllDocsUseCase.execute(dto);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

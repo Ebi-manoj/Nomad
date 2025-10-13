@@ -3,6 +3,7 @@ import { connectMongo } from '../../../infra/database/connectMongo';
 import authRouter from '../routes/auth.routes';
 import userRouter from '../routes/user/user.routes';
 import userManagementRouter from '../routes/admin/user.routes';
+import documentRouter from '../routes/admin/documents.routes';
 import fileRouter from '../routes/file.routes';
 import { errorHandling } from '../middlewares/errorHandlingMiddleware';
 import { connectRedis } from '../../../infra/database/connectRedis';
@@ -25,6 +26,7 @@ app.use('/api/v1/user', userRouter);
 
 app.use('/api/v1/file', fileRouter);
 app.use('/api/v1/admin/users', userManagementRouter);
+app.use('/api/v1/admin/documents', documentRouter);
 
 app.use(errorHandling);
 

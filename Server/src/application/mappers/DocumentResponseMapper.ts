@@ -1,18 +1,9 @@
-import { UserResponseDTO } from '../../domain/dto/authDTO';
-import { uploadDocResponseDTO } from '../../domain/dto/fileuploadDTO';
+import {
+  DocumentsWithUserDTO,
+  uploadDocResponseDTO,
+} from '../../domain/dto/DocumentsDTO';
 import { Document } from '../../domain/entities/Document';
-import { User } from '../../domain/entities/User';
-export interface DocumentProps {
-  id?: string;
-  user_id: string;
-  document_type: 'aadhaar' | 'license';
-  document_number: string;
-  fileUrl: string;
-  verified?: boolean;
-  status?: 'pending' | 'verified' | 'rejected';
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+
 export function documentMapper(document: Document): uploadDocResponseDTO {
   return {
     id: document.getId()!,
@@ -24,5 +15,22 @@ export function documentMapper(document: Document): uploadDocResponseDTO {
     verified: document.isVerified(),
     createdAt: document.getCreatedAt(),
     updatedAt: document.getUpdatedAt(),
+  };
+}
+
+export function documentWithUserMapper(doc: any): DocumentsWithUserDTO {
+  return {
+    id: doc._id.toString(),
+    type: doc.document_type,
+    doc_number: doc.document_number,
+    fileURL: doc.fileUrl,
+    verified: doc.verified,
+    status: doc.status,
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt,
+    user: {
+      id: doc.users?._id.toString() || doc.user_id.toString(),
+      fullName: doc.users?.fullName || '',
+    },
   };
 }

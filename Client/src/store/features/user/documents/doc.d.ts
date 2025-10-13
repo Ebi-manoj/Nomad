@@ -6,8 +6,9 @@ export interface document {
   type: docType;
   fileURL: string;
   userId: string;
-  status: string;
+  status: 'pending' | 'verified' | 'rejected';
   verified: boolean;
+  createdAt: Date;
 }
 
 export interface DocState {

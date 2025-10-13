@@ -1,4 +1,4 @@
-import { uploadDocResponseDTO } from '../../../domain/dto/fileuploadDTO';
+import { uploadDocResponseDTO } from '../../../domain/dto/DocumentsDTO';
 import { documentMapper } from '../../mappers/DocumentResponseMapper';
 import { IDocumentRepository } from '../../repositories/IDocumentRepository';
 
@@ -7,6 +7,7 @@ export class FetchUserDocsUseCase {
 
   async execute(userId: string): Promise<uploadDocResponseDTO[] | []> {
     const userDocs = await this.documentsRepository.findDocsByUserId(userId);
+    console.log(userDocs);
     return userDocs.map(docs => documentMapper(docs));
   }
 }
