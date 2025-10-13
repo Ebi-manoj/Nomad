@@ -1,5 +1,9 @@
 import { DocumentTable } from '@/components/documentFields';
-import { useState } from 'react';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { fetchAllDocs } from '@/store/features/admin/documents/adminDoc.thunk';
+import type { RootState } from '@/store/store';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function DocumentVerification() {
   const [filters, setFilters] = useState({
@@ -7,21 +11,13 @@ export default function DocumentVerification() {
     type: 'All',
     status: 'All',
   });
+  const dispatch = useAppDispatch();
+  const { documents } = useSelector((state: RootState) => state.adminDocs);
+  console.log(documents);
 
-  // 🧩 Dummy document data for testing UI
-  const dummyDocs = [
-    {
-      id: '1',
-      user: {
-        name: 'Ebi Manoj',
-        avatar: 'https://i.pravatar.cc/150?img=12',
-      },
-      type: 'Aadhar',
-      status: 'Pending',
-      docNumber: '1234-5678-9012',
-      uploadedAt: new Date().toISOString(),
-    },
-  ];
+  useEffect(() => {
+    dispatch(fetchAllDocs({ page: 1 }));
+  }, []);
 
   // Dummy actions
   const handleVerify = (id: string) => alert(`Verified doc ${id}`);
@@ -66,7 +62,7 @@ export default function DocumentVerification() {
             <option>Rejected</option>
           </select>
         </div>
-        <DocumentTable documents={dummyDocs} />
+        <DocumentTable documents={documents} />
       </section>
     </main>
   );

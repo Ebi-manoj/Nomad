@@ -1,18 +1,18 @@
-type Status = 'Pending' | 'Verified' | 'Rejected';
+type Status = 'pending' | 'verified' | 'rejected';
 
 export function StatusBadge({ status }: { status: Status }) {
   const map: Record<Status, { bg: string; fg: string; label: string }> = {
-    Pending: {
+    pending: {
       bg: 'var(--color-chart-4)',
       fg: 'var(--color-chart-4)',
       label: 'Pending',
     },
-    Verified: {
+    verified: {
       bg: 'var(--color-chart-2)',
       fg: 'var(--color-chart-2)',
       label: 'Verified',
     },
-    Rejected: {
+    rejected: {
       bg: 'var(--color-destructive)',
       fg: 'var(--color-destructive)',
       label: 'Rejected',

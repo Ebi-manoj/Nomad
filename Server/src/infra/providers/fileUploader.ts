@@ -28,9 +28,9 @@ export class S3Fileuploader implements IFileuploadGateway {
   async getPresignedURL(
     data: presignedURLRequestDTO
   ): Promise<presignURLResponseDTO> {
-    const { fileName, fileType } = data;
+    const { fileName, fileType, type } = data;
 
-    const key = `${uuidv4()}-${fileName}`;
+    const key = `${type}/${uuidv4()}-${fileName}`;
     const command = new PutObjectCommand({
       Bucket: env.AWS_BUCKET_NAME,
       Key: key,

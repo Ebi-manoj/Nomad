@@ -1,6 +1,9 @@
+import { FOLDER_NAMES } from '../enums/Constants';
+
 export interface presignedURLRequestDTO {
   fileName: string;
   fileType: string;
+  type: FOLDER_NAMES;
 }
 
 export interface presignURLResponseDTO {

@@ -12,8 +12,8 @@ import { docSchema, type docSchemaType } from '@/validation/docSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import axiosInstance from '@/utils/axiosInstance';
-import { PRESIGNED_URL_API } from '@/api/fileuplods';
-import axios from 'axios';
+import { PRESIGNED_URL_API } from '@/api/documents';
+import axios, { isAxiosError } from 'axios';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import {
   fetchDocs,
@@ -24,6 +24,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { toast } from 'sonner';
 import { SubmitBtn } from './SubmitBtn';
+import { ErrorMessage, FolderTypes } from '@/utils/constants';
 
 type docType = 'aadhaar' | 'license';
 
@@ -190,11 +191,9 @@ export const VerificationModal = ({
       const signedURL = await axiosInstance.post(PRESIGNED_URL_API, {
         fileName,
         fileType,
+        type: FolderTypes.DOCUMENT,
       });
-
-      console.log(signedURL);
       const { uploadURL, fileURL } = signedURL.data.data;
-      console.log(uploadURL);
 
       await axios.put(uploadURL, file, {
         headers: {
@@ -213,6 +212,14 @@ export const VerificationModal = ({
       reset();
       toast.success('Document uploaded successfully');
     } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error);
+        toast.error(
+          error.response?.data.error.message ||
+            ErrorMessage.SOMETHING_WENT_WRONG
+        );
+        return;
+      }
       toast.error(typeof error == 'string' && error);
     }
   }

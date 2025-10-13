@@ -1,4 +1,4 @@
-import { FETCH_DOCS_API, UPLOAD_DOCS_API } from '@/api/fileuplods';
+import { FETCH_DOCS_API, UPLOAD_DOCS_API } from '@/api/documents';
 import axiosInstance from '@/utils/axiosInstance';
 import type { uploadDocsRequest } from './doc';
 

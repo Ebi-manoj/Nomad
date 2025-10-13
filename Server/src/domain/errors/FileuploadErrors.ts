@@ -7,3 +7,8 @@ export class InvalidFileFormat extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class InvalidFolderType extends CustomError {
+  constructor(message = ErrorMessages.INVALID_FOLDER_TYPE) {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

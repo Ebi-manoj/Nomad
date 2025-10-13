@@ -9,3 +9,5 @@ export const allowedMimeTypes = [
   'image/png',
   'application/pdf',
 ];
+export type FOLDER_NAMES = 'profiles' | 'documents';
+export const IMAGE_FOLDERS = ['profiles', 'documents'];
