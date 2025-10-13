@@ -15,7 +15,13 @@ export class PresignedUrlController implements IGetPresignedURLController {
       fileType: string;
       type: FOLDER_NAMES;
     };
-    const result = await this.presignedUrlService.execute(data);
+    const result = await this.presignedUrlService.getUploadUrl(data);
+    const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+  async getViewPresignedUrl(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const data = httpRequest.body as { fileURL: string };
+    const result = await this.presignedUrlService.getViewUrl(data);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

@@ -55,7 +55,6 @@ export function DocumentTable({ documents }: { documents: AdminDocument[] }) {
 
               <td className="px-5 py-4">
                 <div className="flex items-center gap-3">
-                  {/* 👁️ View Button instead of image */}
                   <button
                     title="View Document"
                     className="flex items-center justify-center h-10 w-10 rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 transition"

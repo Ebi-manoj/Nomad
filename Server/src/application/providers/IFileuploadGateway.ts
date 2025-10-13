@@ -5,5 +5,5 @@ import {
 
 export interface IFileuploadGateway {
   getPresignedURL(data: presignedURLRequestDTO): Promise<presignURLResponseDTO>;
-  getImageBuffer(url: string): Promise<Buffer | undefined>;
+  getViewPresignedUrl(data: string): Promise<string>;
 }

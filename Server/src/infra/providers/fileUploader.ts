@@ -44,31 +44,19 @@ export class S3Fileuploader implements IFileuploadGateway {
     const fileURL = `https://${env.AWS_BUCKET_NAME}.s3.${env.AWS_S3_REGION}.amazonaws.com/${key}`;
     return { uploadURL, fileURL };
   }
-
-  async getImageBuffer(fileURL: string): Promise<Buffer | undefined> {
-    const url = new URL(fileURL);
-    const bucket = url.hostname.split('.')[0];
-    const key = decodeURIComponent(url.pathname.substring(1));
-    console.log(bucket);
-    console.log(key);
+  async getViewPresignedUrl(fileUrl: string): Promise<string> {
+    const bucketBase = `https://${env.AWS_BUCKET_NAME}.s3.${env.AWS_S3_REGION}.amazonaws.com/`;
+    const fileKey = fileUrl.replace(bucketBase, '');
 
     const command = new GetObjectCommand({
-      Bucket: bucket,
-      Key: key,
+      Bucket: env.AWS_BUCKET_NAME,
+      Key: fileKey,
     });
-    let readableStream: Stream.Readable;
-    try {
-      const { Body } = await this.s3Client.send(command);
-      readableStream = Body as Stream.Readable;
-    } catch (error) {
-      return undefined;
-    }
 
-    const chunks: Buffer[] = [];
-    for await (const chunk of readableStream) {
-      chunks.push(Buffer.from(chunk));
-    }
-    Buffer.concat(chunks);
-    console.log(chunks);
+    const signedUrl = await getSignedUrl(this.s3Client, command, {
+      expiresIn: 60 * 5,
+    });
+
+    return signedUrl;
   }
 }
