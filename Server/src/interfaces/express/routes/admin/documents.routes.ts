@@ -19,4 +19,16 @@ router.get(
   }
 );
 
+router.patch(
+  '/verify',
+  authMiddleware,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      DocumentComposer().veirfyDocument(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;

@@ -18,7 +18,7 @@ export interface uploadDocRequestDTO {
   userId: string;
 }
 
-export interface uploadDocResponseDTO {
+export interface DocResponseDTO {
   id: string;
   userId: string;
   type: 'aadhaar' | 'license';
@@ -32,6 +32,7 @@ export interface uploadDocResponseDTO {
 
 export interface FetchDocsQuery {
   status?: string;
+  type?: string;
   search?: string;
   limit: number;
   skip: number;
@@ -49,5 +50,18 @@ export interface DocumentsWithUserDTO {
     fullName: string;
   };
   createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface VerifyDocsRequestDTO {
+  document_id: string;
+  status: 'verified' | 'rejected';
+}
+
+export interface VerifyDocResponseDTO {
+  id: string;
+  doc_number: string;
+  verified: boolean;
+  status: 'pending' | 'verified' | 'rejected';
   updatedAt: Date;
 }

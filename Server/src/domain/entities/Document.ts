@@ -15,9 +15,9 @@ export class Document {
   private readonly user_id: string;
   private readonly document_type: 'aadhaar' | 'license';
   private readonly document_number: string;
-  private readonly verified: boolean;
-  private readonly fileUrl: string;
-  private readonly status: 'pending' | 'verified' | 'rejected';
+  private verified: boolean;
+  private fileUrl: string;
+  private status: 'pending' | 'verified' | 'rejected';
   private readonly createdAt: Date;
   private updatedAt: Date;
 
@@ -63,8 +63,17 @@ export class Document {
   getCreatedAt() {
     return this.createdAt;
   }
+  getVerifed() {
+    return this.verified;
+  }
 
   getUpdatedAt() {
     return this.updatedAt;
+  }
+  setStatus(status: 'verified' | 'rejected') {
+    this.status = status;
+  }
+  setVerified(data: boolean) {
+    this.verified = data;
   }
 }

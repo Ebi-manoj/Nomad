@@ -11,12 +11,13 @@ export class FetchAllDocsUseCase {
   async execute(
     query: Partial<FetchDocsQuery> & { page: number }
   ): Promise<DocumentsWithUserDTO[] | []> {
-    const { status, search, page, limit = 10 } = query;
+    const { status, search, page, type, limit = 10 } = query;
     const skip = (page - 1) * limit;
     const documents = await this.documentsRepository.findDocs({
       status,
       search,
       limit,
+      type,
       skip,
     });
     return documents.map(d => documentWithUserMapper(d));

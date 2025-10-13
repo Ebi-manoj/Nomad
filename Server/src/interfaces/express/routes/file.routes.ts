@@ -36,7 +36,7 @@ router.post(
   authMiddleware,
   async (req: Request, res: Response) => {
     const adapter = await expressAdapter(req, httpReq =>
-      DocumentComposer().verifyDocument(httpReq)
+      DocumentComposer().uploadDocument(httpReq)
     );
     return res.status(adapter.statusCode).json(adapter.body);
   }

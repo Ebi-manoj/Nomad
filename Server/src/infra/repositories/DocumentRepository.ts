@@ -8,6 +8,12 @@ import { DocumentModel } from '../database/document.model';
 import { documentDomainMapper } from '../mappers/documentDomainMapper';
 
 export class DocumentRepository implements IDocumentRepository {
+  async findById(id: string): Promise<Document | null> {
+    const found = await DocumentModel.findById(id);
+    if (!found) return null;
+    return documentDomainMapper(found);
+  }
+
   async create(data: Document): Promise<Document> {
     const created = await DocumentModel.create({
       user_id: data.getUserId(),
@@ -21,13 +27,28 @@ export class DocumentRepository implements IDocumentRepository {
     return documentDomainMapper(created);
   }
 
+  async updateOne(data: Document): Promise<Document | void> {
+    const updated = await DocumentModel.findByIdAndUpdate(
+      data.getId(),
+      {
+        verified: data.getVerifed(),
+        status: data.getStatus(),
+        fileUrl: data.getFileUrl(),
+      },
+      { new: true }
+    );
+    if (!updated) return;
+    return documentDomainMapper(updated);
+  }
+
   async findDocsByUserId(data: string): Promise<Document[] | []> {
     const userDocs = await DocumentModel.find({ user_id: data });
     return userDocs.map(docs => documentDomainMapper(docs));
   }
 
   async findDocs(data: FetchDocsQuery): Promise<DocumentsWithUserDTO[] | []> {
-    const { status, limit, search, skip } = data;
+    const { status, limit, search, skip, type } = data;
+    console.log(status);
     const docs = await DocumentModel.aggregate([
       {
         $lookup: {
@@ -52,7 +73,8 @@ export class DocumentRepository implements IDocumentRepository {
           ]
         : []),
       ...(status ? [{ $match: { status } }] : []),
-      { $sort: { requestedAt: -1 } },
+      ...(type ? [{ $match: { document_type: type } }] : []),
+      { $sort: { createdAt: -1 } },
       { $skip: skip },
       { $limit: limit },
     ]);

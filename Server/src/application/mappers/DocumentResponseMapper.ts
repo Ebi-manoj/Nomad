@@ -1,10 +1,10 @@
 import {
   DocumentsWithUserDTO,
-  uploadDocResponseDTO,
+  DocResponseDTO,
 } from '../../domain/dto/DocumentsDTO';
 import { Document } from '../../domain/entities/Document';
 
-export function documentMapper(document: Document): uploadDocResponseDTO {
+export function documentMapper(document: Document): DocResponseDTO {
   return {
     id: document.getId()!,
     doc_number: document.getDocumentNumber(),

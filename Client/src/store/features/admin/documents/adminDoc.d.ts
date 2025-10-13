@@ -23,6 +23,7 @@ export interface AdminDocState {
 export interface fetchAllDocsQuery {
   page: number;
   status?: string;
+  type?: string;
   search?: string;
   limit?: string;
 }

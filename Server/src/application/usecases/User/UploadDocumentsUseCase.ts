@@ -1,6 +1,6 @@
 import {
   uploadDocRequestDTO,
-  uploadDocResponseDTO,
+  DocResponseDTO,
 } from '../../../domain/dto/DocumentsDTO';
 import { Document } from '../../../domain/entities/Document';
 import { UserNotFound } from '../../../domain/errors/CustomError';
@@ -15,7 +15,7 @@ export class UploadDocumentUseCase {
     private readonly userRepository: UserRepository
   ) {}
 
-  async execute(data: uploadDocRequestDTO): Promise<uploadDocResponseDTO> {
+  async execute(data: uploadDocRequestDTO): Promise<DocResponseDTO> {
     const { fileURL, userId, type, doc_number } = data;
     console.log(userId);
     const user = await this.userRepository.findById(userId);
