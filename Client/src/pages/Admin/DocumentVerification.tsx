@@ -1,7 +1,10 @@
-import { DocumentTable } from '@/components/documentFields';
+import { VIEW_PRESIGNED_URL_API } from '@/api/documents';
+import { DocumentTable } from '@/components/documentTable';
+import { ImageModal } from '@/components/ImageModal';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { fetchAllDocs } from '@/store/features/admin/documents/adminDoc.thunk';
 import type { RootState } from '@/store/store';
+import axiosInstance from '@/utils/axiosInstance';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -13,15 +16,34 @@ export default function DocumentVerification() {
   });
   const dispatch = useAppDispatch();
   const { documents } = useSelector((state: RootState) => state.adminDocs);
-  console.log(documents);
+  const [modalData, setModalData] = useState<{
+    isOpen: boolean;
+    imageUrl: string;
+  }>({
+    isOpen: false,
+    imageUrl: '',
+  });
+
+  const handleOpenModal = async (fileURL: string) => {
+    setModalData({ isOpen: true, imageUrl: '' });
+
+    try {
+      const res = await axiosInstance.post(VIEW_PRESIGNED_URL_API, { fileURL });
+      console.log(res);
+      const url = res.data.data;
+      setModalData(prev => ({ ...prev, imageUrl: url }));
+    } catch (err) {
+      console.error(err);
+      setModalData(prev => ({ ...prev, imageUrl: '' }));
+    }
+  };
+
+  const handleCloseModal = () => setModalData({ isOpen: false, imageUrl: '' });
 
   useEffect(() => {
     dispatch(fetchAllDocs({ page: 1 }));
   }, []);
 
-  // Dummy actions
-  const handleVerify = (id: string) => alert(`Verified doc ${id}`);
-  const handleReject = (id: string) => alert(`Rejected doc ${id}`);
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8">
       <header className="mb-6">
@@ -62,8 +84,16 @@ export default function DocumentVerification() {
             <option>Rejected</option>
           </select>
         </div>
-        <DocumentTable documents={documents} />
+        <DocumentTable
+          documents={documents}
+          handleImageModal={handleOpenModal}
+        />
       </section>
+      <ImageModal
+        isOpen={modalData.isOpen}
+        onClose={handleCloseModal}
+        imageUrl={modalData.imageUrl}
+      />
     </main>
   );
 }

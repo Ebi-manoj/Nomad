@@ -5,7 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { AdminDocument } from '@/store/features/admin/documents/adminDoc';
 import { formatDate } from '@/utils/dateFormater';
 
-export function DocumentTable({ documents }: { documents: AdminDocument[] }) {
+type docTableProps = {
+  documents: AdminDocument[];
+  handleImageModal: (url: string) => void;
+};
+
+export function DocumentTable({ documents, handleImageModal }: docTableProps) {
   return (
     <div className="rounded-lg border border-border bg-white shadow-sm overflow-x-auto">
       <table className="w-full border-separate border-spacing-0 text-sm">
@@ -57,9 +62,13 @@ export function DocumentTable({ documents }: { documents: AdminDocument[] }) {
                 <div className="flex items-center gap-3">
                   <button
                     title="View Document"
-                    className="flex items-center justify-center h-10 w-10 rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 transition"
+                    className="cursor-pointer flex items-center justify-center h-10 w-10 rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 transition"
                   >
-                    <Eye size={18} className="text-gray-600" />
+                    <Eye
+                      size={18}
+                      className="text-gray-600"
+                      onClick={() => handleImageModal(doc.fileURL)}
+                    />
                   </button>
                   <div>
                     <p className="text-sm font-medium text-gray-800">
