@@ -1,11 +1,12 @@
 import { PickupInput } from '@/components/PickupInput';
-import { DropoffInput } from '@/components/DropoffInput';
 import { SubmitBtn } from '@/components/SubmitBtn';
 import { ToggleButton } from '@/components/ToogleButton';
 import { useState } from 'react';
+import { GoogleApiWrapper } from '@/components/GoogleApiWrapper';
 
 export const Hike = () => {
   const [hasHelmet, setHasHelmet] = useState(false);
+
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -13,8 +14,18 @@ export const Hike = () => {
           <h2 className="text-2xl font-bold mb-6">Find Your Next Ride</h2>
 
           <form className="space-y-4">
-            <PickupInput />
-            <DropoffInput />
+            <GoogleApiWrapper>
+              <PickupInput
+                onSelect={pickup => console.log(pickup)}
+                type="pickup"
+                placeholder="Enter location"
+              />
+              <PickupInput
+                onSelect={pickup => console.log(pickup)}
+                type="dropoff"
+                placeholder="Enter destination"
+              />
+            </GoogleApiWrapper>
 
             <div className="space-y-6">
               <div className="flex items-center justify-between">
