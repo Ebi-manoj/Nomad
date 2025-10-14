@@ -26,7 +26,7 @@ import { toast } from 'sonner';
 import { SubmitBtn } from './SubmitBtn';
 import { ErrorMessage, FolderTypes } from '@/utils/constants';
 
-type docType = 'aadhaar' | 'license';
+type docType = 'aadhaar' | 'licence';
 
 interface VerificationModalProps {
   type: docType | null;
@@ -51,7 +51,7 @@ export function VerificationSection() {
     loadDocs();
   }, []);
   const aadharDoc = documents.find(doc => doc.type == 'aadhaar');
-  const licenseDoc = documents.find(doc => doc.type == 'license');
+  const licenseDoc = documents.find(doc => doc.type == 'licence');
   return (
     <section aria-labelledby="verification" className="space-y-4">
       <h2 id="verification" className="text-lg font-semibold">
@@ -71,7 +71,7 @@ export function VerificationSection() {
         <VerifyItem
           label="LICENCE VERIFIED"
           status={`${licenseDoc ? licenseDoc.status : 'not verified'}`}
-          onVerify={() => openModal('license')}
+          onVerify={() => openModal('licence')}
         />
       </ul>
       <VerificationModal
@@ -231,7 +231,7 @@ export const VerificationModal = ({
           <DialogTitle>
             {type === 'aadhaar'
               ? 'Aadhaar Verification'
-              : 'License Verification'}
+              : 'Licence Verification'}
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground mt-6">
             Please upload your {type} card photo for verification.

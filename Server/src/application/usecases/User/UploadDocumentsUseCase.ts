@@ -3,10 +3,10 @@ import {
   DocResponseDTO,
 } from '../../../domain/dto/DocumentsDTO';
 import { Document } from '../../../domain/entities/Document';
+import { DocumentStatus } from '../../../domain/enums/documentStatus';
 import { UserNotFound } from '../../../domain/errors/CustomError';
 import { DocumentNotFound } from '../../../domain/errors/DocumentError';
 import { documentMapper } from '../../mappers/DocumentResponseMapper';
-import { IFileuploadGateway } from '../../providers/IFileuploadGateway';
 import { IDocumentRepository } from '../../repositories/IDocumentRepository';
 import { UserRepository } from '../../repositories/UserRepository';
 
@@ -39,7 +39,7 @@ export class UploadDocumentUseCase {
       newDoc = await this.documentRepository.create(document);
     } else {
       existingDoc.setFileUrl(fileURL);
-      existingDoc.setStatus('pending');
+      existingDoc.setStatus(DocumentStatus.Pending);
       existingDoc.setDocumentNumber(doc_number);
       existingDoc.setCreatedAt(new Date());
       const updated = await this.documentRepository.updateOne(existingDoc);

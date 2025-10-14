@@ -1,4 +1,5 @@
 import { FOLDER_NAMES } from '../enums/Constants';
+import { Documents, DocumentStatus } from '../enums/documentStatus';
 
 export interface presignedURLRequestDTO {
   fileName: string;
@@ -13,7 +14,7 @@ export interface presignURLResponseDTO {
 
 export interface uploadDocRequestDTO {
   fileURL: string;
-  type: 'aadhaar' | 'license';
+  type: Documents.Aadhaar | Documents.Licence;
   doc_number: string;
   userId: string;
 }
@@ -21,11 +22,11 @@ export interface uploadDocRequestDTO {
 export interface DocResponseDTO {
   id: string;
   userId: string;
-  type: 'aadhaar' | 'license';
+  type: Documents.Aadhaar | Documents.Licence;
   doc_number: string;
   fileURL: string;
   verified: boolean;
-  status: 'pending' | 'verified' | 'rejected';
+  status: DocumentStatus;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,11 +41,11 @@ export interface FetchDocsQuery {
 
 export interface DocumentsWithUserDTO {
   id: string;
-  type: 'aadhaar' | 'license';
+  type: Documents.Aadhaar | Documents.Licence;
   doc_number: string;
   fileURL: string;
   verified: boolean;
-  status: 'pending' | 'verified' | 'rejected';
+  status: DocumentStatus;
   user: {
     id: string;
     fullName: string;
@@ -55,13 +56,13 @@ export interface DocumentsWithUserDTO {
 
 export interface VerifyDocsRequestDTO {
   document_id: string;
-  status: 'verified' | 'rejected';
+  status: DocumentStatus.Verified | DocumentStatus.Rejected;
 }
 
 export interface VerifyDocResponseDTO {
   id: string;
   doc_number: string;
   verified: boolean;
-  status: 'pending' | 'verified' | 'rejected';
+  status: DocumentStatus;
   updatedAt: Date;
 }

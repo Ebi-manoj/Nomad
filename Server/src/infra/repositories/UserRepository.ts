@@ -35,6 +35,8 @@ export class MongoUserRepository implements UserRepository {
     if (!found) return;
     found.password = user.getPassword() || found.password;
     found.isBlocked = user.getIsBlocked();
+    found.aadhaarVerified = user.getAadhaarVerified();
+    found.licenceVerified = user.getLicenceVerified();
     await found.save();
     return userDomainMapper(found);
   }

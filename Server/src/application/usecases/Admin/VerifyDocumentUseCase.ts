@@ -1,8 +1,9 @@
 import {
-  DocumentsWithUserDTO,
   VerifyDocResponseDTO,
   VerifyDocsRequestDTO,
 } from '../../../domain/dto/DocumentsDTO';
+import { DocumentStatus } from '../../../domain/enums/documentStatus';
+import { UserNotFound } from '../../../domain/errors/CustomError';
 import { DocumentNotFound } from '../../../domain/errors/DocumentError';
 import { documentMapper } from '../../mappers/DocumentResponseMapper';
 import { IDocumentRepository } from '../../repositories/IDocumentRepository';
@@ -18,7 +19,13 @@ export class VerifyDocumentUseCase {
     const document = await this.documentRepository.findById(data.document_id);
     if (!document) throw new DocumentNotFound();
     document.setStatus(data.status);
-    if (data.status == 'verified') {
+
+    if (data.status == DocumentStatus.Verified) {
+      const user = await this.userRepository.findById(document.getUserId());
+      if (!user) throw new UserNotFound();
+      document.getDocumentType() == 'aadhaar' && user.setAadhaarVerified(true);
+      document.getDocumentType() == 'licence' && user.setLicenceVerified(true);
+      await this.userRepository.updateUser(user);
       document.setVerified(true);
     }
     const updatedDoc = await this.documentRepository.updateOne(document);

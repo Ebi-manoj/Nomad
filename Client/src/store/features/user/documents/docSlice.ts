@@ -23,9 +23,12 @@ const docSlice = createSlice({
     builder.addCase(uploadDocs.fulfilled, (state, action) => {
       state.loading = false;
       const newDoc = action.payload;
-      state.documents = state.documents.map(doc =>
-        doc.id != newDoc.id ? { ...doc } : newDoc
-      );
+      const index = state.documents.findIndex(doc => doc.id === newDoc.id);
+      if (index === -1) {
+        state.documents.push(newDoc);
+      } else {
+        state.documents[index] = newDoc;
+      }
     });
   },
 });

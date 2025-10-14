@@ -1,12 +1,13 @@
 import mongoose, { Schema, Types } from 'mongoose';
+import { Documents, DocumentStatus } from '../../domain/enums/documentStatus';
 
 export interface IDocumentModel {
   _id: string;
   user_id: Types.ObjectId;
-  document_type: 'aadhaar' | 'license';
+  document_type: Documents.Aadhaar | Documents.Licence;
   document_number: string;
   verified: boolean;
-  status: 'pending' | 'verified' | 'rejected';
+  status: DocumentStatus;
   fileUrl: string;
   createdAt: Date;
   updatedAt: Date;
@@ -21,7 +22,7 @@ const documentSchema = new Schema<IDocumentModel>(
     },
     document_type: {
       type: String,
-      enum: ['aadhaar', 'license'],
+      enum: [Documents.Aadhaar, Documents.Licence],
       required: true,
     },
     document_number: {
@@ -40,8 +41,8 @@ const documentSchema = new Schema<IDocumentModel>(
     },
     status: {
       type: String,
-      enum: ['pending', 'verified', 'rejected'],
-      default: 'pending',
+      enum: Object.values(DocumentStatus),
+      default: DocumentStatus.Pending,
     },
   },
   {

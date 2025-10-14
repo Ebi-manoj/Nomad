@@ -12,3 +12,14 @@ export const FolderTypes = {
   PROFILE: 'profiles',
   DOCUMENT: 'documents',
 } as const;
+
+export const DocumentStatus = {
+  Pending: 'pending',
+  Verified: 'verified',
+  Rejected: 'rejected',
+} as const;
+
+export const Documents = {
+  Aadhaar: 'aadhaar',
+  Licence: 'licence',
+} as const;

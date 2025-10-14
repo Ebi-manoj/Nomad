@@ -7,6 +7,8 @@ export interface IUserModel {
   mobile?: string;
   password?: string;
   role: string;
+  aadhaarVerified: boolean;
+  licenceVerified: boolean;
   isBlocked: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -34,6 +36,14 @@ const userSchema = new Schema<IUserModel>(
       type: String,
       default: 'user',
       enum: ['user', 'admin'],
+    },
+    aadhaarVerified: {
+      type: Boolean,
+      default: false,
+    },
+    licenceVerified: {
+      type: Boolean,
+      default: false,
     },
     isBlocked: {
       type: Boolean,

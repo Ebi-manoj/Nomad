@@ -1,4 +1,4 @@
-export type docType = 'aadhaar' | 'license';
+export type docType = 'aadhaar' | 'licence';
 
 export interface document {
   id: string;

@@ -1,11 +1,13 @@
+import { Documents, DocumentStatus } from '../enums/documentStatus';
+
 export interface DocumentProps {
   id?: string;
   user_id: string;
-  document_type: 'aadhaar' | 'license';
+  document_type: Documents.Aadhaar | Documents.Licence;
   document_number: string;
   fileUrl: string;
   verified?: boolean;
-  status?: 'pending' | 'verified' | 'rejected';
+  status?: DocumentStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -13,11 +15,11 @@ export interface DocumentProps {
 export class Document {
   private readonly id?: string;
   private readonly user_id: string;
-  private readonly document_type: 'aadhaar' | 'license';
+  private readonly document_type: Documents.Aadhaar | Documents.Licence;
   private document_number: string;
   private verified: boolean;
   private fileUrl: string;
-  private status: 'pending' | 'verified' | 'rejected';
+  private status: DocumentStatus;
   private createdAt: Date;
   private updatedAt: Date;
 
@@ -27,7 +29,7 @@ export class Document {
     this.document_type = props.document_type;
     this.document_number = props.document_number;
     this.fileUrl = props.fileUrl;
-    this.status = props.status || 'pending';
+    this.status = props.status || DocumentStatus.Pending;
     this.verified = props.verified ?? false;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
@@ -70,7 +72,7 @@ export class Document {
   getUpdatedAt() {
     return this.updatedAt;
   }
-  setStatus(status: 'pending' | 'verified' | 'rejected') {
+  setStatus(status: DocumentStatus) {
     this.status = status;
   }
   setVerified(data: boolean) {

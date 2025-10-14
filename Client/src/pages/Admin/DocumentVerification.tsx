@@ -86,7 +86,7 @@ export default function DocumentVerification() {
           >
             <option>All</option>
             <option>Aadhaar</option>
-            <option>License</option>
+            <option>Licence</option>
           </select>
           <select
             value={filters.status}
