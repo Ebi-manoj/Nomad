@@ -2,7 +2,8 @@ import { PickupInput } from '@/components/PickupInput';
 import { SubmitBtn } from '@/components/SubmitBtn';
 import { ToggleButton } from '@/components/ToogleButton';
 import { useState } from 'react';
-import { GoogleApiWrapper } from '@/components/GoogleApiWrapper';
+
+import { MapComponent } from '@/components/MapComponent';
 
 export const Hike = () => {
   const [hasHelmet, setHasHelmet] = useState(false);
@@ -14,18 +15,16 @@ export const Hike = () => {
           <h2 className="text-2xl font-bold mb-6">Find Your Next Ride</h2>
 
           <form className="space-y-4">
-            <GoogleApiWrapper>
-              <PickupInput
-                onSelect={pickup => console.log(pickup)}
-                type="pickup"
-                placeholder="Enter location"
-              />
-              <PickupInput
-                onSelect={pickup => console.log(pickup)}
-                type="dropoff"
-                placeholder="Enter destination"
-              />
-            </GoogleApiWrapper>
+            <PickupInput
+              onSelect={pickup => console.log(pickup)}
+              type="pickup"
+              placeholder="Enter location"
+            />
+            <PickupInput
+              onSelect={pickup => console.log(pickup)}
+              type="dropoff"
+              placeholder="Enter destination"
+            />
 
             <div className="space-y-6">
               <div className="flex items-center justify-between">
@@ -68,13 +67,7 @@ export const Hike = () => {
 
         <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm h-[500px] lg:h-[600px]">
           <div className="map-placeholder w-full h-full relative">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-gray-400">
-                <i className="fas fa-map text-6xl mb-4"></i>
-                <p className="text-lg font-medium">Interactive Map View</p>
-                <p className="text-sm mt-2">Available rides will appear here</p>
-              </div>
-            </div>
+            <MapComponent />
 
             <div className="absolute bottom-4 right-4 flex flex-col space-y-2">
               <button className="bg-white border border-gray-300 w-10 h-10 rounded-lg shadow-md hover:bg-gray-50 transition-colors">
