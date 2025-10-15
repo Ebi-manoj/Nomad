@@ -1,14 +1,14 @@
-import type { ReactNode } from 'react';
-import { LoadScript } from '@react-google-maps/api';
+import type { ReactElement } from 'react';
+import { LoadScriptNext } from '@react-google-maps/api';
 
 const libraries: 'places'[] = ['places'];
-export const GoogleApiWrapper = ({ children }: { children: ReactNode }) => {
+export const GoogleApiWrapper = ({ children }: { children: ReactElement }) => {
   return (
-    <LoadScript
+    <LoadScriptNext
       googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
       libraries={libraries}
     >
-      {children}
-    </LoadScript>
+      <>{children}</>
+    </LoadScriptNext>
   );
 };
