@@ -19,7 +19,7 @@ export class ResetPasswordUseCase {
 
     const hashedPassword = await this.passwordHasher.hash(data.password);
     user.setPassword(hashedPassword);
-    await this.userRepository.updateUser(user);
+    await this.userRepository.update(user.getId(), user);
     return {
       message: SuccessMessages.PASSWORD_RESET,
     };

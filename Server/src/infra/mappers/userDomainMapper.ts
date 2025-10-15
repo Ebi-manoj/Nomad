@@ -15,8 +15,6 @@ export const userMapper: IMapper<User, IUserModel> = {
       isBlocked: domain.getIsBlocked(),
       aadhaarVerified: domain.getAadhaarVerified(),
       licenceVerified: domain.getLicenceVerified(),
-      createdAt: domain.getCreatedAt(),
-      updatedAt: domain.getUpdatedAt(),
     };
   },
   toDomain(userDoc: IUserModel): User {
@@ -35,19 +33,3 @@ export const userMapper: IMapper<User, IUserModel> = {
     });
   },
 };
-
-export function userDomainMapper(userDoc: IUserModel): User {
-  return new User({
-    id: userDoc._id.toString(),
-    fullName: userDoc.fullName,
-    email: new Email(userDoc.email),
-    mobile: userDoc.mobile ? new Mobile(userDoc.mobile) : undefined,
-    password: userDoc.password,
-    role: userDoc.role,
-    isBlocked: userDoc.isBlocked,
-    aadhaarVerified: userDoc.aadhaarVerified,
-    licenceVerified: userDoc.licenceVerified,
-    createdAt: userDoc.createdAt,
-    updatedAt: userDoc.updatedAt,
-  });
-}

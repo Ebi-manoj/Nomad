@@ -10,7 +10,7 @@ export class BlockUserUseCase {
     const user = await this.userRepository.findById(id);
     if (!user) throw new UserNotFound();
     user.toggleIsBlocked();
-    const updatedUser = await this.userRepository.updateUser(user);
+    const updatedUser = await this.userRepository.update(user.getId(), user);
     if (!updatedUser) throw new UpdateFailed();
     return userMapper(updatedUser);
   }

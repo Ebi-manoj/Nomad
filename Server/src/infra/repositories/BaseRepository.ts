@@ -24,11 +24,12 @@ export abstract class MongoBaseRepository<TDomain, TModel>
     return found ? this.mapper.toDomain(found) : null;
   }
 
-  async update(id: string, data: Partial<TDomain>): Promise<TDomain | null> {
-    const updated = await this.model.findById(id);
-    if (!updated) return null;
-    Object.assign(updated, data);
-    return this.mapper.toDomain(updated);
+  async update(id: string | undefined, data: TDomain): Promise<TDomain | null> {
+    const persistence = this.mapper.toPersistence(data);
+    const updated = await this.model.findByIdAndUpdate(id, persistence, {
+      new: true,
+    });
+    return updated ? this.mapper.toDomain(updated) : null;
   }
 
   async delete(id: string): Promise<void> {
