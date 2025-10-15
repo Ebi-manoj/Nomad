@@ -1,19 +1,17 @@
 import { UserRepository } from '../../application/repositories/UserRepository';
 import { User } from '../../domain/entities/User';
-import { UserModel } from '../database/user.model';
-import { userDomainMapper } from '../mappers/userDomainMapper';
+import { IUserModel, UserModel } from '../database/user.model';
+import { userDomainMapper, userMapper } from '../mappers/userDomainMapper';
+import { MongoBaseRepository } from './BaseRepository';
 
-export class MongoUserRepository implements UserRepository {
-  async create(user: User): Promise<User> {
-    const created = await UserModel.create({
-      fullName: user.getFullName(),
-      email: user.getEmail(),
-      mobile: user.getMobile(),
-      password: user.getPassword(),
-    });
-
-    return userDomainMapper(created);
+export class MongoUserRepository
+  extends MongoBaseRepository<User, IUserModel>
+  implements UserRepository
+{
+  constructor() {
+    super(UserModel, userMapper);
   }
+
   async findById(id: string): Promise<User | null> {
     const found = await UserModel.findById(id);
     if (!found) return null;
