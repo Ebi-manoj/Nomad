@@ -2,7 +2,6 @@ import { PickupInput } from '@/components/PickupInput';
 import { SubmitBtn } from '@/components/SubmitBtn';
 import { ToggleButton } from '@/components/ToogleButton';
 import { useState } from 'react';
-
 import { MapComponent } from '@/components/MapComponent';
 
 export const Hike = () => {

@@ -3,7 +3,6 @@ import { Protected } from './Protected';
 import { HomeLayout } from '@/layouts/HomeLayout';
 import { Hike } from '@/pages/User/Hike';
 import ProfilePage from '@/pages/User/Profile';
-import { GoogleApiWrapper } from '@/components/GoogleApiWrapper';
 
 export const UserRoutes = (
   <Route
@@ -14,14 +13,7 @@ export const UserRoutes = (
       </Protected>
     }
   >
-    <Route
-      path="hike"
-      element={
-        <GoogleApiWrapper>
-          <Hike />
-        </GoogleApiWrapper>
-      }
-    />
+    <Route path="hike" element={<Hike />} />
     <Route path="/profile" element={<ProfilePage />} />
   </Route>
 );
