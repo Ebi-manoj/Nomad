@@ -25,7 +25,7 @@ export class VerifyDocumentUseCase {
       if (!user) throw new UserNotFound();
       document.getDocumentType() == 'aadhaar' && user.setAadhaarVerified(true);
       document.getDocumentType() == 'licence' && user.setLicenceVerified(true);
-      await this.userRepository.updateUser(user);
+      await this.userRepository.update(user.getId(), user);
       document.setVerified(true);
     }
     const updatedDoc = await this.documentRepository.updateOne(document);

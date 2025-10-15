@@ -3,6 +3,7 @@ import { VerifyDocumentUseCase } from '../../../application/usecases/Admin/Verif
 import { FetchUserDocsUseCase } from '../../../application/usecases/User/FetchUserDocsUseCase';
 import { UploadDocumentUseCase } from '../../../application/usecases/User/UploadDocumentsUseCase';
 import { VerifyDocsRequestDTO } from '../../../domain/dto/DocumentsDTO';
+import { DocumentStatus } from '../../../domain/enums/documentStatus';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { uploadDocSchema } from '../../validators/uploadFileValidator';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
@@ -37,7 +38,7 @@ export class DocumentController implements IDocumentController {
   async findAllDocuments(httpRequest: HttpRequest): Promise<HttpResponse> {
     const parsed = httpRequest.query as Record<string, unknown>;
     const page = Number(parsed.page) || 1;
-    const limit = Number(parsed.limit) || 2;
+    const limit = Number(parsed.limit) || 5;
     const search = parsed.search as string | undefined;
     const status = parsed.status as string | undefined;
     const type = parsed.type as string | undefined;
@@ -51,7 +52,7 @@ export class DocumentController implements IDocumentController {
   async veirfyDocument(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto: VerifyDocsRequestDTO = httpRequest.body as {
       document_id: string;
-      status: 'verified' | 'rejected';
+      status: DocumentStatus.Verified | DocumentStatus.Rejected;
     };
     const result = await this.verifyDocumentUseCase.execute(dto);
     const response = ApiDTO.success(result);
