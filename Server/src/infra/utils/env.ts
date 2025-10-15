@@ -17,4 +17,8 @@ export const env = {
   EMAIL_ADDRESS: getEnvVariables('EMAIL_ADDRESS'),
   GOOGLE_CLIENT_ID: getEnvVariables('GOOGLE_CLIENT_ID'),
   GOOGLE_CLIENT_SECRET: getEnvVariables('GOOGLE_CLIENT_SECRET'),
+  AWS_S3_ACCESS_KEY: getEnvVariables('AWS_S3_ACCESS_KEY'),
+  AWS_S3_SECRET_KEY: getEnvVariables('AWS_S3_SECRET_KEY'),
+  AWS_S3_REGION: getEnvVariables('AWS_S3_REGION'),
+  AWS_BUCKET_NAME: getEnvVariables('AWS_BUCKET_NAME'),
 };

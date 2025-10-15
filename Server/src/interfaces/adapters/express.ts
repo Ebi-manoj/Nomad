@@ -12,6 +12,7 @@ export async function expressAdapter(
     path: req.params,
     query: req.query,
     cookies: req.cookies,
+    user: req.user,
   });
   const httpResponse = await controllerMethod(httpRequest);
 

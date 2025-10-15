@@ -7,3 +7,19 @@ export const ErrorMessage = {
   FETCH_USERS_FAILED: 'Failed to fetch users',
   SOMETHING_WENT_WRONG: 'Something went wrong',
 } as const;
+
+export const FolderTypes = {
+  PROFILE: 'profiles',
+  DOCUMENT: 'documents',
+} as const;
+
+export const DocumentStatus = {
+  Pending: 'pending',
+  Verified: 'verified',
+  Rejected: 'rejected',
+} as const;
+
+export const Documents = {
+  Aadhaar: 'aadhaar',
+  Licence: 'licence',
+} as const;

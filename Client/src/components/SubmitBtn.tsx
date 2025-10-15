@@ -1,18 +1,28 @@
 import { Loader } from 'lucide-react';
+import React from 'react';
+import { cn } from '@/lib/utils';
 
-export const SubmitBtn = (props: { text: string; isLoading: boolean }) => {
+interface SubmitBtnProps {
+  text: string;
+  isLoading: boolean;
+  className?: string;
+}
+
+export const SubmitBtn: React.FC<SubmitBtnProps> = ({
+  text,
+  isLoading,
+  className,
+}) => {
   return (
     <button
       type="submit"
-      className="mt-2 w-full cursor-pointer  bg-black text-white font-semibold py-2.5 rounded-md
-       disabled:opacity-80 disabled:cursor-not-allowed hover:bg-gray-900 transition duration-200"
-      disabled={props.isLoading}
-    >
-      {props.isLoading ? (
-        <Loader className="mx-auto animate-spin" />
-      ) : (
-        props.text
+      disabled={isLoading}
+      className={cn(
+        'mt-2 w-full cursor-pointer bg-black text-white font-semibold py-2.5 rounded-md transition duration-200 disabled:opacity-80 disabled:cursor-not-allowed hover:bg-gray-800',
+        className
       )}
+    >
+      {isLoading ? <Loader className="mx-auto animate-spin" /> : text}
     </button>
   );
 };

@@ -12,6 +12,8 @@ export function userDomainMapper(userDoc: IUserModel): User {
     password: userDoc.password,
     role: userDoc.role,
     isBlocked: userDoc.isBlocked,
+    aadhaarVerified: userDoc.aadhaarVerified,
+    licenceVerified: userDoc.licenceVerified,
     createdAt: userDoc.createdAt,
     updatedAt: userDoc.updatedAt,
   });

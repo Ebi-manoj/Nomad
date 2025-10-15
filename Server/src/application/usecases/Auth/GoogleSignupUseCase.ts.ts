@@ -41,6 +41,8 @@ export class GoogleSignupUseCase {
         fullName: payload.name,
         role: USER,
         isBlocked: false,
+        aadhaarVerified: false,
+        licenceVerified: false,
       });
       savedUser = await this.userRepository.create(user);
     }

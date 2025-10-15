@@ -41,6 +41,8 @@ export class RegisterUserUseCase {
       password: hashedPassword,
       role: USER,
       isBlocked: false,
+      aadhaarVerified: false,
+      licenceVerified: false,
     });
 
     const savedUser = await this.userRepository.create(user);

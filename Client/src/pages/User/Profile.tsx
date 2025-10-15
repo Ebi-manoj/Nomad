@@ -138,7 +138,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="mt-6 flex justify-center md:justify-start">
-              <Button className="px-5" variant="default">
+              <Button className="px-5 cursor-pointer" variant="default">
                 Edit profile
               </Button>
             </div>
