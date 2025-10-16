@@ -1,3 +1,3 @@
 export const AdminDashboard = () => {
-  return <div>Admin Dashboard</div>;
+  return <h1>Admin Dashboard</h1>;
 };
