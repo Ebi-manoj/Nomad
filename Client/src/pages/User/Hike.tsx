@@ -66,7 +66,7 @@ export const Hike = () => {
 
         <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm h-[500px] lg:h-[600px]">
           <div className="map-placeholder w-full h-full relative">
-            <MapComponent />
+            {/* <MapComponent /> */}
 
             <div className="absolute bottom-4 right-4 flex flex-col space-y-2">
               <button className="bg-white border border-gray-300 w-10 h-10 rounded-lg shadow-md hover:bg-gray-50 transition-colors">

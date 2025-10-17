@@ -13,7 +13,7 @@ export abstract class MongoBaseRepository<TDomain, TModel>
     this.mapper = mapper;
   }
 
-  async create(data: any): Promise<TDomain> {
+  async create(data: TDomain): Promise<TDomain> {
     const toSave = this.mapper.toPersistence(data);
     const created = await this.model.create(toSave);
     return this.mapper.toDomain(created);
