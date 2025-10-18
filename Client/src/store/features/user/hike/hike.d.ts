@@ -1,9 +1,3 @@
-export interface HikeState {
-  hikeData: any;
-  loading: boolean;
-  error: string;
-}
-
 export interface CreateHikeDTO {
   userId: string;
   pickup: GeoJSON.Point;
@@ -29,4 +23,9 @@ export interface HikeResponseDTO {
   riderId: string | null;
   confirmed: boolean;
   createdAt: Date;
+}
+export interface HikeState {
+  hikeData: HikeResponseDTO | null;
+  loading: boolean;
+  error: string;
 }

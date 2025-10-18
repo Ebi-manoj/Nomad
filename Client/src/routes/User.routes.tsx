@@ -3,6 +3,7 @@ import { Protected } from './Protected';
 import { HomeLayout } from '@/layouts/HomeLayout';
 import { Hike } from '@/pages/User/Hike';
 import ProfilePage from '@/pages/User/Profile';
+import { RideMatching } from '@/pages/User/RideMatching';
 
 export const UserRoutes = (
   <Route
@@ -14,6 +15,7 @@ export const UserRoutes = (
     }
   >
     <Route path="hike" element={<Hike />} />
+    <Route path="hike/match" element={<RideMatching />} />
     <Route path="/profile" element={<ProfilePage />} />
   </Route>
 );

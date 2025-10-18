@@ -3,6 +3,7 @@ import authReducer from './features/auth/authSlice';
 import usersReducer from './features/admin/users/usersSlice';
 import docsReducer from './features/user/documents/docSlice';
 import adminDocsReducer from './features/admin/documents/adminDocs.slice';
+import hikeReducer from './features/user/hike/hikeSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     users: usersReducer,
     documents: docsReducer,
     adminDocs: adminDocsReducer,
+    hike: hikeReducer,
   },
 });
 

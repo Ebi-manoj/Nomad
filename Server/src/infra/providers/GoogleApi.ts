@@ -13,7 +13,6 @@ export class GoogleApiService implements IGoogleApi {
       const response = await axios.get(url);
 
       const data = response.data;
-      console.log(data.routes[0].legs);
 
       if (
         data.routes &&

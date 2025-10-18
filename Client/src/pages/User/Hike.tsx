@@ -5,8 +5,17 @@ import { MapComponent } from '@/components/MapComponent';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { hikeSchema, type HikeFormData } from '@/validation/hike';
+import type { CreateHikeDTO } from '@/store/features/user/hike/hike';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { createHike } from '@/store/features/user/hike/hike.thunk';
+import { useNavigate } from 'react-router-dom';
 
 export const Hike = () => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -21,11 +30,29 @@ export const Hike = () => {
     },
   });
 
-  console.log(control);
-
-  const onSubmit = (data: HikeFormData) => {
+  const onSubmit = async (data: HikeFormData) => {
     console.log('Form submitted ✅', data);
-    // Call API to create hike here
+    const pickup = {
+      type: 'Point',
+      coordinates: [data.pickup.lat, data.pickup.lng],
+    };
+    const destination = {
+      type: 'Point',
+      coordinates: [data.destination.lat, data.destination.lng],
+    };
+
+    const reqDto: CreateHikeDTO = {
+      ...data,
+      userId: user?.id!,
+      pickup,
+      destination,
+      pickupAddress: data.pickup.description,
+      destinationAddress: data.destination.description,
+    };
+    try {
+      await dispatch(createHike(reqDto)).unwrap();
+      navigate('/hike/match');
+    } catch (error) {}
   };
 
   return (
