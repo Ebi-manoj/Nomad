@@ -63,40 +63,44 @@ export const Hike = () => {
 
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             {/* Pickup Input */}
-            <Controller
-              name="pickup"
-              control={control}
-              render={({ field }) => (
-                <PickupInput
-                  type="pickup"
-                  placeholder="Enter pickup location"
-                  onSelect={val => field.onChange(val)}
-                />
+            <div className="flex flex-col">
+              <Controller
+                name="pickup"
+                control={control}
+                render={({ field }) => (
+                  <PickupInput
+                    type="pickup"
+                    placeholder="Enter pickup location"
+                    onSelect={val => field.onChange(val)}
+                  />
+                )}
+              />
+              {errors.pickup?.description && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.pickup.description.message}
+                </p>
               )}
-            />
-            {errors.pickup?.description && (
-              <p className="text-sm text-red-500">
-                {errors.pickup.description.message}
-              </p>
-            )}
+            </div>
 
             {/* Dropoff Input */}
-            <Controller
-              name="destination"
-              control={control}
-              render={({ field }) => (
-                <PickupInput
-                  type="dropoff"
-                  placeholder="Enter destination"
-                  onSelect={val => field.onChange(val)}
-                />
+            <div className="flex flex-col">
+              <Controller
+                name="destination"
+                control={control}
+                render={({ field }) => (
+                  <PickupInput
+                    type="dropoff"
+                    placeholder="Enter destination"
+                    onSelect={val => field.onChange(val)}
+                  />
+                )}
+              />
+              {errors.destination?.description && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.destination.description.message}
+                </p>
               )}
-            />
-            {errors.destination?.description && (
-              <p className="text-sm text-red-500">
-                {errors.destination.description.message}
-              </p>
-            )}
+            </div>
 
             {/* Helmet Toggle */}
             <Controller

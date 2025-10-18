@@ -4,6 +4,7 @@ import { HomeLayout } from '@/layouts/HomeLayout';
 import { Hike } from '@/pages/User/Hike';
 import ProfilePage from '@/pages/User/Profile';
 import { RideMatching } from '@/pages/User/RideMatching';
+import { Ride } from '@/pages/User/Ride';
 
 export const UserRoutes = (
   <Route
@@ -17,5 +18,6 @@ export const UserRoutes = (
     <Route path="hike" element={<Hike />} />
     <Route path="hike/match" element={<RideMatching />} />
     <Route path="/profile" element={<ProfilePage />} />
+    <Route path="/ride" element={<Ride />} />
   </Route>
 );

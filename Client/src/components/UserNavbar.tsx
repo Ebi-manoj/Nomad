@@ -29,10 +29,15 @@ export const UserNavbar = () => {
               <PiPersonSimpleHikeBold className="w-5 h-5" />
               Hike
             </Link>
-            <a className="flex items-center gap-1 text-gray-900 font-medium  border-black pb-1 cursor-pointer">
+            <Link
+              to={'/ride'}
+              className={`flex items-center gap-1 text-gray-900 font-medium ${
+                path == '/ride' && 'border-b-2'
+              }  border-black pb-1 cursor-pointer`}
+            >
               <RiMotorbikeFill className="w-5 h-5" />
               Ride
-            </a>
+            </Link>
           </div>
 
           <div className="hidden md:flex items-center space-x-4">

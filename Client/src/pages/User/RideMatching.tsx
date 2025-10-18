@@ -5,16 +5,6 @@ import type { RootState } from '@/store/store';
 import { Navigate } from 'react-router-dom';
 
 export function RideMatching() {
-  const hike = {
-    pickupAddress: 'Ernakulam South Railway Station, Kochi, Kerala',
-    destinationAddress: 'Infopark, Kakkanad, Kerala',
-    totalDistance: 12.3,
-    seatsRequested: 1,
-    estimatedPrice: 35,
-    status: 'searching',
-    createdAt: '2025-10-17T08:30:00Z',
-  };
-
   const { hikeData } = useSelector((state: RootState) => state.hike);
   console.log(hikeData);
   if (!hikeData) {
@@ -75,7 +65,7 @@ export function RideMatching() {
             <Clock className="text-black mx-auto mb-2" size={20} />
             <p className="text-xs text-gray-500 mb-1">Distance</p>
             <p className="text-sm font-bold text-gray-900">
-              {hike.totalDistance} km
+              {hikeData.totalDistance} km
             </p>
           </div>
         </div>
