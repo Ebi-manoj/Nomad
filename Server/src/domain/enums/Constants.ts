@@ -11,3 +11,4 @@ export const allowedMimeTypes = [
 ];
 export type FOLDER_NAMES = 'profiles' | 'documents';
 export const IMAGE_FOLDERS = ['profiles', 'documents'];
+export const COST_SHARING_LIMIT = 15;

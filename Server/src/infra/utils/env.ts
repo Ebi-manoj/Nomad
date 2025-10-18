@@ -21,4 +21,5 @@ export const env = {
   AWS_S3_SECRET_KEY: getEnvVariables('AWS_S3_SECRET_KEY'),
   AWS_S3_REGION: getEnvVariables('AWS_S3_REGION'),
   AWS_BUCKET_NAME: getEnvVariables('AWS_BUCKET_NAME'),
+  GOOGLE_MAPS_API_KEY: getEnvVariables('GOOGLE_MAPS_API_KEY'),
 };

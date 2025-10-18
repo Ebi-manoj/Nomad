@@ -2,6 +2,7 @@ import { Schema, model, Document, Types } from 'mongoose';
 import { HikeStatus } from '../../domain/enums/Hike';
 
 export interface IHikeLog {
+  _id: string;
   userId: Types.ObjectId;
   pickup: GeoJSON.Point;
   destination: GeoJSON.Point;
@@ -29,6 +30,14 @@ const HikeLogSchema = new Schema<IHikeLog>({
   destination: {
     type: { type: String, default: 'Point' },
     coordinates: { type: [Number], required: true },
+  },
+  pickupAddress: {
+    type: String,
+    required: true,
+  },
+  destinationAddress: {
+    type: String,
+    required: true,
   },
   totalDistance: {
     type: Number,

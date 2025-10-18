@@ -1,7 +1,8 @@
-import { CreateHikeDTO } from '../../../../domain/dto/HikeDTO';
+import { CreateHikeDTO, HikeResponseDTO } from '../../../../domain/dto/HikeDTO';
 import { HikeLog } from '../../../../domain/entities/Hike';
 import { HikeStatus } from '../../../../domain/enums/Hike';
 import { UserNotFound } from '../../../../domain/errors/CustomError';
+import { hikeMapper } from '../../../mappers/HikeMapper';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { UserRepository } from '../../../repositories/UserRepository';
@@ -13,7 +14,7 @@ export class CreateHikeUseCase {
     private readonly googleApis: IGoogleApi
   ) {}
 
-  async execute(data: CreateHikeDTO) {
+  async execute(data: CreateHikeDTO): Promise<HikeResponseDTO> {
     const user = await this.userRepository.findById(data.userId);
     if (!user) throw new UserNotFound();
     const pickup = {
@@ -35,6 +36,7 @@ export class CreateHikeUseCase {
       status: HikeStatus.REQUESTED,
     });
 
-    return await this.hikeRepository.create(hike);
+    const savedHike = await this.hikeRepository.create(hike);
+    return hikeMapper(savedHike);
   }
 }

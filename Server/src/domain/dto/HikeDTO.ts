@@ -11,13 +11,18 @@ export interface CreateHikeDTO {
 }
 
 export interface HikeResponseDTO {
-  hikeId: string;
+  id: string;
   userId: string;
   pickup: GeoJSON.Point;
   destination: GeoJSON.Point;
+  pickupAddress: string;
+  destinationAddress: string;
   totalDistance: number;
   status: HikeStatus;
+  hasHelmet: boolean;
+  seatsRequested: number;
   estimatedPrice: number;
+  riderId: string | null;
   confirmed: boolean;
   createdAt: Date;
 }

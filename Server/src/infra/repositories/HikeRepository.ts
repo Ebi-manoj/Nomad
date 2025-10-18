@@ -1,8 +1,14 @@
 import { IHikeRepository } from '../../application/repositories/IHikeRepository';
 import { HikeLog } from '../../domain/entities/Hike';
-import { IHikeLog } from '../database/hikelog.model';
+import { HikeLogModel, IHikeLog } from '../database/hikelog.model';
+import { hikeMapper } from '../mappers/hikeDomainMapper';
 import { MongoBaseRepository } from './BaseRepository';
 
 export class HikeRepository
   extends MongoBaseRepository<HikeLog, IHikeLog>
-  implements IHikeRepository {}
+  implements IHikeRepository
+{
+  constructor() {
+    super(HikeLogModel, hikeMapper);
+  }
+}

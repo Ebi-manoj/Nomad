@@ -1,7 +1,8 @@
+import { COST_SHARING_LIMIT } from '../enums/Constants';
 import { HikeStatus } from '../enums/Hike';
 
 export interface HikeProps {
-  hikeId?: string;
+  id?: string;
   userId: string;
   pickup: GeoJSON.Point;
   destination: GeoJSON.Point;
@@ -17,7 +18,7 @@ export interface HikeProps {
 }
 
 export class HikeLog {
-  private readonly hikeId?: string;
+  private readonly id?: string;
   private userId: string;
   private pickup: GeoJSON.Point;
   private destination: GeoJSON.Point;
@@ -27,12 +28,12 @@ export class HikeLog {
   private hasHelmet: boolean;
   private seatsRequested: number;
   private riderId: string | null;
-  private status: string;
+  private status: HikeStatus;
   private confirmed: boolean;
   private readonly createdAt: Date;
 
   constructor(props: HikeProps) {
-    this.hikeId = props.hikeId;
+    this.id = props.id;
     this.userId = props.userId;
     this.pickup = props.pickup;
     this.destination = props.destination;
@@ -49,7 +50,7 @@ export class HikeLog {
 
   // Getters
   getHikeId() {
-    return this.hikeId;
+    return this.id;
   }
   getUserId() {
     return this.userId;
@@ -81,6 +82,12 @@ export class HikeLog {
   getCreatedAt() {
     return this.createdAt;
   }
+  getDestinationAddress() {
+    return this.pickupAddress;
+  }
+  getPickupAddress() {
+    return this.destinationAddress;
+  }
 
   toggleConfirmed() {
     this.confirmed = !this.confirmed;
@@ -90,11 +97,14 @@ export class HikeLog {
     this.riderId = riderId;
   }
 
-  updateStatus(newStatus: string) {
+  updateStatus(newStatus: HikeStatus) {
     this.status = newStatus;
   }
 
   updateDistance(newDistance: number) {
     this.totalDistance = newDistance;
+  }
+  getEstimatedPrice(): number {
+    return +(this.totalDistance * COST_SHARING_LIMIT).toFixed(2);
   }
 }
