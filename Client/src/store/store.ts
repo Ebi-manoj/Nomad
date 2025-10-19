@@ -4,6 +4,7 @@ import usersReducer from './features/admin/users/usersSlice';
 import docsReducer from './features/user/documents/docSlice';
 import adminDocsReducer from './features/admin/documents/adminDocs.slice';
 import hikeReducer from './features/user/hike/hikeSlice';
+import rideReducer from './features/user/ride/rideSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     documents: docsReducer,
     adminDocs: adminDocsReducer,
     hike: hikeReducer,
+    ride: rideReducer,
   },
 });
 

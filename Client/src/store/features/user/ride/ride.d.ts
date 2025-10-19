@@ -26,6 +26,7 @@ export interface RideData {
   vehicleNumber: string;
   hasHelmet: boolean;
   hikersMatched: string[];
+  totalDistance: number;
   seatsAvailable: number;
   costSharing: number;
   status: string;
