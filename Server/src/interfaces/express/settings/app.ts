@@ -3,6 +3,7 @@ import { connectMongo } from '../../../infra/database/connectMongo';
 import authRouter from '../routes/auth.routes';
 import userRouter from '../routes/user/user.routes';
 import hikeRouter from '../routes/user/hike.routes';
+import rideRouter from '../routes/user/ride.routes';
 import userManagementRouter from '../routes/admin/user.routes';
 import documentRouter from '../routes/admin/documents.routes';
 import fileRouter from '../routes/file.routes';
@@ -25,6 +26,7 @@ app.use(
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/hike', hikeRouter);
+app.use('/api/v1/ride', rideRouter);
 
 app.use('/api/v1/file', fileRouter);
 app.use('/api/v1/admin/users', userManagementRouter);

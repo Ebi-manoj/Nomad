@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import { HikeStatus } from '../../domain/enums/Hike';
 
 export interface IHikeLog {

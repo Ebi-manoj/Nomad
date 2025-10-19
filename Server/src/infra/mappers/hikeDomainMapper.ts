@@ -17,7 +17,6 @@ export const hikeMapper: IMapper<HikeLog, IHikeLog> = {
       riderId: domain.getRiderId() || null,
       status: domain.getStatus(),
       confirmed: domain.getConfirmed(),
-      createdAt: domain.getCreatedAt(),
     };
   },
 
