@@ -10,7 +10,7 @@ export const createHike = createAsyncThunk<HikeResponseDTO, CreateHikeDTO>(
     try {
       return await createHikeApi(data);
     } catch (err: unknown) {
-      useHandleThunkError(
+      return useHandleThunkError(
         err,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG

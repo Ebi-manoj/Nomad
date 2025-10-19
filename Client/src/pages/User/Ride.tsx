@@ -6,8 +6,18 @@ import { ToggleButton } from '@/components/ToogleButton';
 import { FaMotorcycle, FaCar } from 'react-icons/fa';
 import { CreateHikeRideLayout } from '@/layouts/CreateHikeRideLayout';
 import { rideSchema, type RideFormData } from '@/validation/Ride';
+import type { CreateRideDTO } from '@/store/features/user/ride/ride';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { createRide } from '@/store/features/user/ride/ride.thunk';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export const Ride = () => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -29,8 +39,35 @@ export const Ride = () => {
 
   const vehicleType = watch('vehicleType');
 
-  const onSubmit = (data: RideFormData) => {
+  const onSubmit = async (data: RideFormData) => {
     console.log('Ride form submitted:', data);
+    const pickup = {
+      type: 'Point',
+      coordinates: [data.pickup.lat, data.pickup.lng],
+    };
+    const destination = {
+      type: 'Point',
+      coordinates: [data.destination.lat, data.destination.lng],
+    };
+
+    const reqDto: CreateRideDTO = {
+      ...data,
+      userId: user?.id!,
+      pickup,
+      destination,
+      pickupAddress: data.pickup.description,
+      destinationAddress: data.destination.description,
+      costSharing: data.costPerKm,
+      seatsAvailable: data.seatsRequested ?? 1,
+      hasHelmet: !!data.hasHelmet,
+    };
+
+    try {
+      await dispatch(createRide(reqDto)).unwrap();
+      navigate('/ride/started');
+    } catch (error) {
+      toast.error(typeof error == 'string' && error);
+    }
   };
 
   return (
@@ -152,7 +189,7 @@ export const Ride = () => {
             render={({ field }) => (
               <div className="flex items-center mt-2">
                 <ToggleButton
-                  state={!!field.value} // ensure boolean
+                  state={!!field.value}
                   clickHandler={() => field.onChange(!field.value)}
                 />
                 <span className="ml-2 text-gray-800 text-sm">
@@ -216,7 +253,7 @@ export const Ride = () => {
               <input
                 type="number"
                 value={field.value}
-                onChange={e => field.onChange(Number(e.target.value))} // convert string to number
+                onChange={e => field.onChange(Number(e.target.value))}
                 className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
               />
               {errors.costPerKm && (
