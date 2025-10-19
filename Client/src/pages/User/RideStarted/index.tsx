@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { MapComponent } from '@/components/MapComponent';
 import { ArrowRightCircle } from 'lucide-react';
 import { RidePanel } from './RidePanel';
 import { RideTabs } from './RideTabs';
 import type { RootState } from '@/store/store';
+import { RideMap } from './RideMap';
 
 export function RideStarted() {
   const [showDetails, setShowDetails] = useState(true);
@@ -25,7 +25,10 @@ export function RideStarted() {
             <ArrowRightCircle size={22} />
           </button>
         )}
-        <MapComponent />
+        <RideMap
+          pickup={rideData.pickupAddress}
+          destination={rideData.destinationAddress}
+        />
         <RidePanel
           rideData={rideData}
           showDetails={showDetails}
