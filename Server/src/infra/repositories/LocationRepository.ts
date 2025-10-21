@@ -9,7 +9,7 @@ export class LocationRepository implements ILocationRepository {
   }
 
   async saveLocation(location: Location): Promise<void> {
-    const key = `rider:location:${location.userId}`;
+    const key = `rider:location:${location.rideId}`;
     const geoKey = 'riders:active';
     const data = location.toJSON();
     await this.client.hSet(key, data);
@@ -17,7 +17,7 @@ export class LocationRepository implements ILocationRepository {
     await this.client.geoAdd(geoKey, {
       longitude: location.lng,
       latitude: location.lat,
-      member: location.userId,
+      member: location.rideId,
     });
 
     console.log('updated');

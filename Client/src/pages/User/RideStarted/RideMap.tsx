@@ -1,35 +1,42 @@
 import { MapComponent } from '@/components/MapComponent';
 import { useSocket } from '@/hooks/sockets/useSockets';
-import { DirectionsRenderer, OverlayView } from '@react-google-maps/api';
+import { DirectionsRenderer, Marker } from '@react-google-maps/api';
 import { useEffect, useState } from 'react';
-import { FaMotorcycle } from 'react-icons/fa6';
-import { FaMapPin } from 'react-icons/fa6';
+
 interface RideMapProps {
   pickup: string;
   destination: string;
+  rideId: string;
 }
 
-export const RideMap = ({ pickup, destination }: RideMapProps) => {
+export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
   const [directions, setDirections] =
     useState<google.maps.DirectionsResult | null>(null);
-  const [currentPosition, setCurrentPosition] = useState<{
-    lat: number;
-    lng: number;
-  }>({ lat: 10.8505, lng: 76.2711 });
-  navigator.geolocation.getCurrentPosition(console.log, console.error);
+  const [currentPosition, setCurrentPosition] = useState({
+    lat: 10.8505,
+    lng: 76.2711,
+  });
 
   const riderSocket = useSocket('/rider');
 
+  // Get current position once
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+      pos => {
         setCurrentPosition({
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
         });
-      });
-    }
+      },
+      err => console.error(err),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  }, []);
 
+  // Get directions
+  useEffect(() => {
     const directionsService = new google.maps.DirectionsService();
     directionsService.route(
       {
@@ -42,6 +49,27 @@ export const RideMap = ({ pickup, destination }: RideMapProps) => {
       }
     );
   }, [pickup, destination]);
+
+  // Simulate movement
+  useEffect(() => {
+    if (!directions) return;
+    const routePath = directions.routes[0].overview_path;
+    let index = 0;
+
+    const simulator = setInterval(() => {
+      if (index >= routePath.length) return clearInterval(simulator);
+      const point = routePath[index];
+      setCurrentPosition({ lat: point.lat(), lng: point.lng() });
+      index++;
+    }, 3000);
+
+    return () => clearInterval(simulator);
+  }, [directions]);
+
+  //  location to backend
+  useEffect(() => {
+    riderSocket?.emit('location:update', { rideId, ...currentPosition });
+  }, [currentPosition, riderSocket, rideId]);
 
   const startPos = directions
     ? {
@@ -57,44 +85,49 @@ export const RideMap = ({ pickup, destination }: RideMapProps) => {
       }
     : currentPosition;
 
-  console.log(directions?.routes[0].overview_path);
-
   return (
     <MapComponent center={currentPosition} zoom={15}>
       {directions && (
         <DirectionsRenderer
           directions={directions}
-          options={{
-            suppressMarkers: true,
-          }}
+          options={{ suppressMarkers: true }}
         />
       )}
-      <OverlayView
-        position={startPos}
-        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-      >
-        <div className="w-5 h-5 rounded-full bg-black border-2 border-white shadow-md" />
-      </OverlayView>
 
-      {/* Destination Marker */}
-      <OverlayView
+      {/* Start Marker */}
+      <Marker
+        position={startPos}
+        icon={{
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 6,
+          fillColor: 'black',
+          fillOpacity: 1,
+          strokeColor: 'white',
+          strokeWeight: 2,
+        }}
+      />
+
+      {/* End Marker */}
+      <Marker
         position={endPos}
-        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-      >
-        <div className="w-6 h-6 relative text-red-500 text-2xl">
-          <FaMapPin />
-        </div>
-      </OverlayView>
+        icon={{
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          fillColor: 'red',
+          fillOpacity: 1,
+          strokeColor: 'white',
+          strokeWeight: 2,
+        }}
+      />
 
       {/* Rider Marker */}
-      <OverlayView
+      <Marker
         position={currentPosition}
-        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-      >
-        <div className="text-black text-3xl drop-shadow-lg">
-          <FaMotorcycle />
-        </div>
-      </OverlayView>
+        icon={{
+          url: '/motorcycle-icon.png',
+          scaledSize: new google.maps.Size(40, 40),
+        }}
+      />
     </MapComponent>
   );
 };

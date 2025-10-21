@@ -28,6 +28,7 @@ export function RideStarted() {
         <RideMap
           pickup={rideData.pickupAddress}
           destination={rideData.destinationAddress}
+          rideId={rideData.id}
         />
         <RidePanel
           rideData={rideData}

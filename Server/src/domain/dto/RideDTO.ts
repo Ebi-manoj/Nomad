@@ -15,7 +15,7 @@ export interface CreateRideDTO {
 }
 
 export interface UpdateLocationDTO {
-  userId: string;
+  rideId: string;
   lat: number;
   lng: number;
 }

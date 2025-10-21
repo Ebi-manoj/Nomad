@@ -354,6 +354,7 @@ interface MapComponentProps {
   markers?: { position: { lat: number; lng: number }; label?: string }[];
   zoom?: number;
   children?: React.ReactNode;
+  onLoad?: (map: google.maps.Map) => void;
 }
 
 export const MapComponent = ({
@@ -361,12 +362,14 @@ export const MapComponent = ({
   markers = [],
   zoom,
   children,
+  onLoad,
 }: MapComponentProps) => {
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 10.8505,
     lng: 76.2711,
   });
   const [defaultzoom, setDefaultZoom] = useState(7);
+
   useEffect(() => {
     if (center) return;
     if (navigator.geolocation) {
@@ -390,6 +393,7 @@ export const MapComponent = ({
         zoom={zoom ?? defaultzoom}
         mapContainerStyle={containerStyle}
         options={{ styles: mapStyle, disableDefaultUI: true }}
+        onLoad={onLoad} // pass onLoad to GoogleMap
       >
         {markers.map((m, i) => (
           <Marker key={i} position={m.position} label={m.label} />

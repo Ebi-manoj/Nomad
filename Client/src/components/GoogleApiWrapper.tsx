@@ -1,7 +1,8 @@
 import type { ReactElement } from 'react';
 import { LoadScriptNext } from '@react-google-maps/api';
 
-const libraries: 'places'[] = ['places'];
+const libraries: Array<'places' | 'marker'> = ['places', 'marker'];
+
 export const GoogleApiWrapper = ({ children }: { children: ReactElement }) => {
   return (
     <LoadScriptNext
