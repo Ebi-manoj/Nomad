@@ -13,3 +13,9 @@ export interface CreateRideDTO {
   seatsAvailable: number;
   costSharing: number;
 }
+
+export interface UpdateLocationDTO {
+  userId: string;
+  lat: number;
+  lng: number;
+}

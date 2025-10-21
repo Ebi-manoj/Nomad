@@ -11,10 +11,13 @@ import { errorHandling } from '../middlewares/errorHandlingMiddleware';
 import { connectRedis } from '../../../infra/database/connectRedis';
 import cors from 'cors';
 import cookieparser from 'cookie-parser';
+import { createServer } from 'http';
+import { SocketServer } from '../../sockets/socketInit';
 
 connectMongo();
 connectRedis();
 const app = express();
+const server = createServer(app);
 app.use(express.json());
 app.use(cookieparser());
 app.use(
@@ -23,6 +26,9 @@ app.use(
     origin: ['http://localhost:5173'],
   })
 );
+
+new SocketServer(server, ['http://localhost:5173']);
+
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/hike', hikeRouter);
@@ -34,4 +40,4 @@ app.use('/api/v1/admin/documents', documentRouter);
 
 app.use(errorHandling);
 
-app.listen(3000, () => console.log('Server running on Port 3000'));
+server.listen(3000, () => console.log('Server running on Port 3000'));
