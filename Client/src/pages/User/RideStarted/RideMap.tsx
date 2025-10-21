@@ -1,4 +1,5 @@
 import { MapComponent } from '@/components/MapComponent';
+import { useSocket } from '@/hooks/sockets/useSockets';
 import { DirectionsRenderer, OverlayView } from '@react-google-maps/api';
 import { useEffect, useState } from 'react';
 import { FaMotorcycle } from 'react-icons/fa6';
@@ -15,6 +16,9 @@ export const RideMap = ({ pickup, destination }: RideMapProps) => {
     lat: number;
     lng: number;
   }>({ lat: 10.8505, lng: 76.2711 });
+  navigator.geolocation.getCurrentPosition(console.log, console.error);
+
+  const riderSocket = useSocket('/rider');
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -52,6 +56,8 @@ export const RideMap = ({ pickup, destination }: RideMapProps) => {
         lng: directions.routes[0].legs[0].end_location.lng(),
       }
     : currentPosition;
+
+  console.log(directions?.routes[0].overview_path);
 
   return (
     <MapComponent center={currentPosition} zoom={15}>

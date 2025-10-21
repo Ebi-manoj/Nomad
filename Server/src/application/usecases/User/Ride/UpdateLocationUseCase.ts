@@ -2,7 +2,7 @@ import { UpdateLocationDTO } from '../../../../domain/dto/RideDTO';
 import { Location } from '../../../../domain/entities/Location';
 import { ILocationRepository } from '../../../repositories/ILocationRepository';
 
-export class UpdateRiderLocationUseCase {
+export class UpdateLocationUseCase {
   constructor(private readonly locationRepository: ILocationRepository) {}
 
   async execute(data: UpdateLocationDTO) {

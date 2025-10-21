@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import http from 'http';
 import { setupRiderNameSpace } from './nameSpaces/rider.namespace';
+import { locationUpdateComposer } from '../../infra/services/composer/sockets/locationUpdate.composer';
 
 export class SocketServer {
   private readonly io;
@@ -14,7 +15,8 @@ export class SocketServer {
   }
 
   setupNameSpaces() {
-    setupRiderNameSpace(this.io);
+    const locationUpdateController = locationUpdateComposer();
+    setupRiderNameSpace(this.io, locationUpdateController);
   }
 
   getIo() {

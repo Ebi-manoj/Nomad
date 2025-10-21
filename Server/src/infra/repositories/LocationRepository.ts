@@ -12,12 +12,14 @@ export class LocationRepository implements ILocationRepository {
     const key = `rider:location:${location.userId}`;
     const geoKey = 'riders:active';
     const data = location.toJSON();
-    await this.client.hset(key, data);
+    await this.client.hSet(key, data);
 
     await this.client.geoAdd(geoKey, {
       longitude: location.lng,
       latitude: location.lat,
       member: location.userId,
     });
+
+    console.log('updated');
   }
 }
