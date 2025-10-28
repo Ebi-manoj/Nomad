@@ -5,4 +5,5 @@ export type Data = {
 
 export interface IGoogleApi {
   getDistance(pickup: Data, destination: Data): Promise<number>;
+  getRoute(pickup: Data, destination: Data): Promise<[number, number][]>;
 }

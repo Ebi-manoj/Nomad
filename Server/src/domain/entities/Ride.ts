@@ -18,6 +18,7 @@ export interface RideProps {
   status: RideStatus;
   createdAt?: Date;
   updatedAt?: Date;
+  route: GeoJSON.LineString;
 }
 
 export class RideLog {
@@ -38,6 +39,7 @@ export class RideLog {
   private status: RideStatus;
   private readonly createdAt: Date;
   private updatedAt: Date;
+  private route: GeoJSON.LineString;
 
   constructor(props: RideProps) {
     this.id = props.id;
@@ -57,6 +59,7 @@ export class RideLog {
     this.status = props.status || 'ACTIVE';
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
+    this.route = props.route;
   }
 
   getRideId() {
@@ -123,6 +126,14 @@ export class RideLog {
 
   updateSeats(count: number) {
     this.seatsAvailable = count;
+    this.updatedAt = new Date();
+  }
+  getRoute() {
+    return this.route;
+  }
+
+  setRoute(route: GeoJSON.LineString) {
+    this.route = route;
     this.updatedAt = new Date();
   }
 }

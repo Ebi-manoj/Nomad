@@ -1,114 +1,161 @@
-import { MapPin, Flag, Users, Tag, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { Navigate } from 'react-router-dom';
+import { MapPin, Flag, Car, Star } from 'lucide-react';
+import { MapComponent } from '@/components/MapComponent';
+import { RefreshCcw } from 'lucide-react';
 
 export function RideMatching() {
-  const { hikeData } = useSelector((state: RootState) => state.hike);
-  console.log(hikeData);
-  if (!hikeData) {
-    return <Navigate to={'/hike'} replace />;
-  }
+  const rides = [
+    {
+      id: 1,
+      riderName: 'Arjun Kumar',
+      rating: 4.8,
+      costShare: 120,
+      vehicleName: 'Swift Dzire',
+      vehicleType: 'Car',
+      pickup: 'MG Road, Kochi',
+      destination: 'Infopark, Kakkanad',
+      pickupDistance: 2.7,
+      destinationDistance: 1.0,
+    },
+    {
+      id: 2,
+      riderName: 'Rahul Nair',
+      rating: 4.6,
+      costShare: 80,
+      vehicleName: 'Yamaha FZ',
+      vehicleType: 'Bike',
+      pickup: 'Palarivattom',
+      destination: 'Edappally Lulu Mall',
+      pickupDistance: 1.2,
+      destinationDistance: 0.8,
+    },
+  ];
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col-reverse md:flex-row justify-center pt-6 pb-10 px-5 bg-white">
-      {/* Left Side - Hike Details */}
-      <div className="w-full lg:w-[45%] max-w-md bg-white border border-gray-100 rounded-3xl shadow-2xl p-7 space-y-5 md:mr-10 transform scale-[0.9] origin-top md:mt-0 mt-20">
-        <h2 className="text-2xl font-bold mb-3 text-gray-900 tracking-tight">
-          Your Hike Details
-        </h2>
-
-        <div className="space-y-3 bg-gray-50 rounded-2xl p-5">
-          <div className="flex items-start gap-3 pb-3 border-b border-gray-200">
-            <div className="mt-1 p-2 bg-black rounded-lg">
-              <MapPin className="text-white" size={18} />
-            </div>
-            <div>
-              <p className="text-xs text-gray-500 font-medium mb-1">PICKUP</p>
-              <p className="text-gray-900 text-sm font-medium">
-                {hikeData.pickupAddress}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <div className="mt-1 p-2 bg-black rounded-lg">
-              <Flag className="text-white" size={18} />
-            </div>
-            <div>
-              <p className="text-xs text-gray-500 font-medium mb-1">
-                DESTINATION
-              </p>
-              <p className="text-gray-900 text-sm font-medium">
-                {hikeData.destinationAddress}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-3 mt-5">
-          <div className="bg-gray-50 rounded-xl p-3 text-center">
-            <Users className="text-black mx-auto mb-2" size={20} />
-            <p className="text-xs text-gray-500 mb-1">Seats</p>
-            <p className="text-sm font-bold text-gray-900">
-              {hikeData.seatsRequested}
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* LEFT SIDE — Available Rides */}
+      <div className="w-full md:w-[45%] h-screen overflow-y-auto border-r border-gray-200 bg-white">
+        <div className="sticky top-0 bg-white z-10 p-6 border-b border-gray-100 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">Available Rides</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Find your perfect match
             </p>
           </div>
-          <div className="bg-gray-50 rounded-xl p-3 text-center">
-            <Tag className="text-black mx-auto mb-2" size={20} />
-            <p className="text-xs text-gray-500 mb-1">Price Estimation</p>
-            <p className="text-sm font-bold text-gray-900">
-              ₹{hikeData.estimatedPrice}
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-xl p-3 text-center">
-            <Clock className="text-black mx-auto mb-2" size={20} />
-            <p className="text-xs text-gray-500 mb-1">Distance</p>
-            <p className="text-sm font-bold text-gray-900">
-              {hikeData.totalDistance} km
-            </p>
-          </div>
-        </div>
 
-        <div className="pt-4">
-          <button
-            className="w-full bg-black text-white py-3.5 rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-[0.98]"
-            onClick={() => console.log('Cancel request')}
-          >
-            Cancel Ride Request
+          {/* Refresh Button */}
+          <button className="flex items-center gap-2 font-medium cursor-pointer hover:text-gray-600 text-black">
+            <RefreshCcw size={16} />
+            Refresh
           </button>
         </div>
 
-        <p className="text-xs text-gray-400 text-center pt-1">
-          🔒 Your ride is being searched securely
-        </p>
+        <div className="p-6 space-y-4">
+          {rides.map(ride => (
+            <motion.div
+              key={ride.id}
+              className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300"
+              whileHover={{ scale: 1.01, y: -2 }}
+            >
+              {/* Rider Info Header */}
+              <div className="flex justify-between items-start mb-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gray-800 to-black rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    {ride.riderName.charAt(0)}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      {ride.riderName}
+                    </h3>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="flex items-center text-amber-500">
+                        <Star size={14} fill="currentColor" />
+                        <span className="ml-1 font-semibold text-gray-900">
+                          {ride.rating}
+                        </span>
+                      </div>
+                      <span className="text-gray-400">•</span>
+                      <span className="text-gray-600">{ride.vehicleType}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-bold text-gray-900">
+                    ₹{ride.costShare}
+                  </p>
+                  <p className="text-xs text-gray-500">per ride</p>
+                </div>
+              </div>
+
+              {/* Vehicle Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full mb-4">
+                <Car size={14} className="text-gray-700" />
+                <span className="text-sm font-medium text-gray-700">
+                  {ride.vehicleName}
+                </span>
+              </div>
+
+              {/* Route Info - Single Line */}
+              <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 mb-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <div className="flex items-center gap-1.5 text-green-600">
+                    <MapPin size={16} fill="currentColor" />
+                    <span className="font-medium text-gray-700">
+                      {ride.pickupDistance} km
+                    </span>
+                  </div>
+
+                  <div className="flex-1 flex items-center gap-2">
+                    <div className="h-px flex-1 bg-gradient-to-r from-green-400 via-gray-300 to-red-400"></div>
+                    <Car size={16} className="text-gray-400" />
+                    <div className="h-px flex-1 bg-gradient-to-r from-gray-300 via-gray-300 to-red-400"></div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-red-600">
+                    <Flag size={16} fill="currentColor" />
+                    <span className="font-medium text-gray-700">
+                      {ride.destinationDistance} km
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Details */}
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="text-center p-2 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Departure</p>
+                  <p className="text-sm font-semibold text-gray-900">4:30 PM</p>
+                </div>
+                <div className="text-center p-2 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Seats Left</p>
+                  <p className="text-sm font-semibold text-gray-900">2</p>
+                </div>
+                <div className="text-center p-2 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Duration</p>
+                  <p className="text-sm font-semibold text-gray-900">25 min</p>
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button className="flex-1 border-2 border-gray-900 text-gray-900 py-2.5 rounded-xl font-semibold hover:bg-gray-900 hover:text-white transition-all duration-200">
+                  Show Route
+                </button>
+                <button className="flex-1 bg-gray-900 text-white py-2.5 rounded-xl font-semibold hover:bg-black transition-all duration-200 shadow-lg shadow-gray-900/20">
+                  Join Ride
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      {/* Right Side - Searching Animation */}
-      <div className="w-full md:w-[55%] flex justify-center items-center mt-10 md:mt-0 relative">
-        <div className="relative w-[280px] h-[280px] flex justify-center items-center">
-          {/* Outer pulsating ring */}
-          <motion.div
-            className="absolute w-[280px] h-[280px] rounded-full border-4 border-gray-900/20"
-            animate={{ scale: [1, 1.2, 1], opacity: [1, 0.3, 1] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          />
-          {/* Middle ring */}
-          <motion.div
-            className="absolute w-[200px] h-[200px] rounded-full border-4 border-gray-700/30"
-            animate={{ scale: [1, 1.1, 1], opacity: [1, 0.5, 1] }}
-            transition={{ repeat: Infinity, duration: 1.8 }}
-          />
-          {/* Inner glowing dot */}
-          <motion.div
-            className="w-7 h-7 rounded-full bg-black shadow-[0_0_25px_rgba(0,0,0,0.6)]"
-            animate={{ scale: [1, 1.3, 1], opacity: [1, 0.8, 1] }}
-            transition={{ repeat: Infinity, duration: 1 }}
-          />
-          <p className="absolute bottom-[-40px] text-gray-600 text-sm font-medium">
-            Finding best match...
-          </p>
-        </div>
+      {/* RIGHT SIDE — Map Area */}
+      <div className="w-full md:w-[55%] h-screen flex justify-center items-center relative">
+        <MapComponent />
       </div>
     </div>
   );

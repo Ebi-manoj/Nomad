@@ -30,8 +30,12 @@ export class CreateRideUseCase {
       destination
     );
 
+    const route = await this.googleApis.getRoute(pickup, destination);
+    console.log(route);
+
     const rideLog = new RideLog({
       ...data,
+      route: { type: 'LineString', coordinates: route },
       totalDistance,
       hikersMatched: [],
       status: RideStatus.ACTIVE,

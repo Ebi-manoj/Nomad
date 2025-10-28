@@ -6,6 +6,7 @@ export interface IRideLog {
   userId: Types.ObjectId;
   pickup: GeoJSON.Point;
   destination: GeoJSON.Point;
+  route: GeoJSON.LineString;
   pickupAddress: string;
   destinationAddress: string;
   totalDistance: number;
@@ -34,6 +35,10 @@ const RideLogSchema = new Schema<IRideLog>({
   destination: {
     type: { type: String, default: 'Point' },
     coordinates: { type: [Number], required: true },
+  },
+  route: {
+    type: { type: String, default: 'LineString' },
+    coordinates: { type: [[Number]], required: true },
   },
   pickupAddress: {
     type: String,
