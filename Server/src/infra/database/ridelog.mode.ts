@@ -99,6 +99,6 @@ const RideLogSchema = new Schema<IRideLog>({
 });
 
 RideLogSchema.index({ pickup: '2dsphere' });
-RideLogSchema.index({ destination: '2dsphere' });
+RideLogSchema.index({ route: '2dsphere' });
 
 export const RideLogModel = model<IRideLog>('RideLog', RideLogSchema);

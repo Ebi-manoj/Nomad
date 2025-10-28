@@ -11,4 +11,24 @@ export class RideRepository
   constructor() {
     super(RideLogModel, rideMapper);
   }
+
+  async findActiveNearbyRiders(pickup: GeoJSON.Point): Promise<RideLog[]> {
+    const riders = await RideLogModel.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [pickup.coordinates[1], pickup.coordinates[0]],
+          },
+          distanceField: 'distanceToPickup',
+          maxDistance: 5 * 1000,
+          query: { status: 'active' },
+          spherical: true,
+          key: 'route',
+        },
+      },
+    ]);
+
+    return riders.map(ride => this.mapper.toDomain(ride));
+  }
 }
