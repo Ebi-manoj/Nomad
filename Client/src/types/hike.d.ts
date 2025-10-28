@@ -1,8 +1,3 @@
-export interface RideMatchDTO {
-  pickup: GeoJSON.Point;
-  destination: GeoJSON.Point;
-}
-
 export interface RideMatchResponseDTO {
   rideId: string;
   costSharing: number;

@@ -34,7 +34,8 @@ export function hikeComposer(): IHikeController {
   const findMatchRidesUseCase = new FindMatchRideUseCase(
     rideRepository,
     rideMatchService,
-    geoService
+    geoService,
+    hikeRepository
   );
 
   return new HikeController(createHikeUseCase, findMatchRidesUseCase);

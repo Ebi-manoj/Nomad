@@ -1,8 +1,6 @@
-import {
-  RideMatchDTO,
-  RideMatchResponseDTO,
-} from '../../../../domain/dto/RideMatch';
+import { RideMatchResponseDTO } from '../../../../domain/dto/RideMatch';
 import { IGeoService } from '../../../providers/IGeoService';
+import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { RideMatchService } from '../../../services/RideMatchService';
 
@@ -10,25 +8,45 @@ export class FindMatchRideUseCase {
   constructor(
     private readonly rideRepository: IRideRepository,
     private readonly rideMatchService: RideMatchService,
-    private readonly geoService: IGeoService
+    private readonly geoService: IGeoService,
+    private readonly hikeRepository: IHikeRepository
   ) {}
 
-  async execute(data: RideMatchDTO): Promise<RideMatchResponseDTO[]> {
+  async execute(hikeId: string): Promise<RideMatchResponseDTO[]> {
+    const hikelog = await this.hikeRepository.findById(hikeId);
+    if (!hikelog) return [];
+
+    const pickup = hikelog.getPickup();
+    const destination = hikelog.getDestination();
+    const seatRequested = hikelog.getSeatsRequested();
+    const hasHelmet = hikelog.getHasHelmet();
+
     const activeRiders = await this.rideRepository.findActiveNearbyRiders(
-      data.pickup
+      pickup
     );
-    console.log(activeRiders);
-    const filtered = [];
-    for (const ride of activeRiders) {
+
+    const filteredRiders = activeRiders.filter(ride => {
+      const vehicleType = ride.getVehicleType();
+      const riderHashelmet = ride.getHasHelmet();
+      const seatsAvailable = ride.getSeatsAvailable();
+
+      if (seatRequested > seatsAvailable) return false;
+
+      if (vehicleType == 'bike' && !riderHashelmet && !hasHelmet) return false;
+      return true;
+    });
+
+    const matchedRiders = [];
+    for (const ride of filteredRiders) {
       const match = await this.rideMatchService.evaluate(
         ride,
-        data,
+        { pickup, destination },
         this.geoService
       );
-      if (match) filtered.push(match);
+      if (match) matchedRiders.push(match);
     }
-    console.log(filtered);
+    console.log(matchedRiders);
 
-    return filtered;
+    return matchedRiders;
   }
 }

@@ -21,9 +21,9 @@ export class HikeController implements IHikeController {
   }
 
   async matchRides(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const dto: RideMatchDTO = httpRequest.body as RideMatchDTO;
+    const dto = httpRequest.body as { hikeId: string };
 
-    const result = await this.findMatchRidesUseCase.execute(dto);
+    const result = await this.findMatchRidesUseCase.execute(dto.hikeId);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

@@ -14,7 +14,7 @@ export class RideMatchService {
 
   async evaluate(
     ride: RideLog,
-    context: any,
+    context: { pickup: GeoJSON.Point; destination: GeoJSON.Point },
     geo: IGeoService
   ): Promise<RideMatchResponseDTO | null> {
     const route = ride.getRoute().coordinates;

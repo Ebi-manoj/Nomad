@@ -83,10 +83,10 @@ export class HikeLog {
     return this.createdAt;
   }
   getDestinationAddress() {
-    return this.pickupAddress;
+    return this.destinationAddress;
   }
   getPickupAddress() {
-    return this.destinationAddress;
+    return this.pickupAddress;
   }
 
   toggleConfirmed() {
