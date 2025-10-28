@@ -33,4 +33,18 @@ export class TurfGeoService implements IGeoService {
     const slicedLine = turf.lineSlice(start, end, line);
     return turf.length(slicedLine, { units: 'kilometers' });
   }
+  distanceBetweenPoints(a: Feature<Point>, b: Feature<Point>): number {
+    return turf.distance(a, b, { units: 'kilometers' });
+  }
+  getLineLength(line: Feature<LineString>): number {
+    return turf.length(line, { units: 'kilometers' });
+  }
+  calculateDistanceAlongLine(
+    startPoint: Feature<Point>,
+    targetPoint: Feature<Point>,
+    line: Feature<LineString>
+  ): number {
+    const slicedLine = turf.lineSlice(startPoint, targetPoint, line);
+    return turf.length(slicedLine, { units: 'kilometers' });
+  }
 }

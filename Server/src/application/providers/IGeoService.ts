@@ -1,7 +1,7 @@
 import { Feature, LineString, Point, Position } from 'geojson';
 
 export interface IGeoService {
-  createLine(coords: [number, number][]): Feature<LineString>;
+  createLine(coords: Position[]): Feature<LineString>;
   createPoint(coord: Position): Feature<Point>;
   pointToLineDistance(point: Feature<Point>, line: Feature<LineString>): number;
   nearestPointOnLine(
@@ -11,6 +11,13 @@ export interface IGeoService {
   lineDistance(
     start: Feature<Point>,
     end: Feature<Point>,
+    line: Feature<LineString>
+  ): number;
+  distanceBetweenPoints(a: Feature<Point>, b: Feature<Point>): number;
+  getLineLength(line: Feature<LineString>): number;
+  calculateDistanceAlongLine(
+    startPoint: Feature<Point>,
+    targetPoint: Feature<Point>,
     line: Feature<LineString>
   ): number;
 }

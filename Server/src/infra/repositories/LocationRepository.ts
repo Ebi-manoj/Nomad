@@ -22,4 +22,20 @@ export class LocationRepository implements ILocationRepository {
 
     console.log('updated');
   }
+
+  async getLocation(id: string): Promise<Location | null> {
+    const key = `rider:location:${id}`;
+    const data = await this.client.hGetAll(key);
+
+    if (!data || Object.keys(data).length === 0) return null;
+
+    const lat = parseFloat(data.lat);
+    const lng = parseFloat(data.lng);
+
+    return new Location({
+      rideId: id,
+      lat,
+      lng,
+    });
+  }
 }
