@@ -50,21 +50,21 @@ export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
     );
   }, [pickup, destination]);
 
-  // // Simulate movement
-  // useEffect(() => {
-  //   if (!directions) return;
-  //   const routePath = directions.routes[0].overview_path;
-  //   let index = 0;
+  // Simulate movement
+  useEffect(() => {
+    if (!directions) return;
+    const routePath = directions.routes[0].overview_path;
+    let index = 0;
 
-  //   const simulator = setInterval(() => {
-  //     if (index >= routePath.length) return clearInterval(simulator);
-  //     const point = routePath[index];
-  //     setCurrentPosition({ lat: point.lat(), lng: point.lng() });
-  //     index++;
-  //   }, 3000);
+    const simulator = setInterval(() => {
+      if (index >= routePath.length) return clearInterval(simulator);
+      const point = routePath[index];
+      setCurrentPosition({ lat: point.lat(), lng: point.lng() });
+      index++;
+    }, 5000);
 
-  //   return () => clearInterval(simulator);
-  // }, [directions]);
+    return () => clearInterval(simulator);
+  }, [directions]);
 
   //  location to backend
   useEffect(() => {
