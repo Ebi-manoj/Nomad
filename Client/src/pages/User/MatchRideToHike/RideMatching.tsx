@@ -3,21 +3,25 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { Navigate } from 'react-router-dom';
 import { MapPin, Flag, Car, Star, Loader2 } from 'lucide-react';
-import { MapComponent } from '@/components/MapComponent';
 import { RefreshCcw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import axiosInstance from '@/utils/axiosInstance';
 import { FIND_MATCH_RIDES_API } from '@/api/hike';
 import { toast } from 'sonner';
 import type { RideMatchResponseDTO } from '@/types/hike';
+import { MatchRideMap } from './MatchRideMap';
 
 export function RideMatching() {
   const { hikeData } = useSelector((state: RootState) => state.hike);
   const [availableRides, setAvailableRides] = useState<RideMatchResponseDTO[]>(
     []
   );
+  const [selectedRide, setSelectedRide] = useState<RideMatchResponseDTO | null>(
+    null
+  );
+
   const [loading, setLoading] = useState(false);
-  // if (!hikeData) return <Navigate to={'/hike'} replace />;
+  if (!hikeData) return <Navigate to={'/hike'} replace />;
   const fetchRides = async () => {
     if (!hikeData?.id) return;
     setLoading(true);
@@ -186,7 +190,10 @@ export function RideMatching() {
 
               {/* Buttons */}
               <div className="flex gap-2">
-                <button className="flex-1 border-2 border-slate-900 text-slate-900 py-2 rounded-xl font-semibold text-sm hover:bg-slate-900 hover:text-white transition-all duration-200 hover:shadow-lg">
+                <button
+                  className="flex-1 border-2 border-slate-900 text-slate-900 py-2 rounded-xl font-semibold text-sm hover:bg-slate-900 hover:text-white transition-all duration-200 hover:shadow-lg"
+                  onClick={() => setSelectedRide(ride)}
+                >
                   Show Route
                 </button>
                 <button className="flex-1 bg-gradient-to-r from-slate-900 to-slate-800 text-white py-2 rounded-xl font-semibold text-sm hover:from-slate-800 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-xl">
@@ -200,7 +207,7 @@ export function RideMatching() {
 
       {/* RIGHT SIDE — Map Area */}
       <div className="w-full md:w-[55%] h-screen flex justify-center items-center relative bg-slate-50/30">
-        <MapComponent />
+        <MatchRideMap hike={hikeData} selectedRide={selectedRide} />
       </div>
     </div>
   );

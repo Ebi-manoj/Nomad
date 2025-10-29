@@ -5,6 +5,9 @@ export interface RideMatchDTO {
 
 export interface RideMatchResponseDTO {
   rideId: string;
+  rideStartLocation: GeoJSON.Point;
+  rideEndLocation: GeoJSON.Point;
+  currentRiderLocation: GeoJSON.Point;
   costSharing: number;
   nearestPickup: GeoJSON.Point;
   nearestDestination: GeoJSON.Point;

@@ -3,7 +3,7 @@ import { Protected } from './Protected';
 import { HomeLayout } from '@/layouts/HomeLayout';
 import { Hike } from '@/pages/User/Hike';
 import ProfilePage from '@/pages/User/Profile';
-import { RideMatching } from '@/pages/User/RideMatching';
+import { RideMatching } from '@/pages/User/MatchRideToHike/RideMatching';
 import { Ride } from '@/pages/User/Ride';
 import { RideStarted } from '@/pages/User/RideStarted';
 

@@ -117,6 +117,9 @@ export class RideMatchService {
     // Return ride match summary
     return {
       rideId: ride.getRideId()!,
+      rideStartLocation: ride.getPickup(),
+      rideEndLocation: ride.getDestination(),
+      currentRiderLocation: currentLocationPoint.geometry,
       costSharing: ride.getCostSharing(),
       nearestPickup: nearestPickupPoint.geometry,
       nearestDestination: nearestDestPoint.geometry,
