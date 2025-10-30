@@ -4,22 +4,24 @@ import { setupRiderNameSpace } from './nameSpaces/rider.namespace';
 import { locationUpdateComposer } from '../../infra/services/composer/sockets/locationUpdate.composer';
 
 export class SocketServer {
-  private readonly io;
-  constructor(server: http.Server, origins: string[]) {
-    this.io = new Server(server, {
-      cors: {
-        origin: origins,
-      },
-    });
-    this.setupNameSpaces();
+  private static io: Server;
+  static init(server: http.Server, origins: string[]) {
+    if (!this.io) {
+      this.io = new Server(server, {
+        cors: { origin: origins },
+      });
+      console.log('SocketServer initialized');
+    }
+    this.setupNameSpaces(this.io);
+    return this.io;
   }
 
-  setupNameSpaces() {
+  static setupNameSpaces(io: Server) {
     const locationUpdateController = locationUpdateComposer();
-    setupRiderNameSpace(this.io, locationUpdateController);
+    setupRiderNameSpace(io, locationUpdateController);
   }
 
-  getIo() {
+  static getIo() {
     return this.io;
   }
 }

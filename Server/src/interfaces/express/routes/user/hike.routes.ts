@@ -18,4 +18,11 @@ router.post('/match-rides', async (req: Request, res: Response) => {
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
+router.post('/join-ride', async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    hikeComposer().joinRideRequest(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
 export default router;

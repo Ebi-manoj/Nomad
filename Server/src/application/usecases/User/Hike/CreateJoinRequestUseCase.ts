@@ -1,4 +1,7 @@
-import { CreateJoinRequestDTO } from '../../../../domain/dto/HikeDTO';
+import {
+  CreateJoinRequestDTO,
+  JoinRequestResponseDTO,
+} from '../../../../domain/dto/HikeDTO';
 import { JoinRequest } from '../../../../domain/entities/JoinRequests';
 import {
   HasPendingRequest,
@@ -9,17 +12,22 @@ import { RideNotFound } from '../../../../domain/errors/RideErrors';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
+import { UserRepository } from '../../../repositories/UserRepository';
 import { FareCalculator } from '../../../services/FareCalculator';
+import { joinRequestMapper } from '../../../mappers/JoinRequestMapper';
+import { UserNotFound } from '../../../../domain/errors/CustomError';
+import { JoinRequestStatus } from '../../../../domain/enums/Ride';
 
 export class CreateJoinRequestUseCase {
   constructor(
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly rideRepository: IRideRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly fareCalculator: FareCalculator
+    private readonly fareCalculator: FareCalculator,
+    private readonly userRepository: UserRepository
   ) {}
 
-  async execute(data: CreateJoinRequestDTO): Promise<void> {
+  async execute(data: CreateJoinRequestDTO): Promise<JoinRequestResponseDTO> {
     const ride = await this.rideRepository.findById(data.rideId);
     const hike = await this.hikeRepository.findById(data.hikeId);
     if (!ride) throw new RideNotFound();
@@ -36,9 +44,20 @@ export class CreateJoinRequestUseCase {
       );
     if (hasPendingRequest) throw new HasPendingRequest();
 
-    const joinRequest = new JoinRequest({ ...data });
+    const costSharing = this.fareCalculator.getFare(
+      ride.getCostSharing(),
+      hike.getTotalDistance()
+    );
+    const joinRequest = new JoinRequest({
+      ...data,
+      costSharing,
+      status: JoinRequestStatus.PENDING,
+    });
 
     //Create Collection
-    await this.joinRequestRepository.create(joinRequest);
+    const saved = await this.joinRequestRepository.create(joinRequest);
+    const user = await this.userRepository.findById(hike.getUserId());
+    if (!user) throw new UserNotFound();
+    return joinRequestMapper(saved, hike, user);
   }
 }

@@ -27,7 +27,7 @@ app.use(
   })
 );
 
-new SocketServer(server, ['http://localhost:5173']);
+SocketServer.init(server, ['http://localhost:5173']);
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);

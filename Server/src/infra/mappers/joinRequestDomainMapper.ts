@@ -10,6 +10,7 @@ export const joinRequestMapper: IMapper<JoinRequest, IJoinRequest> = {
       hikeId: new Types.ObjectId(domain.getHikeId()),
       pickupLocation: domain.getPickupLocation(),
       dropoffLocation: domain.getDropoffLocation(),
+      costSharing: domain.getCostSharing(),
       status: domain.getStatus(),
       createdAt: domain.getCreatedAt(),
     };
@@ -22,6 +23,7 @@ export const joinRequestMapper: IMapper<JoinRequest, IJoinRequest> = {
       hikeId: persistence.hikeId.toString(),
       pickupLocation: persistence.pickupLocation,
       dropoffLocation: persistence.dropoffLocation,
+      costSharing: persistence.costSharing,
       status: persistence.status,
       createdAt: persistence.createdAt,
     });

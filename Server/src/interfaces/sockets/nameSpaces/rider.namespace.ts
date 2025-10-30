@@ -13,5 +13,10 @@ export function setupRiderNameSpace(
     socket.on('location:update', data => {
       controller.handleLocationUpdate(socket, data);
     });
+
+    socket.on('ride:join', (rideId: string) => {
+      socket.join(rideId);
+      console.log(`Rider ${socket.id} joined ride room: ${rideId}`);
+    });
   });
 }

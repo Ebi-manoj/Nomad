@@ -39,7 +39,6 @@ export interface CreateJoinRequestDTO {
     type: 'Point';
     coordinates: [number, number];
   };
-  status: JoinRequestStatus;
 }
 export interface JoinRequestResponseDTO {
   id: string;
@@ -48,6 +47,9 @@ export interface JoinRequestResponseDTO {
   seatsRequested: number;
   pickupLocation: GeoJSON.Point;
   dropoffLocation: GeoJSON.Point;
+  hikerPickupAddress: string;
+  hikerDestinationAddress: string;
+  totalDistance: number;
   costSharing: number;
   createdAt: Date;
   updatedAt: Date;

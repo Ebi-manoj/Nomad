@@ -7,7 +7,7 @@ export interface JoinRequestProps {
   status: JoinRequestStatus;
   pickupLocation: GeoJSON.Point;
   dropoffLocation: GeoJSON.Point;
-
+  costSharing: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -19,6 +19,7 @@ export class JoinRequest {
   private status: JoinRequestStatus;
   private pickupLocation: GeoJSON.Point;
   private dropoffLocation: GeoJSON.Point;
+  private costSharing: number;
   private createdAt: Date;
   private updatedAt: Date;
 
@@ -29,6 +30,7 @@ export class JoinRequest {
     this.status = props.status || JoinRequestStatus.PENDING;
     this.pickupLocation = props.pickupLocation;
     this.dropoffLocation = props.dropoffLocation;
+    this.costSharing = props.costSharing;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
   }
@@ -58,6 +60,10 @@ export class JoinRequest {
     return this.dropoffLocation;
   }
 
+  getCostSharing() {
+    return this.costSharing;
+  }
+
   getCreatedAt() {
     return this.createdAt;
   }
@@ -82,6 +88,11 @@ export class JoinRequest {
     this.updatedAt = new Date();
   }
 
+  updateCostSharing(cost: number) {
+    this.costSharing = cost;
+    this.updatedAt = new Date();
+  }
+
   toJSON() {
     return {
       id: this.id,
@@ -90,6 +101,7 @@ export class JoinRequest {
       status: this.status,
       pickupLocation: this.pickupLocation,
       dropoffLocation: this.dropoffLocation,
+      costSharing: this.costSharing,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
