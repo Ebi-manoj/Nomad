@@ -2,9 +2,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import { HikerCard } from './HikerCard';
+import type { RideRequestDTO } from '@/types/ride';
 
 interface HikerListProps {
-  requests: any[];
+  requests: RideRequestDTO[];
   seatsRemaining: number;
   onAccept: (requestId: string) => void;
   onDecline: (requestId: string) => void;

@@ -1,8 +1,9 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { HikerList } from './HikersList';
+import type { RideRequestDTO } from '@/types/ride';
 
 interface RideTabsProps {
-  hikers: any[];
+  hikers: RideRequestDTO[];
   seatsRemaining: number;
 }
 

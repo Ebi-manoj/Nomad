@@ -16,8 +16,18 @@ export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
     lat: 10.8505,
     lng: 76.2711,
   });
-  console.log(directions);
   const { riderSocket } = useSocket();
+  useEffect(() => {
+    if (!riderSocket.connected) {
+      riderSocket.connect();
+    }
+    riderSocket.emit('ride:join', rideId);
+
+    return () => {
+      // Cleanup listeners
+      riderSocket.off('join-request:new');
+    };
+  }, [rideId, riderSocket]);
 
   // Get current position once
   useEffect(() => {
