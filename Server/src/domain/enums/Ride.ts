@@ -4,3 +4,10 @@ export enum RideStatus {
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
 }
+
+export enum JoinRequestStatus {
+  PENDING = 'pending',
+  ACCEPTED = 'accepted',
+  DECLINED = 'declined',
+  CANCELLED = 'cancelled',
+}

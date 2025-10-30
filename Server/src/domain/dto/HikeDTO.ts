@@ -1,4 +1,5 @@
 import { HikeStatus } from '../enums/Hike';
+import { JoinRequestStatus } from '../enums/Ride';
 
 export interface CreateHikeDTO {
   userId: string;
@@ -25,4 +26,35 @@ export interface HikeResponseDTO {
   riderId: string | null;
   confirmed: boolean;
   createdAt: Date;
+}
+
+export interface CreateJoinRequestDTO {
+  rideId: string;
+  hikeId: string;
+  pickupLocation: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
+  dropoffLocation: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
+  status: JoinRequestStatus;
+}
+export interface JoinRequestResponseDTO {
+  id: string;
+  rideId: string;
+  status: JoinRequestStatus;
+  seatsRequested: number;
+  pickupLocation: GeoJSON.Point;
+  dropoffLocation: GeoJSON.Point;
+  costSharing: number;
+  createdAt: Date;
+  updatedAt: Date;
+  hiker: {
+    id: string;
+    fullName: string;
+    profilePicture?: string;
+    rating?: number;
+  };
 }

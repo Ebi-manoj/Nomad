@@ -11,4 +11,8 @@ export const ErrorMessages = {
   INVALID_FILE_FORMAT: 'Invalid file format recieved',
   INVALID_FOLDER_TYPE: 'Invalid folder type',
   DOCUMENT_NOT_FOUND: 'Document not found',
+  RIDE_NOT_FOUND: 'Ride not found',
+  HIKE_NOT_FOUND: 'Hike not found',
+  SEATS_NOT_AVAILABLE: 'Seats not available',
+  HAS_PENDING_REQUESTS: 'You have already pending requests',
 } as const;
