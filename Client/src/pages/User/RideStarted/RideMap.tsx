@@ -1,5 +1,5 @@
 import { MapComponent } from '@/components/MapComponent';
-import { useSocket } from '@/hooks/sockets/useSockets';
+import { useSocket } from '@/context/SocketContext';
 import { DirectionsRenderer, Marker } from '@react-google-maps/api';
 import { useEffect, useState } from 'react';
 
@@ -17,7 +17,7 @@ export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
     lng: 76.2711,
   });
   console.log(directions);
-  const riderSocket = useSocket('/rider');
+  const { riderSocket } = useSocket();
 
   // Get current position once
   useEffect(() => {
