@@ -1,6 +1,11 @@
 import { MapPin, Flag, Car, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
-import type { RideMatchResponseDTO } from '@/types/hike';
+import type { CreateJoinRequestDTO, RideMatchResponseDTO } from '@/types/hike';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
+import { joinRide } from '@/api/hike';
+import { toast } from 'sonner';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 export function RideCard({
   ride,
@@ -9,6 +14,23 @@ export function RideCard({
   ride: RideMatchResponseDTO;
   setSelectedRide: (ride: RideMatchResponseDTO) => void;
 }) {
+  const { hikeData } = useSelector((state: RootState) => state.hike);
+  if (!hikeData) return;
+  const handleJoinRide = async () => {
+    try {
+      const payload: CreateJoinRequestDTO = {
+        rideId: ride.rideId,
+        hikeId: hikeData?.id,
+        pickupLocation: ride.nearestPickup,
+        dropoffLocation: ride.nearestDestination,
+      };
+      await joinRide(payload);
+      toast.success('Request sent to the rider');
+    } catch (error) {
+      useHandleApiError(error);
+    }
+  };
+
   return (
     <motion.div
       className="bg-white border border-slate-200/60 rounded-xl p-3.5 shadow-sm hover:shadow-lg hover:border-slate-300/60 transition-all duration-300"
@@ -83,7 +105,10 @@ export function RideCard({
         >
           Show Route
         </button>
-        <button className="flex-1 bg-gradient-to-r cursor-pointer from-slate-900 to-slate-800 text-white py-1.5 rounded-lg font-semibold text-xs hover:from-slate-800 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-xl">
+        <button
+          className="flex-1 bg-gradient-to-r cursor-pointer from-slate-900 to-slate-800 text-white py-1.5 rounded-lg font-semibold text-xs hover:from-slate-800 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-xl"
+          onClick={handleJoinRide}
+        >
           Join Ride
         </button>
       </div>

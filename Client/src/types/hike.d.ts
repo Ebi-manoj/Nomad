@@ -1,3 +1,16 @@
+export interface CreateJoinRequestDTO {
+  rideId: string;
+  hikeId: string;
+  pickupLocation: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
+  dropoffLocation: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
+}
+
 export interface RideMatchResponseDTO {
   rideId: string;
   rideStartLocation: GeoJSON.Point;
