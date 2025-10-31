@@ -3,20 +3,39 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { RideRequestDTO } from '@/types/ride';
 import { MdOutlineAirlineSeatReclineExtra } from 'react-icons/md';
+import { useRideRoute } from '@/context/RiderHikesRoutesContext';
 
 interface HikerCardProps {
   request: RideRequestDTO;
   onAccept: (requestId: string) => void;
   onDecline: (requestId: string) => void;
-  onViewRoute: (request: any) => void;
 }
 
-export function HikerCard({
-  request,
-  onAccept,
-  onDecline,
-  onViewRoute,
-}: HikerCardProps) {
+export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
+  const { isRouteVisible, selectedRoute, showRoute, hideRoute } =
+    useRideRoute();
+  const handleToggleRoute = () => {
+    const route = {
+      pickup: {
+        lat: request.pickupLocation.coordinates[1],
+        lng: request.pickupLocation.coordinates[0],
+      },
+      dropoff: {
+        lat: request.dropoffLocation.coordinates[1],
+        lng: request.dropoffLocation.coordinates[0],
+      },
+    };
+
+    if (
+      isRouteVisible &&
+      selectedRoute?.pickup.lat === route.pickup.lat &&
+      selectedRoute?.dropoff.lat === route.dropoff.lat
+    ) {
+      hideRoute();
+    } else {
+      showRoute(route);
+    }
+  };
   const {
     hiker,
     hikerPickupAddress,
@@ -103,7 +122,7 @@ export function HikerCard({
             {/* Buttons */}
             <div className="flex gap-1.5">
               <Button
-                onClick={() => onViewRoute(request)}
+                onClick={handleToggleRoute}
                 variant="outline"
                 size="sm"
                 className="h-7 text-[11px] border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700 px-2.5 min-w-0 text-gray-700 dark:text-gray-300 transition-all duration-200"
@@ -112,7 +131,7 @@ export function HikerCard({
                   size={12}
                   className="mr-1 text-gray-600 dark:text-gray-400"
                 />
-                Route
+                {isRouteVisible ? 'Hide Route' : 'View Route'}
               </Button>
               <Button
                 onClick={() => onAccept(request.id)}

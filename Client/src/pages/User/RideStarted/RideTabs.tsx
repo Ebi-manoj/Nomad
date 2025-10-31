@@ -18,11 +18,6 @@ export function RideTabs({ hikers, seatsRemaining }: RideTabsProps) {
     // TODO: Implement decline logic
   };
 
-  const handleViewRoute = (request: any) => {
-    console.log('View route:', request);
-    // TODO: Implement view route logic
-  };
-
   return (
     <Tabs defaultValue="find" className="flex-1 flex flex-col h-full">
       <TabsList className="grid grid-cols-3 mb-4 bg-white text-black rounded-lg flex-shrink-0">
@@ -52,7 +47,6 @@ export function RideTabs({ hikers, seatsRemaining }: RideTabsProps) {
           seatsRemaining={seatsRemaining}
           onAccept={handleAccept}
           onDecline={handleDecline}
-          onViewRoute={handleViewRoute}
         />
       </TabsContent>
 

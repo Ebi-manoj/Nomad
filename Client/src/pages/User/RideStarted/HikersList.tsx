@@ -9,7 +9,6 @@ interface HikerListProps {
   seatsRemaining: number;
   onAccept: (requestId: string) => void;
   onDecline: (requestId: string) => void;
-  onViewRoute: (request: any) => void;
   isLoading?: boolean;
 }
 
@@ -18,7 +17,6 @@ export function HikerList({
   seatsRemaining,
   onAccept,
   onDecline,
-  onViewRoute,
   isLoading = false,
 }: HikerListProps) {
   return (
@@ -51,7 +49,6 @@ export function HikerList({
                     request={request}
                     onAccept={onAccept}
                     onDecline={onDecline}
-                    onViewRoute={onViewRoute}
                   />
                 ))
               ) : (
