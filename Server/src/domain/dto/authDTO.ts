@@ -1,3 +1,6 @@
+import { RideLog } from '../entities/Ride';
+import { HikeResponseDTO } from './HikeDTO';
+
 export interface RegisterUserRequestDTO {
   fullName: string;
   email: string;
@@ -57,4 +60,9 @@ export interface ResetPasswordRequestDTO {
 
 export interface RefreshTokenRequestDTO {
   refreshToken: string;
+}
+
+export interface ActiveSession {
+  activeRide: HikeResponseDTO | null;
+  activeHike: RideLog | null;
 }

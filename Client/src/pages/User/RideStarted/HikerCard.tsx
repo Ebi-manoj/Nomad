@@ -12,8 +12,7 @@ interface HikerCardProps {
 }
 
 export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
-  const { isRouteVisible, selectedRoute, showRoute, hideRoute } =
-    useRideRoute();
+  const { selectedHikerId, showRoute, hideRoute } = useRideRoute();
   const handleToggleRoute = () => {
     const route = {
       pickup: {
@@ -26,14 +25,10 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
       },
     };
 
-    if (
-      isRouteVisible &&
-      selectedRoute?.pickup.lat === route.pickup.lat &&
-      selectedRoute?.dropoff.lat === route.dropoff.lat
-    ) {
+    if (selectedHikerId === request.id) {
       hideRoute();
     } else {
-      showRoute(route);
+      showRoute(route, request.id);
     }
   };
   const {
@@ -125,18 +120,18 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
                 onClick={handleToggleRoute}
                 variant="outline"
                 size="sm"
-                className="h-7 text-[11px] border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700 px-2.5 min-w-0 text-gray-700 dark:text-gray-300 transition-all duration-200"
+                className="h-7 text-[11px] cursor-pointer border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700 px-2.5 min-w-0 text-gray-700 dark:text-gray-300 transition-all duration-200"
               >
                 <MapPin
                   size={12}
                   className="mr-1 text-gray-600 dark:text-gray-400"
                 />
-                {isRouteVisible ? 'Hide Route' : 'View Route'}
+                {selectedHikerId == request.id ? 'Hide Route' : 'View Route'}
               </Button>
               <Button
                 onClick={() => onAccept(request.id)}
                 size="sm"
-                className="h-7 px-2.5 bg-gradient-to-r from-gray-900 to-black dark:from-gray-100 dark:to-white hover:from-black hover:to-gray-900 dark:hover:from-white dark:hover:to-gray-100 text-white dark:text-black text-[11px] min-w-0 shadow-sm hover:shadow transition-all duration-200"
+                className="h-7 px-2.5 bg-gradient-to-r cursor-pointer from-gray-900 to-black dark:from-gray-100 dark:to-white hover:from-black hover:to-gray-900 dark:hover:from-white dark:hover:to-gray-100 text-white dark:text-black text-[11px] min-w-0 shadow-sm hover:shadow transition-all duration-200"
               >
                 <Check size={13} className="mr-1" />
                 Accept
@@ -145,7 +140,7 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
                 onClick={() => onDecline(request.id)}
                 variant="outline"
                 size="sm"
-                className="h-7 px-2.5 border-red-200 dark:border-red-900 text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-300 dark:hover:border-red-800 text-[11px] min-w-0 transition-all duration-200"
+                className="h-7 px-2.5 border-red-200 cursor-pointer dark:border-red-900 text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-300 dark:hover:border-red-800 text-[11px] min-w-0 transition-all duration-200"
               >
                 <X size={13} className="mr-1" />
                 Decline

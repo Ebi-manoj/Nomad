@@ -59,7 +59,7 @@ const HikeLogSchema = new Schema<IHikeLog>({
   status: {
     type: String,
     enum: Object.values(HikeStatus),
-    default: HikeStatus.REQUESTED,
+    default: HikeStatus.ACTIVE,
   },
   confirmed: {
     type: Boolean,

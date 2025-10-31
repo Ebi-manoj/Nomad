@@ -31,4 +31,7 @@ export class RideRepository
 
     return riders.map(ride => this.mapper.toDomain(ride));
   }
+  async findUserActiveRide(userId: string): Promise<RideLog | null> {
+    return await this.model.findOne({ userId, status: 'active' });
+  }
 }

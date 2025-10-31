@@ -1,7 +1,5 @@
 export enum HikeStatus {
-  REQUESTED = 'requested',
-  MATCHED = 'matched',
-  ACCEPTED = 'accepted',
-  CANCELLED = 'cancelled',
+  ACTIVE = 'active',
   COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
 }

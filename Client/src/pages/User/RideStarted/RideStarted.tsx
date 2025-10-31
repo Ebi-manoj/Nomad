@@ -57,7 +57,7 @@ export function RideStartedContent() {
       </div>
 
       {/* RIGHT SIDEBAR */}
-      <div className="w-full sm:w-[400px] border-l border-gray-200 bg-white shadow-sm p-4 flex flex-col">
+      <div className="w-full sm:w-[500px] border-l border-gray-200 bg-white shadow-sm p-4 flex flex-col">
         <RideTabs
           hikers={rideRequests}
           seatsRemaining={rideData.seatsAvailable}

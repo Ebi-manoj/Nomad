@@ -35,7 +35,7 @@ export class CreateHikeUseCase {
     const hike = new HikeLog({
       ...data,
       totalDistance,
-      status: HikeStatus.REQUESTED,
+      status: HikeStatus.ACTIVE,
     });
 
     const savedHike = await this.hikeRepository.create(hike);

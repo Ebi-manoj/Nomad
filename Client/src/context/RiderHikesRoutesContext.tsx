@@ -7,8 +7,8 @@ interface RouteData {
 
 interface RideRouteContextType {
   selectedRoute: RouteData | null;
-  isRouteVisible: boolean;
-  showRoute: (route: RouteData) => void;
+  selectedHikerId: string | null;
+  showRoute: (route: RouteData, hikeId: string) => void;
   hideRoute: () => void;
 }
 
@@ -18,21 +18,21 @@ const RideRouteContext = createContext<RideRouteContextType | undefined>(
 
 export const RideRouteProvider = ({ children }: { children: ReactNode }) => {
   const [selectedRoute, setSelectedRoute] = useState<RouteData | null>(null);
-  const [isRouteVisible, setIsRouteVisible] = useState(false);
+  const [selectedHikerId, setSelectedHikerId] = useState<string | null>(null);
 
-  const showRoute = (route: RouteData) => {
+  const showRoute = (route: RouteData, hikeId: string) => {
     setSelectedRoute(route);
-    setIsRouteVisible(true);
+    setSelectedHikerId(hikeId);
   };
 
   const hideRoute = () => {
     setSelectedRoute(null);
-    setIsRouteVisible(false);
+    setSelectedHikerId(null);
   };
 
   return (
     <RideRouteContext.Provider
-      value={{ selectedRoute, isRouteVisible, showRoute, hideRoute }}
+      value={{ selectedRoute, selectedHikerId, showRoute, hideRoute }}
     >
       {children}
     </RideRouteContext.Provider>

@@ -11,4 +11,7 @@ export class HikeRepository
   constructor() {
     super(HikeLogModel, hikeMapper);
   }
+  async findUserActiveHike(userId: string): Promise<HikeLog | null> {
+    return await this.model.findOne({ userId, status: 'active' });
+  }
 }
