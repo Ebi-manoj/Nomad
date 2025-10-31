@@ -6,6 +6,7 @@ import ProfilePage from '@/pages/User/Profile';
 import { RideMatching } from '@/pages/User/MatchRideToHike';
 import { Ride } from '@/pages/User/Ride';
 import { RideStarted } from '@/pages/User/RideStarted';
+import { ProtectedSession } from './ProtectedSessions';
 
 export const UserRoutes = (
   <Route
@@ -16,10 +17,38 @@ export const UserRoutes = (
       </Protected>
     }
   >
-    <Route path="hike" element={<Hike />} />
-    <Route path="hike/match" element={<RideMatching />} />
+    <Route
+      path="hike"
+      element={
+        <ProtectedSession>
+          <Hike />
+        </ProtectedSession>
+      }
+    />
+    <Route
+      path="hike/match"
+      element={
+        <ProtectedSession requireActiveHike>
+          <RideMatching />
+        </ProtectedSession>
+      }
+    />
     <Route path="/profile" element={<ProfilePage />} />
-    <Route path="/ride" element={<Ride />} />
-    <Route path="/ride/started" element={<RideStarted />} />
+    <Route
+      path="/ride"
+      element={
+        <ProtectedSession>
+          <Ride />
+        </ProtectedSession>
+      }
+    />
+    <Route
+      path="/ride/started"
+      element={
+        <ProtectedSession requireActiveRide>
+          <RideStarted />
+        </ProtectedSession>
+      }
+    />
   </Route>
 );

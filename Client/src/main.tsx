@@ -9,6 +9,7 @@ import { AuthProvider } from './routes/AuthProvider.tsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { injectStore } from './utils/axiosInstance.ts';
 import { SocketProvider } from './context/SocketContext.tsx';
+import { ActiveSessionProvider } from './routes/SessionProvider.tsx';
 injectStore(store);
 
 createRoot(document.getElementById('root')!).render(
@@ -17,11 +18,13 @@ createRoot(document.getElementById('root')!).render(
       <SocketProvider>
         <AuthProvider>
           <BrowserRouter>
-            <GoogleOAuthProvider
-              clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-            >
-              <App />
-            </GoogleOAuthProvider>
+            <ActiveSessionProvider>
+              <GoogleOAuthProvider
+                clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+              >
+                <App />
+              </GoogleOAuthProvider>
+            </ActiveSessionProvider>
           </BrowserRouter>
         </AuthProvider>
       </SocketProvider>

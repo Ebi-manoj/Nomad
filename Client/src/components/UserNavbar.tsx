@@ -23,7 +23,7 @@ export const UserNavbar = () => {
             <Link
               to={'/hike'}
               className={`flex items-center gap-1 text-gray-900 font-medium ${
-                path == '/hike' && 'border-b-2'
+                path.startsWith('/hike') && 'border-b-2'
               }  border-black pb-1 cursor-pointer`}
             >
               <PiPersonSimpleHikeBold className="w-5 h-5" />
@@ -32,7 +32,7 @@ export const UserNavbar = () => {
             <Link
               to={'/ride'}
               className={`flex items-center gap-1 text-gray-900 font-medium ${
-                path == '/ride' && 'border-b-2'
+                path.startsWith('/ride') && 'border-b-2'
               }  border-black pb-1 cursor-pointer`}
             >
               <RiMotorbikeFill className="w-5 h-5" />

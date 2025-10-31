@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { RideState } from './ride';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { RideData, RideState } from './ride';
 import { createRide } from './ride.thunk';
 
 const initialState: RideState = {
@@ -11,7 +11,11 @@ const initialState: RideState = {
 const rideSlice = createSlice({
   name: 'ride',
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveRide(state, action: PayloadAction<RideData | null>) {
+      state.rideData = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(createRide.pending, state => {
@@ -28,4 +32,5 @@ const rideSlice = createSlice({
   },
 });
 
+export const { setActiveRide } = rideSlice.actions;
 export default rideSlice.reducer;

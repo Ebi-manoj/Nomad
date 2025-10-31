@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { HikeState } from './hike';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { HikeResponseDTO, HikeState } from './hike';
 import { createHike } from './hike.thunk';
 
 const initialState: HikeState = {
@@ -11,7 +11,11 @@ const initialState: HikeState = {
 const hikeSlice = createSlice({
   name: 'hike',
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveHike(state, action: PayloadAction<HikeResponseDTO | null>) {
+      state.hikeData = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(createHike.pending, state => {
@@ -28,4 +32,5 @@ const hikeSlice = createSlice({
   },
 });
 
+export const { setActiveHike } = hikeSlice.actions;
 export default hikeSlice.reducer;
