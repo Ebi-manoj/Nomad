@@ -8,6 +8,7 @@ import type { RootState } from '@/store/store';
 import { RideMap } from './RideMap';
 import { useSocket } from '@/context/SocketContext';
 import type { RideRequestDTO } from '@/types/ride';
+import { getJoinRequest } from '@/api/ride';
 
 export function RideStartedContent() {
   const [showDetails, setShowDetails] = useState(true);
@@ -16,6 +17,17 @@ export function RideStartedContent() {
 
   const { riderSocket } = useSocket();
   if (!rideData) return <Navigate to="/ride" replace />;
+
+  useEffect(() => {
+    const fetchPendingReq = async () => {
+      try {
+        const data = await getJoinRequest(rideData.id);
+        setRideRequest(data);
+      } catch (error) {}
+    };
+    fetchPendingReq();
+  }, [rideData]);
+
   useEffect(() => {
     if (!riderSocket.connected) {
       riderSocket.connect();
