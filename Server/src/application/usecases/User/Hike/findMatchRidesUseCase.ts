@@ -1,6 +1,7 @@
 import { RideMatchResponseDTO } from '../../../../domain/dto/RideMatch';
 import { IGeoService } from '../../../providers/IGeoService';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
+import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { RideMatchService } from '../../../services/RideMatchService';
 
@@ -9,7 +10,8 @@ export class FindMatchRideUseCase {
     private readonly rideRepository: IRideRepository,
     private readonly rideMatchService: RideMatchService,
     private readonly geoService: IGeoService,
-    private readonly hikeRepository: IHikeRepository
+    private readonly hikeRepository: IHikeRepository,
+    private readonly joinRequestRepository: IJoinRequestRepository
   ) {}
 
   async execute(hikeId: string): Promise<RideMatchResponseDTO[]> {
@@ -36,6 +38,7 @@ export class FindMatchRideUseCase {
       return true;
     });
 
+    const JoinRequests = await this.joinRequestRepository.findByHikeId(hikeId);
     const matchedRiders = [];
     for (const ride of filteredRiders) {
       const match = await this.rideMatchService.evaluate(
@@ -43,7 +46,16 @@ export class FindMatchRideUseCase {
         { pickup, destination },
         this.geoService
       );
-      if (match) matchedRiders.push(match);
+      // if (match) matchedRiders.push(match);
+      if (match) {
+        const request = JoinRequests.find(
+          r => r.getRideId() === ride.getRideId()
+        );
+        matchedRiders.push({
+          ...match,
+          requestStatus: request ? request.getStatus() : null,
+        });
+      }
     }
     console.log(matchedRiders);
 

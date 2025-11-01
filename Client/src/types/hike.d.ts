@@ -1,3 +1,5 @@
+import type { JoinRequestStatus } from '@/utils/constants';
+
 export interface CreateJoinRequestDTO {
   rideId: string;
   hikeId: string;
@@ -29,4 +31,5 @@ export interface RideMatchResponseDTO {
     vehicleType: string;
     vehicleModal: string;
   };
+  requestStatus: null | JoinRequestStatus;
 }

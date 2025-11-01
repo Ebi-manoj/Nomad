@@ -15,4 +15,8 @@ export class JoinRequestRepository
     const requests = await this.model.countDocuments({ rideId, hikeId });
     return requests > 0;
   }
+  async findByHikeId(hikeId: string): Promise<JoinRequest[]> {
+    const requests = await this.model.find({ hikeId: hikeId });
+    return requests.map(r => this.mapper.toDomain(r));
+  }
 }

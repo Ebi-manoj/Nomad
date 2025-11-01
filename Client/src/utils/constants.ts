@@ -23,3 +23,5 @@ export const Documents = {
   Aadhaar: 'aadhaar',
   Licence: 'licence',
 } as const;
+
+export type JoinRequestStatus = 'pending' | 'accepted' | 'declined';

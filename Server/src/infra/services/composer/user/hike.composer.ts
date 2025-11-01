@@ -42,7 +42,8 @@ export function hikeComposer(): IHikeController {
     rideRepository,
     rideMatchService,
     geoService,
-    hikeRepository
+    hikeRepository,
+    joinRequestRepository
   );
 
   const createJoinRequestUseCase = new CreateJoinRequestUseCase(

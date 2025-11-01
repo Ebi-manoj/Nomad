@@ -1,3 +1,5 @@
+import { JoinRequestStatus } from '../enums/Ride';
+
 export interface RideMatchDTO {
   pickup: GeoJSON.Point;
   destination: GeoJSON.Point;
@@ -21,4 +23,5 @@ export interface RideMatchResponseDTO {
     vehicleType: string;
     vehicleModal: string;
   };
+  requestStatus: null | JoinRequestStatus;
 }

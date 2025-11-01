@@ -43,7 +43,7 @@ const JoinRequestSchema = new Schema<IJoinRequest>({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: 300,
+    expires: 2 * 60 * 60,
   },
 });
 

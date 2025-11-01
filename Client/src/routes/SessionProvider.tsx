@@ -17,6 +17,7 @@ export const ActiveSessionProvider = ({
 
   const { hikeData } = useSelector((state: RootState) => state.hike);
   const { rideData } = useSelector((state: RootState) => state.ride);
+  const { token } = useSelector((state: RootState) => state.auth);
 
   const checkActiveSession = useCallback(async () => {
     try {
@@ -33,12 +34,12 @@ export const ActiveSessionProvider = ({
   }, [dispatch]);
 
   useEffect(() => {
-    if (!rideData && !hikeData) {
+    if (token && !rideData && !hikeData) {
       checkActiveSession();
     } else {
       setLoading(false);
     }
-  }, [rideData, hikeData, checkActiveSession]);
+  }, [rideData, hikeData, checkActiveSession, token]);
 
   if (loading) return <HomeSkeleton />;
 
