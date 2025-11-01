@@ -16,7 +16,7 @@ export class RideMatchService {
     ride: RideLog,
     context: { pickup: GeoJSON.Point; destination: GeoJSON.Point },
     geo: IGeoService
-  ): Promise<RideMatchResponseDTO | null> {
+  ): Promise<Omit<RideMatchResponseDTO, 'requestStatus'> | null> {
     const route = ride.getRoute().coordinates;
     // Validate ride route
     if (!route || route.length < 2) return null;

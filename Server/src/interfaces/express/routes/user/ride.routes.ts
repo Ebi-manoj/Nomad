@@ -11,4 +11,15 @@ router.post('/create', async (req: Request, res: Response) => {
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
+router.get(
+  '/join-request/:rideId/pending',
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      rideComposer().getPendingJoinRequests(httpReq)
+    );
+
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;

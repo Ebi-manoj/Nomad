@@ -16,7 +16,11 @@ export class JoinRequestRepository
     return requests > 0;
   }
   async findByHikeId(hikeId: string): Promise<JoinRequest[]> {
-    const requests = await this.model.find({ hikeId: hikeId });
+    const requests = await this.model.find({ hikeId });
+    return requests.map(r => this.mapper.toDomain(r));
+  }
+  async findByRideId(rideId: string): Promise<JoinRequest[]> {
+    const requests = await this.model.find({ rideId });
     return requests.map(r => this.mapper.toDomain(r));
   }
 }
