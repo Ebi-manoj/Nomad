@@ -43,9 +43,10 @@ const JoinRequestSchema = new Schema<IJoinRequest>({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: 2 * 60 * 60,
   },
 });
+
+JoinRequestSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2 * 60 * 60 });
 
 export const JoinRequestModel = model<IJoinRequest>(
   'JoinRequest',

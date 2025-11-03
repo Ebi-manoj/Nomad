@@ -25,3 +25,18 @@ export interface RideMatchResponseDTO {
   };
   requestStatus: null | JoinRequestStatus;
 }
+
+export interface AcceptJoinRequestDTO {
+  joinRequestId: string;
+  riderId: string;
+}
+
+export interface AcceptJoinResponseDTO {
+  joinRequestId: string;
+  paymentId: string;
+  hikerId: string;
+  amount: number;
+  platformFee: number;
+  status: JoinRequestStatus;
+  expiresAt: Date;
+}

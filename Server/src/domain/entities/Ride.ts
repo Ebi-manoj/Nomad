@@ -1,4 +1,5 @@
 import { RideStatus, VehicleType } from '../enums/Ride';
+import { SeatsNotAvailable } from '../errors/HikeErrors';
 
 export interface RideProps {
   id?: string;
@@ -135,5 +136,9 @@ export class RideLog {
   setRoute(route: GeoJSON.LineString) {
     this.route = route;
     this.updatedAt = new Date();
+  }
+  reserveSeats(count: number) {
+    if (this.seatsAvailable < count) throw new SeatsNotAvailable();
+    this.seatsAvailable -= count;
   }
 }

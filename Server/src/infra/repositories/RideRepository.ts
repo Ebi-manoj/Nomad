@@ -1,5 +1,6 @@
 import { IRideRepository } from '../../application/repositories/IRideRepository';
 import { RideLog } from '../../domain/entities/Ride';
+import { RideNotFound } from '../../domain/errors/RideErrors';
 import { IRideLog, RideLogModel } from '../database/ridelog.mode';
 import { rideMapper } from '../mappers/rideDomainMapper';
 import { MongoBaseRepository } from './BaseRepository';
@@ -35,5 +36,42 @@ export class RideRepository
     const ride = await this.model.findOne({ userId, status: 'active' });
     if (!ride) return null;
     return this.mapper.toDomain(ride);
+  }
+
+  async releaseSeats(rideId: string, seats: number): Promise<boolean> {
+    const result = await this.model.updateOne(
+      { _id: rideId },
+      {
+        $inc: { seatsAvailable: seats },
+      }
+    );
+    return result.modifiedCount > 0;
+  }
+
+  async updateWithLock(
+    rideId: string,
+    callback: (ride: RideLog) => Promise<RideLog>
+  ): Promise<RideLog> {
+    const session = await this.model.startSession();
+    session.startTransaction();
+
+    try {
+      const doc = await this.model.findById(rideId);
+      if (!doc) throw new RideNotFound();
+
+      const ride = this.mapper.toDomain(doc);
+      const updated = await callback(ride);
+
+      const rideData = this.mapper.toPersistence(updated);
+      await this.model.findByIdAndUpdate(rideData._id, rideData, { session });
+
+      await session.commitTransaction();
+      return updated;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
   }
 }

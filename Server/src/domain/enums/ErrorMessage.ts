@@ -16,4 +16,6 @@ export const ErrorMessages = {
   HIKE_NOT_FOUND: 'Hike not found',
   SEATS_NOT_AVAILABLE: 'Seats not available',
   HAS_PENDING_REQUESTS: 'You have already pending requests',
+  JOINREQUEST_NOT_FOUND: 'No reqeuest available at the moment',
+  ACCESS_DENIED: 'You dont have access for this action',
 } as const;

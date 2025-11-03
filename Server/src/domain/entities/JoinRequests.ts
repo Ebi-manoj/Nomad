@@ -72,7 +72,9 @@ export class JoinRequest {
     return this.updatedAt;
   }
 
-  // --- Setters / Domain Methods ---
+  accept() {
+    this.status = JoinRequestStatus.ACCEPTED;
+  }
   updateStatus(status: JoinRequestStatus) {
     this.status = status;
     this.updatedAt = new Date();
