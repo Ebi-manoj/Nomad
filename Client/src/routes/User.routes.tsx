@@ -51,6 +51,6 @@ export const UserRoutes = (
         </ProtectedSession>
       }
     />
-    <Route path="/payment" element={<Payment />} />
+    <Route path="/payment/:paymentId" element={<Payment />} />
   </Route>
 );

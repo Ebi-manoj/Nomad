@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import axiosInstance from '@/utils/axiosInstance';
 import { FIND_MATCH_RIDES_API } from '@/api/hike';
 import { toast } from 'sonner';
@@ -16,6 +16,7 @@ import type { AcceptJoinResponseDTO } from '@/types/ride';
 
 export function RideMatching() {
   const { hikeData } = useSelector((state: RootState) => state.hike);
+  const navigate = useNavigate();
   const [showHikePanel, setShowHikePanel] = useState(true);
   const [availableRides, setAvailableRides] = useState<RideMatchResponseDTO[]>(
     []
@@ -36,6 +37,7 @@ export function RideMatching() {
 
     hikerSocket.on('joinRequest:accepted', (data: AcceptJoinResponseDTO) => {
       console.log('Join accepted', data);
+      navigate(`/payment/${data.paymentId}`);
     });
     return () => {
       hikerSocket.off('join-request:accepted');

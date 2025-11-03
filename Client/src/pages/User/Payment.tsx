@@ -1,17 +1,65 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Car, Flag, MapPin, Star, Clock, AlertCircle } from 'lucide-react';
+import {
+  Car,
+  Flag,
+  MapPin,
+  Star,
+  Clock,
+  AlertCircle,
+  User,
+} from 'lucide-react';
+import { toast } from 'sonner';
+import type { HikerPaymentInfoResponseDTO } from '@/types/payment';
+import { getHikePayment } from '@/api/payment';
 
 export const Payment = () => {
-  // initial seconds (10 min example -> 600). you used 60 in sample; change as needed
-  const INITIAL_SECONDS = 60;
-  const [timeLeft, setTimeLeft] = useState<number>(INITIAL_SECONDS);
+  const { paymentId } = useParams();
+  const navigate = useNavigate();
+  const [timeLeft, setTimeLeft] = useState<number>(0);
   const [isExpired, setIsExpired] = useState(false);
+  const [loading, setLoading] = useState(true);
   const timerRef = useRef<number | null>(null);
 
-  // start timer once
+  const [paymentData, setPaymentData] =
+    useState<HikerPaymentInfoResponseDTO | null>(null);
+
+  // Fetch payment info
   useEffect(() => {
-    if (timerRef.current) return;
+    const fetchPayment = async () => {
+      try {
+        if (!paymentId) {
+          toast.error('Invalid payment link.');
+          navigate('/hike');
+          return;
+        }
+
+        setLoading(true);
+        const data = await getHikePayment(paymentId);
+        setPaymentData(data);
+
+        if (data.expiresAt) {
+          const diff = Math.floor(
+            (new Date(data.expiresAt).getTime() - Date.now()) / 1000
+          );
+          setTimeLeft(diff > 0 ? diff : 0);
+        }
+      } catch (error) {
+        toast.error('Failed to load payment details. Please try again.');
+        console.error('Payment fetch error:', error);
+        navigate('/hike');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPayment();
+  }, [paymentId, navigate]);
+
+  // Start timer
+  useEffect(() => {
+    if (!timeLeft || timerRef.current) return;
 
     timerRef.current = window.setInterval(() => {
       setTimeLeft(prev => {
@@ -31,7 +79,7 @@ export const Payment = () => {
         timerRef.current = null;
       }
     };
-  }, []);
+  }, [timeLeft]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -39,31 +87,42 @@ export const Payment = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const data = {
-    rider: {
-      fullName: 'Arjun Nair',
-      avatar: '/uploads/avatar123.jpg',
-      rating: 4.7,
-    },
-    route: {
-      distanceAwayfromPickup: 1.2,
-      distanceAwayfromDestination: 10.5,
-    },
-    amount: 120,
-    platformFee: 10,
-    totalAmount: 130,
-  };
-  const { rider, route, amount, platformFee, totalAmount } = data;
-
   const getTimerColor = () => {
     if (timeLeft > 300) return 'text-green-600 bg-green-50 border-green-200';
     if (timeLeft > 120) return 'text-orange-600 bg-orange-50 border-orange-200';
     return 'text-red-600 bg-red-50 border-red-200';
   };
 
-  // IMPORTANT: outer container must have fixed height calc(100vh - NAVBAR)
-  // and inner scrolling area must be flex-1 min-h-0 overflow-auto
-  // replace 60px with your actual navbar height if different
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-68px)] bg-green-50">
+        <p className="text-gray-600 font-medium">Loading payment details...</p>
+      </div>
+    );
+  }
+
+  if (!paymentData) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[calc(100vh-68px)] bg-green-50 text-center px-4">
+        <AlertCircle size={48} className="text-red-500 mb-4" />
+        <h2 className="text-lg font-bold text-gray-800 mb-2">
+          No Payment Found
+        </h2>
+        <p className="text-gray-600 mb-4">
+          This payment link is invalid or expired.
+        </p>
+        <Button
+          onClick={() => navigate('/hike')}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          Go Back
+        </Button>
+      </div>
+    );
+  }
+
+  const { rider, route, amount, platformFee, totalAmount } = paymentData;
+
   if (isExpired) {
     return (
       <div className="flex flex-col bg-green-50 h-[calc(100vh-68px)]">
@@ -103,7 +162,10 @@ export const Payment = () => {
                 </ul>
               </div>
 
-              <Button className="w-full max-w-md py-3 text-base font-semibold bg-gray-900 hover:bg-gray-800 text-white">
+              <Button
+                onClick={() => navigate('/hike')}
+                className="w-full max-w-md py-3 text-base font-semibold bg-gray-900 hover:bg-gray-800 text-white"
+              >
                 Find New Ride
               </Button>
             </div>
@@ -115,7 +177,6 @@ export const Payment = () => {
 
   return (
     <div className="flex flex-col bg-green-50 h-[calc(100vh-68px)]">
-      {/* Scrolling area: flex-1 + min-h-0 is the key to avoid double scrollbar */}
       <div className="flex-1 min-h-0 overflow-auto">
         <div className="max-w-2xl mx-auto px-4 py-4 md:py-6">
           {/* Timer */}
@@ -133,11 +194,18 @@ export const Payment = () => {
           {/* Rider Info */}
           <div className="bg-white border border-gray-200 rounded-xl p-3 md:p-4 mb-3 shadow-sm">
             <div className="flex items-center gap-3">
-              <img
-                src={rider.avatar || '/default-avatar.png'}
-                alt="Rider Avatar"
-                className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-200 object-cover"
-              />
+              {rider.profilePic ? (
+                <img
+                  src={rider.profilePic || '/default-avatar.png'}
+                  alt="Rider Avatar"
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-gray-200 object-cover"
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-full border-2 border-gray-200 bg-gray-100 flex items-center justify-center">
+                  <User size={24} className="text-gray-400" />
+                </div>
+              )}
+
               <div className="flex-1 min-w-0">
                 <h2 className="text-sm md:text-base font-bold text-gray-900 mb-0.5 truncate">
                   {rider.fullName}
@@ -150,7 +218,7 @@ export const Payment = () => {
                       className="text-yellow-400"
                     />
                     <span className="font-semibold text-gray-700">
-                      {rider.rating?.toFixed(1)}
+                      {rider.rating.toFixed(1)}
                     </span>
                   </div>
                   <span className="text-gray-400">•</span>
@@ -185,7 +253,7 @@ export const Payment = () => {
                       </span>
                     </div>
                     <span className="text-xs font-semibold text-gray-900">
-                      {route.distanceAwayfromPickup} km away
+                      {route.distanceAwayfromPickup.toFixed(2)} km away
                     </span>
                   </div>
                 </div>
@@ -204,7 +272,7 @@ export const Payment = () => {
                       </span>
                     </div>
                     <span className="text-xs font-semibold text-gray-900">
-                      {route.distanceAwayfromDestination} km
+                      {route.distanceAwayfromDestination.toFixed(2)} km
                     </span>
                   </div>
                 </div>
@@ -213,24 +281,20 @@ export const Payment = () => {
           </div>
 
           {/* Payment Summary */}
-          <div className="bg-green-600 rounded-xl p-4 md:p-5 mb-4 shadow-sm">
+          <div className="bg-green-500 rounded-xl p-4 md:p-5 mb-4 shadow-sm">
             <h3 className="text-white font-bold mb-3 text-sm">
               Payment Summary
             </h3>
-
             <div className="space-y-3 text-sm">
               <div className="flex justify-between items-center">
                 <span className="text-green-50">Cost Sharing</span>
                 <span className="text-white font-semibold">₹{amount}</span>
               </div>
-
               <div className="flex justify-between items-center">
                 <span className="text-green-50">Platform Fee</span>
                 <span className="text-white font-semibold">₹{platformFee}</span>
               </div>
-
               <div className="h-px bg-green-500 my-2" />
-
               <div className="flex justify-between items-center">
                 <span className="text-white font-bold">Total Payable</span>
                 <span className="text-lg md:text-xl font-bold text-white">
@@ -244,16 +308,16 @@ export const Payment = () => {
           <div className="grid grid-cols-2 gap-3 mb-3">
             <Button
               variant="outline"
-              className="py-3 text-sm font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-50"
+              onClick={() => navigate('/hike')}
+              className="py-3 text-sm font-semibold border-1 border-red-400 text-gray-700 hover:bg-gray-50 cursor-pointer"
             >
               Cancel
             </Button>
-            <Button className="py-3 text-sm font-semibold bg-green-600 hover:bg-green-700 text-white">
+            <Button className="py-3 text-sm font-semibold bg-green-600 hover:bg-green-700 text-white cursor-pointer">
               Proceed to Pay
             </Button>
           </div>
 
-          {/* Security Badge */}
           <div className="text-center pb-6">
             <p className="text-sm text-gray-500">
               🔒 Secure payment • Your data is encrypted
