@@ -34,10 +34,9 @@ export class RideController implements IRideController {
   }
 
   async acceptJoinRequests(httpRequest: HttpRequest): Promise<HttpResponse> {
-    // const data = httpRequest.body as { joinRequestId: string };
-    // const riderId = httpRequest.user?.id;
-    // const dto: AcceptJoinRequestDTO = { ...data, riderId: riderId! };
-    const dto = httpRequest.body as AcceptJoinRequestDTO;
+    const data = httpRequest.body as { joinRequestId: string };
+    const riderId = httpRequest.user?.id;
+    const dto: AcceptJoinRequestDTO = { ...data, riderId: riderId! };
 
     const result = await this.acceptJoinRequestUseCase.execute(dto);
     const response = ApiDTO.success(result);

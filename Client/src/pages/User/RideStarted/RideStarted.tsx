@@ -73,6 +73,7 @@ export function RideStartedContent() {
         <RideTabs
           hikers={rideRequests}
           seatsRemaining={rideData.seatsAvailable}
+          setRideRequest={setRideRequest}
         />
       </div>
     </div>

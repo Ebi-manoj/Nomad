@@ -23,11 +23,15 @@ router.get(
   }
 );
 
-router.post('/join-request/accept', async (req: Request, res: Response) => {
-  const adapter = await expressAdapter(req, httpReq =>
-    rideComposer().acceptJoinRequests(httpReq)
-  );
-  return res.status(adapter.statusCode).json(adapter.body);
-});
+router.post(
+  '/join-request/accept',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      rideComposer().acceptJoinRequests(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

@@ -1,4 +1,4 @@
-import { Check, X, MapPin, MapPinOff, Route } from 'lucide-react';
+import { Check, X, MapPin, MapPinOff, Route, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { RideRequestDTO } from '@/types/ride';
@@ -115,36 +115,63 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
             </div>
 
             {/* Buttons */}
-            <div className="flex gap-1.5">
-              <Button
-                onClick={handleToggleRoute}
-                variant="outline"
-                size="sm"
-                className="h-7 text-[11px] cursor-pointer border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700 px-2.5 min-w-0 text-gray-700 dark:text-gray-300 transition-all duration-200"
-              >
-                <MapPin
-                  size={12}
-                  className="mr-1 text-gray-600 dark:text-gray-400"
-                />
-                {selectedHikerId == request.id ? 'Hide Route' : 'View Route'}
-              </Button>
-              <Button
-                onClick={() => onAccept(request.id)}
-                size="sm"
-                className="h-7 px-2.5 bg-gradient-to-r cursor-pointer from-gray-900 to-black dark:from-gray-100 dark:to-white hover:from-black hover:to-gray-900 dark:hover:from-white dark:hover:to-gray-100 text-white dark:text-black text-[11px] min-w-0 shadow-sm hover:shadow transition-all duration-200"
-              >
-                <Check size={13} className="mr-1" />
-                Accept
-              </Button>
-              <Button
-                onClick={() => onDecline(request.id)}
-                variant="outline"
-                size="sm"
-                className="h-7 px-2.5 border-red-200 cursor-pointer dark:border-red-900 text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-300 dark:hover:border-red-800 text-[11px] min-w-0 transition-all duration-200"
-              >
-                <X size={13} className="mr-1" />
-                Decline
-              </Button>
+            <div className="flex gap-1.5 items-center transition-all duration-200">
+              {/* View Route visible for both Pending and Accepted */}
+              {(request.status === 'pending' ||
+                request.status === 'accepted') && (
+                <Button
+                  onClick={handleToggleRoute}
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-[11px] cursor-pointer border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700 px-2.5 min-w-0 text-gray-700 dark:text-gray-300 transition-all duration-200"
+                >
+                  <MapPin
+                    size={12}
+                    className="mr-1 text-gray-600 dark:text-gray-400"
+                  />
+                  {selectedHikerId === request.id ? 'Hide Route' : 'View Route'}
+                </Button>
+              )}
+
+              {/* Pending — show Accept & Decline */}
+              {request.status === 'pending' && (
+                <>
+                  <Button
+                    onClick={() => onAccept(request.id)}
+                    size="sm"
+                    className="h-7 px-2.5 bg-gradient-to-r cursor-pointer from-gray-900 to-black dark:from-gray-100 dark:to-white hover:from-black hover:to-gray-900 dark:hover:from-white dark:hover:to-gray-100 text-white dark:text-black text-[11px] min-w-0 shadow-sm hover:shadow transition-all duration-200"
+                  >
+                    <Check size={13} className="mr-1" />
+                    Accept
+                  </Button>
+
+                  <Button
+                    onClick={() => onDecline(request.id)}
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2.5 border-red-200 cursor-pointer dark:border-red-900 text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-300 dark:hover:border-red-800 text-[11px] min-w-0 transition-all duration-200"
+                  >
+                    <X size={13} className="mr-1" />
+                    Decline
+                  </Button>
+                </>
+              )}
+
+              {/* Accepted — show waiting label */}
+              {request.status === 'accepted' && (
+                <div className="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/20 px-3 py-1.5 rounded-md text-yellow-700 dark:text-yellow-300 text-[11px]">
+                  <Clock size={13} className="animate-pulse" />
+                  Waiting for hiker payment...
+                </div>
+              )}
+
+              {/* Declined — show declined label */}
+              {request.status === 'declined' && (
+                <div className="flex items-center gap-2 bg-red-50 dark:bg-red-900/20 px-3 py-1.5 rounded-md text-red-700 dark:text-red-400 text-[11px]">
+                  <X size={13} />
+                  Request Declined
+                </div>
+              )}
             </div>
           </div>
         </div>

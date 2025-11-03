@@ -63,7 +63,7 @@ export class RideRepository
       const updated = await callback(ride);
 
       const rideData = this.mapper.toPersistence(updated);
-      await this.model.findByIdAndUpdate(rideData._id, rideData, { session });
+      await this.model.findByIdAndUpdate(rideId, rideData, { session });
 
       await session.commitTransaction();
       return updated;

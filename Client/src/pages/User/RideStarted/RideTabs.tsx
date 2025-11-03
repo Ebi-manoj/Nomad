@@ -1,21 +1,39 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { HikerList } from './HikersList';
 import type { RideRequestDTO } from '@/types/ride';
+import { acceptJoinRequest } from '@/api/ride';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 interface RideTabsProps {
   hikers: RideRequestDTO[];
   seatsRemaining: number;
+  setRideRequest: React.Dispatch<React.SetStateAction<RideRequestDTO[]>>;
 }
 
-export function RideTabs({ hikers, seatsRemaining }: RideTabsProps) {
-  const handleAccept = (requestId: string) => {
-    console.log('Accepted:', requestId);
-    // TODO: Implement accept logic
+export function RideTabs({
+  hikers,
+  seatsRemaining,
+  setRideRequest,
+}: RideTabsProps) {
+  const handleAccept = async (requestId: string) => {
+    try {
+      const data = await acceptJoinRequest(requestId);
+      setRideRequest(prev =>
+        prev.map(req =>
+          req.id == requestId ? { ...req, status: data.status } : req
+        )
+      );
+    } catch (error) {
+      useHandleApiError(error);
+    }
   };
 
   const handleDecline = (requestId: string) => {
-    console.log('Declined:', requestId);
-    // TODO: Implement decline logic
+    setRideRequest(prev =>
+      prev.map(req =>
+        req.id == requestId ? { ...req, status: 'declined' } : req
+      )
+    );
   };
 
   return (

@@ -83,6 +83,7 @@ export class AcceptJoinRequestUseCase {
         ride.getRideId()!,
         hike.getSeatsRequested()
       );
+      console.log(error);
       throw error;
     }
   }
