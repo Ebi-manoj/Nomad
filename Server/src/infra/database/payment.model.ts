@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { PaymentStatus } from '../../domain/enums/payment';
 
-export interface IPaymentDocument extends Document {
+export interface IPaymentDocument {
   _id: string;
   joinRequestId: mongoose.Types.ObjectId;
   hikerId: mongoose.Types.ObjectId;
@@ -43,6 +43,10 @@ const PaymentSchema = new Schema<IPaymentDocument>(
       enum: Object.values(PaymentStatus),
       default: PaymentStatus.PENDING,
       index: true,
+    },
+    platformFee: {
+      type: Number,
+      required: true,
     },
     paymentMethod: {
       type: String,

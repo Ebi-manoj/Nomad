@@ -2,6 +2,7 @@ import express from 'express';
 import { connectMongo } from '../../../infra/database/connectMongo';
 import authRouter from '../routes/auth.routes';
 import userRouter from '../routes/user/user.routes';
+import paymentRouter from '../routes/payment.routes';
 import hikeRouter from '../routes/user/hike.routes';
 import rideRouter from '../routes/user/ride.routes';
 import userManagementRouter from '../routes/admin/user.routes';
@@ -35,6 +36,7 @@ app.use('/api/v1/hike', hikeRouter);
 app.use('/api/v1/ride', rideRouter);
 
 app.use('/api/v1/file', fileRouter);
+app.use('/api/v1/payments', paymentRouter);
 app.use('/api/v1/admin/users', userManagementRouter);
 app.use('/api/v1/admin/documents', documentRouter);
 

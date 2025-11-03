@@ -1,15 +1,16 @@
-import { riderSocket } from '@/config/socket';
+import { hikerSocket, riderSocket } from '@/config/socket';
 import { createContext, useContext, type ReactNode } from 'react';
 
 interface SocketContextType {
   riderSocket: typeof riderSocket;
+  hikerSocket: typeof hikerSocket;
 }
 
 const SocketContext = createContext<SocketContextType | null>(null);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   return (
-    <SocketContext.Provider value={{ riderSocket }}>
+    <SocketContext.Provider value={{ riderSocket, hikerSocket }}>
       {children}
     </SocketContext.Provider>
   );

@@ -11,6 +11,8 @@ import { HikePanel } from './HikePanel';
 import { TogglePanelButton } from './TogglePanelButton';
 import { RideList } from './RideList';
 import { MatchRideMap } from './MatchRideMap';
+import { useSocket } from '@/context/SocketContext';
+import type { AcceptJoinResponseDTO } from '@/types/ride';
 
 export function RideMatching() {
   const { hikeData } = useSelector((state: RootState) => state.hike);
@@ -24,6 +26,21 @@ export function RideMatching() {
   const [loading, setLoading] = useState(false);
 
   if (!hikeData) return <Navigate to="/hike" replace />;
+
+  const { hikerSocket } = useSocket();
+  useEffect(() => {
+    if (!hikerSocket.connected) {
+      hikerSocket.connect();
+    }
+    hikerSocket.emit('hike:join', hikeData.id);
+
+    hikerSocket.on('joinRequest:accepted', (data: AcceptJoinResponseDTO) => {
+      console.log('Join accepted', data);
+    });
+    return () => {
+      hikerSocket.off('join-request:accepted');
+    };
+  }, [hikeData, hikerSocket]);
 
   const fetchRides = async () => {
     if (!hikeData?.id) return;

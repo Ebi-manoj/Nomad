@@ -18,4 +18,5 @@ export const ErrorMessages = {
   HAS_PENDING_REQUESTS: 'You have already pending requests',
   JOINREQUEST_NOT_FOUND: 'No reqeuest available at the moment',
   ACCESS_DENIED: 'You dont have access for this action',
+  PAYMENTINFO_NOT_FOUND: 'No payment info found',
 } as const;

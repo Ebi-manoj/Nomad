@@ -7,6 +7,7 @@ import { RideMatching } from '@/pages/User/MatchRideToHike';
 import { Ride } from '@/pages/User/Ride';
 import { RideStarted } from '@/pages/User/RideStarted';
 import { ProtectedSession } from './ProtectedSessions';
+import { Payment } from '@/pages/User/Payment';
 
 export const UserRoutes = (
   <Route
@@ -50,5 +51,6 @@ export const UserRoutes = (
         </ProtectedSession>
       }
     />
+    <Route path="/payment" element={<Payment />} />
   </Route>
 );

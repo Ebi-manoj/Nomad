@@ -6,3 +6,8 @@ export const riderSocket = io(`${BASE_URL}/rider`, {
   transports: ['websocket'],
   autoConnect: false,
 });
+
+export const hikerSocket = io(`${BASE_URL}/hiker`, {
+  transports: ['websocket'],
+  autoConnect: false,
+});

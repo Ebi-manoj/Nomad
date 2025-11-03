@@ -56,3 +56,8 @@ export class SuspendedAccount extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class Unauthorized extends CustomError {
+  constructor(message: string = ErrorMessages.UNAUTHORIZED) {
+    super(HttpStatus.UNAUTHORIZED, message);
+  }
+}

@@ -73,6 +73,7 @@ export class AcceptJoinRequestUseCase {
         joinRequestId: updatedJoinRequest.getId()!,
         paymentId: savedPayment.getId()!,
         hikerId: hike.getUserId(),
+        hikeId: hike.getHikeId()!,
         amount: payment.getAmount(),
         platformFee: payment.getPlatformFee(),
         status: updatedJoinRequest.getStatus(),

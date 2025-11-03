@@ -9,12 +9,14 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IRideController } from './IRideController';
 import { AcceptJoinRequestDTO } from '../../../domain/dto/RideMatch';
 import { AcceptJoinRequestUseCase } from '../../../application/usecases/User/Ride/AcceptJoinRequest';
+import { Server } from 'socket.io';
 
 export class RideController implements IRideController {
   constructor(
     private readonly createRideUseCase: CreateRideUseCase,
     private readonly getPendingRequestUseCase: GetPendingRequestUseCase,
-    private readonly acceptJoinRequestUseCase: AcceptJoinRequestUseCase
+    private readonly acceptJoinRequestUseCase: AcceptJoinRequestUseCase,
+    private readonly io: Server
   ) {}
 
   async createRide(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -39,6 +41,7 @@ export class RideController implements IRideController {
     const dto: AcceptJoinRequestDTO = { ...data, riderId: riderId! };
 
     const result = await this.acceptJoinRequestUseCase.execute(dto);
+    this.io.of('/hiker').to(result.hikeId).emit('joinRequest:accepted', result);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

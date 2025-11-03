@@ -23,6 +23,7 @@ export interface AcceptJoinResponseDTO {
   joinRequestId: string;
   paymentId: string;
   hikerId: string;
+  hikeId: string;
   amount: number;
   platformFee: number;
   status: JoinRequestStatus;
