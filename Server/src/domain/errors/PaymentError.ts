@@ -7,3 +7,9 @@ export class PaymentInfoNotFound extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+
+export class InvalidAmount extends CustomError {
+  constructor(message: string = 'Invalid amount') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

@@ -3,4 +3,5 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 
 export interface IPaymentController {
   getPaymentInfo(httpRequest: HttpRequest): Promise<HttpResponse>;
+  createPaymentIntent(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

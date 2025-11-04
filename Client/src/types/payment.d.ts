@@ -13,3 +13,8 @@ export interface HikerPaymentInfoResponseDTO {
   totalAmount: number;
   expiresAt: Date;
 }
+
+export interface paymentIntentResponseDTO {
+  clientSecret: string;
+  paymentIntentId: string;
+}
