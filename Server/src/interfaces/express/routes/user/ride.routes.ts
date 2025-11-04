@@ -34,4 +34,16 @@ router.post(
   }
 );
 
+router.patch(
+  '/join-request/decline',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      rideComposer().declineJoinRequests(httpReq)
+    );
+
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;

@@ -1,3 +1,5 @@
+import type { JoinRequestStatus } from '@/utils/constants';
+
 export interface RideRequestDTO {
   id: string;
   rideId: string;
@@ -28,4 +30,11 @@ export interface AcceptJoinResponseDTO {
   platformFee: number;
   status: JoinRequestStatus;
   expiresAt: Date;
+}
+
+export interface DeclineJoinResponseDTO {
+  joinRequestId: string;
+  rideId: string;
+  hikeId: string;
+  status: JoinRequestStatus;
 }

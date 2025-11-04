@@ -13,3 +13,9 @@ export class NotAuthorizedToAccept extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+
+export class InvalidJoinRequestStatus extends CustomError {
+  constructor(message = 'Dont have any pending requests') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

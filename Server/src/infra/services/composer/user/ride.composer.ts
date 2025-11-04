@@ -1,6 +1,7 @@
 import { FareCalculator } from '../../../../application/services/FareCalculator';
 import { AcceptJoinRequestUseCase } from '../../../../application/usecases/User/Ride/AcceptJoinRequest';
 import { CreateRideUseCase } from '../../../../application/usecases/User/Ride/CreateRideUseCase';
+import { DeclineJoinRequestUseCase } from '../../../../application/usecases/User/Ride/DeclineJoinRequest';
 import { GetPendingRequestUseCase } from '../../../../application/usecases/User/Ride/GetPendingRequestUseCase';
 import { IRideController } from '../../../../interfaces/http/controllers/IRideController';
 import { RideController } from '../../../../interfaces/http/controllers/ride.controller';
@@ -41,10 +42,16 @@ export function rideComposer(): IRideController {
     fareCalculator
   );
 
+  const declienJoinRequestUseCase = new DeclineJoinRequestUseCase(
+    joinRequestRepository,
+    rideRepository
+  );
+
   return new RideController(
     createRideUseCase,
     getPendingRequestUseCase,
     acceptJoinRequestUseCase,
+    declienJoinRequestUseCase,
     io
   );
 }

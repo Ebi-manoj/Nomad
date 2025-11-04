@@ -164,7 +164,7 @@ export const Payment = () => {
 
               <Button
                 onClick={() => navigate('/hike')}
-                className="w-full max-w-md py-3 text-base font-semibold bg-gray-900 hover:bg-gray-800 text-white"
+                className="cursor-pointer w-full max-w-md py-3 text-base font-semibold bg-gray-900 hover:bg-gray-800 text-white"
               >
                 Find New Ride
               </Button>

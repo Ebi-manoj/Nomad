@@ -5,4 +5,5 @@ export interface IRideController {
   createRide(httpRequest: HttpRequest): Promise<HttpResponse>;
   getPendingJoinRequests(httpRequest: HttpRequest): Promise<HttpResponse>;
   acceptJoinRequests(httpRequest: HttpRequest): Promise<HttpResponse>;
+  declineJoinRequests(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

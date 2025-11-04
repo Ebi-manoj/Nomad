@@ -6,7 +6,7 @@ import type { RootState } from '@/store/store';
 import { joinRide } from '@/api/hike';
 import { toast } from 'sonner';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function RideCard({
   ride,
@@ -18,6 +18,9 @@ export function RideCard({
   const { hikeData } = useSelector((state: RootState) => state.hike);
   if (!hikeData) return;
   const [requestStatus, setRequestStatus] = useState(ride.requestStatus);
+  useEffect(() => {
+    setRequestStatus(ride.requestStatus);
+  }, [ride]);
 
   const handleJoinRide = async () => {
     try {

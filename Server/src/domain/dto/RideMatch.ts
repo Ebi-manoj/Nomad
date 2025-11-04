@@ -41,3 +41,15 @@ export interface AcceptJoinResponseDTO {
   status: JoinRequestStatus;
   expiresAt: Date;
 }
+
+export interface DeclineJoinRequestDTO {
+  joinRequestId: string;
+  riderId: string;
+}
+
+export interface DeclineJoinResponseDTO {
+  joinRequestId: string;
+  hikeId: string;
+  rideId: string;
+  status: JoinRequestStatus;
+}

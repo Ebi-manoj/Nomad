@@ -12,7 +12,10 @@ import { TogglePanelButton } from './TogglePanelButton';
 import { RideList } from './RideList';
 import { MatchRideMap } from './MatchRideMap';
 import { useSocket } from '@/context/SocketContext';
-import type { AcceptJoinResponseDTO } from '@/types/ride';
+import type {
+  AcceptJoinResponseDTO,
+  DeclineJoinResponseDTO,
+} from '@/types/ride';
 
 export function RideMatching() {
   const { hikeData } = useSelector((state: RootState) => state.hike);
@@ -39,8 +42,23 @@ export function RideMatching() {
       console.log('Join accepted', data);
       navigate(`/payment/${data.paymentId}`);
     });
+    hikerSocket.on('joinRequest:declined', (data: DeclineJoinResponseDTO) => {
+      console.log('Join declined', data);
+      setAvailableRides(prev => {
+        console.log('prev', prev);
+        const updated = prev.map(r => {
+          console.log(r.rideId == data.rideId);
+          return r.rideId == data.rideId
+            ? { ...r, requestStatus: data.status }
+            : { ...r };
+        });
+        console.log('updated', updated);
+        return updated;
+      });
+    });
     return () => {
       hikerSocket.off('join-request:accepted');
+      hikerSocket.off('join-request:declined');
     };
   }, [hikeData, hikerSocket]);
 

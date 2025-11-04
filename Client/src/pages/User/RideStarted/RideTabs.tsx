@@ -1,7 +1,7 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { HikerList } from './HikersList';
 import type { RideRequestDTO } from '@/types/ride';
-import { acceptJoinRequest } from '@/api/ride';
+import { acceptJoinRequest, declineJoinRequest } from '@/api/ride';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 interface RideTabsProps {
@@ -28,12 +28,17 @@ export function RideTabs({
     }
   };
 
-  const handleDecline = (requestId: string) => {
-    setRideRequest(prev =>
-      prev.map(req =>
-        req.id == requestId ? { ...req, status: 'declined' } : req
-      )
-    );
+  const handleDecline = async (requestId: string) => {
+    try {
+      await declineJoinRequest(requestId);
+      setRideRequest(prev =>
+        prev.map(req =>
+          req.id == requestId ? { ...req, status: 'declined' } : req
+        )
+      );
+    } catch (error) {
+      useHandleApiError(error);
+    }
   };
 
   return (
