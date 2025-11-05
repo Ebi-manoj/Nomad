@@ -6,8 +6,9 @@ import { hikeMapper } from '../../../mappers/HikeMapper';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { ICreateHikeUseCase } from './ICreateHikeUseCase';
 
-export class CreateHikeUseCase {
+export class CreateHikeUseCase implements ICreateHikeUseCase {
   constructor(
     private readonly hikeRepository: IHikeRepository,
     private readonly userRepository: IUserRepository,

@@ -17,8 +17,9 @@ import { FareCalculator } from '../../../services/FareCalculator';
 import { joinRequestMapper } from '../../../mappers/JoinRequestMapper';
 import { UserNotFound } from '../../../../domain/errors/CustomError';
 import { JoinRequestStatus } from '../../../../domain/enums/Ride';
+import { ICreateJoinRequestUseCase } from './ICreateJoinRequestUseCase';
 
-export class CreateJoinRequestUseCase {
+export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
   constructor(
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly rideRepository: IRideRepository,

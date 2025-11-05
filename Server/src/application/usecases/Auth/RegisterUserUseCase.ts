@@ -10,8 +10,9 @@ import { Mobile } from '../../../domain/value-objects/mobile';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { PasswordHasher } from '../../providers/IpasswordHasher';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { IRegisterUserUseCase } from './IRegisterUserUseCase';
 
-export class RegisterUserUseCase {
+export class RegisterUserUseCase implements IRegisterUserUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly passwordHasher: PasswordHasher

@@ -8,8 +8,9 @@ import { DocumentNotFound } from '../../../domain/errors/DocumentError';
 import { documentMapper } from '../../mappers/DocumentResponseMapper';
 import { IDocumentRepository } from '../../repositories/IDocumentRepository';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { IVerifyDocumentUseCase } from './IVerifyDocumentUseCase';
 
-export class VerifyDocumentUseCase {
+export class VerifyDocumentUseCase implements IVerifyDocumentUseCase {
   constructor(
     private readonly documentRepository: IDocumentRepository,
     private readonly userRepository: IUserRepository

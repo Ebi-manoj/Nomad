@@ -10,8 +10,9 @@ import { OTP } from '../../../domain/value-objects/otp';
 import { IEmailTransporter } from '../../providers/IEmailTransporter';
 import { IOTPRepository } from '../../repositories/IOTPRepository';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { ISendResetOTPUseCase } from './ISendResetOTP';
 
-export class SendResetOTPUseCase {
+export class SendResetOTPUseCase implements ISendResetOTPUseCase {
   constructor(
     private readonly emailTransporter: IEmailTransporter,
     private readonly otpRepository: IOTPRepository,

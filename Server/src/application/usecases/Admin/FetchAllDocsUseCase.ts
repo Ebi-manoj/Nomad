@@ -4,8 +4,9 @@ import {
 } from '../../../domain/dto/DocumentsDTO';
 import { documentWithUserMapper } from '../../mappers/DocumentResponseMapper';
 import { IDocumentRepository } from '../../repositories/IDocumentRepository';
+import { IFetchAllDocsUseCase } from './IFetchAllDocsUseCase';
 
-export class FetchAllDocsUseCase {
+export class FetchAllDocsUseCase implements IFetchAllDocsUseCase {
   constructor(private readonly documentsRepository: IDocumentRepository) {}
 
   async execute(

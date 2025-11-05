@@ -3,8 +3,9 @@ import { joinRequestMapper } from '../../../mappers/JoinRequestMapper';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { IGetPendingRequestUseCase } from './IGetPendingRequestUseCase';
 
-export class GetPendingRequestUseCase {
+export class GetPendingRequestUseCase implements IGetPendingRequestUseCase {
   constructor(
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly hikeRepository: IHikeRepository,

@@ -17,8 +17,9 @@ import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepos
 import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { FareCalculator } from '../../../services/FareCalculator';
+import { IAcceptJoinRequestUseCase } from './IAcceptJoinRequest';
 
-export class AcceptJoinRequestUseCase {
+export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
   constructor(
     private readonly hikeRepository: IHikeRepository,
     private readonly rideRepository: IRideRepository,

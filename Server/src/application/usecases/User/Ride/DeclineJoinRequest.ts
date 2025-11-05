@@ -12,8 +12,9 @@ import {
 import { RideNotFound } from '../../../../domain/errors/RideErrors';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
+import { IDeclineJoinRequestUseCase } from './IDeclineJoinRequest';
 
-export class DeclineJoinRequestUseCase {
+export class DeclineJoinRequestUseCase implements IDeclineJoinRequestUseCase {
   constructor(
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly rideRepository: IRideRepository

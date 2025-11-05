@@ -13,10 +13,10 @@ import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
-import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { IGetHikerPaymentInfoUseCase } from './IGetHikerPaymentInfo';
 
-export class GetHikerPaymentInfoUseCase {
+export class GetHikerPaymentInfoUseCase implements IGetHikerPaymentInfoUseCase {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
     private readonly joinRequestRepository: IJoinRequestRepository,

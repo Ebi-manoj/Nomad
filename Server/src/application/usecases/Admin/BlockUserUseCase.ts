@@ -2,8 +2,9 @@ import { UserResponseDTO } from '../../../domain/dto/authDTO';
 import { UpdateFailed, UserNotFound } from '../../../domain/errors/CustomError';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { IBlockUserUseCase } from './IBlockUserUseCase';
 
-export class BlockUserUseCase {
+export class BlockUserUseCase implements IBlockUserUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(id: string): Promise<UserResponseDTO> {

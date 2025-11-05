@@ -1,17 +1,23 @@
-import { RefreshTokenRequestDTO } from '../../../domain/dto/authDTO';
+import {
+  RefreshTokenRequestDTO,
+  RefreshTokenResponseDTO,
+} from '../../../domain/dto/authDTO';
 import { ACCESS_TOKEN_EXPIRY } from '../../../domain/enums/Constants';
 import { InvalidToken } from '../../../domain/errors/CustomError';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { IRefreshTokenUseCase } from './IRefreshTokenUseCase';
 
-export class RefreshTokenUseCase {
+export class RefreshTokenUseCase implements IRefreshTokenUseCase {
   constructor(
     private tokenGenerator: ITOkenGenerator,
     private readonly userRepostiory: IUserRepository
   ) {}
 
-  async execute(data: RefreshTokenRequestDTO) {
+  async execute(
+    data: RefreshTokenRequestDTO
+  ): Promise<RefreshTokenResponseDTO> {
     const payload = this.tokenGenerator.verifyToken<{ userId: string }>(
       data.refreshToken
     );

@@ -9,8 +9,9 @@ import { DocumentNotFound } from '../../../domain/errors/DocumentError';
 import { documentMapper } from '../../mappers/DocumentResponseMapper';
 import { IDocumentRepository } from '../../repositories/IDocumentRepository';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { IUploadDocumentUseCase } from './IUploadDocUseCase';
 
-export class UploadDocumentUseCase {
+export class UploadDocumentUseCase implements IUploadDocumentUseCase {
   constructor(
     private readonly documentRepository: IDocumentRepository,
     private readonly userRepository: IUserRepository

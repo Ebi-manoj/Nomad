@@ -15,8 +15,9 @@ import { userMapper } from '../../mappers/UserResponse.mapper';
 import { PasswordHasher } from '../../providers/IpasswordHasher';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { ILoginUserUsecase } from './ILoginUserUseCase';
 
-export class LoginUserUsecase {
+export class LoginUserUsecase implements ILoginUserUsecase {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly passwordHasher: PasswordHasher,

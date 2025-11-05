@@ -16,8 +16,9 @@ import { userMapper } from '../../mappers/UserResponse.mapper';
 import { IGoogleClient } from '../../providers/IGoogleClient';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { IGoogleSignupUseCase } from './IGoogleSignupUseCase';
 
-export class GoogleSignupUseCase {
+export class GoogleSignupUseCase implements IGoogleSignupUseCase {
   constructor(
     private readonly authClient: IGoogleClient,
     private readonly userRepository: IUserRepository,

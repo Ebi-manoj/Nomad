@@ -4,8 +4,9 @@ import {
 } from '../../../domain/dto/userManagementDTO';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { IGetAllUsersUseCase } from './IGetAllUsersUseCase';
 
-export class GetAllUsersUseCase {
+export class GetAllUsersUseCase implements IGetAllUsersUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(data: GetAllUsersRequestDTO): Promise<GetAllUsersResponseDTO> {

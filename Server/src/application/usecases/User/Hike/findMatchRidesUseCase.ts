@@ -4,8 +4,9 @@ import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { RideMatchService } from '../../../services/RideMatchService';
+import { IFindMatchRideUseCase } from './IFindMatchRideUseCase';
 
-export class FindMatchRideUseCase {
+export class FindMatchRideUseCase implements IFindMatchRideUseCase {
   constructor(
     private readonly rideRepository: IRideRepository,
     private readonly rideMatchService: RideMatchService,

@@ -10,8 +10,9 @@ import { OTP } from '../../../domain/value-objects/otp';
 import { IEmailTransporter } from '../../providers/IEmailTransporter';
 import { IOTPRepository } from '../../repositories/IOTPRepository';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { ISendSignupOTPUseCase } from './ISendOTPSignupUseCase';
 
-export class SendSignupOTPUseCase {
+export class SendSignupOTPUseCase implements ISendSignupOTPUseCase {
   constructor(
     private readonly emailTransporter: IEmailTransporter,
     private readonly otpRepository: IOTPRepository,

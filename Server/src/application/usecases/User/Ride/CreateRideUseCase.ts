@@ -5,8 +5,9 @@ import { UserNotFound } from '../../../../domain/errors/CustomError';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { ICreateRideUseCase } from './ICreateRideUseCase';
 
-export class CreateRideUseCase {
+export class CreateRideUseCase implements ICreateRideUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly googleApis: IGoogleApi,

@@ -9,8 +9,9 @@ import { Email } from '../../../domain/value-objects/email';
 import { OTP } from '../../../domain/value-objects/otp';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
 import { IOTPRepository } from '../../repositories/IOTPRepository';
+import { IVerifyOTPUseCase } from './IVerifOTPUseCase';
 
-export class VerifyOTPUseCase {
+export class VerifyOTPUseCase implements IVerifyOTPUseCase {
   constructor(
     private readonly otpRepository: IOTPRepository,
     private readonly tokenGenerator: ITOkenGenerator

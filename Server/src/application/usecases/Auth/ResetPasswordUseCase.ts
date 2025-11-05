@@ -4,8 +4,9 @@ import { UserNotFound } from '../../../domain/errors/CustomError';
 import { Email } from '../../../domain/value-objects/email';
 import { PasswordHasher } from '../../providers/IpasswordHasher';
 import { IUserRepository } from '../../repositories/IUserRepository';
+import { IResetPasswordUseCase } from './IResetPassword';
 
-export class ResetPasswordUseCase {
+export class ResetPasswordUseCase implements IResetPasswordUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly passwordHasher: PasswordHasher

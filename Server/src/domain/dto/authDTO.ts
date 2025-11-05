@@ -1,3 +1,4 @@
+import { HikeLog } from '../entities/Hike';
 import { RideLog } from '../entities/Ride';
 import { HikeResponseDTO } from './HikeDTO';
 
@@ -62,7 +63,12 @@ export interface RefreshTokenRequestDTO {
   refreshToken: string;
 }
 
+export interface RefreshTokenResponseDTO {
+  accessToken: string;
+  user: UserResponseDTO;
+}
+
 export interface ActiveSession {
-  activeRide: HikeResponseDTO | null;
-  activeHike: RideLog | null;
+  activeRide: RideLog | null;
+  activeHike: HikeLog | null;
 }
