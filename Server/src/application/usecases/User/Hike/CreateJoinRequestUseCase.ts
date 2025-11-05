@@ -12,7 +12,7 @@ import { RideNotFound } from '../../../../domain/errors/RideErrors';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
-import { UserRepository } from '../../../repositories/UserRepository';
+import { IUserRepository } from '../../../repositories/IUserRepository';
 import { FareCalculator } from '../../../services/FareCalculator';
 import { joinRequestMapper } from '../../../mappers/JoinRequestMapper';
 import { UserNotFound } from '../../../../domain/errors/CustomError';
@@ -24,7 +24,7 @@ export class CreateJoinRequestUseCase {
     private readonly rideRepository: IRideRepository,
     private readonly hikeRepository: IHikeRepository,
     private readonly fareCalculator: FareCalculator,
-    private readonly userRepository: UserRepository
+    private readonly userRepository: IUserRepository
   ) {}
 
   async execute(data: CreateJoinRequestDTO): Promise<JoinRequestResponseDTO> {

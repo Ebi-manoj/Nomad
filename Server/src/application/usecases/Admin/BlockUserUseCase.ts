@@ -1,10 +1,10 @@
 import { UserResponseDTO } from '../../../domain/dto/authDTO';
 import { UpdateFailed, UserNotFound } from '../../../domain/errors/CustomError';
 import { userMapper } from '../../mappers/UserResponse.mapper';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class BlockUserUseCase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(id: string): Promise<UserResponseDTO> {
     const user = await this.userRepository.findById(id);

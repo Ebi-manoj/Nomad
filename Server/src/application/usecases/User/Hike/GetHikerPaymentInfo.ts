@@ -14,14 +14,14 @@ import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
-import { UserRepository } from '../../../repositories/UserRepository';
+import { IUserRepository } from '../../../repositories/IUserRepository';
 
 export class GetHikerPaymentInfoUseCase {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly googleApi: IGoogleApi
   ) {}
 

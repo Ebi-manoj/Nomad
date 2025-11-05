@@ -8,12 +8,12 @@ import { UserNotFound } from '../../../domain/errors/CustomError';
 import { DocumentNotFound } from '../../../domain/errors/DocumentError';
 import { documentMapper } from '../../mappers/DocumentResponseMapper';
 import { IDocumentRepository } from '../../repositories/IDocumentRepository';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class UploadDocumentUseCase {
   constructor(
     private readonly documentRepository: IDocumentRepository,
-    private readonly userRepository: UserRepository
+    private readonly userRepository: IUserRepository
   ) {}
 
   async execute(data: uploadDocRequestDTO): Promise<DocResponseDTO> {

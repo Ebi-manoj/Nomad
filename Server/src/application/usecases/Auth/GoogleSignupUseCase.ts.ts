@@ -15,12 +15,12 @@ import { Email } from '../../../domain/value-objects/email';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { IGoogleClient } from '../../providers/IGoogleClient';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class GoogleSignupUseCase {
   constructor(
     private readonly authClient: IGoogleClient,
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly tokenGenerator: ITOkenGenerator
   ) {}
 

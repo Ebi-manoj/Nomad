@@ -9,13 +9,13 @@ import { Email } from '../../../domain/value-objects/email';
 import { OTP } from '../../../domain/value-objects/otp';
 import { IEmailTransporter } from '../../providers/IEmailTransporter';
 import { IOTPRepository } from '../../repositories/IOTPRepository';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class SendResetOTPUseCase {
   constructor(
     private readonly emailTransporter: IEmailTransporter,
     private readonly otpRepository: IOTPRepository,
-    private readonly userRepostiroy: UserRepository
+    private readonly userRepostiroy: IUserRepository
   ) {}
 
   async execute(data: SentOTPRequestDTO): Promise<SentOTPResponseDTO> {

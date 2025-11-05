@@ -1,4 +1,4 @@
-import { UserRepository } from '../../application/repositories/UserRepository';
+import { IUserRepository } from '../../application/repositories/IUserRepository';
 import { User } from '../../domain/entities/User';
 import { IUserModel, UserModel } from '../database/user.model';
 import { userMapper } from '../mappers/userDomainMapper';
@@ -6,7 +6,7 @@ import { MongoBaseRepository } from './BaseRepository';
 
 export class MongoUserRepository
   extends MongoBaseRepository<User, IUserModel>
-  implements UserRepository
+  implements IUserRepository
 {
   constructor() {
     super(UserModel, userMapper);

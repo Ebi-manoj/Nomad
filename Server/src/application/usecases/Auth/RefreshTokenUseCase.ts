@@ -3,12 +3,12 @@ import { ACCESS_TOKEN_EXPIRY } from '../../../domain/enums/Constants';
 import { InvalidToken } from '../../../domain/errors/CustomError';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class RefreshTokenUseCase {
   constructor(
     private tokenGenerator: ITOkenGenerator,
-    private readonly userRepostiory: UserRepository
+    private readonly userRepostiory: IUserRepository
   ) {}
 
   async execute(data: RefreshTokenRequestDTO) {

@@ -2,12 +2,12 @@ import { RideMatchResponseDTO } from '../../domain/dto/RideMatch';
 import { RideLog } from '../../domain/entities/Ride';
 import { IGeoService } from '../providers/IGeoService';
 import { ILocationRepository } from '../repositories/ILocationRepository';
-import { UserRepository } from '../repositories/UserRepository';
+import { IUserRepository } from '../repositories/IUserRepository';
 import { DurationCalculator } from './DurationCalculator';
 
 export class RideMatchService {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly durationCalculator: DurationCalculator,
     private readonly locationRepository: ILocationRepository
   ) {}

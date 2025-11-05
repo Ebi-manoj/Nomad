@@ -4,11 +4,11 @@ import { RideStatus } from '../../../../domain/enums/Ride';
 import { UserNotFound } from '../../../../domain/errors/CustomError';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IRideRepository } from '../../../repositories/IRideRepository';
-import { UserRepository } from '../../../repositories/UserRepository';
+import { IUserRepository } from '../../../repositories/IUserRepository';
 
 export class CreateRideUseCase {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly googleApis: IGoogleApi,
     private readonly rideRepository: IRideRepository
   ) {}

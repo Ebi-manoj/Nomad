@@ -1,7 +1,7 @@
 import { IEmailTransporter } from '../../../application/providers/IEmailTransporter';
 import { PasswordHasher } from '../../../application/providers/IpasswordHasher';
 import { IOTPRepository } from '../../../application/repositories/IOTPRepository';
-import { UserRepository } from '../../../application/repositories/UserRepository';
+import { IUserRepository } from '../../../application/repositories/IUserRepository';
 import { GoogleSignupUseCase } from '../../../application/usecases/Auth/GoogleSignupUseCase.ts';
 import { LoginUserUsecase } from '../../../application/usecases/Auth/LoginUserCase';
 import { RefreshTokenUseCase } from '../../../application/usecases/Auth/RefreshTokenUseCase';
@@ -22,7 +22,7 @@ import { env } from '../../utils/env';
 
 export function authComposer(): IauthController {
   ///////////////REGISTER USE CASE/////////////////////////////
-  const userRepository: UserRepository = new MongoUserRepository();
+  const userRepository: IUserRepository = new MongoUserRepository();
   const passwordHasher: PasswordHasher = new BcryptService();
   const registerUseCase: RegisterUserUseCase = new RegisterUserUseCase(
     userRepository,

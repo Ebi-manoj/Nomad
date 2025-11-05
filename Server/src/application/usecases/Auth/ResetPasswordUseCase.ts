@@ -3,11 +3,11 @@ import { SuccessMessages } from '../../../domain/enums/SuccessMessage';
 import { UserNotFound } from '../../../domain/errors/CustomError';
 import { Email } from '../../../domain/value-objects/email';
 import { PasswordHasher } from '../../providers/IpasswordHasher';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class ResetPasswordUseCase {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly passwordHasher: PasswordHasher
   ) {}
 

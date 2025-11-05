@@ -5,12 +5,12 @@ import { UserNotFound } from '../../../../domain/errors/CustomError';
 import { hikeMapper } from '../../../mappers/HikeMapper';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
-import { UserRepository } from '../../../repositories/UserRepository';
+import { IUserRepository } from '../../../repositories/IUserRepository';
 
 export class CreateHikeUseCase {
   constructor(
     private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly googleApis: IGoogleApi
   ) {}
 

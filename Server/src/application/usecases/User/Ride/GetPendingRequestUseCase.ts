@@ -2,13 +2,13 @@ import { JoinRequestResponseDTO } from '../../../../domain/dto/HikeDTO';
 import { joinRequestMapper } from '../../../mappers/JoinRequestMapper';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
-import { UserRepository } from '../../../repositories/UserRepository';
+import { IUserRepository } from '../../../repositories/IUserRepository';
 
 export class GetPendingRequestUseCase {
   constructor(
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: UserRepository
+    private readonly userRepository: IUserRepository
   ) {}
 
   async execute(rideId: string): Promise<JoinRequestResponseDTO[]> {

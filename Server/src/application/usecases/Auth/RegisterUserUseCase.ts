@@ -9,11 +9,11 @@ import { Email } from '../../../domain/value-objects/email';
 import { Mobile } from '../../../domain/value-objects/mobile';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { PasswordHasher } from '../../providers/IpasswordHasher';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class RegisterUserUseCase {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly passwordHasher: PasswordHasher
   ) {}
 

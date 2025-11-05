@@ -14,11 +14,11 @@ import { Email } from '../../../domain/value-objects/email';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { PasswordHasher } from '../../providers/IpasswordHasher';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class LoginUserUsecase {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly passwordHasher: PasswordHasher,
     private readonly tokenGenerator: ITOkenGenerator
   ) {}

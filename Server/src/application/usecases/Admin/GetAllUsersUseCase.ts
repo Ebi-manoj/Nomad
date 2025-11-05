@@ -3,10 +3,10 @@ import {
   GetAllUsersResponseDTO,
 } from '../../../domain/dto/userManagementDTO';
 import { userMapper } from '../../mappers/UserResponse.mapper';
-import { UserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 
 export class GetAllUsersUseCase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(data: GetAllUsersRequestDTO): Promise<GetAllUsersResponseDTO> {
     const { page, limit, search } = data;
