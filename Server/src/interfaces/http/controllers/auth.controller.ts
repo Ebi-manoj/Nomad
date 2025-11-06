@@ -21,11 +21,7 @@ import {
   VerifyOTPResponseDTO,
 } from '../../../domain/dto/authDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import {
-  InvalidCredindatials,
-  InvalidInputData,
-} from '../../../domain/errors/CustomError';
-import { verifyEmailToken } from '../../express/middlewares/verifyEmailToken.js';
+import { InvalidCredindatials } from '../../../domain/errors/CustomError';
 import {
   emailSchema,
   googleCodeSchema,

@@ -12,6 +12,7 @@ import {
 } from '../../../domain/errors/CustomError';
 import { Email } from '../../../domain/value-objects/email';
 import { userMapper } from '../../mappers/UserResponse.mapper';
+import { ILogger } from '../../providers/ILogger';
 import { PasswordHasher } from '../../providers/IpasswordHasher';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
 import { IUserRepository } from '../../repositories/IUserRepository';
@@ -19,16 +20,17 @@ import { ILoginUserUsecase } from './ILoginUserUseCase';
 
 export class LoginUserUsecase implements ILoginUserUsecase {
   constructor(
+    private readonly logger: ILogger,
     private readonly userRepository: IUserRepository,
     private readonly passwordHasher: PasswordHasher,
     private readonly tokenGenerator: ITOkenGenerator
   ) {}
 
   async execute(data: LoginUserRequestDTO): Promise<LoginuserResponseDTO> {
+    this.logger.info('Login UseCase executing with', data);
     const email = new Email(data.email);
     const user = await this.userRepository.findByEmail(email.getValue());
     if (!user) throw new InvalidCredindatials();
-    console.log('User Found');
     if (user.getIsBlocked()) throw new SuspendedAccount();
     const password = user.getPassword();
     if (!password) throw new InvalidCredindatials();

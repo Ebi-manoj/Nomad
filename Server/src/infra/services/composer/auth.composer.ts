@@ -16,11 +16,13 @@ import { NodemailerTransporter } from '../../providers/emailTransporter';
 import { GoogleClient } from '../../providers/googleClient';
 import { BcryptService } from '../../providers/passwordHasher';
 import { TokenGenerator } from '../../providers/tokenGenrator';
+import { WinstonLogger } from '../../providers/winstonLogger';
 import { RedisOTPRepository } from '../../repositories/RedisOTP.repository';
 import { MongoUserRepository } from '../../repositories/UserRepository';
 import { env } from '../../utils/env';
 
 export function authComposer(): IauthController {
+  const logger = new WinstonLogger();
   ///////////////REGISTER USE CASE/////////////////////////////
   const userRepository: IUserRepository = new MongoUserRepository();
   const passwordHasher: PasswordHasher = new BcryptService();
@@ -32,6 +34,7 @@ export function authComposer(): IauthController {
   /////////////////LOGIN USE CASE////////////////////////////
   const tokenGenerator = new TokenGenerator(env.JWT_SECERT);
   const loginUseCase: LoginUserUsecase = new LoginUserUsecase(
+    logger,
     userRepository,
     passwordHasher,
     tokenGenerator
