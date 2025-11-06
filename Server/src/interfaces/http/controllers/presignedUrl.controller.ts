@@ -1,3 +1,4 @@
+import { IPresignedUrlService } from '../../../application/services/IPresignedUrlService';
 import { PresignedUrlService } from '../../../application/services/PresignedUrlServices';
 import { FOLDER_NAMES } from '../../../domain/enums/Constants';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
@@ -7,7 +8,7 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IGetPresignedURLController } from './IGetPresignedUrlController';
 
 export class PresignedUrlController implements IGetPresignedURLController {
-  constructor(private readonly presignedUrlService: PresignedUrlService) {}
+  constructor(private readonly presignedUrlService: IPresignedUrlService) {}
 
   async getPresignedUrl(httpRequest: HttpRequest): Promise<HttpResponse> {
     const data = httpRequest.body as {

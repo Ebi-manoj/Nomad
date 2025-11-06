@@ -4,11 +4,13 @@ import { IGeoService } from '../providers/IGeoService';
 import { ILocationRepository } from '../repositories/ILocationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
 import { DurationCalculator } from './DurationCalculator';
+import { IDurationCalculator } from './IDurationCalculator';
+import { IRideMatchService } from './IRideMatchService';
 
-export class RideMatchService {
+export class RideMatchService implements IRideMatchService {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly durationCalculator: DurationCalculator,
+    private readonly durationCalculator: IDurationCalculator,
     private readonly locationRepository: ILocationRepository
   ) {}
 

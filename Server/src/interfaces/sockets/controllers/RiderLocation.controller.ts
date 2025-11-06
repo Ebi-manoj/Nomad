@@ -2,9 +2,10 @@ import { Socket } from 'socket.io';
 import { UpdateLocationUseCase } from '../../../application/usecases/User/Ride/UpdateLocationUseCase';
 import { UpdateLocationDTO } from '../../../domain/dto/RideDTO';
 import { IRiderLocationController } from './IRiderLocationController';
+import { IUpdateLocationUseCase } from '../../../application/usecases/User/Ride/IUpdateLocationUseCase';
 
 export class RiderLocationController implements IRiderLocationController {
-  constructor(private readonly updateLocationUseCase: UpdateLocationUseCase) {}
+  constructor(private readonly updateLocationUseCase: IUpdateLocationUseCase) {}
 
   async handleLocationUpdate(
     socket: Socket,

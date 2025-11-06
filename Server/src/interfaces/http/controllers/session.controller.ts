@@ -1,4 +1,5 @@
 import { ActiveSessionsUseCase } from '../../../application/usecases/User/ActiveSessionsUseCase';
+import { IActiveSessionsUseCase } from '../../../application/usecases/User/IActiveSessionsUseCase';
 import { ErrorMessages } from '../../../domain/enums/ErrorMessage';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { CustomError } from '../../../domain/errors/CustomError';
@@ -8,7 +9,7 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { ISessionController } from './ISessionController';
 
 export class SessionController implements ISessionController {
-  constructor(private readonly activeSessionUseCase: ActiveSessionsUseCase) {}
+  constructor(private readonly activeSessionUseCase: IActiveSessionsUseCase) {}
   async getActiveUserSession(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;
     if (!userId)

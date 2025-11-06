@@ -1,7 +1,14 @@
 import { GoogleSignupUseCase } from '../../../application/usecases/Auth/GoogleSignupUseCase.ts.js';
+import { IGoogleSignupUseCase } from '../../../application/usecases/Auth/IGoogleSignupUseCase.js';
+import { ILoginUserUsecase } from '../../../application/usecases/Auth/ILoginUserUseCase.js';
+import { IRefreshTokenUseCase } from '../../../application/usecases/Auth/IRefreshTokenUseCase.js';
+import { IRegisterUserUseCase } from '../../../application/usecases/Auth/IRegisterUserUseCase.js';
+import { IResetPasswordUseCase } from '../../../application/usecases/Auth/IResetPassword.js';
+import { ISendSignupOTPUseCase } from '../../../application/usecases/Auth/ISendOTPSignupUseCase.js';
+import { ISendResetOTPUseCase } from '../../../application/usecases/Auth/ISendResetOTP.js';
+import { IVerifyOTPUseCase } from '../../../application/usecases/Auth/IVerifOTPUseCase.js';
 import { LoginUserUsecase } from '../../../application/usecases/Auth/LoginUserCase.js';
 import { RefreshTokenUseCase } from '../../../application/usecases/Auth/RefreshTokenUseCase.js';
-import { RegisterUserUseCase } from '../../../application/usecases/Auth/RegisterUserUseCase.js';
 import { ResetPasswordUseCase } from '../../../application/usecases/Auth/ResetPasswordUseCase.js';
 import { SendSignupOTPUseCase } from '../../../application/usecases/Auth/SendOTPSignupUseCase.js';
 import { SendResetOTPUseCase } from '../../../application/usecases/Auth/SendResetOTPUseCase.js';
@@ -35,14 +42,14 @@ import { IauthController } from './IAuthcontroller';
 
 export class AuthController implements IauthController {
   constructor(
-    private readonly registerUserUseCase: RegisterUserUseCase,
-    private readonly loginUserUseCase: LoginUserUsecase,
-    private readonly sendSignupOTPUseCase: SendSignupOTPUseCase,
-    private readonly sendResetOTPuseCase: SendResetOTPUseCase,
-    private readonly verifyOTPUseCase: VerifyOTPUseCase,
-    private readonly resetPasswordUseCase: ResetPasswordUseCase,
-    private readonly refreshTokenUseCase: RefreshTokenUseCase,
-    private readonly googleSignupUseCase: GoogleSignupUseCase
+    private readonly registerUserUseCase: IRegisterUserUseCase,
+    private readonly loginUserUseCase: ILoginUserUsecase,
+    private readonly sendSignupOTPUseCase: ISendSignupOTPUseCase,
+    private readonly sendResetOTPuseCase: ISendResetOTPUseCase,
+    private readonly verifyOTPUseCase: IVerifyOTPUseCase,
+    private readonly resetPasswordUseCase: IResetPasswordUseCase,
+    private readonly refreshTokenUseCase: IRefreshTokenUseCase,
+    private readonly googleSignupUseCase: IGoogleSignupUseCase
   ) {}
 
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {

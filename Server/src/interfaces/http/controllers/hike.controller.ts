@@ -12,12 +12,15 @@ import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IHikeController } from './IHikeController';
 import { Server } from 'socket.io';
+import { ICreateHikeUseCase } from '../../../application/usecases/User/Hike/ICreateHikeUseCase';
+import { IFindMatchRideUseCase } from '../../../application/usecases/User/Hike/IFindMatchRideUseCase';
+import { ICreateJoinRequestUseCase } from '../../../application/usecases/User/Hike/ICreateJoinRequestUseCase';
 
 export class HikeController implements IHikeController {
   constructor(
-    private readonly createHikeUseCase: CreateHikeUseCase,
-    private readonly findMatchRidesUseCase: FindMatchRideUseCase,
-    private readonly createJoinRequestUseCase: CreateJoinRequestUseCase,
+    private readonly createHikeUseCase: ICreateHikeUseCase,
+    private readonly findMatchRidesUseCase: IFindMatchRideUseCase,
+    private readonly createJoinRequestUseCase: ICreateJoinRequestUseCase,
     private io: Server
   ) {}
   async createHike(httpRequest: HttpRequest): Promise<HttpResponse> {

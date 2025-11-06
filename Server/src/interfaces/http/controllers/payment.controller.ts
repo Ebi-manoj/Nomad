@@ -7,11 +7,13 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IPaymentController } from './IPaymentController';
 import { paymentIntentRequestDTO } from '../../../domain/dto/paymentService';
 import { CreatePaymentIntentUseCase } from '../../../application/usecases/User/payment/CreatePaymentIntent';
+import { IGetHikerPaymentInfoUseCase } from '../../../application/usecases/User/Hike/IGetHikerPaymentInfo';
+import { ICreatePaymentIntentUseCase } from '../../../application/usecases/User/payment/ICreatePaymentIntent';
 
 export class PaymentController implements IPaymentController {
   constructor(
-    private readonly getHikerPaymentInfoUseCase: GetHikerPaymentInfoUseCase,
-    private readonly createPaymentIntentUseCase: CreatePaymentIntentUseCase
+    private readonly getHikerPaymentInfoUseCase: IGetHikerPaymentInfoUseCase,
+    private readonly createPaymentIntentUseCase: ICreatePaymentIntentUseCase
   ) {}
   async getPaymentInfo(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;

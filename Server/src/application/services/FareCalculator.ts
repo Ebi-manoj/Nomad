@@ -1,4 +1,6 @@
-export class FareCalculator {
+import { IFareCalculator } from './IFareCalculator';
+
+export class FareCalculator implements IFareCalculator {
   private readonly platformFeePerc = 10;
   private readonly minimumFare = 50;
   getFare(costPerKm: number, distanceInKm: number): number {

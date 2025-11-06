@@ -1,6 +1,11 @@
+import { IFileuploadGateway } from '../../../application/providers/IFileuploadGateway';
 import { FetchAllDocsUseCase } from '../../../application/usecases/Admin/FetchAllDocsUseCase';
+import { IFetchAllDocsUseCase } from '../../../application/usecases/Admin/IFetchAllDocsUseCase';
+import { IVerifyDocumentUseCase } from '../../../application/usecases/Admin/IVerifyDocumentUseCase';
 import { VerifyDocumentUseCase } from '../../../application/usecases/Admin/VerifyDocumentUseCase';
 import { FetchUserDocsUseCase } from '../../../application/usecases/User/FetchUserDocsUseCase';
+import { IFetchUserDocsUseCase } from '../../../application/usecases/User/IFetchUserDocsUseCase';
+import { IUploadDocumentUseCase } from '../../../application/usecases/User/IUploadDocUseCase';
 import { UploadDocumentUseCase } from '../../../application/usecases/User/UploadDocumentsUseCase';
 import { VerifyDocsRequestDTO } from '../../../domain/dto/DocumentsDTO';
 import { DocumentStatus } from '../../../domain/enums/documentStatus';
@@ -13,10 +18,10 @@ import { IDocumentController } from './IDocumentController';
 
 export class DocumentController implements IDocumentController {
   constructor(
-    private readonly uploadDocumentUseCase: UploadDocumentUseCase,
-    private readonly fetchUserDocsUseCase: FetchUserDocsUseCase,
-    private readonly fetchAllDocsUseCase: FetchAllDocsUseCase,
-    private readonly verifyDocumentUseCase: VerifyDocumentUseCase
+    private readonly uploadDocumentUseCase: IUploadDocumentUseCase,
+    private readonly fetchUserDocsUseCase: IFetchUserDocsUseCase,
+    private readonly fetchAllDocsUseCase: IFetchAllDocsUseCase,
+    private readonly verifyDocumentUseCase: IVerifyDocumentUseCase
   ) {}
   async uploadDocument(httpRequest: HttpRequest): Promise<HttpResponse> {
     console.log('Reached upload Doc controller');

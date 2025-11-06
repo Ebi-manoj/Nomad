@@ -14,13 +14,17 @@ import {
 import { AcceptJoinRequestUseCase } from '../../../application/usecases/User/Ride/AcceptJoinRequest';
 import { Server } from 'socket.io';
 import { DeclineJoinRequestUseCase } from '../../../application/usecases/User/Ride/DeclineJoinRequest';
+import { ICreateRideUseCase } from '../../../application/usecases/User/Ride/ICreateRideUseCase';
+import { IGetPendingRequestUseCase } from '../../../application/usecases/User/Ride/IGetPendingRequestUseCase';
+import { IAcceptJoinRequestUseCase } from '../../../application/usecases/User/Ride/IAcceptJoinRequest';
+import { IDeclineJoinRequestUseCase } from '../../../application/usecases/User/Ride/IDeclineJoinRequest';
 
 export class RideController implements IRideController {
   constructor(
-    private readonly createRideUseCase: CreateRideUseCase,
-    private readonly getPendingRequestUseCase: GetPendingRequestUseCase,
-    private readonly acceptJoinRequestUseCase: AcceptJoinRequestUseCase,
-    private readonly declienJoinRequestUseCase: DeclineJoinRequestUseCase,
+    private readonly createRideUseCase: ICreateRideUseCase,
+    private readonly getPendingRequestUseCase: IGetPendingRequestUseCase,
+    private readonly acceptJoinRequestUseCase: IAcceptJoinRequestUseCase,
+    private readonly declienJoinRequestUseCase: IDeclineJoinRequestUseCase,
     private readonly io: Server
   ) {}
 
