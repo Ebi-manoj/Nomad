@@ -1,6 +1,4 @@
 import { HttpStatusCode } from 'axios';
-import { CreateRideUseCase } from '../../../application/usecases/User/Ride/CreateRideUseCase';
-import { GetPendingRequestUseCase } from '../../../application/usecases/User/Ride/GetPendingRequestUseCase';
 import { CreateRideDTO } from '../../../domain/dto/RideDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
@@ -11,9 +9,7 @@ import {
   AcceptJoinRequestDTO,
   DeclineJoinRequestDTO,
 } from '../../../domain/dto/RideMatch';
-import { AcceptJoinRequestUseCase } from '../../../application/usecases/User/Ride/AcceptJoinRequest';
 import { Server } from 'socket.io';
-import { DeclineJoinRequestUseCase } from '../../../application/usecases/User/Ride/DeclineJoinRequest';
 import { ICreateRideUseCase } from '../../../application/usecases/User/Ride/ICreateRideUseCase';
 import { IGetPendingRequestUseCase } from '../../../application/usecases/User/Ride/IGetPendingRequestUseCase';
 import { IAcceptJoinRequestUseCase } from '../../../application/usecases/User/Ride/IAcceptJoinRequest';

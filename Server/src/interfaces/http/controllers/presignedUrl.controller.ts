@@ -1,5 +1,4 @@
 import { IPresignedUrlService } from '../../../application/services/IPresignedUrlService';
-import { PresignedUrlService } from '../../../application/services/PresignedUrlServices';
 import { FOLDER_NAMES } from '../../../domain/enums/Constants';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { ApiDTO } from '../helpers/implementation/apiDTO';

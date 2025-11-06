@@ -57,7 +57,7 @@ export class GoogleApiService implements IGoogleApi {
   }
 
   private decodePolyline(encoded: string): [number, number][] {
-    let points: [number, number][] = [];
+    const points: [number, number][] = [];
     let index = 0,
       lat = 0,
       lng = 0;

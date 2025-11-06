@@ -1,4 +1,4 @@
-import { Model, Document } from 'mongoose';
+import { Model } from 'mongoose';
 import { IBaseRepository } from '../../application/repositories/IBaseRepository';
 import { IMapper } from '../mappers/IMapper';
 

@@ -1,5 +1,3 @@
-import { BlockUserUseCase } from '../../../application/usecases/Admin/BlockUserUseCase';
-import { GetAllUsersUseCase } from '../../../application/usecases/Admin/GetAllUsersUseCase';
 import { IBlockUserUseCase } from '../../../application/usecases/Admin/IBlockUserUseCase';
 import { IGetAllUsersUseCase } from '../../../application/usecases/Admin/IGetAllUsersUseCase';
 import { UserResponseDTO } from '../../../domain/dto/authDTO';

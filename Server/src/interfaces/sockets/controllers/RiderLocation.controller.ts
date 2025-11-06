@@ -1,5 +1,4 @@
 import { Socket } from 'socket.io';
-import { UpdateLocationUseCase } from '../../../application/usecases/User/Ride/UpdateLocationUseCase';
 import { UpdateLocationDTO } from '../../../domain/dto/RideDTO';
 import { IRiderLocationController } from './IRiderLocationController';
 import { IUpdateLocationUseCase } from '../../../application/usecases/User/Ride/IUpdateLocationUseCase';

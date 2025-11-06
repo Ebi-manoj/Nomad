@@ -1,12 +1,7 @@
-import { IFileuploadGateway } from '../../../application/providers/IFileuploadGateway';
-import { FetchAllDocsUseCase } from '../../../application/usecases/Admin/FetchAllDocsUseCase';
 import { IFetchAllDocsUseCase } from '../../../application/usecases/Admin/IFetchAllDocsUseCase';
 import { IVerifyDocumentUseCase } from '../../../application/usecases/Admin/IVerifyDocumentUseCase';
-import { VerifyDocumentUseCase } from '../../../application/usecases/Admin/VerifyDocumentUseCase';
-import { FetchUserDocsUseCase } from '../../../application/usecases/User/FetchUserDocsUseCase';
 import { IFetchUserDocsUseCase } from '../../../application/usecases/User/IFetchUserDocsUseCase';
 import { IUploadDocumentUseCase } from '../../../application/usecases/User/IUploadDocUseCase';
-import { UploadDocumentUseCase } from '../../../application/usecases/User/UploadDocumentsUseCase';
 import { VerifyDocsRequestDTO } from '../../../domain/dto/DocumentsDTO';
 import { DocumentStatus } from '../../../domain/enums/documentStatus';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';

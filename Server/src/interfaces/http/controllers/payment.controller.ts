@@ -1,12 +1,10 @@
 import { HttpStatusCode } from 'axios';
-import { GetHikerPaymentInfoUseCase } from '../../../application/usecases/User/Hike/GetHikerPaymentInfo';
 import { Unauthorized } from '../../../domain/errors/CustomError';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IPaymentController } from './IPaymentController';
 import { paymentIntentRequestDTO } from '../../../domain/dto/paymentService';
-import { CreatePaymentIntentUseCase } from '../../../application/usecases/User/payment/CreatePaymentIntent';
 import { IGetHikerPaymentInfoUseCase } from '../../../application/usecases/User/Hike/IGetHikerPaymentInfo';
 import { ICreatePaymentIntentUseCase } from '../../../application/usecases/User/payment/ICreatePaymentIntent';
 

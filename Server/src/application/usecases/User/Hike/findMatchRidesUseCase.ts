@@ -4,7 +4,6 @@ import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IRideMatchService } from '../../../services/IRideMatchService';
-import { RideMatchService } from '../../../services/RideMatchService';
 import { IFindMatchRideUseCase } from './IFindMatchRideUseCase';
 
 export class FindMatchRideUseCase implements IFindMatchRideUseCase {

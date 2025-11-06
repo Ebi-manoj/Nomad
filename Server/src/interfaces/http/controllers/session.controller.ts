@@ -1,4 +1,3 @@
-import { ActiveSessionsUseCase } from '../../../application/usecases/User/ActiveSessionsUseCase';
 import { IActiveSessionsUseCase } from '../../../application/usecases/User/IActiveSessionsUseCase';
 import { ErrorMessages } from '../../../domain/enums/ErrorMessage';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';

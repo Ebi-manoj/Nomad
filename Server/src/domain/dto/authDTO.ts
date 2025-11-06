@@ -1,6 +1,5 @@
 import { HikeLog } from '../entities/Hike';
 import { RideLog } from '../entities/Ride';
-import { HikeResponseDTO } from './HikeDTO';
 
 export interface RegisterUserRequestDTO {
   fullName: string;

@@ -1,7 +1,4 @@
 import { HttpStatusCode } from 'axios';
-import { CreateHikeUseCase } from '../../../application/usecases/User/Hike/CreateHikeUseCase';
-import { CreateJoinRequestUseCase } from '../../../application/usecases/User/Hike/CreateJoinRequestUseCase';
-import { FindMatchRideUseCase } from '../../../application/usecases/User/Hike/findMatchRidesUseCase';
 import {
   CreateHikeDTO,
   CreateJoinRequestDTO,

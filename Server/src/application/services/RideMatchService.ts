@@ -3,7 +3,6 @@ import { RideLog } from '../../domain/entities/Ride';
 import { IGeoService } from '../providers/IGeoService';
 import { ILocationRepository } from '../repositories/ILocationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
-import { DurationCalculator } from './DurationCalculator';
 import { IDurationCalculator } from './IDurationCalculator';
 import { IRideMatchService } from './IRideMatchService';
 
