@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import type { HikerPaymentInfoResponseDTO } from '@/types/payment';
 import { createPaymentIntent, getHikePayment } from '@/api/payment';
-import { PaymentNotFound } from './HikerPayment/PaymentNotFound';
-import { PaymentExpired } from './HikerPayment/PaymentExpired';
-import { PaymentSummary } from './HikerPayment/PaymentSummary';
+import { PaymentNotFound } from './PaymentNotFound';
+import { PaymentExpired } from './PaymentExpired';
+import { PaymentSummary } from './PaymentSummary';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 import { Elements } from '@stripe/react-stripe-js';
 import {
@@ -13,7 +13,7 @@ import {
   stripePromise,
   type stripeOptionType,
 } from '@/config/stripe';
-import { CheckoutForm } from './HikerPayment/CheckoutForm';
+import { CheckoutForm } from './CheckoutForm';
 
 export const Payment = () => {
   const { paymentId } = useParams();
