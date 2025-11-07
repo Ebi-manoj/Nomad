@@ -121,7 +121,7 @@ export const Payment = () => {
     return <PaymentNotFound />;
   }
 
-  if (isExpired) {
+  if (isExpired || !timeLeft) {
     return <PaymentExpired />;
   }
 

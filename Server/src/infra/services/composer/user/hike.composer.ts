@@ -12,6 +12,7 @@ import { TurfGeoService } from '../../../providers/turfGeroService';
 import { HikeRepository } from '../../../repositories/HikeRepository';
 import { JoinRequestRepository } from '../../../repositories/JoinRequestReqpository';
 import { LocationRepository } from '../../../repositories/LocationRepository';
+import { PaymentRepository } from '../../../repositories/PaymentRepository';
 import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
 
@@ -23,6 +24,7 @@ export function hikeComposer(): IHikeController {
   const durationCalculator = new DurationCalculator();
   const locationRepository = new LocationRepository();
   const joinRequestRepository = new JoinRequestRepository();
+  const paymentRepository = new PaymentRepository();
   const fareCalculator = new FareCalculator();
   const io = SocketServer.getIo();
   const rideMatchService = new RideMatchService(
@@ -43,7 +45,8 @@ export function hikeComposer(): IHikeController {
     rideMatchService,
     geoService,
     hikeRepository,
-    joinRequestRepository
+    joinRequestRepository,
+    paymentRepository
   );
 
   const createJoinRequestUseCase = new CreateJoinRequestUseCase(

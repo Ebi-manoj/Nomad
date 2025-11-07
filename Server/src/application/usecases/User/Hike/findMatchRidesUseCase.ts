@@ -2,6 +2,7 @@ import { RideMatchResponseDTO } from '../../../../domain/dto/RideMatch';
 import { IGeoService } from '../../../providers/IGeoService';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
+import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IRideMatchService } from '../../../services/IRideMatchService';
 import { IFindMatchRideUseCase } from './IFindMatchRideUseCase';
@@ -12,7 +13,8 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
     private readonly rideMatchService: IRideMatchService,
     private readonly geoService: IGeoService,
     private readonly hikeRepository: IHikeRepository,
-    private readonly joinRequestRepository: IJoinRequestRepository
+    private readonly joinRequestRepository: IJoinRequestRepository,
+    private readonly paymentRepository: IPaymentRepository
   ) {}
 
   async execute(hikeId: string): Promise<RideMatchResponseDTO[]> {
@@ -40,6 +42,14 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
     });
 
     const JoinRequests = await this.joinRequestRepository.findByHikeId(hikeId);
+    const payments = await this.paymentRepository.findPendingPaymentsByHikeId(
+      hikeId
+    );
+    for (const p of payments) {
+      const ride = await this.rideRepository.findById(p.getRideId());
+      if (ride) filteredRiders.push(ride);
+    }
+
     const matchedRiders = [];
     for (const ride of filteredRiders) {
       const match = await this.rideMatchService.evaluate(
@@ -47,14 +57,17 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
         { pickup, destination },
         this.geoService
       );
-      // if (match) matchedRiders.push(match);
       if (match) {
         const request = JoinRequests.find(
           r => r.getRideId() === ride.getRideId()
         );
+        const payment = payments.find(
+          p => p.getJoinRequestId() == request?.getId()
+        );
         matchedRiders.push({
           ...match,
           requestStatus: request ? request.getStatus() : null,
+          paymentId: payment ? payment.getId()! : null,
         });
       }
     }

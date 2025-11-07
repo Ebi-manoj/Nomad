@@ -5,6 +5,8 @@ export interface PaymentProps {
   joinRequestId: string;
   hikerId: string;
   riderId: string;
+  hikeId: string;
+  rideId: string;
   amount: number;
   platformFee: number;
   status: PaymentStatus;
@@ -20,6 +22,8 @@ export class Payment {
   private joinRequestId: string;
   private hikerId: string;
   private riderId: string;
+  private hikeId: string;
+  private rideId: string;
   private amount: number;
   private platformFee: number;
   private status: PaymentStatus;
@@ -34,6 +38,8 @@ export class Payment {
     this.joinRequestId = props.joinRequestId;
     this.hikerId = props.hikerId;
     this.riderId = props.riderId;
+    this.hikeId = props.hikeId;
+    this.rideId = props.rideId;
     this.amount = props.amount;
     this.platformFee = props.platformFee;
     this.status = props.status;
@@ -58,6 +64,13 @@ export class Payment {
 
   getRiderId(): string {
     return this.riderId;
+  }
+  getHikeId(): string {
+    return this.hikeId;
+  }
+
+  getRideId(): string {
+    return this.rideId;
   }
 
   getAmount(): number {

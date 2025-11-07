@@ -6,6 +6,8 @@ export interface IPaymentDocument {
   joinRequestId: mongoose.Types.ObjectId;
   hikerId: mongoose.Types.ObjectId;
   riderId: mongoose.Types.ObjectId;
+  hikeId: mongoose.Types.ObjectId;
+  rideId: mongoose.Types.ObjectId;
   amount: number;
   platformFee: number;
   status: PaymentStatus;
@@ -32,6 +34,16 @@ const PaymentSchema = new Schema<IPaymentDocument>(
     riderId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      required: true,
+    },
+    hikeId: {
+      type: Schema.Types.ObjectId,
+      ref: 'HikeLog',
+      required: true,
+    },
+    rideId: {
+      type: Schema.Types.ObjectId,
+      ref: 'RideLog',
       required: true,
     },
     amount: {

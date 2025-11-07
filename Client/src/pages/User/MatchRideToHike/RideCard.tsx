@@ -1,4 +1,13 @@
-import { MapPin, Flag, Car, Star, XCircle, Clock } from 'lucide-react';
+import {
+  MapPin,
+  Flag,
+  Car,
+  Star,
+  XCircle,
+  Clock,
+  CheckCircle2,
+  Sparkles,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { CreateJoinRequestDTO, RideMatchResponseDTO } from '@/types/hike';
 import { useSelector } from 'react-redux';
@@ -7,6 +16,7 @@ import { joinRide } from '@/api/hike';
 import { toast } from 'sonner';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function RideCard({
   ride,
@@ -37,15 +47,31 @@ export function RideCard({
       useHandleApiError(error);
     }
   };
+  const navigate = useNavigate();
+  const handleMakePayment = (id: string | null) => {
+    if (!id) return;
+    navigate(`/payment/${id}`);
+  };
 
   return (
     <motion.div
-      className="bg-white border border-slate-200/60 rounded-xl p-3.5 shadow-sm hover:shadow-lg hover:border-slate-300/60 transition-all duration-300"
+      className="relative bg-white border border-slate-200/60 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-slate-300/60 transition-all duration-300"
       whileHover={{ scale: 1.01, y: -2 }}
     >
+      {/* Accepted Badge */}
+      {requestStatus === 'accepted' && (
+        <div className="absolute -top-2 right-3">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full shadow-md text-white">
+            <CheckCircle2 size={12} fill="white" />
+            <span className="text-xs font-bold tracking-wide">Accepted</span>
+          </div>
+        </div>
+      )}
+
+      {/* Rider Info */}
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+          <div className="w-9 h-9 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
             {ride.user.fullName.charAt(0)}
           </div>
           <div>
@@ -62,22 +88,26 @@ export function RideCard({
             </div>
           </div>
         </div>
+
+        {/* Price */}
         <div className="text-right">
-          <p className="text-lg font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          <p className="text-lg font-bold text-slate-900">
             ₹{ride.costSharing}
           </p>
           <p className="text-[10px] text-slate-500">per km</p>
         </div>
       </div>
 
-      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-slate-100 to-slate-50 rounded-full mb-2.5 border border-slate-200/60">
+      {/* Vehicle info */}
+      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-50 rounded-full mb-3 border border-slate-200">
         <Car size={11} className="text-slate-700" />
         <span className="text-[11px] font-semibold text-slate-700">
           {ride.user.vehicleModal}
         </span>
       </div>
 
-      <div className="bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-lg p-2.5 mb-2.5 border border-slate-200/40">
+      {/* Route Summary */}
+      <div className="bg-slate-50 rounded-lg p-2.5 mb-3 border border-slate-200/40">
         <div className="flex items-center gap-1.5 text-xs">
           <div className="flex items-center gap-1 text-green-600">
             <MapPin size={13} fill="currentColor" />
@@ -99,16 +129,17 @@ export function RideCard({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-1.5 mb-2.5">
+      {/* Ride Details */}
+      <div className="grid grid-cols-3 gap-1.5 mb-3">
         <RideDetail label="Departure" value={`${ride.departure} min`} />
         <RideDetail label="Seats Left" value={ride.seatsLeft} />
         <RideDetail label="Duration" value={`${ride.duration} min`} />
       </div>
 
+      {/* Action Buttons */}
       <div className="flex gap-1.5 items-center">
-        {/* Show Route Button */}
         <button
-          className="flex-1 border-2 cursor-pointer border-slate-900 text-slate-900 py-1.5 rounded-lg font-semibold text-xs hover:bg-slate-900 hover:text-white transition-all duration-200 hover:shadow-lg"
+          className="flex-1 border-2 border-slate-900 text-slate-900 py-1.5 rounded-lg font-semibold text-xs hover:bg-slate-900 hover:text-white transition-all duration-200"
           onClick={() => setSelectedRide(ride)}
         >
           Show Route
@@ -116,24 +147,56 @@ export function RideCard({
 
         {requestStatus === null ? (
           <button
-            className="flex-1 bg-black text-white py-2.5 cursor-pointer rounded-lg font-semibold text-sm hover:bg-gray-900 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-[0.98]"
+            className="flex-1 bg-black text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-900 transition-all duration-200 shadow-md active:scale-[0.98]"
             onClick={handleJoinRide}
           >
             Join Ride
           </button>
         ) : requestStatus === 'pending' ? (
           <div className="flex-1 flex items-center justify-center py-1.5 rounded-lg bg-amber-50 text-amber-700 font-semibold text-sm border border-amber-200 select-none">
-            <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 animate-pulse" />
-              Request Sent
-            </span>
+            <Clock className="w-4 h-4 mr-1 animate-pulse" />
+            Request Sent
           </div>
+        ) : requestStatus === 'accepted' ? (
+          <motion.button
+            className="flex-1 relative bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2.5 cursor-pointer rounded-lg font-bold text-sm transition-all duration-200 shadow-lg hover:shadow-2xl active:scale-[0.98] overflow-hidden group"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => handleMakePayment(ride.paymentId)}
+          >
+            {/* Shine effect */}
+            <motion.div
+              className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
+              animate={{
+                x: ['-200%', '200%'],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatDelay: 1,
+                ease: 'easeInOut',
+              }}
+            />
+
+            {/* Button content */}
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4 animate-pulse" />
+              Make Payment
+              <motion.span
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 1, repeat: Infinity }}
+              >
+                →
+              </motion.span>
+            </span>
+
+            {/* Glow effect on hover */}
+            <motion.div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+          </motion.button>
         ) : (
           <div className="flex-1 flex items-center justify-center py-2.5 rounded-lg bg-red-50 text-red-700 font-semibold text-sm border border-red-200 select-none">
-            <span className="flex items-center gap-2">
-              <XCircle className="w-4 h-4" />
-              Request Declined
-            </span>
+            <XCircle className="w-4 h-4 mr-1" />
+            Request Declined
           </div>
         )}
       </div>

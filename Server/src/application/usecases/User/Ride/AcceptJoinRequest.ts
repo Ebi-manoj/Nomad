@@ -58,6 +58,8 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
         joinRequestId: joinRequest.getId()!,
         hikerId: hike.getUserId(),
         riderId: ride.getRiderId(),
+        hikeId: hike.getHikeId()!,
+        rideId: ride.getRideId()!,
         amount: totalAmount,
         platformFee,
         status: PaymentStatus.PENDING,

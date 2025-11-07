@@ -32,4 +32,5 @@ export interface RideMatchResponseDTO {
     vehicleModal: string;
   };
   requestStatus: null | JoinRequestStatus;
+  paymentId: null | string;
 }
