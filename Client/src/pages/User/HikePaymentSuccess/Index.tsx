@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { PaymentLoading } from './Loading';
 import { PaymentSuccess } from './Success';
 import { PaymentFailed } from './Failed';
+import { useSearchParams } from 'react-router-dom';
 
 export const PaymentSuccessPage = () => {
   const [status, setStatus] = useState<'loading' | 'success' | 'failed'>(
@@ -9,16 +10,11 @@ export const PaymentSuccessPage = () => {
   );
   const [countdown, setCountdown] = useState(100);
   const [retrying, setRetrying] = useState(false);
-
-  // Extract payment_intent from URL
-  const getPaymentIntentId = () => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('payment_intent');
-  };
+  const [searchParams] = useSearchParams();
+  const paymentIntentId = searchParams.get('payment_intent');
 
   // Simulate API call
   useEffect(() => {
-    const paymentIntentId = getPaymentIntentId();
     if (!paymentIntentId) {
       setStatus('failed');
       return;
@@ -26,7 +22,7 @@ export const PaymentSuccessPage = () => {
 
     // Simulate success
     setTimeout(() => {
-      setStatus('success');
+      setStatus('failed');
     }, 4000);
   }, []);
 

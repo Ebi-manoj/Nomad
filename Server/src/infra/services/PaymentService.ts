@@ -1,6 +1,8 @@
 import { IPaymentService } from '../../application/services/IPaymentService';
 import Stripe from 'stripe';
 import { env } from '../utils/env';
+import { CustomError } from '../../domain/errors/CustomError';
+import { HttpStatus } from '../../domain/enums/HttpStatusCode';
 
 export class StripePaymentService implements IPaymentService {
   private readonly stripe: Stripe;
@@ -33,6 +35,33 @@ export class StripePaymentService implements IPaymentService {
       console.log(error);
 
       throw new Error(`Stripe API error`);
+    }
+  }
+  async retrievePaymentIntent(
+    paymentIntentId: string
+  ): Promise<{ client_secret: string; id: string; status: string }> {
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.retrieve(
+        paymentIntentId
+      );
+
+      if (!paymentIntent || paymentIntent.status === 'canceled') {
+        throw new CustomError(
+          HttpStatus.BAD_REQUEST,
+          'Invalid or canceled PaymentIntent'
+        );
+      }
+
+      console.log(paymentIntent);
+
+      return {
+        client_secret: paymentIntent.client_secret!,
+        id: paymentIntent.id,
+        status: paymentIntent.status,
+      };
+    } catch (error) {
+      console.error('Stripe retrievePaymentIntent error:', error);
+      throw new Error(`Stripe API error while retrieving payment intent`);
     }
   }
 }

@@ -14,6 +14,13 @@ export interface HikerPaymentInfoResponseDTO {
   expiresAt: Date;
 }
 
+export interface paymentIntentRequestDTO {
+  paymentId: string;
+  currency: string;
+  amount: number;
+  metadata: Record<string, string>;
+}
+
 export interface paymentIntentResponseDTO {
   clientSecret: string;
   paymentIntentId: string;

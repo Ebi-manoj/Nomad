@@ -12,7 +12,7 @@ export interface IPaymentDocument {
   platformFee: number;
   status: PaymentStatus;
   paymentMethod?: string;
-  transactionId?: string;
+  stripePaymentId?: string;
   expiresAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
@@ -63,7 +63,7 @@ const PaymentSchema = new Schema<IPaymentDocument>(
     paymentMethod: {
       type: String,
     },
-    transactionId: {
+    stripePaymentId: {
       type: String,
       unique: true,
       sparse: true,

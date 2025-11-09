@@ -17,7 +17,7 @@ export const PaymentMapper: IMapper<Payment, IPaymentDocument> = {
       platformFee: persistence.platformFee,
       status: persistence.status as PaymentStatus,
       paymentMethod: persistence.paymentMethod,
-      transactionId: persistence.transactionId,
+      stripePaymentId: persistence.stripePaymentId,
       expiresAt: persistence.expiresAt,
       createdAt: persistence.createdAt,
       updatedAt: persistence.updatedAt,
@@ -35,7 +35,7 @@ export const PaymentMapper: IMapper<Payment, IPaymentDocument> = {
       platformFee: domain.getPlatformFee(),
       status: domain.getStatus(),
       paymentMethod: domain.getPaymentMethod(),
-      transactionId: domain.getTransactionId(),
+      stripePaymentId: domain.getStripPaymentId(),
       expiresAt: domain.getExpiresAt(),
     };
   },

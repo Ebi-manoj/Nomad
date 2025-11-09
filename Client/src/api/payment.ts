@@ -1,6 +1,7 @@
 import type { ApiResponse } from '@/types/ApiResponse';
 import type {
   HikerPaymentInfoResponseDTO,
+  paymentIntentRequestDTO,
   paymentIntentResponseDTO,
 } from '@/types/payment';
 import axiosInstance from '@/utils/axiosInstance';
@@ -16,18 +17,10 @@ export const getHikePayment = async function (paymentId: string) {
   return res.data.data;
 };
 
-export const createPaymentIntent = async (
-  amount: number,
-  currency = 'inr',
-  metadata = {}
-) => {
+export const createPaymentIntent = async (data: paymentIntentRequestDTO) => {
   const res = await axiosInstance.post<ApiResponse<paymentIntentResponseDTO>>(
     CREATE_PAYMENT_INTENT_API,
-    {
-      amount,
-      currency,
-      metadata,
-    }
+    data
   );
   return res.data.data;
 };

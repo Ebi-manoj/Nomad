@@ -13,3 +13,18 @@ export class InvalidAmount extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class InvalidPaymentStatus extends CustomError {
+  constructor(message: string = 'Payment is not in pending status') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
+export class PaymentExpired extends CustomError {
+  constructor(message: string = 'Payment has been expired') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
+export class PaymentNotSuccessfull extends CustomError {
+  constructor(message: string = 'Payment not successfull') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

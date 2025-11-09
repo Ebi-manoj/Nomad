@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import type { HikerPaymentInfoResponseDTO } from '@/types/payment';
+import type {
+  HikerPaymentInfoResponseDTO,
+  paymentIntentRequestDTO,
+} from '@/types/payment';
 import { createPaymentIntent, getHikePayment } from '@/api/payment';
 import { PaymentNotFound } from './PaymentNotFound';
 import { PaymentExpired } from './PaymentExpired';
@@ -34,14 +37,19 @@ export const Payment = () => {
 
   //handlePaymentIntent
   const handlePaymentIntent = async () => {
-    if (!paymentData) return;
-
-    try {
-      setLoading(true);
-      const data = await createPaymentIntent(paymentData.totalAmount, 'inr', {
+    if (!paymentData || !paymentId) return;
+    const dto: paymentIntentRequestDTO = {
+      paymentId,
+      currency: 'inr',
+      amount: paymentData.totalAmount,
+      metadata: {
         product: 'Ride Payment',
         paymentId: paymentId,
-      });
+      },
+    };
+    try {
+      setLoading(true);
+      const data = await createPaymentIntent(dto);
       console.log(data);
       setClientSecret(data.clientSecret);
       setShowPayment(true);

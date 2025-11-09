@@ -21,4 +21,17 @@ export class PaymentRepository
     });
     return payments.map(p => this.mapper.toDomain(p));
   }
+
+  async findByStripeId(paymentIntentId: string): Promise<Payment | null> {
+    return await this.model.findOne({ stripePaymentId: paymentIntentId });
+  }
+
+  async findExpiredPayments(): Promise<Payment[]> {
+    const now = new Date();
+    const docs = await this.model.find({
+      status: PaymentStatus.PENDING,
+      expiresAt: { $lt: now },
+    });
+    return docs.map(d => this.mapper.toDomain(d));
+  }
 }

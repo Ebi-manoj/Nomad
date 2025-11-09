@@ -53,6 +53,7 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
       ...data,
       costSharing,
       status: JoinRequestStatus.PENDING,
+      seatsRequested: hike.getSeatsRequested(),
     });
 
     //Create Collection

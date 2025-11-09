@@ -7,6 +7,7 @@ export interface IJoinRequest {
   hikeId: Types.ObjectId;
   pickupLocation: GeoJSON.Point;
   dropoffLocation: GeoJSON.Point;
+  seatsRequested: number;
   costSharing: number;
   status: JoinRequestStatus;
   createdAt: Date;
@@ -32,6 +33,10 @@ const JoinRequestSchema = new Schema<IJoinRequest>({
     coordinates: { type: [Number], required: true },
   },
   costSharing: {
+    type: Number,
+    required: true,
+  },
+  seatsRequested: {
     type: Number,
     required: true,
   },

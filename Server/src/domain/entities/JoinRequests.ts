@@ -7,6 +7,7 @@ export interface JoinRequestProps {
   status: JoinRequestStatus;
   pickupLocation: GeoJSON.Point;
   dropoffLocation: GeoJSON.Point;
+  seatsRequested: number;
   costSharing: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -19,6 +20,7 @@ export class JoinRequest {
   private status: JoinRequestStatus;
   private pickupLocation: GeoJSON.Point;
   private dropoffLocation: GeoJSON.Point;
+  private seatsRequested: number;
   private costSharing: number;
   private createdAt: Date;
   private updatedAt: Date;
@@ -30,6 +32,7 @@ export class JoinRequest {
     this.status = props.status || JoinRequestStatus.PENDING;
     this.pickupLocation = props.pickupLocation;
     this.dropoffLocation = props.dropoffLocation;
+    this.seatsRequested = props.seatsRequested;
     this.costSharing = props.costSharing;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
@@ -70,6 +73,10 @@ export class JoinRequest {
 
   getUpdatedAt() {
     return this.updatedAt;
+  }
+
+  getSeatsRequested() {
+    return this.seatsRequested;
   }
 
   accept() {

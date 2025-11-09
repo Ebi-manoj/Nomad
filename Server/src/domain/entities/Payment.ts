@@ -11,7 +11,7 @@ export interface PaymentProps {
   platformFee: number;
   status: PaymentStatus;
   paymentMethod?: string;
-  transactionId?: string;
+  stripePaymentId?: string;
   expiresAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
@@ -28,7 +28,7 @@ export class Payment {
   private platformFee: number;
   private status: PaymentStatus;
   private paymentMethod?: string;
-  private transactionId?: string;
+  private stripePaymentId?: string;
   private expiresAt: Date;
   private createdAt: Date;
   private updatedAt: Date;
@@ -44,7 +44,7 @@ export class Payment {
     this.platformFee = props.platformFee;
     this.status = props.status;
     this.paymentMethod = props.paymentMethod;
-    this.transactionId = props.transactionId;
+    this.stripePaymentId = props.stripePaymentId;
     this.expiresAt = props.expiresAt;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
@@ -89,8 +89,8 @@ export class Payment {
     return this.paymentMethod;
   }
 
-  getTransactionId(): string | undefined {
-    return this.transactionId;
+  getStripPaymentId(): string | undefined {
+    return this.stripePaymentId;
   }
 
   getCreatedAt(): Date {
@@ -98,5 +98,13 @@ export class Payment {
   }
   getExpiresAt(): Date {
     return this.expiresAt;
+  }
+
+  setStripePaymentId(id: string) {
+    this.stripePaymentId = id;
+  }
+
+  setExpired() {
+    this.status = PaymentStatus.EXPIRED;
   }
 }

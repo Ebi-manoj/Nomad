@@ -1,4 +1,5 @@
 export interface paymentIntentRequestDTO {
+  paymentId: string;
   amount: number;
   currency: string;
   customerId: string;

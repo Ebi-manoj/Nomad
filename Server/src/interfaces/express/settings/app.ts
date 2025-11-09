@@ -14,6 +14,7 @@ import cors from 'cors';
 import cookieparser from 'cookie-parser';
 import { createServer } from 'http';
 import { SocketServer } from '../../sockets/socketInit';
+import { startSchedules } from '../../../infra/services/composer/scheduler.composer';
 
 connectMongo();
 connectRedis();
@@ -29,6 +30,7 @@ app.use(
 );
 
 SocketServer.init(server, ['http://localhost:5173']);
+startSchedules().start();
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
@@ -41,5 +43,6 @@ app.use('/api/v1/admin/users', userManagementRouter);
 app.use('/api/v1/admin/documents', documentRouter);
 
 app.use(errorHandling);
+console.log('Listener count:', process.listenerCount('uncaughtException'));
 
 server.listen(3000, () => console.log('Server running on Port 3000'));

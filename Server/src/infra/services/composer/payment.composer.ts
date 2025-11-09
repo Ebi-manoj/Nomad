@@ -3,6 +3,7 @@ import { CreatePaymentIntentUseCase } from '../../../application/usecases/User/p
 import { IPaymentController } from '../../../interfaces/http/controllers/IPaymentController';
 import { PaymentController } from '../../../interfaces/http/controllers/payment.controller';
 import { GoogleApiService } from '../../providers/GoogleApi';
+import { WinstonLogger } from '../../providers/winstonLogger';
 import { HikeRepository } from '../../repositories/HikeRepository';
 import { JoinRequestRepository } from '../../repositories/JoinRequestReqpository';
 import { PaymentRepository } from '../../repositories/PaymentRepository';
@@ -16,6 +17,7 @@ export function paymentComposer(): IPaymentController {
   const userRepository = new MongoUserRepository();
   const googleApi = new GoogleApiService();
   const paymentService = new StripePaymentService();
+  const logger = new WinstonLogger();
   const getHikerPaymentInfoUseCase = new GetHikerPaymentInfoUseCase(
     paymentRepository,
     joinRepository,
@@ -25,7 +27,8 @@ export function paymentComposer(): IPaymentController {
   );
   const createPaymentIntentUseCase = new CreatePaymentIntentUseCase(
     paymentService,
-    paymentRepository
+    paymentRepository,
+    logger
   );
 
   return new PaymentController(
