@@ -25,3 +25,11 @@ export interface paymentIntentResponseDTO {
   clientSecret: string;
   paymentIntentId: string;
 }
+
+export interface ConfirmHikerPaymentDTO {
+  bookingId: string;
+  paymentId: string;
+  seatsBooked: number;
+  amount: number;
+  platformFee: number;
+}

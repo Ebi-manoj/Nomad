@@ -3,11 +3,15 @@ import { PaymentLoading } from './Loading';
 import { PaymentSuccess } from './Success';
 import { PaymentFailed } from './Failed';
 import { useSearchParams } from 'react-router-dom';
+import { confirmPayment } from '@/api/payment';
+import type { ConfirmHikerPaymentDTO } from '@/types/payment';
 
 export const PaymentSuccessPage = () => {
   const [status, setStatus] = useState<'loading' | 'success' | 'failed'>(
     'loading'
   );
+  const [bookingDetails, setBookingDetails] =
+    useState<ConfirmHikerPaymentDTO | null>(null);
   const [countdown, setCountdown] = useState(100);
   const [retrying, setRetrying] = useState(false);
   const [searchParams] = useSearchParams();
@@ -19,11 +23,17 @@ export const PaymentSuccessPage = () => {
       setStatus('failed');
       return;
     }
-
-    // Simulate success
-    setTimeout(() => {
-      setStatus('failed');
-    }, 4000);
+    const confirm = async () => {
+      try {
+        const data = await confirmPayment(paymentIntentId);
+        console.log(data);
+        setBookingDetails(data);
+        setStatus('success');
+      } catch (error) {
+        setStatus('failed');
+      }
+    };
+    confirm();
   }, []);
 
   // Countdown redirect
@@ -57,9 +67,13 @@ export const PaymentSuccessPage = () => {
   }
 
   //Success State
-  if (status === 'success') {
+  if (status === 'success' && bookingDetails) {
     return (
-      <PaymentSuccess countdown={countdown} handleRedirect={handleRedirect} />
+      <PaymentSuccess
+        countdown={countdown}
+        handleRedirect={handleRedirect}
+        bookingDetails={bookingDetails}
+      />
     );
   }
 

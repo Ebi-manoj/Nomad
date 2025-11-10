@@ -14,4 +14,10 @@ export class RideBookingRepository
   constructor() {
     super(RideBookingModel, rideBookingMapper);
   }
+
+  async findbyPaymentId(id: string): Promise<RideBooking | null> {
+    const found = await this.model.findOne({ paymentId: id });
+    if (!found) return null;
+    return this.mapper.toDomain(found);
+  }
 }

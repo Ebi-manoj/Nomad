@@ -1,3 +1,4 @@
+import { ConfirmHikerPaymentDTO } from '../../../../domain/dto/paymentDTO';
 import { RideBooking } from '../../../../domain/entities/RideBooking';
 import { RideBookingStatus } from '../../../../domain/enums/RideBooking';
 import { HikeNotFound } from '../../../../domain/errors/HikeErrors';
@@ -27,8 +28,8 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
     private readonly transactionManager: ITransactionManager
   ) {}
 
-  async execute(paymentIntentId: string): Promise<RideBooking> {
-    return this.transactionManager.runInTransaction(async () => {
+  async execute(paymentIntentId: string): Promise<ConfirmHikerPaymentDTO> {
+    const booking = await this.transactionManager.runInTransaction(async () => {
       const payment = await this.paymentRepository.findByStripeId(
         paymentIntentId
       );
@@ -51,6 +52,11 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
       if (!ride) throw new RideNotFound();
       if (!hike) throw new HikeNotFound();
       if (!joinRequest) throw new JoinRequestNotFound();
+
+      let booking = await this.ridebookingRepository.findbyPaymentId(
+        payment.getId()!
+      );
+      if (booking) return booking;
 
       const rideBooking = new RideBooking({
         rideId: ride.getRideId()!,
@@ -79,5 +85,14 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
 
       return savedBooking;
     });
+    console.log(booking);
+    const response: ConfirmHikerPaymentDTO = {
+      bookingId: booking.getId()!,
+      paymentId: booking.getPaymentId(),
+      seatsBooked: booking.getSeatsBooked(),
+      amount: booking.getAmount(),
+      platformFee: booking.getPlatformFee(),
+    };
+    return response;
   }
 }
