@@ -7,6 +7,7 @@ import {
   PaymentNotSuccessfull,
 } from '../../../../domain/errors/PaymentError';
 import { RideNotFound } from '../../../../domain/errors/RideErrors';
+import { ITransactionManager } from '../../../providers/ITransactionManager';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
@@ -22,58 +23,61 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
     private readonly rideRepository: IRideRepository,
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly ridebookingRepository: IRideBookingRepository
+    private readonly ridebookingRepository: IRideBookingRepository,
+    private readonly transactionManager: ITransactionManager
   ) {}
 
   async execute(paymentIntentId: string): Promise<RideBooking> {
-    const payment = await this.paymentRepository.findByStripeId(
-      paymentIntentId
-    );
-    if (!payment) throw new PaymentInfoNotFound();
+    return this.transactionManager.runInTransaction(async () => {
+      const payment = await this.paymentRepository.findByStripeId(
+        paymentIntentId
+      );
+      if (!payment) throw new PaymentInfoNotFound();
 
-    const paymentIntent = await this.paymentService.retrievePaymentIntent(
-      paymentIntentId
-    );
-    if (paymentIntent.status !== 'succeeded') throw new PaymentNotSuccessfull();
-    console.log(payment);
+      const paymentIntent = await this.paymentService.retrievePaymentIntent(
+        paymentIntentId
+      );
+      if (paymentIntent.status !== 'succeeded')
+        throw new PaymentNotSuccessfull();
 
-    payment.success();
-    await this.paymentRepository.update(payment.getId()!, payment);
+      payment.success();
+      await this.paymentRepository.update(payment.getId()!, payment);
 
-    const [ride, hike, joinRequest] = await Promise.all([
-      this.rideRepository.findById(payment.getRideId()),
-      this.hikeRepository.findById(payment.getHikeId()),
-      this.joinRequestRepository.findById(payment.getJoinRequestId()),
-    ]);
-    if (!ride) throw new RideNotFound();
-    if (!hike) throw new HikeNotFound();
-    if (!joinRequest) throw new JoinRequestNotFound();
+      const [ride, hike, joinRequest] = await Promise.all([
+        this.rideRepository.findById(payment.getRideId()),
+        this.hikeRepository.findById(payment.getHikeId()),
+        this.joinRequestRepository.findById(payment.getJoinRequestId()),
+      ]);
+      if (!ride) throw new RideNotFound();
+      if (!hike) throw new HikeNotFound();
+      if (!joinRequest) throw new JoinRequestNotFound();
 
-    const rideBooking = new RideBooking({
-      rideId: ride.getRideId()!,
-      hikeId: hike.getHikeId()!,
-      riderId: ride.getRiderId(),
-      hikerId: hike.getUserId()!,
-      joinRequestId: joinRequest.getId()!,
-      paymentId: payment.getId()!,
-      seatsBooked: joinRequest.getSeatsRequested()!,
-      amount: payment.getAmount(),
-      platformFee: payment.getPlatformFee(),
-      pickupLocation: joinRequest.getPickupLocation(),
-      dropoffLocation: joinRequest.getDropoffLocation(),
-      status: RideBookingStatus.CONFIRMED,
+      const rideBooking = new RideBooking({
+        rideId: ride.getRideId()!,
+        hikeId: hike.getHikeId()!,
+        riderId: ride.getRiderId(),
+        hikerId: hike.getUserId()!,
+        joinRequestId: joinRequest.getId()!,
+        paymentId: payment.getId()!,
+        seatsBooked: joinRequest.getSeatsRequested()!,
+        amount: payment.getAmount(),
+        platformFee: payment.getPlatformFee(),
+        pickupLocation: joinRequest.getPickupLocation(),
+        dropoffLocation: joinRequest.getDropoffLocation(),
+        status: RideBookingStatus.CONFIRMED,
+      });
+
+      const savedBooking = await this.ridebookingRepository.create(rideBooking);
+      joinRequest.confirm();
+      hike.setBookingId(savedBooking.getId()!);
+      hike.toggleConfirmed();
+
+      await Promise.all([
+        this.hikeRepository.update(hike.getHikeId(), hike),
+        this.joinRequestRepository.update(joinRequest.getId(), joinRequest),
+      ]);
+
+      return savedBooking;
     });
-
-    const savedBooking = await this.ridebookingRepository.create(rideBooking);
-    joinRequest.confirm();
-    hike.setBookingId(savedBooking.getId()!);
-    hike.toggleConfirmed();
-
-    await Promise.all([
-      this.hikeRepository.update(hike.getHikeId(), hike),
-      this.joinRequestRepository.update(joinRequest.getId(), joinRequest),
-    ]);
-
-    return savedBooking;
   }
 }

@@ -139,7 +139,7 @@ export function RideCard({
       {/* Action Buttons */}
       <div className="flex gap-1.5 items-center">
         <button
-          className="flex-1 border-2 border-slate-900 text-slate-900 py-1.5 rounded-lg font-semibold text-xs hover:bg-slate-900 hover:text-white transition-all duration-200"
+          className="cursor-pointer flex-1 border-2 border-slate-900 text-slate-900 py-1.5 rounded-lg font-semibold text-xs hover:bg-slate-900 hover:text-white transition-all duration-200"
           onClick={() => setSelectedRide(ride)}
         >
           Show Route
@@ -147,7 +147,7 @@ export function RideCard({
 
         {requestStatus === null ? (
           <button
-            className="flex-1 bg-black text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-900 transition-all duration-200 shadow-md active:scale-[0.98]"
+            className="cursor-pointer flex-1 bg-black text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-900 transition-all duration-200 shadow-md active:scale-[0.98]"
             onClick={handleJoinRide}
           >
             Join Ride

@@ -70,12 +70,12 @@ const RideBookingSchema = new Schema<IRideBookingDocument>(
       required: true,
     },
     pickupLocation: {
-      type: String,
-      required: true,
+      type: { type: String, default: 'Point' },
+      coordinates: { type: [Number], required: true },
     },
     dropoffLocation: {
-      type: String,
-      required: true,
+      type: { type: String, default: 'Point' },
+      coordinates: { type: [Number], required: true },
     },
     status: {
       type: String,

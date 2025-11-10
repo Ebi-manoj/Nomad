@@ -1,12 +1,13 @@
-import { Model } from 'mongoose';
+import { Model, ClientSession } from 'mongoose';
 import { IBaseRepository } from '../../application/repositories/IBaseRepository';
 import { IMapper } from '../mappers/IMapper';
 
 export abstract class MongoBaseRepository<TDomain, TModel>
-  implements IBaseRepository<TDomain>
+  implements IBaseRepository<TDomain, ClientSession>
 {
   protected model: Model<TModel>;
   protected mapper: IMapper<TDomain, TModel>;
+  protected session: ClientSession | null = null;
 
   constructor(model: Model<TModel>, mapper: IMapper<TDomain, TModel>) {
     this.model = model;
@@ -34,5 +35,8 @@ export abstract class MongoBaseRepository<TDomain, TModel>
 
   async delete(id: string): Promise<void> {
     await this.model.findByIdAndDelete(id);
+  }
+  setSession(session: ClientSession | null): void {
+    this.session = session;
   }
 }

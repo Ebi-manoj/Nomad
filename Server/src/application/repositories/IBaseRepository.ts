@@ -1,4 +1,4 @@
-export interface IBaseRepository<TDomain> {
+export interface IBaseRepository<TDomain, TSession = unknown> {
   create(data: TDomain): Promise<TDomain>;
   findById(id: string): Promise<TDomain | null>;
   update(
@@ -6,4 +6,5 @@ export interface IBaseRepository<TDomain> {
     data: Partial<TDomain>
   ): Promise<TDomain | null>;
   delete(id: string): Promise<void>;
+  setSession(session: TSession | null): void;
 }
