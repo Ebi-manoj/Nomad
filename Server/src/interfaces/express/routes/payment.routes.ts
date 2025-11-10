@@ -22,5 +22,14 @@ router.post('/create-intent', async (req: Request, res: Response) => {
   );
   return res.status(adapter.statusCode).json(adapter.body);
 });
+router.post(
+  '/confirm/:paymentIntentId',
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      paymentComposer().confirmPayment(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

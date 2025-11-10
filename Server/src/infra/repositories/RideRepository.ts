@@ -42,7 +42,7 @@ export class RideRepository
     const result = await this.model.updateOne(
       { _id: rideId },
       {
-        $inc: { seatsAvailable: -seats },
+        $inc: { seatsAvailable: seats },
       }
     );
     return result.modifiedCount > 0;

@@ -23,7 +23,11 @@ export class PaymentRepository
   }
 
   async findByStripeId(paymentIntentId: string): Promise<Payment | null> {
-    return await this.model.findOne({ stripePaymentId: paymentIntentId });
+    const found = await this.model.findOne({
+      stripePaymentId: paymentIntentId,
+    });
+    if (!found) return null;
+    return this.mapper.toDomain(found);
   }
 
   async findExpiredPayments(): Promise<Payment[]> {

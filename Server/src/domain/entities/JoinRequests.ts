@@ -82,6 +82,9 @@ export class JoinRequest {
   accept() {
     this.status = JoinRequestStatus.ACCEPTED;
   }
+  confirm() {
+    this.status = JoinRequestStatus.CONFIRMED;
+  }
   updateStatus(status: JoinRequestStatus) {
     this.status = status;
     this.updatedAt = new Date();

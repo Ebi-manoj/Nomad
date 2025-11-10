@@ -15,6 +15,7 @@ export const hikeMapper: IMapper<HikeLog, IHikeLog> = {
       hasHelmet: domain.getHasHelmet(),
       seatsRequested: domain.getSeatsRequested(),
       riderId: domain.getRiderId() || null,
+      bookingId: domain.getBookingId() || null,
       status: domain.getStatus(),
       confirmed: domain.getConfirmed(),
     };
@@ -32,6 +33,7 @@ export const hikeMapper: IMapper<HikeLog, IHikeLog> = {
       hasHelmet: persistence.hasHelmet,
       seatsRequested: persistence.seatsRequested,
       riderId: persistence.riderId?.toString() || null,
+      bookingId: persistence.riderId?.toString() || null,
       status: persistence.status,
       confirmed: persistence.confirmed,
       createdAt: persistence.createdAt,

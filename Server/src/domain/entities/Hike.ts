@@ -12,6 +12,7 @@ export interface HikeProps {
   hasHelmet: boolean;
   seatsRequested: number;
   riderId?: string | null;
+  bookingId?: string | null;
   status: HikeStatus;
   confirmed?: boolean;
   createdAt?: Date;
@@ -28,6 +29,7 @@ export class HikeLog {
   private hasHelmet: boolean;
   private seatsRequested: number;
   private riderId: string | null;
+  private bookingId: string | null;
   private status: HikeStatus;
   private confirmed: boolean;
   private readonly createdAt: Date;
@@ -43,6 +45,7 @@ export class HikeLog {
     this.hasHelmet = props.hasHelmet;
     this.seatsRequested = props.seatsRequested;
     this.riderId = props.riderId || null;
+    this.bookingId = props.bookingId || null;
     this.status = props.status;
     this.confirmed = props.confirmed || false;
     this.createdAt = props.createdAt || new Date();
@@ -87,6 +90,12 @@ export class HikeLog {
   }
   getPickupAddress() {
     return this.pickupAddress;
+  }
+  getBookingId() {
+    return this.bookingId;
+  }
+  setBookingId(bookingId: string) {
+    this.bookingId = bookingId;
   }
 
   toggleConfirmed() {

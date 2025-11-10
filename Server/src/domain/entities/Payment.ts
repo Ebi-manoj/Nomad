@@ -107,4 +107,7 @@ export class Payment {
   setExpired() {
     this.status = PaymentStatus.EXPIRED;
   }
+  success() {
+    this.status = PaymentStatus.SUCCESS;
+  }
 }

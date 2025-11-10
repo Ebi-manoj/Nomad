@@ -8,6 +8,7 @@ export enum RideStatus {
 export enum JoinRequestStatus {
   PENDING = 'pending',
   ACCEPTED = 'accepted',
+  CONFIRMED = 'confirmed',
   DECLINED = 'declined',
   EXPIRED = 'expired',
 }

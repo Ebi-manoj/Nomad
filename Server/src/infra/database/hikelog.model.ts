@@ -12,6 +12,7 @@ export interface IHikeLog {
   hasHelmet: boolean;
   seatsRequested: number;
   riderId?: string | null;
+  bookingId?: string | null;
   status: HikeStatus;
   confirmed: boolean;
   createdAt: Date;
@@ -54,6 +55,11 @@ const HikeLogSchema = new Schema<IHikeLog>({
   riderId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    default: null,
+  },
+  bookingId: {
+    type: Schema.Types.ObjectId,
+    ref: 'RideBooking',
     default: null,
   },
   status: {

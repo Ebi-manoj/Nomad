@@ -1,0 +1,6 @@
+export enum RideBookingStatus {
+  CONFIRMED = 'CONFIRMED',
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED',
+  ONGOING = 'ONGOING',
+}
