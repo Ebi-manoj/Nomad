@@ -14,8 +14,6 @@ export class CleanupSeatsReservation implements ICleanupSeatsReservation {
   ) {}
 
   async execute(): Promise<void> {
-    this.logger.info('Cleanup reserved seats executing');
-
     const pendingPayments = await this.paymentRepository.findExpiredPayments();
     for (const payment of pendingPayments) {
       const ride = await this.rideRepository.findById(payment.getRideId());
@@ -38,6 +36,5 @@ export class CleanupSeatsReservation implements ICleanupSeatsReservation {
       payment.setExpired();
       await this.paymentRepository.update(payment.getId()!, payment);
     }
-    this.logger.info('Cleanup reserved seats finshed');
   }
 }

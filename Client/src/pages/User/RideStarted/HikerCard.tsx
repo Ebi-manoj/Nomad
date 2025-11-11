@@ -173,6 +173,12 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
                 </div>
               )}
             </div>
+            {request.status === 'expired' && (
+              <div className="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/20 px-3 py-1.5 rounded-md text-yellow-700 dark:text-yellow-400 text-[11px]">
+                <Clock size={13} />
+                Request Expired
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

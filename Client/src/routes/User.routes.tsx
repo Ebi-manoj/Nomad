@@ -9,6 +9,7 @@ import { RideStarted } from '@/pages/User/RideStarted';
 import { ProtectedSession } from './ProtectedSessions';
 import { Payment } from '@/pages/User/HikerPayment/Payment';
 import { PaymentSuccessPage } from '@/pages/User/HikePaymentSuccess/Index';
+import { HikeStartedPage } from '@/pages/User/HikeConfirmed';
 
 export const UserRoutes = (
   <Route
@@ -32,6 +33,14 @@ export const UserRoutes = (
       element={
         <ProtectedSession requireActiveHike>
           <RideMatching />
+        </ProtectedSession>
+      }
+    />
+    <Route
+      path="hike/started"
+      element={
+        <ProtectedSession requireActiveHike>
+          <HikeStartedPage />
         </ProtectedSession>
       }
     />

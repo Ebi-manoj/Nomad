@@ -24,4 +24,4 @@ export const Documents = {
   Licence: 'licence',
 } as const;
 
-export type JoinRequestStatus = 'pending' | 'accepted' | 'declined';
+export type JoinRequestStatus = 'pending' | 'accepted' | 'expired' | 'declined';
