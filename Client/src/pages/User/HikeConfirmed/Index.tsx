@@ -7,7 +7,6 @@ import {
   User,
   Car,
   Calendar,
-  X,
 } from 'lucide-react';
 import { MapComponent } from '@/components/MapComponent';
 

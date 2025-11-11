@@ -7,3 +7,9 @@ export class RideNotFound extends CustomError {
     super(HttpStatus.NOT_FOUND, message);
   }
 }
+
+export class RideLocationNotFound extends CustomError {
+  constructor(message = 'Ride Location not found') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}

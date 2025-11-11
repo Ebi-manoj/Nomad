@@ -60,14 +60,11 @@ export class GetHikerPaymentInfoUseCase implements IGetHikerPaymentInfoUseCase {
       lng: joinRequest.getDropoffLocation().coordinates[0],
     };
 
-    const distanceAwayfromPickup = await this.googleApi.getDistance(
-      pickup,
-      nearestPickup
-    );
-    const distanceAwayfromDestination = await this.googleApi.getDistance(
-      destination,
-      nearestDestination
-    );
+    const { distance: distanceAwayfromPickup } =
+      await this.googleApi.getDistance(pickup, nearestPickup);
+
+    const { distance: distanceAwayfromDestination } =
+      await this.googleApi.getDistance(destination, nearestDestination);
 
     const rider = await this.userRepository.findById(payment.getRiderId());
     if (!rider) throw new UserNotFound();

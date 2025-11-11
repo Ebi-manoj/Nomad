@@ -26,7 +26,7 @@ export class CreateRideUseCase implements ICreateRideUseCase {
       lng: data.destination.coordinates[1],
     };
 
-    const totalDistance = await this.googleApis.getDistance(
+    const { distance: totalDistance } = await this.googleApis.getDistance(
       pickup,
       destination
     );

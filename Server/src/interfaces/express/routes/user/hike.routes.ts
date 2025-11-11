@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { expressAdapter } from '../../../adapters/express';
 import { hikeComposer } from '../../../../infra/services/composer/user/hike.composer';
+import { ridebookingComposer } from '../../../../infra/services/composer/user/rideBooking.composer';
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
 const router = express.Router();
 
@@ -24,5 +26,16 @@ router.post('/join-ride', async (req: Request, res: Response) => {
   );
   return res.status(adapter.statusCode).json(adapter.body);
 });
+
+router.get(
+  '/:bookingId/booking',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      ridebookingComposer().getRideBooking(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

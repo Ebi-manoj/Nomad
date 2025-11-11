@@ -3,7 +3,10 @@ import { Data, IGoogleApi } from '../../application/providers/IGoogleApi';
 import { env } from '../utils/env';
 
 export class GoogleApiService implements IGoogleApi {
-  async getDistance(pickup: Data, destination: Data): Promise<number> {
+  async getDistance(
+    pickup: Data,
+    destination: Data
+  ): Promise<{ distance: number; duration: number }> {
     console.log(pickup, destination);
 
     const apiKey = env.GOOGLE_MAPS_API_KEY;
@@ -20,9 +23,12 @@ export class GoogleApiService implements IGoogleApi {
         data.routes[0].legs &&
         data.routes[0].legs.length > 0
       ) {
-        const distanceMeters = data.routes[0].legs[0].distance.value;
-        const distanceKm = distanceMeters / 1000;
-        return distanceKm;
+        const leg = data.routes[0].legs[0];
+
+        const distance = leg.distance.value / 1000;
+        const duration = leg.duration.value / 60;
+
+        return { distance, duration };
       }
 
       throw new Error('No route found');
