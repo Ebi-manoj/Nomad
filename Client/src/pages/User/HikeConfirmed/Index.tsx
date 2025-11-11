@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   Clock,
   Navigation,
@@ -8,69 +10,67 @@ import {
   Car,
   Calendar,
 } from 'lucide-react';
-import { MapComponent } from '@/components/MapComponent';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { getRideBookingThunk } from '@/store/features/user/rideBooking/rideBooking.thunk';
+import type { RootState } from '@/store/store';
+import { timeFormater } from '@/utils/dateFormater';
+import { HikeStartedMap } from './HikeMap';
+import { latlangFormat } from '@/utils/LatLangFormater';
 
 export const HikeStartedPage = () => {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [eta, setEta] = useState('4 MIN');
-
-  // Sample ride booking data
-  const rideBooking = {
-    rideId: 'R12345',
-    hikerId: 'H67890',
-    riderId: 'RD001',
-    seatsBooked: 2,
-    amount: 250,
-    platformFee: 25,
-    pickupLocation: { coordinates: [76.2673, 9.9312] },
-    dropoffLocation: { coordinates: [76.512, 10.5276] },
-    status: 'IN_PROGRESS',
-  };
-
-  // Sample rider and ride details
-  const rider = {
-    name: 'Rahul Kumar',
-    rating: 4.8,
-    totalRides: 342,
-    vehicleNumber: 'KL 07 AB 1234',
-    vehicleModel: 'Honda City',
-    phone: '+91 98765 43210',
-  };
-
-  const rideDetails = {
-    hikeName: 'Thiruvanathapuram - Kochi',
-    startLocation: 'Thiruvanathapuram',
-    destination: 'Kochi',
-    departureTime: '10:30 AM',
-    arrivalTime: '2:30 PM',
-    distance: '10km',
-    duration: '20min',
-  };
+  const dispatch = useAppDispatch();
+  const { bookingId } = useParams();
+  const { booking, loading } = useSelector(
+    (state: RootState) => state.rideBooking
+  );
+  const [departure, setDeparture] = useState('');
+  const [estimation, setEstimation] = useState('');
+  useEffect(() => {
+    if (!booking) return;
+    setDeparture(timeFormater(rideDetails.departure));
+    setEstimation(timeFormater(rideDetails.duration + rideDetails.departure));
+  }, [booking]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+    if (!bookingId) return;
+    dispatch(getRideBookingThunk(bookingId));
+  }, [bookingId, dispatch]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading ride details...</p>
+      </div>
+    );
+  }
+
+  if (!booking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">No ride details found.</p>
+      </div>
+    );
+  }
+
+  const { rideBooking, rider, rideDetails } = booking;
+  const riderLocation = rider.currentLocation;
+  const hikerPickup = latlangFormat(rideBooking.pickupLocation, false);
+  const hikerDestination = latlangFormat(rideBooking.dropoffLocation, false);
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-white shadow-sm p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div>
-            <h1 className="text-lg font-semibold">
-              Hiking {rideDetails.hikeName}
-            </h1>
+            <h1 className="text-lg font-semibold">Ride in Progress</h1>
             <p className="text-sm text-gray-500">
-              Ride ID: {rideBooking.rideId}
+              Booking ID: {rideBooking.rideId}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
-            In Progress
+            {rideBooking.status}
           </span>
           <button className="cursor-pointer flex items-center gap-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm rounded-full transition">
             Cancel Ride
@@ -79,9 +79,9 @@ export const HikeStartedPage = () => {
       </div>
 
       <div className="w-full mx-auto p-4 grid md:grid-cols-2 gap-4">
-        {/* Left Panel - Ride Details */}
+        {/* Left Panel */}
         <div className="space-y-4">
-          {/* Rider Information Card */}
+          {/* Rider Info */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <User className="w-5 h-5" />
@@ -99,8 +99,6 @@ export const HikeStartedPage = () => {
                     <span className="text-yellow-500 mr-1">★</span>
                     {rider.rating}
                   </span>
-                  <span>•</span>
-                  <span>{rider.totalRides} rides</span>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -113,7 +111,7 @@ export const HikeStartedPage = () => {
               </div>
             </div>
 
-            {/* Vehicle Details */}
+            {/* Vehicle */}
             <div className="flex items-center gap-3 mb-6 p-4 bg-gray-50 rounded-lg">
               <Car className="w-6 h-6 text-gray-600" />
               <div>
@@ -122,7 +120,7 @@ export const HikeStartedPage = () => {
               </div>
             </div>
 
-            {/* Trip Timeline */}
+            {/* Pickup & Drop */}
             <div className="space-y-4">
               <div className="flex items-start gap-4">
                 <div className="flex flex-col items-center">
@@ -135,14 +133,14 @@ export const HikeStartedPage = () => {
                       PICKUP
                     </span>
                     <span className="text-xs text-gray-500">
-                      Rider is on the way to your pickup location
+                      Rider is on the way
                     </span>
                   </div>
                   <p className="font-semibold text-gray-900">
-                    {rideDetails.startLocation}
+                    {rideDetails.pickupAddress}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {rideDetails.departureTime}
+                    Departure: {departure}
                   </p>
                 </div>
               </div>
@@ -156,11 +154,9 @@ export const HikeStartedPage = () => {
                     DROPOFF
                   </span>
                   <p className="font-semibold text-gray-900">
-                    {rideDetails.destination}
+                    {rideDetails.dropoffAddress}
                   </p>
-                  <p className="text-sm text-gray-500">
-                    Est. {rideDetails.arrivalTime}
-                  </p>
+                  <p className="text-sm text-gray-500">Est. {estimation}</p>
                 </div>
               </div>
             </div>
@@ -173,15 +169,17 @@ export const HikeStartedPage = () => {
               <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
                 <Clock className="w-5 h-5 text-blue-600" />
                 <div>
-                  <p className="text-xs text-gray-600">Arrival in</p>
-                  <p className="font-semibold">{rideDetails.duration}</p>
+                  <p className="text-xs text-gray-600">Duration</p>
+                  <p className="font-semibold">
+                    {Math.round(rideDetails.duration)} mins
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
                 <Navigation className="w-5 h-5 text-purple-600" />
                 <div>
                   <p className="text-xs text-gray-600">Distance</p>
-                  <p className="font-semibold">{rideDetails.distance}</p>
+                  <p className="font-semibold">{rideDetails.distance} km</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
@@ -202,9 +200,13 @@ export const HikeStartedPage = () => {
           </div>
         </div>
 
-        {/* Right Panel - Map */}
+        {/* Map Section */}
         <div className="space-y-4">
-          <MapComponent />
+          <HikeStartedMap
+            riderLocation={riderLocation}
+            pickup={hikerPickup}
+            destination={hikerDestination}
+          />
         </div>
       </div>
     </div>

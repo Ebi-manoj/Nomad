@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { createHike } from '@/store/features/user/hike/hike.thunk';
 import { useNavigate } from 'react-router-dom';
 import { CreateHikeRideLayout } from '@/layouts/CreateHikeRideLayout';
+import { toast } from 'sonner';
 
 export const Hike = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -51,7 +52,9 @@ export const Hike = () => {
     try {
       await dispatch(createHike(reqDto)).unwrap();
       navigate('/hike/match');
-    } catch (error) {}
+    } catch (error) {
+      toast.error(typeof error == 'string' && error);
+    }
   };
 
   return (

@@ -17,7 +17,7 @@ export class RideMatchService implements IRideMatchService {
     ride: RideLog,
     context: { pickup: GeoJSON.Point; destination: GeoJSON.Point },
     geo: IGeoService
-  ): Promise<Omit<RideMatchResponseDTO, 'requestStatus'> | null> {
+  ): Promise<Omit<RideMatchResponseDTO, 'requestStatus' | 'paymentId'> | null> {
     const route = ride.getRoute().coordinates;
     // Validate ride route
     if (!route || route.length < 2) return null;
@@ -54,6 +54,7 @@ export class RideMatchService implements IRideMatchService {
       rideRoute
     );
 
+    console.log('haaai');
     // Reject if pickup > 2 km or destination > 5 km from ride’s path
     if (pickupDistanceToRoute > 2) return null;
     if (destinationDistanceToRoute > 5) return null;
@@ -88,7 +89,6 @@ export class RideMatchService implements IRideMatchService {
       nearestDestPoint,
       rideRoute
     );
-
     const pickupAheadDiff = pickupProgressKm - riderProgressKm;
     const destinationAheadDiff = destinationProgressKm - riderProgressKm;
     if (pickupAheadDiff < -0.5 || destinationAheadDiff < 0.5) {

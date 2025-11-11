@@ -7,5 +7,5 @@ export interface IRideMatchService {
     ride: RideLog,
     context: { pickup: GeoJSON.Point; destination: GeoJSON.Point },
     geo: IGeoService
-  ): Promise<Omit<RideMatchResponseDTO, 'requestStatus'> | null>;
+  ): Promise<Omit<RideMatchResponseDTO, 'requestStatus' | 'paymentId'> | null>;
 }

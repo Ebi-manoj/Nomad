@@ -19,8 +19,6 @@ export class LocationRepository implements ILocationRepository {
       latitude: location.lat,
       member: location.rideId,
     });
-
-    console.log('updated');
   }
 
   async getLocation(id: string): Promise<Location | null> {

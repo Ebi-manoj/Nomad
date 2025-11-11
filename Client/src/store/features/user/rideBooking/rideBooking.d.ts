@@ -1,10 +1,3 @@
-import { Position } from 'geojson';
-
-export interface RideBookingRequestDTO {
-  bookingId: string;
-  userId: string;
-}
-
 export interface RideBookingResponseDTO {
   rideBooking: {
     bookingId: string;
@@ -15,8 +8,8 @@ export interface RideBookingResponseDTO {
     seatsBooked: number;
     amount: number;
     platformFee: number;
-    pickupLocation: Position;
-    dropoffLocation: Position;
+    pickupLocation: [number, number];
+    dropoffLocation: [number, number];
     status: string;
   };
   rider: {
@@ -33,4 +26,10 @@ export interface RideBookingResponseDTO {
     distance: number;
     duration: number;
   };
+}
+
+export interface RideBookingState {
+  booking: RideBookingResponseDTO | null;
+  loading: boolean;
+  error: string;
 }

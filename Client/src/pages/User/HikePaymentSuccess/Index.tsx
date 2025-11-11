@@ -45,7 +45,8 @@ export const PaymentSuccessPage = () => {
       return () => clearTimeout(timer);
     }
     if (status === 'success' && countdown === 0) {
-      window.location.href = '/hike/started';
+      if (!bookingDetails) return;
+      window.location.href = `/hike/started/${bookingDetails.bookingId}`;
     }
   }, [status, countdown]);
 
@@ -57,8 +58,9 @@ export const PaymentSuccessPage = () => {
     }, 2000);
   };
 
-  const handleRedirect = () => {
-    window.location.href = '/hike/started';
+  const handleRedirect = (id: string) => {
+    console.log(id);
+    window.location.href = `/hike/started/${id}`;
   };
 
   //  Loading State
@@ -71,7 +73,7 @@ export const PaymentSuccessPage = () => {
     return (
       <PaymentSuccess
         countdown={countdown}
-        handleRedirect={handleRedirect}
+        handleRedirect={() => handleRedirect(bookingDetails.bookingId)}
         bookingDetails={bookingDetails}
       />
     );

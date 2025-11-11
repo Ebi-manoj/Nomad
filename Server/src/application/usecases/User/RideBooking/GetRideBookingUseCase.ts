@@ -66,6 +66,7 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
 
     return {
       rideBooking: {
+        bookingId: booking.getId()!,
         rideId: booking.getRideId(),
         hikeId: booking.getHikeId(),
         riderId: booking.getRiderId(),
@@ -73,15 +74,16 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
         seatsBooked: booking.getSeatsBooked(),
         amount: booking.getAmount(),
         platformFee: booking.getPlatformFee(),
-        status: booking.getStatus(),
-        pickupLocation: booking.getPickupLocation(),
-        dropoffLocation: booking.getDropoffLocation(),
+        status: hike.getStatus(),
+        pickupLocation: booking.getPickupLocation().coordinates,
+        dropoffLocation: booking.getDropoffLocation().coordinates,
       },
       rider: {
         name: rider.getFullName(),
         rating: 4.5,
         vehicleNumber: ride.getVehicleNumber(),
         vehicleModel: ride.getVehicleModel(),
+        currentLocation: riderLocationCoord,
       },
       rideDetails: {
         pickupAddress: hike.getPickupAddress(),

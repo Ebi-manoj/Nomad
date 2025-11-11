@@ -11,8 +11,6 @@ export class RiderLocationController implements IRiderLocationController {
     data: UpdateLocationDTO
   ): Promise<void> {
     try {
-      console.log(data);
-
       await this.updateLocationUseCase.execute(data);
       socket.emit('location:update:success', {
         message: 'Location updated successfully',
