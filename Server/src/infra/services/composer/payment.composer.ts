@@ -1,7 +1,7 @@
 import { GetHikerPaymentInfoUseCase } from '../../../application/usecases/User/Hike/GetHikerPaymentInfo';
 import { ConfirmHikerPaymentUseCase } from '../../../application/usecases/User/payment/ConfirmHikerPayment';
 import { CreatePaymentIntentUseCase } from '../../../application/usecases/User/payment/CreatePaymentIntent';
-import { CreateTasksUseCase } from '../../../application/usecases/User/Ride/CreateTasksUseCase';
+import { CreateTasksUseCase } from '../../../application/usecases/User/Task/CreateTasksUseCase';
 import { IPaymentController } from '../../../interfaces/http/controllers/IPaymentController';
 import { PaymentController } from '../../../interfaces/http/controllers/payment.controller';
 import { MongoTransactionManager } from '../../database/MongoTransactionManger';

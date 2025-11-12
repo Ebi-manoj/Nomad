@@ -23,6 +23,7 @@ export class CreateTasksUseCase implements ICreateTasksUseCase {
     const isExist = await this.taskRepository.findByRideBookingId(
       booking.getId()!
     );
+    console.log(isExist);
     if (isExist.length > 0) return;
 
     const ride = await this.rideRepository.findById(booking.getRideId());

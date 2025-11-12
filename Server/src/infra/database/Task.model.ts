@@ -82,6 +82,6 @@ const TaskSchema = new Schema<ITaskDocument>(
 );
 
 TaskSchema.index({ riderId: 1, rideId: 1, status: 1 });
-TaskSchema.index({ rideBookingId: 1 });
+TaskSchema.index({ rideBookingId: 1, taskType: 1 }, { unique: true });
 
 export const TaskModel = mongoose.model<ITaskDocument>('Task', TaskSchema);

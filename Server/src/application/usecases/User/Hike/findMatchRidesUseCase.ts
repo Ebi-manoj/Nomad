@@ -71,7 +71,6 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
         });
       }
     }
-    console.log(matchedRiders);
 
     return matchedRiders;
   }
