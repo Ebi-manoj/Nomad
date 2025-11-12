@@ -18,6 +18,7 @@ import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { FareCalculator } from '../../../services/FareCalculator';
 import { IAcceptJoinRequestUseCase } from './IAcceptJoinRequest';
+import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 
 export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
   constructor(
@@ -25,7 +26,8 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
     private readonly rideRepository: IRideRepository,
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly paymentRepository: IPaymentRepository,
-    private readonly fareCalculator: FareCalculator
+    private readonly fareCalculator: FareCalculator,
+    private readonly realtimeGateway: IRealtimeGateway
   ) {}
 
   async execute(data: AcceptJoinRequestDTO): Promise<AcceptJoinResponseDTO> {
@@ -72,7 +74,7 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
       ]);
       if (!updatedJoinRequest) throw new UpdateFailed();
 
-      return {
+      const response = {
         joinRequestId: updatedJoinRequest.getId()!,
         paymentId: savedPayment.getId()!,
         hikerId: hike.getUserId(),
@@ -82,6 +84,15 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
         status: updatedJoinRequest.getStatus(),
         expiresAt: payment.getExpiresAt(),
       };
+
+      await this.realtimeGateway.emitToRoom(
+        'hiker',
+        response.hikeId,
+        'joinRequest:accepted',
+        response
+      );
+
+      return response;
     } catch (error) {
       await this.rideRepository.releaseSeats(
         ride.getRideId()!,

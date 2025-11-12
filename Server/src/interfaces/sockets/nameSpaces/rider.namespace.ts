@@ -11,7 +11,7 @@ export function setupRiderNameSpace(
     console.log(`Socket connected${socket.id}`);
 
     socket.on('location:update', data => {
-      controller.handleLocationUpdate(socket, data);
+      controller.handleLocationUpdate(socket.id, data);
     });
 
     socket.on('ride:join', (rideId: string) => {

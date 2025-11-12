@@ -1,23 +1,36 @@
-import { Socket } from 'socket.io';
 import { UpdateLocationDTO } from '../../../domain/dto/RideDTO';
 import { IRiderLocationController } from './IRiderLocationController';
 import { IUpdateLocationUseCase } from '../../../application/usecases/User/Ride/IUpdateLocationUseCase';
+import { IRealtimeGateway } from '../../../application/providers/IRealtimeGateway';
 
 export class RiderLocationController implements IRiderLocationController {
-  constructor(private readonly updateLocationUseCase: IUpdateLocationUseCase) {}
+  constructor(
+    private readonly updateLocationUseCase: IUpdateLocationUseCase,
+    private readonly realtimeGateway: IRealtimeGateway
+  ) {}
 
   async handleLocationUpdate(
-    socket: Socket,
+    socketId: string,
     data: UpdateLocationDTO
   ): Promise<void> {
     try {
       await this.updateLocationUseCase.execute(data);
-      socket.emit('location:update:success', {
-        message: 'Location updated successfully',
-      });
+      await this.realtimeGateway.emitToSocket(
+        socketId,
+        'location:update:success',
+        {
+          message: 'Location updated successfully',
+        }
+      );
     } catch (error) {
       console.log(error);
-      socket.emit('location:update:error', { message: 'An error occured' });
+      await this.realtimeGateway.emitToSocket(
+        socketId,
+        'location:update:error',
+        {
+          message: 'An error occured',
+        }
+      );
     }
   }
 }

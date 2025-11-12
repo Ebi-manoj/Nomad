@@ -6,6 +6,7 @@ import { GetPendingRequestUseCase } from '../../../../application/usecases/User/
 import { IRideController } from '../../../../interfaces/http/controllers/IRideController';
 import { RideController } from '../../../../interfaces/http/controllers/ride.controller';
 import { SocketServer } from '../../../../interfaces/sockets/socketInit';
+import { SocketRealtimeGateway } from '../../../providers/SocketRealtimeGateway';
 import { GoogleApiService } from '../../../providers/GoogleApi';
 import { HikeRepository } from '../../../repositories/HikeRepository';
 import { JoinRequestRepository } from '../../../repositories/JoinRequestReqpository';
@@ -22,6 +23,7 @@ export function rideComposer(): IRideController {
   const paymentRepository = new PaymentRepository();
   const fareCalculator = new FareCalculator();
   const io = SocketServer.getIo();
+  const realtimeGateway = new SocketRealtimeGateway(io);
   const createRideUseCase = new CreateRideUseCase(
     userRepository,
     googleApis,
@@ -39,19 +41,20 @@ export function rideComposer(): IRideController {
     rideRepository,
     joinRequestRepository,
     paymentRepository,
-    fareCalculator
+    fareCalculator,
+    realtimeGateway
   );
 
   const declienJoinRequestUseCase = new DeclineJoinRequestUseCase(
     joinRequestRepository,
-    rideRepository
+    rideRepository,
+    realtimeGateway
   );
 
   return new RideController(
     createRideUseCase,
     getPendingRequestUseCase,
     acceptJoinRequestUseCase,
-    declienJoinRequestUseCase,
-    io
+    declienJoinRequestUseCase
   );
 }

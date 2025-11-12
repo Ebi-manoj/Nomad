@@ -13,11 +13,13 @@ import { RideNotFound } from '../../../../domain/errors/RideErrors';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IDeclineJoinRequestUseCase } from './IDeclineJoinRequest';
+import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 
 export class DeclineJoinRequestUseCase implements IDeclineJoinRequestUseCase {
   constructor(
     private readonly joinRequestRepository: IJoinRequestRepository,
-    private readonly rideRepository: IRideRepository
+    private readonly rideRepository: IRideRepository,
+    private readonly realtimeGateway: IRealtimeGateway
   ) {}
   async execute(data: DeclineJoinRequestDTO): Promise<DeclineJoinResponseDTO> {
     const joinRequest = await this.joinRequestRepository.findById(
@@ -40,11 +42,20 @@ export class DeclineJoinRequestUseCase implements IDeclineJoinRequestUseCase {
     );
     if (!updated) throw new UpdateFailed();
 
-    return {
+    const response = {
       joinRequestId: updated.getId()!,
       rideId: ride.getRideId()!,
       hikeId: updated.getHikeId(),
       status: updated.getStatus(),
     };
+
+    await this.realtimeGateway.emitToRoom(
+      'hiker',
+      response.hikeId,
+      'joinRequest:declined',
+      response
+    );
+
+    return response;
   }
 }

@@ -7,6 +7,7 @@ import { IRideRepository } from '../../../repositories/IRideRepository';
 import { ITaskRepository } from '../../../repositories/ITaskRepository';
 import { IPickupOTPService } from '../../../services/IPickupOTPService';
 import { ITaskPrioritizationService } from '../../../services/ITaskPrioritizationService';
+import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 import { ICreateTasksUseCase } from './ICreateTaskUseCase';
 
 export class CreateTasksUseCase implements ICreateTasksUseCase {
@@ -16,7 +17,8 @@ export class CreateTasksUseCase implements ICreateTasksUseCase {
     private readonly hikeRepository: IHikeRepository,
     private readonly pickupOTPService: IPickupOTPService,
     private readonly taskPrioritizationService: ITaskPrioritizationService,
-    private readonly taskRepository: ITaskRepository
+    private readonly taskRepository: ITaskRepository,
+    private readonly realtimeGateway: IRealtimeGateway
   ) {}
 
   async execute(booking: RideBooking): Promise<void> {
@@ -105,21 +107,23 @@ export class CreateTasksUseCase implements ICreateTasksUseCase {
       }
     }
 
-    // Save new tasks
     for (const task of tasksToSave) {
       await this.taskRepository.create(task);
     }
 
-    // // Notify rider via socket
-    // this.io
-    //   .of('/rider')
-    //   .to(booking.getRideId())
-    //   .emit('ride:booking:confirmed', {
-    //     bookingId: booking.getId(),
-    //     rideId: booking.getRideId(),
-    //     hikerId: booking.getHikerId(),
-    //     message: 'New ride booking confirmed. Check your tasks!',
-    //     tasksCount: prioritizedTasks.filter(t => t.getStatus() === TaskStatus.PENDING).length,
-    //   });
+    await this.realtimeGateway.emitToRoom(
+      'rider',
+      booking.getRideId(),
+      'ride:booking:confirmed',
+      {
+        bookingId: booking.getId(),
+        rideId: booking.getRideId(),
+        hikerId: booking.getHikerId(),
+        message: 'New ride booking confirmed. Check your tasks!',
+        tasksCount: prioritizedTasks.filter(
+          t => t.getStatus() === TaskStatus.PENDING
+        ).length,
+      }
+    );
   }
 }

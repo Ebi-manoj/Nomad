@@ -7,6 +7,7 @@ import { FindMatchRideUseCase } from '../../../../application/usecases/User/Hike
 import { HikeController } from '../../../../interfaces/http/controllers/hike.controller';
 import { IHikeController } from '../../../../interfaces/http/controllers/IHikeController';
 import { SocketServer } from '../../../../interfaces/sockets/socketInit';
+import { SocketRealtimeGateway } from '../../../providers/SocketRealtimeGateway';
 import { GoogleApiService } from '../../../providers/GoogleApi';
 import { TurfGeoService } from '../../../providers/turfGeroService';
 import { HikeRepository } from '../../../repositories/HikeRepository';
@@ -27,6 +28,7 @@ export function hikeComposer(): IHikeController {
   const paymentRepository = new PaymentRepository();
   const fareCalculator = new FareCalculator();
   const io = SocketServer.getIo();
+  const realtimeGateway = new SocketRealtimeGateway(io);
   const rideMatchService = new RideMatchService(
     userRepository,
     durationCalculator,
@@ -54,13 +56,13 @@ export function hikeComposer(): IHikeController {
     rideRepository,
     hikeRepository,
     fareCalculator,
-    userRepository
+    userRepository,
+    realtimeGateway
   );
 
   return new HikeController(
     createHikeUseCase,
     findMatchRidesUseCase,
-    createJoinRequestUseCase,
-    io
+    createJoinRequestUseCase
   );
 }

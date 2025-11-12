@@ -18,6 +18,7 @@ import { joinRequestMapper } from '../../../mappers/JoinRequestMapper';
 import { UserNotFound } from '../../../../domain/errors/CustomError';
 import { JoinRequestStatus } from '../../../../domain/enums/Ride';
 import { ICreateJoinRequestUseCase } from './ICreateJoinRequestUseCase';
+import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 
 export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
   constructor(
@@ -25,7 +26,8 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     private readonly rideRepository: IRideRepository,
     private readonly hikeRepository: IHikeRepository,
     private readonly fareCalculator: FareCalculator,
-    private readonly userRepository: IUserRepository
+    private readonly userRepository: IUserRepository,
+    private readonly realtimeGateway: IRealtimeGateway
   ) {}
 
   async execute(data: CreateJoinRequestDTO): Promise<JoinRequestResponseDTO> {
@@ -60,6 +62,15 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     const saved = await this.joinRequestRepository.create(joinRequest);
     const user = await this.userRepository.findById(hike.getUserId());
     if (!user) throw new UserNotFound();
-    return joinRequestMapper(saved, hike, user);
+    const response = joinRequestMapper(saved, hike, user);
+
+    await this.realtimeGateway.emitToRoom(
+      'rider',
+      response.rideId,
+      'join-request:new',
+      response
+    );
+
+    return response;
   }
 }

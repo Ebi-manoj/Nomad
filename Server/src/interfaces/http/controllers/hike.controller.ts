@@ -8,7 +8,6 @@ import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IHikeController } from './IHikeController';
-import { Server } from 'socket.io';
 import { ICreateHikeUseCase } from '../../../application/usecases/User/Hike/ICreateHikeUseCase';
 import { IFindMatchRideUseCase } from '../../../application/usecases/User/Hike/IFindMatchRideUseCase';
 import { ICreateJoinRequestUseCase } from '../../../application/usecases/User/Hike/ICreateJoinRequestUseCase';
@@ -17,8 +16,7 @@ export class HikeController implements IHikeController {
   constructor(
     private readonly createHikeUseCase: ICreateHikeUseCase,
     private readonly findMatchRidesUseCase: IFindMatchRideUseCase,
-    private readonly createJoinRequestUseCase: ICreateJoinRequestUseCase,
-    private io: Server
+    private readonly createJoinRequestUseCase: ICreateJoinRequestUseCase
   ) {}
   async createHike(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto: CreateHikeDTO = httpRequest.body as CreateHikeDTO;
@@ -38,9 +36,6 @@ export class HikeController implements IHikeController {
     const dto = httpRequest.body as CreateJoinRequestDTO;
     const result = await this.createJoinRequestUseCase.execute(dto);
     const response = ApiDTO.success(result);
-
-    this.io.of('/rider').to(result.rideId).emit('join-request:new', result);
-
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 }

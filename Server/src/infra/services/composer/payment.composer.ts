@@ -18,6 +18,8 @@ import { MongoUserRepository } from '../../repositories/UserRepository';
 import { StripePaymentService } from '../PaymentService';
 import { PickupOTPService } from '../PickupOTPService';
 import { TaskPrioritizationService } from '../TaskPrioritizationService';
+import { SocketServer } from '../../../interfaces/sockets/socketInit';
+import { SocketRealtimeGateway } from '../../providers/SocketRealtimeGateway';
 
 export function paymentComposer(): IPaymentController {
   const paymentRepository = new PaymentRepository();
@@ -33,6 +35,8 @@ export function paymentComposer(): IPaymentController {
   const taskPrioritization = new TaskPrioritizationService(googleApi);
   const taskRepository = new TaskRepository();
   const logger = new WinstonLogger();
+  const io = SocketServer.getIo();
+  const realtimeGateway = new SocketRealtimeGateway(io);
 
   const transactionManager = new MongoTransactionManager([
     paymentRepository,
@@ -61,7 +65,8 @@ export function paymentComposer(): IPaymentController {
     hikeRepository,
     pickupOTPService,
     taskPrioritization,
-    taskRepository
+    taskRepository,
+    realtimeGateway
   );
 
   const confirmHikerPaymentUseCase = new ConfirmHikerPaymentUseCase(

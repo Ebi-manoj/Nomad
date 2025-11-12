@@ -9,7 +9,6 @@ import {
   AcceptJoinRequestDTO,
   DeclineJoinRequestDTO,
 } from '../../../domain/dto/RideMatch';
-import { Server } from 'socket.io';
 import { ICreateRideUseCase } from '../../../application/usecases/User/Ride/ICreateRideUseCase';
 import { IGetPendingRequestUseCase } from '../../../application/usecases/User/Ride/IGetPendingRequestUseCase';
 import { IAcceptJoinRequestUseCase } from '../../../application/usecases/User/Ride/IAcceptJoinRequest';
@@ -20,8 +19,7 @@ export class RideController implements IRideController {
     private readonly createRideUseCase: ICreateRideUseCase,
     private readonly getPendingRequestUseCase: IGetPendingRequestUseCase,
     private readonly acceptJoinRequestUseCase: IAcceptJoinRequestUseCase,
-    private readonly declienJoinRequestUseCase: IDeclineJoinRequestUseCase,
-    private readonly io: Server
+    private readonly declienJoinRequestUseCase: IDeclineJoinRequestUseCase
   ) {}
 
   async createRide(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -46,7 +44,6 @@ export class RideController implements IRideController {
     const dto: AcceptJoinRequestDTO = { ...data, riderId: riderId! };
 
     const result = await this.acceptJoinRequestUseCase.execute(dto);
-    this.io.of('/hiker').to(result.hikeId).emit('joinRequest:accepted', result);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -57,7 +54,6 @@ export class RideController implements IRideController {
 
     const result = await this.declienJoinRequestUseCase.execute(dto);
     const response = ApiDTO.success(result);
-    this.io.of('/hiker').to(result.hikeId).emit('joinRequest:declined', result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 }
