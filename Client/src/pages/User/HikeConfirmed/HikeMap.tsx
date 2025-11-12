@@ -147,8 +147,8 @@ export const HikeStartedMap = ({
         path={hikerPath}
         options={{
           strokeOpacity: 0,
-          strokeWeight: 0, // Add this - crucial to remove the gray line
-          strokeColor: 'transparent', // Make stroke transparent
+          strokeWeight: 0,
+          strokeColor: 'transparent',
           icons: [
             {
               icon: {

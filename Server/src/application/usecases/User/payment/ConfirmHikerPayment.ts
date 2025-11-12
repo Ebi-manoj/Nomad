@@ -85,7 +85,6 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
 
       return savedBooking;
     });
-    console.log(booking);
     const response: ConfirmHikerPaymentDTO = {
       bookingId: booking.getId()!,
       paymentId: booking.getPaymentId(),
