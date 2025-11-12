@@ -1,6 +1,7 @@
 import { GetHikerPaymentInfoUseCase } from '../../../application/usecases/User/Hike/GetHikerPaymentInfo';
 import { ConfirmHikerPaymentUseCase } from '../../../application/usecases/User/payment/ConfirmHikerPayment';
 import { CreatePaymentIntentUseCase } from '../../../application/usecases/User/payment/CreatePaymentIntent';
+import { CreateTasksUseCase } from '../../../application/usecases/User/Ride/CreateTasksUseCase';
 import { IPaymentController } from '../../../interfaces/http/controllers/IPaymentController';
 import { PaymentController } from '../../../interfaces/http/controllers/payment.controller';
 import { MongoTransactionManager } from '../../database/MongoTransactionManger';
@@ -8,11 +9,15 @@ import { GoogleApiService } from '../../providers/GoogleApi';
 import { WinstonLogger } from '../../providers/winstonLogger';
 import { HikeRepository } from '../../repositories/HikeRepository';
 import { JoinRequestRepository } from '../../repositories/JoinRequestReqpository';
+import { LocationRepository } from '../../repositories/LocationRepository';
 import { PaymentRepository } from '../../repositories/PaymentRepository';
 import { RideBookingRepository } from '../../repositories/RideBookingRepository';
 import { RideRepository } from '../../repositories/RideRepository';
+import { TaskRepository } from '../../repositories/TaskRepository';
 import { MongoUserRepository } from '../../repositories/UserRepository';
 import { StripePaymentService } from '../PaymentService';
+import { PickupOTPService } from '../PickupOTPService';
+import { TaskPrioritizationService } from '../TaskPrioritizationService';
 
 export function paymentComposer(): IPaymentController {
   const paymentRepository = new PaymentRepository();
@@ -23,6 +28,10 @@ export function paymentComposer(): IPaymentController {
   const paymentService = new StripePaymentService();
   const rideRepository = new RideRepository();
   const rideBookingRepository = new RideBookingRepository();
+  const locationRepository = new LocationRepository();
+  const pickupOTPService = new PickupOTPService();
+  const taskPrioritization = new TaskPrioritizationService(googleApi);
+  const taskRepository = new TaskRepository();
   const logger = new WinstonLogger();
 
   const transactionManager = new MongoTransactionManager([
@@ -46,6 +55,15 @@ export function paymentComposer(): IPaymentController {
     logger
   );
 
+  const createTasksUseCase = new CreateTasksUseCase(
+    rideRepository,
+    locationRepository,
+    hikeRepository,
+    pickupOTPService,
+    taskPrioritization,
+    taskRepository
+  );
+
   const confirmHikerPaymentUseCase = new ConfirmHikerPaymentUseCase(
     paymentService,
     paymentRepository,
@@ -53,7 +71,8 @@ export function paymentComposer(): IPaymentController {
     joinRepository,
     hikeRepository,
     rideBookingRepository,
-    transactionManager
+    transactionManager,
+    createTasksUseCase
   );
 
   return new PaymentController(

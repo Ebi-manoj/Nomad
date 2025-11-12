@@ -15,6 +15,7 @@ import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IPaymentService } from '../../../services/IPaymentService';
+import { ICreateTasksUseCase } from '../Ride/ICreateTaskUseCase';
 import { IConfirmHikerPayment } from './IConfirmHikerPayment';
 
 export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
@@ -25,7 +26,8 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly hikeRepository: IHikeRepository,
     private readonly ridebookingRepository: IRideBookingRepository,
-    private readonly transactionManager: ITransactionManager
+    private readonly transactionManager: ITransactionManager,
+    private readonly createTasksUseCase: ICreateTasksUseCase
   ) {}
 
   async execute(paymentIntentId: string): Promise<ConfirmHikerPaymentDTO> {
@@ -85,6 +87,9 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
 
       return savedBooking;
     });
+
+    await this.createTasksUseCase.execute(booking);
+
     const response: ConfirmHikerPaymentDTO = {
       bookingId: booking.getId()!,
       paymentId: booking.getPaymentId(),

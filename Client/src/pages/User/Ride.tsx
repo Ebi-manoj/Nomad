@@ -13,6 +13,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { createRide } from '@/store/features/user/ride/ride.thunk';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { FeatureAccessDenied } from '@/components/RidePageShield';
 
 export const Ride = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -69,7 +70,8 @@ export const Ride = () => {
       toast.error(typeof error == 'string' && error);
     }
   };
-
+  if (!user?.aadhaarVerified || !user?.licenceVerified)
+    return <FeatureAccessDenied />;
   return (
     <CreateHikeRideLayout title="Start your Journey">
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
