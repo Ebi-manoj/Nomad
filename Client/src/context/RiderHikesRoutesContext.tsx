@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
 
 interface RouteData {
-  pickup: { lat: number; lng: number };
-  dropoff: { lat: number; lng: number };
+  pickup?: { lat: number; lng: number };
+  dropoff?: { lat: number; lng: number };
 }
 
 interface RideRouteContextType {

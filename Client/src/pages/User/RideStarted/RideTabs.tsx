@@ -1,6 +1,8 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { HikerList } from './HikersList';
+import { TasksList } from './TasksList';
 import type { RideRequestDTO } from '@/types/ride';
+import type { Task } from '@/types/task';
 import { acceptJoinRequest, declineJoinRequest } from '@/api/ride';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 
@@ -8,12 +10,16 @@ interface RideTabsProps {
   hikers: RideRequestDTO[];
   seatsRemaining: number;
   setRideRequest: React.Dispatch<React.SetStateAction<RideRequestDTO[]>>;
+  tasks: Task[];
+  onCompleteTask: (taskId: string, otp?: string) => void;
 }
 
 export function RideTabs({
   hikers,
   seatsRemaining,
   setRideRequest,
+  tasks,
+  onCompleteTask,
 }: RideTabsProps) {
   const handleAccept = async (requestId: string) => {
     try {
@@ -73,16 +79,12 @@ export function RideTabs({
         />
       </TabsContent>
 
-      <TabsContent value="tasks" className="flex-1 mt-0">
-        <div className="h-full flex items-center justify-center text-gray-500">
-          No active tasks right now.
-        </div>
+      <TabsContent value="tasks" className="flex-1 mt-0 overflow-hidden">
+        <TasksList tasks={tasks} onCompleteTask={onCompleteTask} />
       </TabsContent>
 
-      <TabsContent value="current" className="flex-1 mt-0">
-        <div className="h-full flex items-center justify-center text-gray-500">
-          No hikers currently onboard.
-        </div>
+      <TabsContent value="current" className="flex-1 mt-0 overflow-hidden">
+        No active Hikers
       </TabsContent>
     </Tabs>
   );

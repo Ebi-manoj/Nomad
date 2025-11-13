@@ -194,7 +194,7 @@ export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
       />
 
       {/* Hiker Pickup Marker with Label */}
-      {selectedRoute && (
+      {selectedRoute && selectedRoute?.pickup && (
         <Marker
           position={selectedRoute.pickup}
           icon={createLabeledMarker('Pickup', '#22c55e')}
@@ -203,7 +203,7 @@ export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
       )}
 
       {/* Hiker Dropoff Marker with Label */}
-      {selectedRoute && (
+      {selectedRoute && selectedRoute?.dropoff && (
         <Marker
           position={selectedRoute.dropoff}
           icon={createLabeledMarker('Destination', '#ef4444')}

@@ -13,7 +13,9 @@ export class GetPendingRequestUseCase implements IGetPendingRequestUseCase {
   ) {}
 
   async execute(rideId: string): Promise<JoinRequestResponseDTO[]> {
-    const joinRequests = await this.joinRequestRepository.findByRideId(rideId);
+    const joinRequests = await this.joinRequestRepository.findPendingOrAccepted(
+      rideId
+    );
 
     const requests = await Promise.all(
       joinRequests.map(async jr => {

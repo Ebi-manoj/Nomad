@@ -1,5 +1,6 @@
 import { IJoinRequestRepository } from '../../application/repositories/IJoinRequestsRepository';
 import { JoinRequest } from '../../domain/entities/JoinRequests';
+import { JoinRequestStatus } from '../../domain/enums/Ride';
 import { IJoinRequest, JoinRequestModel } from '../database/joinRequest.model';
 import { joinRequestMapper } from '../mappers/joinRequestDomainMapper';
 import { MongoBaseRepository } from './BaseRepository';
@@ -21,6 +22,14 @@ export class JoinRequestRepository
   }
   async findByRideId(rideId: string): Promise<JoinRequest[]> {
     const requests = await this.model.find({ rideId });
+    return requests.map(r => this.mapper.toDomain(r));
+  }
+  async findPendingOrAccepted(rideId: string): Promise<JoinRequest[]> {
+    const requests = await this.model.find({
+      rideId,
+      status: { $in: [JoinRequestStatus.PENDING, JoinRequestStatus.ACCEPTED] },
+    });
+
     return requests.map(r => this.mapper.toDomain(r));
   }
 }

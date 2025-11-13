@@ -114,9 +114,9 @@ export class RideLog {
     this.updatedAt = new Date();
   }
 
-  addMatchedHiker(hikerId: string) {
-    if (!this.hikersMatched.includes(hikerId)) {
-      this.hikersMatched.push(hikerId);
+  addMatchedHiker(hikeId: string) {
+    if (!this.hikersMatched.includes(hikeId)) {
+      this.hikersMatched.push(hikeId);
     }
   }
 

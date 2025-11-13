@@ -8,12 +8,14 @@ import type { RootState } from '@/store/store';
 import { RideMap } from './RideMap';
 import { useSocket } from '@/context/SocketContext';
 import type { RideRequestDTO } from '@/types/ride';
-import { getJoinRequest } from '@/api/ride';
+import type { Task } from '@/types/task';
+import { getJoinRequest, getTasks } from '@/api/ride';
 
 export function RideStartedContent() {
   const [showDetails, setShowDetails] = useState(true);
   const { rideData } = useSelector((state: RootState) => state.ride);
   const [rideRequests, setRideRequest] = useState<RideRequestDTO[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const { riderSocket } = useSocket();
   if (!rideData) return <Navigate to="/ride" replace />;
@@ -25,7 +27,16 @@ export function RideStartedContent() {
         setRideRequest(data);
       } catch (error) {}
     };
+
+    const fetchTasks = async () => {
+      try {
+        const tasksData = await getTasks(rideData.id);
+        setTasks(tasksData);
+      } catch (error) {}
+    };
+
     fetchPendingReq();
+    fetchTasks();
   }, [rideData]);
 
   useEffect(() => {
@@ -41,8 +52,20 @@ export function RideStartedContent() {
 
     return () => {
       riderSocket.off('join-request:new');
+      riderSocket.off('payment:confirmed');
+      riderSocket.disconnect();
     };
   }, [rideData, riderSocket]);
+
+  const handleCompleteTask = (taskId: string, otp?: string) => {
+    console.log('Completing task:', taskId, 'with OTP:', otp);
+
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === taskId ? { ...task, status: 'COMPLETED' as const } : task
+      )
+    );
+  };
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-white text-black overflow-hidden">
@@ -69,11 +92,13 @@ export function RideStartedContent() {
       </div>
 
       {/* RIGHT SIDEBAR */}
-      <div className="w-full sm:w-[500px] border-l border-gray-200 bg-white shadow-sm p-4 flex flex-col">
+      <div className="w-full sm:w-[600px] border-l border-gray-200 bg-white shadow-sm p-4 flex flex-col">
         <RideTabs
           hikers={rideRequests}
           seatsRemaining={rideData.seatsAvailable}
           setRideRequest={setRideRequest}
+          tasks={tasks}
+          onCompleteTask={handleCompleteTask}
         />
       </div>
     </div>

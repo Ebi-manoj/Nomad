@@ -87,6 +87,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
         await Promise.all([
           this.hikeRepository.update(hike.getHikeId(), hike),
           this.joinRequestRepository.update(joinRequest.getId(), joinRequest),
+          this.rideRepository.update(ride.getRideId(), ride),
         ]);
 
         return { booking: savedBooking, shouldCreateTasks: true };
