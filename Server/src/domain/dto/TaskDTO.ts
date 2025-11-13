@@ -13,3 +13,24 @@ export interface TaskResponseDTO {
   completedAt?: Date;
   createdAt: Date;
 }
+
+export interface GetTasksReqDTO {
+  rideId: string;
+  userId: string;
+}
+
+export interface GetTaskResponseDTO {
+  id: string;
+  hikerId: string;
+  taskType: TaskType;
+  location: GeoJSON.Point;
+  address: string;
+  priority: number;
+  status: TaskStatus;
+  user: {
+    fullName: string;
+    rating: number;
+    profilePic: string;
+    isVerified: boolean;
+  };
+}

@@ -20,21 +20,19 @@ export class TaskRepository
     }
     const found = await this.model
       .find(query)
-      .sort({ priority: -1, createdAt: 1 })
-      .exec();
+      .sort({ priority: -1, createdAt: 1 });
     return found.map(doc => this.mapper.toDomain(doc));
   }
 
   async findByRideBookingId(rideBookingId: string): Promise<Task[]> {
-    const found = await this.model.find({ rideBookingId }).exec();
+    const found = await this.model.find({ rideBookingId });
     return found.map(doc => this.mapper.toDomain(doc));
   }
 
   async findByRideId(rideId: string): Promise<Task[]> {
     const found = await this.model
       .find({ rideId })
-      .sort({ priority: -1, createdAt: 1 })
-      .exec();
+      .sort({ priority: -1, createdAt: 1 });
     return found.map(doc => this.mapper.toDomain(doc));
   }
 
@@ -49,8 +47,7 @@ export class TaskRepository
         taskType: 'PICKUP',
         status: TaskStatus.PENDING,
       })
-      .sort({ priority: -1, createdAt: 1 })
-      .exec();
+      .sort({ priority: -1, createdAt: 1 });
     return found.map(doc => this.mapper.toDomain(doc));
   }
 
@@ -65,8 +62,7 @@ export class TaskRepository
         taskType: 'DROPOFF',
         status: TaskStatus.PENDING,
       })
-      .sort({ priority: -1, createdAt: 1 })
-      .exec();
+      .sort({ priority: -1, createdAt: 1 });
     return found.map(doc => this.mapper.toDomain(doc));
   }
 }
