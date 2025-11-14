@@ -19,3 +19,30 @@ export interface UpdateLocationDTO {
   lat: number;
   lng: number;
 }
+
+export interface GetHikersMatchedReqDTO {
+  userId: string;
+  rideId: string;
+}
+
+export interface GetHikersMatchedResponseDTO {
+  user: {
+    fullName: string;
+    isVerified: boolean;
+    rating: number;
+    profilePic: string;
+    currentLocation: {
+      lat: number;
+      lng: number;
+    };
+  };
+  hikeDetails: {
+    hikeId: string;
+    pickupAddress: string;
+    destinationAdress: string;
+    costShared: number;
+    totalDistance: number;
+    seatsRequested: number;
+    status: string;
+  };
+}

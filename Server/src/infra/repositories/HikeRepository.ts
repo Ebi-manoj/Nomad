@@ -16,4 +16,8 @@ export class HikeRepository
     if (!hike) return null;
     return this.mapper.toDomain(hike);
   }
+  async findByUserId(userId: string): Promise<HikeLog | null> {
+    const hike = await this.model.findOne({ userId });
+    return hike ? this.mapper.toDomain(hike) : null;
+  }
 }

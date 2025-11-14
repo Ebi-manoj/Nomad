@@ -13,6 +13,9 @@ import { JoinRequestRepository } from '../../../repositories/JoinRequestReqposit
 import { PaymentRepository } from '../../../repositories/PaymentRepository';
 import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
+import { GetHikersMatchedUseCase } from '../../../../application/usecases/User/Ride/GetHikersMatched';
+import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
+import { LocationRepository } from '../../../repositories/LocationRepository';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -24,6 +27,8 @@ export function rideComposer(): IRideController {
   const fareCalculator = new FareCalculator();
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
+  const ridebookingRepository = new RideBookingRepository();
+  const locationRepository = new LocationRepository();
   const createRideUseCase = new CreateRideUseCase(
     userRepository,
     googleApis,
@@ -51,10 +56,19 @@ export function rideComposer(): IRideController {
     realtimeGateway
   );
 
+  const getHikersMatchedUseCase = new GetHikersMatchedUseCase(
+    rideRepository,
+    ridebookingRepository,
+    hikeRepository,
+    userRepository,
+    locationRepository
+  );
+
   return new RideController(
     createRideUseCase,
     getPendingRequestUseCase,
     acceptJoinRequestUseCase,
-    declienJoinRequestUseCase
+    declienJoinRequestUseCase,
+    getHikersMatchedUseCase
   );
 }

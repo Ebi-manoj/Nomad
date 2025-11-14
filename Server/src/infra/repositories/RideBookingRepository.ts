@@ -20,4 +20,9 @@ export class RideBookingRepository
     if (!found) return null;
     return this.mapper.toDomain(found);
   }
+
+  async findByRideId(id: string): Promise<RideBooking[]> {
+    const rideBookings = await this.model.find({ rideId: id });
+    return rideBookings.map(r => this.mapper.toDomain(r));
+  }
 }

@@ -13,13 +13,16 @@ import { ICreateRideUseCase } from '../../../application/usecases/User/Ride/ICre
 import { IGetPendingRequestUseCase } from '../../../application/usecases/User/Ride/IGetPendingRequestUseCase';
 import { IAcceptJoinRequestUseCase } from '../../../application/usecases/User/Ride/IAcceptJoinRequest';
 import { IDeclineJoinRequestUseCase } from '../../../application/usecases/User/Ride/IDeclineJoinRequest';
+import { Unauthorized } from '../../../domain/errors/CustomError';
+import { IGetHikerMatchedUseCase } from '../../../application/usecases/User/Ride/IGetHikersMatched';
 
 export class RideController implements IRideController {
   constructor(
     private readonly createRideUseCase: ICreateRideUseCase,
     private readonly getPendingRequestUseCase: IGetPendingRequestUseCase,
     private readonly acceptJoinRequestUseCase: IAcceptJoinRequestUseCase,
-    private readonly declienJoinRequestUseCase: IDeclineJoinRequestUseCase
+    private readonly declienJoinRequestUseCase: IDeclineJoinRequestUseCase,
+    private readonly getHikerMatchedUseCase: IGetHikerMatchedUseCase
   ) {}
 
   async createRide(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -53,6 +56,18 @@ export class RideController implements IRideController {
     const dto: DeclineJoinRequestDTO = { ...data, riderId: riderId! };
 
     const result = await this.declienJoinRequestUseCase.execute(dto);
+    const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatusCode.Ok, response);
+  }
+
+  async getHikersMatched(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { rideId } = httpRequest.path as { rideId: string };
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+    const result = await this.getHikerMatchedUseCase.execute({
+      userId,
+      rideId,
+    });
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }

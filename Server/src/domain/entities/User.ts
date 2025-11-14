@@ -83,6 +83,9 @@ export class User {
   getLicenceVerified() {
     return this.licenceVerified;
   }
+  getIsVerifed() {
+    return this.licenceVerified && this.aadhaarVerified;
+  }
   setAadhaarVerified(data: boolean) {
     this.aadhaarVerified = data;
   }

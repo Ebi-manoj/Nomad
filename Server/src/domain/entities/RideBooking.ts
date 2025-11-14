@@ -113,6 +113,9 @@ export class RideBooking {
   getUpdatedAt(): Date {
     return this.updatedAt;
   }
+  getCostShared() {
+    return this.amount - this.platformFee;
+  }
 
   confirm() {
     this.status = RideBookingStatus.CONFIRMED;

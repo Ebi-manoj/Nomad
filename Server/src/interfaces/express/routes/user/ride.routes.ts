@@ -45,5 +45,15 @@ router.patch(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+router.get(
+  '/hikers-matched/:rideId',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      rideComposer().getHikersMatched(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;
