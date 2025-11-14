@@ -1,4 +1,5 @@
 import { RideMatchResponseDTO } from '../../../../domain/dto/RideMatch';
+import { RideLog } from '../../../../domain/entities/Ride';
 import { IGeoService } from '../../../providers/IGeoService';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
@@ -30,25 +31,30 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
       pickup
     );
 
-    const filteredRiders = activeRiders.filter(ride => {
+    const filteredRidersMap = new Map<string, RideLog>();
+
+    for (const ride of activeRiders) {
       const vehicleType = ride.getVehicleType();
       const riderHashelmet = ride.getHasHelmet();
       const seatsAvailable = ride.getSeatsAvailable();
 
-      if (seatRequested > seatsAvailable) return false;
+      if (seatRequested > seatsAvailable) continue;
+      if (vehicleType === 'bike' && !riderHashelmet && !hasHelmet) continue;
 
-      if (vehicleType == 'bike' && !riderHashelmet && !hasHelmet) return false;
-      return true;
-    });
+      filteredRidersMap.set(ride.getRideId()!, ride);
+    }
 
     const JoinRequests = await this.joinRequestRepository.findByHikeId(hikeId);
     const payments = await this.paymentRepository.findPendingPaymentsByHikeId(
       hikeId
     );
+
     for (const p of payments) {
       const ride = await this.rideRepository.findById(p.getRideId());
-      if (ride) filteredRiders.push(ride);
+      if (ride) filteredRidersMap.set(ride.getRideId()!, ride);
     }
+
+    const filteredRiders = Array.from(filteredRidersMap.values());
 
     const matchedRiders = [];
     for (const ride of filteredRiders) {

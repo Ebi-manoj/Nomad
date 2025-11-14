@@ -71,6 +71,7 @@ export function RideMatching() {
         FIND_MATCH_RIDES_API,
         { hikeId: hikeData.id }
       );
+      console.log(res.data.data);
       setAvailableRides(res.data.data);
     } catch {
       toast.error('Fetching rides failed');
