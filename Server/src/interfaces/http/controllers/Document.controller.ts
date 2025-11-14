@@ -19,8 +19,6 @@ export class DocumentController implements IDocumentController {
     private readonly verifyDocumentUseCase: IVerifyDocumentUseCase
   ) {}
   async uploadDocument(httpRequest: HttpRequest): Promise<HttpResponse> {
-    console.log('Reached upload Doc controller');
-
     const dto = uploadDocSchema.parse(httpRequest.body);
     const result = await this.uploadDocumentUseCase.execute(dto);
     const response = ApiDTO.success(result);

@@ -19,7 +19,6 @@ export class UploadDocumentUseCase implements IUploadDocumentUseCase {
 
   async execute(data: uploadDocRequestDTO): Promise<DocResponseDTO> {
     const { fileURL, userId, type, doc_number } = data;
-    console.log(userId);
     const user = await this.userRepository.findById(userId);
     if (!user) throw new UserNotFound();
 

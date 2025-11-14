@@ -26,7 +26,6 @@ export class GoogleSignupUseCase implements IGoogleSignupUseCase {
   ) {}
 
   async execute(data: { code: string }): Promise<LoginuserResponseDTO> {
-    console.log(data);
     const payload = await this.authClient.getAuthDetails(data.code);
     if (!payload) throw new InvalidToken();
 

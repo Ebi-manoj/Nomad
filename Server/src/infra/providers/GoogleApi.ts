@@ -7,8 +7,6 @@ export class GoogleApiService implements IGoogleApi {
     pickup: Data,
     destination: Data
   ): Promise<{ distance: number; duration: number }> {
-    console.log(pickup, destination);
-
     const apiKey = env.GOOGLE_MAPS_API_KEY;
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${pickup.lat},${pickup.lng}&destination=${destination.lat},${destination.lng}&mode=driving&key=${apiKey}`;
 

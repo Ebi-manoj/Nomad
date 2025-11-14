@@ -59,6 +59,7 @@ export function RideMatching() {
     return () => {
       hikerSocket.off('join-request:accepted');
       hikerSocket.off('join-request:declined');
+      hikerSocket.disconnect();
     };
   }, [hikeData, hikerSocket]);
 

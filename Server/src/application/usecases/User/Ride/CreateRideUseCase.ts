@@ -32,7 +32,6 @@ export class CreateRideUseCase implements ICreateRideUseCase {
     );
 
     const route = await this.googleApis.getRoute(pickup, destination);
-    console.log(route);
 
     const rideLog = new RideLog({
       ...data,

@@ -52,8 +52,6 @@ export class StripePaymentService implements IPaymentService {
         );
       }
 
-      console.log(paymentIntent);
-
       return {
         client_secret: paymentIntent.client_secret!,
         id: paymentIntent.id,

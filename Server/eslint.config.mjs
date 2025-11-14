@@ -18,7 +18,7 @@ export default defineConfig([
     rules: {
       'unused-imports/no-unused-imports': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
-      'no-console': 'off',
+      'no-console': 'warn',
     },
   },
 ]);

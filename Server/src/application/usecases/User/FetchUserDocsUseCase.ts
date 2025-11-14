@@ -8,7 +8,6 @@ export class FetchUserDocsUseCase implements IFetchUserDocsUseCase {
 
   async execute(userId: string): Promise<DocResponseDTO[] | []> {
     const userDocs = await this.documentsRepository.findDocsByUserId(userId);
-    console.log(userDocs);
     return userDocs.map(docs => documentMapper(docs));
   }
 }

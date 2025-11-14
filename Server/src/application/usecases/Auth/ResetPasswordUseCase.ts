@@ -16,7 +16,6 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     const emailVO = new Email(data.email);
     const user = await this.userRepository.findByEmail(emailVO.getValue());
     if (!user) throw new UserNotFound();
-    console.log(user);
 
     const hashedPassword = await this.passwordHasher.hash(data.password);
     user.setPassword(hashedPassword);

@@ -16,7 +16,6 @@ export class PresignedUrlService implements IPresignedUrlService {
   async getUploadUrl(
     data: presignedURLRequestDTO
   ): Promise<presignURLResponseDTO> {
-    console.log(data.type);
     if (!allowedMimeTypes.includes(data.fileType))
       throw new InvalidFileFormat();
     if (!IMAGE_FOLDERS.includes(data.type)) throw new InvalidFolderType();

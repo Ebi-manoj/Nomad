@@ -19,7 +19,6 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
   ) {}
 
   async execute(data: RegisterUserRequestDTO): Promise<UserResponseDTO> {
-    console.log('Reached here');
     const email = new Email(data.email);
     const mobile = new Mobile(data.mobile);
 

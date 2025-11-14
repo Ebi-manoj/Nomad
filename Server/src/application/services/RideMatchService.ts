@@ -54,7 +54,6 @@ export class RideMatchService implements IRideMatchService {
       rideRoute
     );
 
-    console.log('haaai');
     // Reject if pickup > 2 km or destination > 5 km from ride’s path
     if (pickupDistanceToRoute > 2) return null;
     if (destinationDistanceToRoute > 5) return null;

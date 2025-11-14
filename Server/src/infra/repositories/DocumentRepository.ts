@@ -56,7 +56,6 @@ export class DocumentRepository implements IDocumentRepository {
 
   async findDocs(data: FetchDocsQuery): Promise<DocumentsWithUserDTO[] | []> {
     const { status, limit, search, skip, type } = data;
-    console.log(status);
     const docs = await DocumentModel.aggregate([
       {
         $lookup: {

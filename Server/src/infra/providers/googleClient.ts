@@ -15,7 +15,6 @@ export class GoogleClient implements IGoogleClient {
   async getAuthDetails(
     code: string
   ): Promise<{ email: string; name: string } | null> {
-    console.log('Reached Client');
     try {
       const { tokens } = await this.client.getToken(code);
       if (!tokens?.id_token) throw new InvalidToken();

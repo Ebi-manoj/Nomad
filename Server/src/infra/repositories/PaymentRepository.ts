@@ -1,8 +1,6 @@
 import { IPaymentRepository } from '../../application/repositories/IPaymentRepository';
-import { JoinRequest } from '../../domain/entities/JoinRequests';
 import { Payment } from '../../domain/entities/Payment';
 import { PaymentStatus } from '../../domain/enums/payment';
-import { JoinRequestStatus } from '../../domain/enums/Ride';
 import { IPaymentDocument, PaymentModel } from '../database/payment.model';
 import { PaymentMapper } from '../mappers/paymentMapper';
 import { MongoBaseRepository } from './BaseRepository';

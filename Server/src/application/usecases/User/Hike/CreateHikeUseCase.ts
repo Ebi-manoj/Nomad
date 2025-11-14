@@ -18,7 +18,6 @@ export class CreateHikeUseCase implements ICreateHikeUseCase {
   async execute(data: CreateHikeDTO): Promise<HikeResponseDTO> {
     const user = await this.userRepository.findById(data.userId);
     if (!user) throw new UserNotFound();
-    console.log(data);
 
     const pickup = {
       lat: data.pickup.coordinates[0],

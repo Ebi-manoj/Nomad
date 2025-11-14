@@ -2,7 +2,7 @@ import {
   RideBookingRequestDTO,
   RideBookingResponseDTO,
 } from '../../../../domain/dto/RideBookingDTO';
-import { Forbidden, Unauthorized } from '../../../../domain/errors/CustomError';
+import { Forbidden } from '../../../../domain/errors/CustomError';
 import { HikeNotFound } from '../../../../domain/errors/HikeErrors';
 import { RideBookingNotFound } from '../../../../domain/errors/RideBookingError';
 import {

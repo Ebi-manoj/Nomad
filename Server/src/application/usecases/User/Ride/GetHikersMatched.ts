@@ -6,7 +6,6 @@ import { Unauthorized } from '../../../../domain/errors/CustomError';
 import { RideNotFound } from '../../../../domain/errors/RideErrors';
 import { hikersMatchedMapper } from '../../../mappers/HikersMatchedMapper';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
-import { ILocationRepository } from '../../../repositories/ILocationRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';

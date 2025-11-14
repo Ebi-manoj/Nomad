@@ -20,18 +20,6 @@ export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
   const { riderSocket } = useSocket();
   const { selectedRoute } = useRideRoute();
 
-  useEffect(() => {
-    if (!riderSocket.connected) {
-      riderSocket.connect();
-    }
-    riderSocket.emit('ride:join', rideId);
-
-    return () => {
-      // Cleanup listeners
-      riderSocket.off('join-request:new');
-    };
-  }, [rideId, riderSocket]);
-
   // Get current position once
   useEffect(() => {
     if (!navigator.geolocation) return;
