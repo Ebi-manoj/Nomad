@@ -62,6 +62,7 @@ export class RideController implements IRideController {
 
   async getHikersMatched(httpRequest: HttpRequest): Promise<HttpResponse> {
     const { rideId } = httpRequest.path as { rideId: string };
+    // const { userId } = httpRequest.body as { userId: string };
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
     const result = await this.getHikerMatchedUseCase.execute({

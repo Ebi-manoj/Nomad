@@ -17,8 +17,7 @@ export class GetHikersMatchedUseCase implements IGetHikerMatchedUseCase {
     private readonly rideRepository: IRideRepository,
     private readonly ridebookingRepository: IRideBookingRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly locationRepository: ILocationRepository
+    private readonly userRepository: IUserRepository
   ) {}
 
   async execute(
@@ -36,13 +35,12 @@ export class GetHikersMatchedUseCase implements IGetHikerMatchedUseCase {
     const response = [];
 
     for (const booking of rideBookings) {
-      const [hike, user, location] = await Promise.all([
+      const [hike, user] = await Promise.all([
         this.hikeRepository.findById(booking.getHikeId()),
         this.userRepository.findById(booking.getHikerId()),
-        this.locationRepository.getLocation(booking.getHikeId()),
       ]);
-      if (hike && user && location) {
-        const dto = hikersMatchedMapper(user, hike, booking, location);
+      if (hike && user) {
+        const dto = hikersMatchedMapper(user, hike, booking);
         response.push(dto);
       }
     }

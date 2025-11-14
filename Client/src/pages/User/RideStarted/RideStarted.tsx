@@ -9,13 +9,15 @@ import { RideMap } from './RideMap';
 import { useSocket } from '@/context/SocketContext';
 import type { RideRequestDTO } from '@/types/ride';
 import type { Task } from '@/types/task';
-import { getJoinRequest, getTasks } from '@/api/ride';
+import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
+import { getJoinRequest, getTasks, getHikersMatched } from '@/api/ride';
 
 export function RideStartedContent() {
   const [showDetails, setShowDetails] = useState(true);
   const { rideData } = useSelector((state: RootState) => state.ride);
   const [rideRequests, setRideRequest] = useState<RideRequestDTO[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentHikers, setCurrentHikers] = useState<GetHikersMatchedResponseDTO[]>([]);
 
   const { riderSocket } = useSocket();
   if (!rideData) return <Navigate to="/ride" replace />;
@@ -35,8 +37,16 @@ export function RideStartedContent() {
       } catch (error) {}
     };
 
+    const fetchCurrentHikers = async () => {
+      try {
+        const hikersData = await getHikersMatched(rideData.id);
+        setCurrentHikers(hikersData);
+      } catch (error) {}
+    };
+
     fetchPendingReq();
     fetchTasks();
+    fetchCurrentHikers();
   }, [rideData]);
 
   useEffect(() => {
@@ -65,6 +75,12 @@ export function RideStartedContent() {
         task.id === taskId ? { ...task, status: 'COMPLETED' as const } : task
       )
     );
+  };
+
+  const handleChatClick = (hikeId: string) => {
+    console.log('Opening chat with hiker:', hikeId);
+    // TODO: Implement chat functionality
+    // This could open a chat modal or navigate to a chat page
   };
 
   return (
@@ -98,7 +114,9 @@ export function RideStartedContent() {
           seatsRemaining={rideData.seatsAvailable}
           setRideRequest={setRideRequest}
           tasks={tasks}
+          currentHikers={currentHikers}
           onCompleteTask={handleCompleteTask}
+          onChatClick={handleChatClick}
         />
       </div>
     </div>

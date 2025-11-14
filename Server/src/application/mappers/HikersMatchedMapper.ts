@@ -1,31 +1,36 @@
 import { GetHikersMatchedResponseDTO } from '../../domain/dto/RideDTO';
 import { HikeLog } from '../../domain/entities/Hike';
-import { Location } from '../../domain/entities/Location';
 import { RideBooking } from '../../domain/entities/RideBooking';
 import { User } from '../../domain/entities/User';
 
 export function hikersMatchedMapper(
   user: User,
   hike: HikeLog,
-  booking: RideBooking,
-  location: Location
+  booking: RideBooking
 ): GetHikersMatchedResponseDTO {
   return {
     user: {
       fullName: user.getFullName(),
       rating: 4.5,
       profilePic: '',
-      currentLocation: { lat: location.lat, lng: location.lng },
       isVerified: user.getIsVerifed(),
     },
     hikeDetails: {
       hikeId: booking.getHikeId(),
       pickupAddress: hike.getPickupAddress(),
       destinationAdress: hike.getDestinationAddress(),
+      pickupLocation: {
+        lat: booking.getPickupLocation().coordinates[1],
+        lng: booking.getPickupLocation().coordinates[0],
+      },
+      dropoffLocation: {
+        lat: booking.getDropoffLocation().coordinates[1],
+        lng: booking.getDropoffLocation().coordinates[0],
+      },
       costShared: booking.getCostShared(),
       totalDistance: hike.getTotalDistance(),
       seatsRequested: booking.getSeatsBooked(),
-      status: hike.getStatus(),
+      status: booking.getStatus(),
     },
   };
 }

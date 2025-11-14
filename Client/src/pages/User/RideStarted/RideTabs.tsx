@@ -1,8 +1,10 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { HikerList } from './HikersList';
 import { TasksList } from './TasksList';
+import { CurrentHikersList } from './CurrentHikersList';
 import type { RideRequestDTO } from '@/types/ride';
 import type { Task } from '@/types/task';
+import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { acceptJoinRequest, declineJoinRequest } from '@/api/ride';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 
@@ -11,7 +13,9 @@ interface RideTabsProps {
   seatsRemaining: number;
   setRideRequest: React.Dispatch<React.SetStateAction<RideRequestDTO[]>>;
   tasks: Task[];
+  currentHikers: GetHikersMatchedResponseDTO[];
   onCompleteTask: (taskId: string, otp?: string) => void;
+  onChatClick?: (hikeId: string) => void;
 }
 
 export function RideTabs({
@@ -19,7 +23,9 @@ export function RideTabs({
   seatsRemaining,
   setRideRequest,
   tasks,
+  currentHikers,
   onCompleteTask,
+  onChatClick,
 }: RideTabsProps) {
   const handleAccept = async (requestId: string) => {
     try {
@@ -84,7 +90,7 @@ export function RideTabs({
       </TabsContent>
 
       <TabsContent value="current" className="flex-1 mt-0 overflow-hidden">
-        No active Hikers
+        <CurrentHikersList hikers={currentHikers} onChatClick={onChatClick} />
       </TabsContent>
     </Tabs>
   );

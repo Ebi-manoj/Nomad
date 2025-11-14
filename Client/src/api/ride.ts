@@ -5,6 +5,7 @@ import type {
   RideRequestDTO,
 } from '@/types/ride';
 import type { Task } from '@/types/task';
+import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const CREATE_RIDE_API = '/ride/create';
@@ -14,6 +15,7 @@ export const GET_JOIN_REQUESTS_API = (rideId: string) =>
 export const ACCEPT_JOIN_REQ_API = '/ride/join-request/accept';
 export const DECLINE_JOIN_REQ_API = '/ride/join-request/decline';
 export const GET_TASKS_API = '/task';
+export const GET_HIKERS_MATCHED_API = (rideId: string) => `/ride/hikers-matched/${rideId}`;
 
 export async function getJoinRequest(rideId: string) {
   const res = await axiosInstance.get<ApiResponse<RideRequestDTO[]>>(
@@ -42,5 +44,12 @@ export async function getTasks(rideId: string) {
   const res = await axiosInstance.get<ApiResponse<Task[]>>(GET_TASKS_API, {
     params: { rideId },
   });
+  return res.data.data;
+}
+
+export async function getHikersMatched(rideId: string) {
+  const res = await axiosInstance.get<ApiResponse<GetHikersMatchedResponseDTO[]>>(
+    GET_HIKERS_MATCHED_API(rideId)
+  );
   return res.data.data;
 }
