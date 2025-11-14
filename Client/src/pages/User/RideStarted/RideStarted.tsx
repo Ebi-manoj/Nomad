@@ -17,7 +17,9 @@ export function RideStartedContent() {
   const { rideData } = useSelector((state: RootState) => state.ride);
   const [rideRequests, setRideRequest] = useState<RideRequestDTO[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [currentHikers, setCurrentHikers] = useState<GetHikersMatchedResponseDTO[]>([]);
+  const [currentHikers, setCurrentHikers] = useState<
+    GetHikersMatchedResponseDTO[]
+  >([]);
 
   const { riderSocket } = useSocket();
   if (!rideData) return <Navigate to="/ride" replace />;
@@ -79,8 +81,6 @@ export function RideStartedContent() {
 
   const handleChatClick = (hikeId: string) => {
     console.log('Opening chat with hiker:', hikeId);
-    // TODO: Implement chat functionality
-    // This could open a chat modal or navigate to a chat page
   };
 
   return (

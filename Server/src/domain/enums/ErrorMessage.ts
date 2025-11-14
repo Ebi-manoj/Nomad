@@ -1,6 +1,7 @@
 export const ErrorMessages = {
   USER_ALREADY_EXISTS: 'User already exists',
   UNAUTHORIZED: 'Unauthorized',
+  FORBIDDEN: 'You do not have permission to access this resource.',
   USER_NOT_FOUND: 'User not found',
   INVALID_INPUT: 'Invalid input data',
   SERVER_ERROR: 'Internal server error',

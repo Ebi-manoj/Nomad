@@ -61,3 +61,8 @@ export class Unauthorized extends CustomError {
     super(HttpStatus.UNAUTHORIZED, message);
   }
 }
+export class Forbidden extends CustomError {
+  constructor(message: string = ErrorMessages.FORBIDDEN) {
+    super(HttpStatus.FORBIDDEN, message);
+  }
+}

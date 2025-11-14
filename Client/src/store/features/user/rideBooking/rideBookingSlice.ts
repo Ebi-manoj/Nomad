@@ -24,8 +24,10 @@ const rideBookingSlice = createSlice({
       state.error = '';
     });
     builder.addCase(getRideBookingThunk.rejected, (state, action) => {
+      console.log('redux rejected booking');
       state.loading = false;
       state.error = action.payload as string;
+      state.booking = null;
     });
   },
 });

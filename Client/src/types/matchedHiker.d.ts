@@ -9,6 +9,8 @@ export interface GetHikersMatchedResponseDTO {
     hikeId: string;
     pickupAddress: string;
     destinationAdress: string;
+    pickupLocation: { lat: number; lng: number };
+    dropoffLocation: { lat: number; lng: number };
     costShared: number;
     totalDistance: number;
     seatsRequested: number;

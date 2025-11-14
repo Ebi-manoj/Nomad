@@ -9,7 +9,10 @@ interface CurrentHikersListProps {
   onChatClick?: (hikeId: string) => void;
 }
 
-export function CurrentHikersList({ hikers, onChatClick }: CurrentHikersListProps) {
+export function CurrentHikersList({
+  hikers,
+  onChatClick,
+}: CurrentHikersListProps) {
   if (hikers.length === 0) {
     return (
       <Card className="h-full border border-gray-200 flex flex-col overflow-hidden">
@@ -18,7 +21,9 @@ export function CurrentHikersList({ hikers, onChatClick }: CurrentHikersListProp
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Users className="w-8 h-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Current Hikers</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              No Current Hikers
+            </h3>
             <p className="text-gray-500 text-sm max-w-sm">
               Confirmed hikers will appear here once they join your ride.
             </p>
@@ -36,7 +41,7 @@ export function CurrentHikersList({ hikers, onChatClick }: CurrentHikersListProp
           <div className="flex justify-between items-center">
             <h3 className="font-semibold text-gray-700 flex items-center gap-2">
               <Users className="w-4 h-4" />
-              Current Hikers
+              Matched Hikers
             </h3>
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
               {hikers.length} Hikers
@@ -54,7 +59,7 @@ export function CurrentHikersList({ hikers, onChatClick }: CurrentHikersListProp
         <div className="flex-1 overflow-hidden -mr-4">
           <ScrollArea className="h-full w-full">
             <div className="space-y-3 pr-4">
-              {hikers.map((hiker) => (
+              {hikers.map(hiker => (
                 <CurrentHikerCard
                   key={hiker.hikeDetails.hikeId}
                   hiker={hiker}

@@ -1,27 +1,37 @@
-import { MapPin, MapPinOff, Route, MessageCircle, Star, CheckCircle } from 'lucide-react';
+import {
+  MapPin,
+  MapPinOff,
+  Route,
+  MessageCircle,
+  Star,
+  CheckCircle,
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { MdOutlineAirlineSeatReclineExtra } from 'react-icons/md';
 import { useRideRoute } from '@/context/RiderHikesRoutesContext';
+import {} from 'lucide-react';
 
 interface CurrentHikerCardProps {
   hiker: GetHikersMatchedResponseDTO;
   onChatClick?: (hikeId: string) => void;
 }
 
-export function CurrentHikerCard({ hiker, onChatClick }: CurrentHikerCardProps) {
-  const { selectedHikerId, hideRoute } = useRideRoute();
-  
+export function CurrentHikerCard({
+  hiker,
+  onChatClick,
+}: CurrentHikerCardProps) {
+  const { selectedHikerId, hideRoute, showRoute } = useRideRoute();
+
   const handleToggleRoute = () => {
-    // For now, we'll use the hikeId as the identifier
-    // In a real scenario, you might need pickup/dropoff coordinates
+    const pickup = hiker.hikeDetails.pickupLocation;
+    const dropoff = hiker.hikeDetails.dropoffLocation;
+    const hikeId = hiker.hikeDetails.hikeId;
     if (selectedHikerId === hiker.hikeDetails.hikeId) {
       hideRoute();
     } else {
-      // You would need to get actual coordinates from the backend
-      // For now, this is a placeholder
-      console.log('Show route for hiker:', hiker.hikeDetails.hikeId);
+      showRoute({ pickup, dropoff }, hikeId);
     }
   };
 
@@ -43,21 +53,26 @@ export function CurrentHikerCard({ hiker, onChatClick }: CurrentHikerCardProps) 
       <CardContent className="p-3.5">
         <div className="flex gap-3">
           {/* Profile Picture */}
-          <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden ring-2 ring-gray-200 ring-offset-2 ring-offset-white">
-            {hiker.user.profilePic ? (
-              <img
-                src={hiker.user.profilePic}
-                alt={hiker.user.fullName}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-xs font-semibold text-gray-600">
-                {hiker.user.fullName.charAt(0).toUpperCase()}
-              </span>
-            )}
+          {/* Profile Picture */}
+          <div className="relative w-14 h-14">
+            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden ring-2 ring-gray-200 shadow-md">
+              {hiker.user.profilePic ? (
+                <img
+                  src={hiker.user.profilePic}
+                  alt={hiker.user.fullName}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-xl font-bold text-gray-600">
+                  {hiker.user.fullName.charAt(0).toUpperCase()}
+                </span>
+              )}
+            </div>
+
+            {/* Verification Badge — FIXED */}
             {hiker.user.isVerified && (
-              <div className="absolute -bottom-0.5 -right-0.5 bg-blue-500 rounded-full p-0.5 ring-2 ring-white ">
-                <CheckCircle className="w-2.5 h-2.5 text-white" />
+              <div className="absolute bottom-0 right-0 translate-x-1 translate-y-1 bg-blue-500 rounded-full p-1 ring-2 ring-white shadow-md">
+                <CheckCircle className="w-3 h-3 text-white" />
               </div>
             )}
           </div>
@@ -78,7 +93,11 @@ export function CurrentHikerCard({ hiker, onChatClick }: CurrentHikerCardProps) 
                     </span>
                   </div>
                 </div>
-                <div className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(hiker.hikeDetails.status)}`}>
+                <div
+                  className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(
+                    hiker.hikeDetails.status
+                  )}`}
+                >
                   {hiker.hikeDetails.status}
                 </div>
               </div>
@@ -107,7 +126,8 @@ export function CurrentHikerCard({ hiker, onChatClick }: CurrentHikerCardProps) 
                   <MdOutlineAirlineSeatReclineExtra className="w-3.5 h-3.5 text-blue-600" />
                 </div>
                 <p className="text-xs font-medium text-blue-700">
-                  {hiker.hikeDetails.seatsRequested} seat{hiker.hikeDetails.seatsRequested > 1 ? 's' : ''}
+                  {hiker.hikeDetails.seatsRequested} seat
+                  {hiker.hikeDetails.seatsRequested > 1 ? 's' : ''}
                 </p>
               </div>
               <div className="text-center p-1.5 bg-green-50 rounded-lg">
@@ -118,7 +138,7 @@ export function CurrentHikerCard({ hiker, onChatClick }: CurrentHikerCardProps) 
               </div>
               <div className="text-center p-1.5 bg-purple-50 rounded-lg">
                 <p className="text-xs font-semibold text-purple-700">
-                  {hiker.hikeDetails.totalDistance}km
+                  {hiker.hikeDetails.totalDistance.toFixed(2)}km
                 </p>
                 <p className="text-xs text-purple-600">Distance</p>
               </div>
@@ -130,18 +150,20 @@ export function CurrentHikerCard({ hiker, onChatClick }: CurrentHikerCardProps) 
                 variant="outline"
                 size="sm"
                 onClick={handleToggleRoute}
-                className="flex-1 h-7 text-xs bg-white hover:bg-gray-50 border-gray-300"
+                className="flex-1 h-7 text-xs bg-white hover:bg-gray-50 border-gray-300 cursor-pointer"
               >
                 <Route className="w-3 h-3 mr-1" />
-                Route
+                {selectedHikerId !== hiker.hikeDetails.hikeId
+                  ? 'Route'
+                  : 'Hide Route'}
               </Button>
-              
+
               {onChatClick && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => onChatClick(hiker.hikeDetails.hikeId)}
-                  className="flex-1 h-7 text-xs bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
+                  className="cursor-pointer flex-1 h-7 text-xs bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
                 >
                   <MessageCircle className="w-3 h-3 mr-1" />
                   Chat

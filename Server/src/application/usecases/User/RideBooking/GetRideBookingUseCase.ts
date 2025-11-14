@@ -2,7 +2,7 @@ import {
   RideBookingRequestDTO,
   RideBookingResponseDTO,
 } from '../../../../domain/dto/RideBookingDTO';
-import { Unauthorized } from '../../../../domain/errors/CustomError';
+import { Forbidden, Unauthorized } from '../../../../domain/errors/CustomError';
 import { HikeNotFound } from '../../../../domain/errors/HikeErrors';
 import { RideBookingNotFound } from '../../../../domain/errors/RideBookingError';
 import {
@@ -30,7 +30,7 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
   async execute(data: RideBookingRequestDTO): Promise<RideBookingResponseDTO> {
     const booking = await this.bookingRepository.findById(data.bookingId);
     if (!booking) throw new RideBookingNotFound();
-    if (booking.getHikerId() !== data.userId) throw new Unauthorized();
+    if (booking.getHikerId() !== data.userId) throw new Forbidden();
 
     const hike = await this.hikeRepository.findById(booking.getHikeId());
     if (!hike) throw new HikeNotFound();
