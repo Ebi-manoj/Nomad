@@ -8,6 +8,7 @@ import {
   PaymentNotSuccessfull,
 } from '../../../../domain/errors/PaymentError';
 import { RideNotFound } from '../../../../domain/errors/RideErrors';
+import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 import { ITransactionManager } from '../../../providers/ITransactionManager';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
@@ -27,7 +28,8 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
     private readonly hikeRepository: IHikeRepository,
     private readonly ridebookingRepository: IRideBookingRepository,
     private readonly transactionManager: ITransactionManager,
-    private readonly createTasksUseCase: ICreateTasksUseCase
+    private readonly createTasksUseCase: ICreateTasksUseCase,
+    private readonly realtimeGateWay: IRealtimeGateway
   ) {}
 
   async execute(paymentIntentId: string): Promise<ConfirmHikerPaymentDTO> {
@@ -96,6 +98,18 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
     if (shouldCreateTasks) {
       await this.createTasksUseCase.execute(booking);
     }
+
+    await this.realtimeGateWay.emitToRoom(
+      'rider',
+      booking.getRideId(),
+      'hike:confirmed',
+      {
+        message:"New Hike confirmed successfully",
+        bookingId: booking.getId()!,
+        seatsBooked: booking.getSeatsBooked(),
+        amount: booking.getCostShared(),
+      }
+    );
 
     const response: ConfirmHikerPaymentDTO = {
       bookingId: booking.getId()!,

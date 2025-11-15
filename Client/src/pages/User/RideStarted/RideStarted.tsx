@@ -11,8 +11,10 @@ import type { RideRequestDTO } from '@/types/ride';
 import type { Task } from '@/types/task';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { getJoinRequest, getTasks, getHikersMatched } from '@/api/ride';
+import ChatInterface from './ChatInterface';
 
 export function RideStartedContent() {
+  const [showChat, setShowChat] = useState(false);
   const [showDetails, setShowDetails] = useState(true);
   const { rideData } = useSelector((state: RootState) => state.ride);
   const [rideRequests, setRideRequest] = useState<RideRequestDTO[]>([]);
@@ -62,9 +64,20 @@ export function RideStartedContent() {
       setRideRequest(prev => [...prev, data]);
     });
 
+    riderSocket.on('hike:confirmed', async () => {
+      try {
+        const [tasksData, hikersData] = await Promise.all([
+          getTasks(rideData.id),
+          getHikersMatched(rideData.id),
+        ]);
+        setTasks(tasksData);
+        setCurrentHikers(hikersData);
+      } catch (error) {}
+    });
+
     return () => {
       riderSocket.off('join-request:new');
-      riderSocket.off('payment:confirmed');
+      riderSocket.off('hike:confirmed');
       riderSocket.disconnect();
     };
   }, [rideData, riderSocket]);
@@ -80,7 +93,12 @@ export function RideStartedContent() {
   };
 
   const handleChatClick = (hikeId: string) => {
+    setShowChat(true);
     console.log('Opening chat with hiker:', hikeId);
+  };
+
+  const handleChatBack = () => {
+    setShowChat(false);
   };
 
   return (
@@ -109,15 +127,19 @@ export function RideStartedContent() {
 
       {/* RIGHT SIDEBAR */}
       <div className="w-full sm:w-[600px] border-l border-gray-200 bg-white shadow-sm p-4 flex flex-col">
-        <RideTabs
-          hikers={rideRequests}
-          seatsRemaining={rideData.seatsAvailable}
-          setRideRequest={setRideRequest}
-          tasks={tasks}
-          currentHikers={currentHikers}
-          onCompleteTask={handleCompleteTask}
-          onChatClick={handleChatClick}
-        />
+        {!showChat && (
+          <RideTabs
+            hikers={rideRequests}
+            seatsRemaining={rideData.seatsAvailable}
+            setRideRequest={setRideRequest}
+            tasks={tasks}
+            currentHikers={currentHikers}
+            onCompleteTask={handleCompleteTask}
+            onChatClick={handleChatClick}
+          />
+        )}
+
+        {showChat && <ChatInterface onBack={handleChatBack} />}
       </div>
     </div>
   );

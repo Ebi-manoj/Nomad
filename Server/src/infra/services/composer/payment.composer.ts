@@ -77,7 +77,8 @@ export function paymentComposer(): IPaymentController {
     hikeRepository,
     rideBookingRepository,
     transactionManager,
-    createTasksUseCase
+    createTasksUseCase,
+    realtimeGateway
   );
 
   return new PaymentController(
