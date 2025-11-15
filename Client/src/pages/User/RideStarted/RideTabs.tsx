@@ -14,7 +14,7 @@ interface RideTabsProps {
   seatsRemaining: number;
   setRideRequest: React.Dispatch<React.SetStateAction<RideRequestDTO[]>>;
   onCompleteTask: (taskId: string, otp?: string) => void;
-  onChatClick?: (hiker: GetHikersMatchedResponseDTO) => void;
+  onChatClick: (hiker: GetHikersMatchedResponseDTO) => void;
 }
 
 export function RideTabs({

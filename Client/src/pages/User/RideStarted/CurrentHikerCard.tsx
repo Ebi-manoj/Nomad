@@ -15,7 +15,7 @@ import {} from 'lucide-react';
 
 interface CurrentHikerCardProps {
   hiker: GetHikersMatchedResponseDTO;
-  onChatClick?: (hiker: GetHikersMatchedResponseDTO) => void;
+  onChatClick: (hiker: GetHikersMatchedResponseDTO) => void;
 }
 
 export function CurrentHikerCard({

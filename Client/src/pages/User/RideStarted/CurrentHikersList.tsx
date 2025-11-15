@@ -6,7 +6,7 @@ import { Users, MessageCircle } from 'lucide-react';
 
 interface CurrentHikersListProps {
   hikers: GetHikersMatchedResponseDTO[];
-  onChatClick?: (hiker: GetHikersMatchedResponseDTO) => void;
+  onChatClick: (hiker: GetHikersMatchedResponseDTO) => void;
 }
 
 export function CurrentHikersList({
@@ -47,12 +47,10 @@ export function CurrentHikersList({
               {hikers.length} Hikers
             </span>
           </div>
-          {onChatClick && (
-            <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-              <MessageCircle className="w-3 h-3" />
-              Click chat to message hikers
-            </p>
-          )}
+          <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+            <MessageCircle className="w-3 h-3" />
+            Click chat to message hikers
+          </p>
         </div>
 
         {/* Scrollable Hikers List */}

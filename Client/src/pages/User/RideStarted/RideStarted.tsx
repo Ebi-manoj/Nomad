@@ -8,18 +8,16 @@ import type { RootState } from '@/store/store';
 import { RideMap } from './RideMap';
 import { useSocket } from '@/context/SocketContext';
 import type { RideRequestDTO } from '@/types/ride';
-import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { getJoinRequest } from '@/api/ride';
 import ChatInterface from './ChatInterface';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { fetchRiderTasks } from '@/store/features/user/riderTasks/riderTasks.thunk';
 import { fetchMatchedHikers } from '@/store/features/user/matchedHikers/matchedHikers.thunk';
-
+import type { ChatInterfaceProps } from '@/types/chat';
+import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 
 export function RideStartedContent() {
-  const [showChat, setShowChat] = useState<
-    GetHikersMatchedResponseDTO | null
-  >(null);
+  const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
   const [showDetails, setShowDetails] = useState(true);
   const { rideData } = useSelector((state: RootState) => state.ride);
   const [rideRequests, setRideRequest] = useState<RideRequestDTO[]>([]);
@@ -65,16 +63,24 @@ export function RideStartedContent() {
 
   const handleCompleteTask = (taskId: string, otp?: string) => {
     console.log('Completing task:', taskId, 'with OTP:', otp);
- 
   };
 
   const handleChatClick = (hiker: GetHikersMatchedResponseDTO) => {
-    setShowChat(hiker);
+    const { user, hikeDetails } = hiker;
+    setShowChat({
+      onBack: handleChatBack,
+      user: {
+        name: user.fullName,
+        rating: user.rating,
+        profilePic: user.profilePic,
+        verified: user.isVerified,
+        socketId: hikeDetails.hikeId,
+      },
+    });
   };
 
   const handleChatBack = () => {
     setShowChat(null);
-    
   };
 
   return (
@@ -113,8 +119,8 @@ export function RideStartedContent() {
           />
         )}
 
-        {showChat  && (
-          <ChatInterface onBack={handleChatBack} hiker={showChat} />
+        {showChat && (
+          <ChatInterface onBack={handleChatBack} user={showChat.user} />
         )}
       </div>
     </div>
