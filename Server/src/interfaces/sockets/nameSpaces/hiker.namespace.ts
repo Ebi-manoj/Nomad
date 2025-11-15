@@ -10,5 +10,15 @@ export function setupHikerNamespace(io: Server) {
       socket.join(hikeId);
       console.log(`Hiker ${socket.id} joined room: ${hikeId}`);
     });
+
+    socket.on('chat:join', (roomId: string) => {
+      socket.join(roomId);
+      console.log(`Hiker ${socket.id} joined chat room: ${roomId}`);
+    });
+
+    socket.on('chat:leave', (roomId: string) => {
+      socket.leave(roomId);
+      console.log(`Hiker ${socket.id} left chat room: ${roomId}`);
+    });
   });
 }

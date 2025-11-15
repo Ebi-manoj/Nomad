@@ -1,18 +1,95 @@
-import type { ChatInterfaceProps } from '@/types/chat';
+import type { ChatInterfaceProps, ChatMessageDTO } from '@/types/chat';
 import { ArrowLeft, Send, Star, CheckCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSocket } from '@/context/SocketContext';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
+import { getChatMessages, sendChatMessage } from '@/api/chat';
 
-export default function ChatInterface({ onBack, user }: ChatInterfaceProps) {
+export default function ChatInterface({
+  onBack,
+  user,
+  role,
+}: ChatInterfaceProps) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<
-    { from: 'me' | 'other'; text: string }[]
+    { id?: string; from: 'me' | 'other'; text: string; createdAt?: string }[]
   >([]);
 
-  const handleSend = () => {
-    if (!message.trim()) return;
+  const { riderSocket, hikerSocket } = useSocket();
+  const currentUserId = useSelector((state: RootState) => state.auth.user?.id);
 
-    setMessages(prev => [...prev, { from: 'me', text: message }]);
+  const socket = role === 'rider' ? riderSocket : hikerSocket;
+  const roomId = user.socketId;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    socket.emit('chat:join', roomId);
+
+    getChatMessages(roomId)
+      .then(history => {
+        if (!isMounted) return;
+        setMessages(
+          history.map(m => ({
+            id: m.id,
+            from: m.senderId === currentUserId ? 'me' : 'other',
+            text: m.message,
+            createdAt: m.createdAt,
+          }))
+        );
+      })
+      .catch(() => {
+        // ignore history load errors for now
+      });
+
+    const handleIncoming = (m: ChatMessageDTO) => {
+      if (m.roomId !== roomId) return;
+      if (m.senderId === currentUserId) return;
+      setMessages(prev => [
+        ...prev,
+        {
+          id: m.id,
+          from: 'other',
+          text: m.message,
+          createdAt: m.createdAt,
+        },
+      ]);
+    };
+
+    socket.on('chat:message', handleIncoming);
+
+    return () => {
+      isMounted = false;
+      socket.off('chat:message', handleIncoming);
+      socket.emit('chat:leave', roomId);
+    };
+  }, [socket, roomId, currentUserId]);
+
+  const handleSend = async () => {
+    const trimmed = message.trim();
+    if (!trimmed) return;
+
     setMessage('');
+
+    try {
+      const sent = await sendChatMessage(roomId, role, trimmed);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: sent.id,
+          from: 'me',
+          text: sent.message,
+          createdAt: sent.createdAt,
+        },
+      ]);
+    } catch {
+      // optional: handle send error (e.g., toast)
+    }
   };
 
   return (

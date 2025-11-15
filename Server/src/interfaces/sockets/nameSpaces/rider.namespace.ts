@@ -18,5 +18,15 @@ export function setupRiderNameSpace(
       socket.join(rideId);
       console.log(`Rider ${socket.id} joined ride room: ${rideId}`);
     });
+
+    socket.on('chat:join', (roomId: string) => {
+      socket.join(roomId);
+      console.log(`Rider ${socket.id} joined chat room: ${roomId}`);
+    });
+
+    socket.on('chat:leave', (roomId: string) => {
+      socket.leave(roomId);
+      console.log(`Rider ${socket.id} left chat room: ${roomId}`);
+    });
   });
 }

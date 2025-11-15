@@ -9,7 +9,7 @@ import { RideMap } from './RideMap';
 import { useSocket } from '@/context/SocketContext';
 import type { RideRequestDTO } from '@/types/ride';
 import { getJoinRequest } from '@/api/ride';
-import ChatInterface from './ChatInterface';
+import ChatInterface from '../../../components/ChatInterface';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { fetchRiderTasks } from '@/store/features/user/riderTasks/riderTasks.thunk';
 import { fetchMatchedHikers } from '@/store/features/user/matchedHikers/matchedHikers.thunk';
@@ -69,6 +69,7 @@ export function RideStartedContent() {
     const { user, hikeDetails } = hiker;
     setShowChat({
       onBack: handleChatBack,
+      role: 'rider',
       user: {
         name: user.fullName,
         rating: user.rating,
@@ -120,7 +121,11 @@ export function RideStartedContent() {
         )}
 
         {showChat && (
-          <ChatInterface onBack={handleChatBack} user={showChat.user} />
+          <ChatInterface
+            onBack={handleChatBack}
+            role={showChat.role}
+            user={showChat.user}
+          />
         )}
       </div>
     </div>
