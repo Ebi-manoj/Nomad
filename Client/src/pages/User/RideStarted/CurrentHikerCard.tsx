@@ -15,7 +15,7 @@ import {} from 'lucide-react';
 
 interface CurrentHikerCardProps {
   hiker: GetHikersMatchedResponseDTO;
-  onChatClick?: (hikeId: string) => void;
+  onChatClick?: (hiker: GetHikersMatchedResponseDTO) => void;
 }
 
 export function CurrentHikerCard({
@@ -162,7 +162,7 @@ export function CurrentHikerCard({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => onChatClick(hiker.hikeDetails.hikeId)}
+                  onClick={() => onChatClick(hiker)}
                   className="cursor-pointer flex-1 h-7 text-xs bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
                 >
                   <MessageCircle className="w-3 h-3 mr-1" />

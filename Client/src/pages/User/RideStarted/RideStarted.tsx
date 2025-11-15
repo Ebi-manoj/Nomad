@@ -8,22 +8,24 @@ import type { RootState } from '@/store/store';
 import { RideMap } from './RideMap';
 import { useSocket } from '@/context/SocketContext';
 import type { RideRequestDTO } from '@/types/ride';
-import type { Task } from '@/types/task';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
-import { getJoinRequest, getTasks, getHikersMatched } from '@/api/ride';
+import { getJoinRequest } from '@/api/ride';
 import ChatInterface from './ChatInterface';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { fetchRiderTasks } from '@/store/features/user/riderTasks/riderTasks.thunk';
+import { fetchMatchedHikers } from '@/store/features/user/matchedHikers/matchedHikers.thunk';
+
 
 export function RideStartedContent() {
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState<
+    GetHikersMatchedResponseDTO | null
+  >(null);
   const [showDetails, setShowDetails] = useState(true);
   const { rideData } = useSelector((state: RootState) => state.ride);
   const [rideRequests, setRideRequest] = useState<RideRequestDTO[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [currentHikers, setCurrentHikers] = useState<
-    GetHikersMatchedResponseDTO[]
-  >([]);
 
   const { riderSocket } = useSocket();
+  const dispatch = useAppDispatch();
   if (!rideData) return <Navigate to="/ride" replace />;
 
   useEffect(() => {
@@ -33,25 +35,10 @@ export function RideStartedContent() {
         setRideRequest(data);
       } catch (error) {}
     };
-
-    const fetchTasks = async () => {
-      try {
-        const tasksData = await getTasks(rideData.id);
-        setTasks(tasksData);
-      } catch (error) {}
-    };
-
-    const fetchCurrentHikers = async () => {
-      try {
-        const hikersData = await getHikersMatched(rideData.id);
-        setCurrentHikers(hikersData);
-      } catch (error) {}
-    };
-
     fetchPendingReq();
-    fetchTasks();
-    fetchCurrentHikers();
-  }, [rideData]);
+    dispatch(fetchRiderTasks(rideData.id));
+    dispatch(fetchMatchedHikers(rideData.id));
+  }, [rideData, dispatch]);
 
   useEffect(() => {
     if (!riderSocket.connected) {
@@ -65,14 +52,8 @@ export function RideStartedContent() {
     });
 
     riderSocket.on('hike:confirmed', async () => {
-      try {
-        const [tasksData, hikersData] = await Promise.all([
-          getTasks(rideData.id),
-          getHikersMatched(rideData.id),
-        ]);
-        setTasks(tasksData);
-        setCurrentHikers(hikersData);
-      } catch (error) {}
+      dispatch(fetchRiderTasks(rideData.id));
+      dispatch(fetchMatchedHikers(rideData.id));
     });
 
     return () => {
@@ -80,25 +61,20 @@ export function RideStartedContent() {
       riderSocket.off('hike:confirmed');
       riderSocket.disconnect();
     };
-  }, [rideData, riderSocket]);
+  }, [rideData, riderSocket, dispatch]);
 
   const handleCompleteTask = (taskId: string, otp?: string) => {
     console.log('Completing task:', taskId, 'with OTP:', otp);
-
-    setTasks(prev =>
-      prev.map(task =>
-        task.id === taskId ? { ...task, status: 'COMPLETED' as const } : task
-      )
-    );
+ 
   };
 
-  const handleChatClick = (hikeId: string) => {
-    setShowChat(true);
-    console.log('Opening chat with hiker:', hikeId);
+  const handleChatClick = (hiker: GetHikersMatchedResponseDTO) => {
+    setShowChat(hiker);
   };
 
   const handleChatBack = () => {
-    setShowChat(false);
+    setShowChat(null);
+    
   };
 
   return (
@@ -132,14 +108,14 @@ export function RideStartedContent() {
             hikers={rideRequests}
             seatsRemaining={rideData.seatsAvailable}
             setRideRequest={setRideRequest}
-            tasks={tasks}
-            currentHikers={currentHikers}
             onCompleteTask={handleCompleteTask}
             onChatClick={handleChatClick}
           />
         )}
 
-        {showChat && <ChatInterface onBack={handleChatBack} />}
+        {showChat  && (
+          <ChatInterface onBack={handleChatBack} hiker={showChat} />
+        )}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { Users, MessageCircle } from 'lucide-react';
 
 interface CurrentHikersListProps {
   hikers: GetHikersMatchedResponseDTO[];
-  onChatClick?: (hikeId: string) => void;
+  onChatClick?: (hiker: GetHikersMatchedResponseDTO) => void;
 }
 
 export function CurrentHikersList({

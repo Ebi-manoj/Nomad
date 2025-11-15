@@ -3,30 +3,31 @@ import { HikerList } from './HikersList';
 import { TasksList } from './TasksList';
 import { CurrentHikersList } from './CurrentHikersList';
 import type { RideRequestDTO } from '@/types/ride';
-import type { Task } from '@/types/task';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { acceptJoinRequest, declineJoinRequest } from '@/api/ride';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
 
 interface RideTabsProps {
   hikers: RideRequestDTO[];
   seatsRemaining: number;
   setRideRequest: React.Dispatch<React.SetStateAction<RideRequestDTO[]>>;
-  tasks: Task[];
-  currentHikers: GetHikersMatchedResponseDTO[];
   onCompleteTask: (taskId: string, otp?: string) => void;
-  onChatClick?: (hikeId: string) => void;
+  onChatClick?: (hiker: GetHikersMatchedResponseDTO) => void;
 }
 
 export function RideTabs({
   hikers,
   seatsRemaining,
   setRideRequest,
-  tasks,
-  currentHikers,
   onCompleteTask,
   onChatClick,
 }: RideTabsProps) {
+  const tasks = useSelector((state: RootState) => state.riderTasks.tasks);
+  const currentHikers = useSelector(
+    (state: RootState) => state.matchedHikers.hikers
+  );
   const handleAccept = async (requestId: string) => {
     try {
       const data = await acceptJoinRequest(requestId);

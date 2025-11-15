@@ -7,7 +7,7 @@ export interface Task {
   taskType: TaskType;
   location: {
     type: 'Point';
-    coordinates: [number, number]; // [longitude, latitude]
+    coordinates: [number, number];
   };
   address: string;
   priority: number;
@@ -20,28 +20,4 @@ export interface Task {
   };
   estimatedTime?: string;
   otp?: string;
-}
-
-export interface ConfirmedHiker {
-  id: string;
-  bookingId: string;
-  hiker: {
-    id: string;
-    fullName: string;
-    profilePicture?: string;
-    phone?: string;
-    rating?: number;
-  };
-  pickupLocation: {
-    address: string;
-    coordinates: [number, number];
-  };
-  dropoffLocation: {
-    address: string;
-    coordinates: [number, number];
-  };
-  seatsBooked: number;
-  amount: number;
-  status: 'confirmed' | 'picked_up' | 'dropped_off';
-  confirmedAt: string;
 }

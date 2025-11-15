@@ -1,11 +1,13 @@
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send, Star, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
+import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 
 interface ChatInterfaceProps {
   onBack: () => void;
+  hiker: GetHikersMatchedResponseDTO;
 }
 
-export default function ChatInterface({ onBack }: ChatInterfaceProps) {
+export default function ChatInterface({ onBack, hiker }: ChatInterfaceProps) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<
     { from: 'me' | 'other'; text: string }[]
@@ -31,11 +33,29 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
 
         <div className="flex items-center gap-3">
           <img
-            src={'https://ui-avatars.com/api/?name='}
-            alt="profile"
+            src={
+              hiker.user.profilePic ||
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                hiker.user.fullName
+              )}`
+            }
+            alt={hiker.user.fullName}
             className="w-10 h-10 rounded-full object-cover border"
           />
-          <span className="font-semibold text-lg">{'userName'}</span>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-lg">
+                {hiker.user.fullName}
+              </span>
+              {hiker.user.isVerified && (
+                <CheckCircle className="w-4 h-4 text-blue-500" />
+              )}
+            </div>
+            <div className="flex items-center gap-1 text-xs text-gray-600">
+              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+              <span>{hiker.user.rating.toFixed(1)}</span>
+            </div>
+          </div>
         </div>
       </div>
 
