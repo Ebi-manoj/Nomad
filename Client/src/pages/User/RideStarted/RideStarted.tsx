@@ -11,10 +11,14 @@ import type { RideRequestDTO } from '@/types/ride';
 import { getJoinRequest } from '@/api/ride';
 import ChatInterface from '../../../components/ChatInterface';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { fetchRiderTasks } from '@/store/features/user/riderTasks/riderTasks.thunk';
+import {
+  completeTask,
+  fetchRiderTasks,
+} from '@/store/features/user/riderTasks/riderTasks.thunk';
 import { fetchMatchedHikers } from '@/store/features/user/matchedHikers/matchedHikers.thunk';
 import type { ChatInterfaceProps } from '@/types/chat';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
+import { toast } from 'sonner';
 
 export function RideStartedContent() {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
@@ -61,8 +65,13 @@ export function RideStartedContent() {
     };
   }, [rideData, riderSocket, dispatch]);
 
-  const handleCompleteTask = (taskId: string, otp?: string) => {
-    console.log('Completing task:', taskId, 'with OTP:', otp);
+  const handleCompleteTask = async (taskId: string, otp?: string) => {
+    try {
+      console.log('Completing task:', taskId, 'with OTP:', otp);
+      await dispatch(completeTask({ taskId, otp })).unwrap();
+    } catch (error) {
+      toast.error(typeof error == 'string' && error);
+    }
   };
 
   const handleChatClick = (hiker: GetHikersMatchedResponseDTO) => {

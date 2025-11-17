@@ -74,7 +74,7 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
         seatsBooked: booking.getSeatsBooked(),
         amount: booking.getAmount(),
         platformFee: booking.getPlatformFee(),
-        status: hike.getStatus(),
+        status: booking.getStatus(),
         pickupLocation: booking.getPickupLocation().coordinates,
         dropoffLocation: booking.getDropoffLocation().coordinates,
       },

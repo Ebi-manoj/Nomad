@@ -1,9 +1,17 @@
-import { CompleteTaskReqDTO } from '../../../../domain/dto/TaskDTO';
+import {
+  CompleteTaskReqDTO,
+  CompleteTaskResponseDTO,
+} from '../../../../domain/dto/TaskDTO';
 import { RideBookingStatus } from '../../../../domain/enums/RideBooking';
 import { TaskStatus, TaskType } from '../../../../domain/enums/Task';
-import { Forbidden, InvalidOTP } from '../../../../domain/errors/CustomError';
+import {
+  Forbidden,
+  InvalidOTP,
+  UpdateFailed,
+} from '../../../../domain/errors/CustomError';
 import { RideBookingNotFound } from '../../../../domain/errors/RideBookingError';
 import {
+  HikerNotMarkedDropOff,
   TaskAlreadyComplted,
   TaskNotFound,
   TaskNotInHighestPriority,
@@ -19,7 +27,7 @@ export class CompleteTaskUseCase implements ICompleteTaskUseCase {
     private readonly bookingRepository: IRideBookingRepository
   ) {}
 
-  async execute(data: CompleteTaskReqDTO): Promise<{ message: string }> {
+  async execute(data: CompleteTaskReqDTO): Promise<CompleteTaskResponseDTO> {
     const task = await this.taskRepository.findById(data.taskId);
     if (!task) throw new TaskNotFound();
 
@@ -42,20 +50,28 @@ export class CompleteTaskUseCase implements ICompleteTaskUseCase {
     );
     if (!booking) throw new RideBookingNotFound();
 
+    if (task.getTaskType() == TaskType.DROPOFF) {
+      if (booking.getStatus() !== RideBookingStatus.DROPPEDOFF)
+        throw new HikerNotMarkedDropOff();
+    }
+
     const bookingStatus =
       task.getTaskType() == TaskType.PICKUP
         ? RideBookingStatus.PICKEDUP
-        : RideBookingStatus.DROPPEDOFF;
+        : RideBookingStatus.COMPLETED;
 
     booking.setStatus(bookingStatus);
     task.complete();
 
-    await Promise.all([
+    const [updatedBooking, updatedTask] = await Promise.all([
       this.bookingRepository.update(booking.getId(), booking),
       this.taskRepository.update(task.getId(), task),
     ]);
+    if (!updatedTask) throw new UpdateFailed();
+
     return {
-      message: 'Task Completed SuccessFully',
+      taskId: updatedTask.getId()!,
+      status: updatedTask.getStatus(),
     };
   }
 }

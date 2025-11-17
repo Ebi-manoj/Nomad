@@ -9,6 +9,7 @@ import {
   TrendingUp,
   Star,
   Navigation,
+  AlertTriangle,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -153,7 +154,7 @@ export function TaskCard({ task, displayPriority, onComplete }: TaskCardProps) {
               onClick={handleShowLocation}
               variant="outline"
               size="sm"
-              className="w-full mt-2 bg-white hover:bg-gray-50 border-gray-300"
+              className="w-full mt-2 bg-white hover:bg-gray-50 border-gray-300 cursor-pointer"
             >
               <Navigation className="w-3.5 h-3.5 mr-2" />
               View on Map
@@ -179,19 +180,19 @@ export function TaskCard({ task, displayPriority, onComplete }: TaskCardProps) {
                     </label>
                     <Input
                       type="text"
-                      placeholder="0000"
+                      placeholder="******"
                       value={otpInput}
                       onChange={e =>
                         setOtpInput(e.target.value.replace(/\D/g, ''))
                       }
-                      maxLength={4}
+                      maxLength={6}
                       className="text-center text-2xl font-bold tracking-widest border-2 border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200"
                     />
                   </div>
                   <Button
                     onClick={handleComplete}
-                    disabled={otpInput.length !== 4 || isCompleting}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-6 rounded-lg shadow-md hover:shadow-lg transition-all disabled:opacity-50"
+                    disabled={otpInput.length !== 6 || isCompleting}
+                    className="cursor-pointer w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-6 rounded-lg shadow-md hover:shadow-lg transition-all disabled:opacity-50"
                   >
                     {isCompleting ? (
                       <>
@@ -209,23 +210,34 @@ export function TaskCard({ task, displayPriority, onComplete }: TaskCardProps) {
               )}
 
               {!isPickup && (
-                <Button
-                  onClick={handleComplete}
-                  disabled={isCompleting}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 rounded-lg shadow-md hover:shadow-lg transition-all"
-                >
-                  {isCompleting ? (
-                    <>
-                      <Clock className="w-5 h-5 mr-2 animate-spin" />
-                      Completing...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle className="w-5 h-5 mr-2" />
-                      Complete Dropoff
-                    </>
-                  )}
-                </Button>
+                <>
+                  <div className="bg-amber-50 border-l-4 border-amber-500 rounded-lg p-3 flex  gap-2 items-center mb-4">
+                    <div className="flex-shrink-0 mt-0.5">
+                      <AlertTriangle className="text-red-300" size={16} />
+                    </div>
+                    <p className="text-sm font-medium text-amber-800 leading-relaxed">
+                      Make sure Hiker is marked as{' '}
+                      <span className="font-bold">Dropped Off</span> first
+                    </p>
+                  </div>
+                  <Button
+                    onClick={handleComplete}
+                    disabled={isCompleting}
+                    className="cursor-pointer w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 rounded-lg shadow-md hover:shadow-lg transition-all"
+                  >
+                    {isCompleting ? (
+                      <>
+                        <Clock className="w-5 h-5 mr-2 animate-spin" />
+                        Completing...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-5 h-5 mr-2" />
+                        Complete Dropoff
+                      </>
+                    )}
+                  </Button>
+                </>
               )}
             </div>
           )}

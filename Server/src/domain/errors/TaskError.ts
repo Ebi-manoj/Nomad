@@ -21,3 +21,8 @@ export class TaskNotInHighestPriority extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class HikerNotMarkedDropOff extends CustomError {
+  constructor(message = 'Hiker not marked dropoff completed') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

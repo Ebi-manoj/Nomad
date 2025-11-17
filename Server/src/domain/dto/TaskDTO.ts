@@ -40,3 +40,7 @@ export interface CompleteTaskReqDTO {
   taskId: string;
   userId: string;
 }
+export interface CompleteTaskResponseDTO {
+  taskId: string;
+  status: TaskStatus;
+}

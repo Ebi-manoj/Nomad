@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import {
   Clock,
   Navigation,
-  Phone,
   MessageCircle,
   User,
   Car,
@@ -78,9 +77,6 @@ export const BookingSection = ({
             </div>
           </div>
           <div className="flex gap-2">
-            <button className="p-3 bg-green-500 hover:bg-green-600 text-white rounded-full transition">
-              <Phone className="w-5 h-5" />
-            </button>
             <button className="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full transition">
               <MessageCircle className="w-5 h-5" onClick={onChatClick} />
             </button>
@@ -107,9 +103,6 @@ export const BookingSection = ({
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm font-medium text-green-600">
                   PICKUP
-                </span>
-                <span className="text-xs text-gray-500">
-                  Rider is on the way
                 </span>
               </div>
               <p className="font-semibold text-gray-900">

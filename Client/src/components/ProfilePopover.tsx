@@ -28,7 +28,7 @@ export function ProfilePopover() {
   async function handleLogout() {
     try {
       await dispatch(logout()).unwrap();
-      navigate('/auth/sign-in');
+      window.location.href = '/auth/sign-in';
     } catch (error) {
       toast.success(typeof error == 'string' ? error : 'Logout Failed');
     }

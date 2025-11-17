@@ -21,11 +21,15 @@ router.get(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
-router.patch('/:taskId', async (req: Request, res: Response) => {
-  const adapter = await expressAdapter(req, httpReq =>
-    taskComposer().completeTask(httpReq)
-  );
-  return res.status(adapter.statusCode).json(adapter.body);
-});
+router.patch(
+  '/:taskId',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      taskComposer().completeTask(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;
