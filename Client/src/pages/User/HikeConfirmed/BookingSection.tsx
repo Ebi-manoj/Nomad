@@ -9,7 +9,15 @@ import {
   User,
   Car,
   Calendar,
+  Loader2,
 } from 'lucide-react';
+import { getRideBookingOTP } from '@/api/rideBooking';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
+
+export type RideOTPState = {
+  otp: string | null;
+  loading: boolean;
+};
 
 export const BookingSection = ({
   booking,
@@ -21,11 +29,31 @@ export const BookingSection = ({
   const { rideBooking, rider, rideDetails } = booking;
   const [departure, setDeparture] = useState('');
   const [estimation, setEstimation] = useState('');
+  const [rideOtp, setRideOtp] = useState<RideOTPState>({
+    otp: null,
+    loading: false,
+  });
+
+  console.log(rideOtp);
   useEffect(() => {
     if (!booking) return;
     setDeparture(timeFormater(rideDetails.departure));
     setEstimation(timeFormater(rideDetails.duration + rideDetails.departure));
   }, [booking]);
+
+  const handleViewOtp = async () => {
+    setRideOtp({ ...rideOtp, loading: true });
+    try {
+      const data = await getRideBookingOTP(rideBooking.bookingId);
+      setRideOtp({ ...rideOtp, otp: data.otp });
+    } catch (error) {
+      useHandleApiError(error);
+    } finally {
+      setRideOtp(prev => {
+        return { ...prev, loading: false };
+      });
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -88,10 +116,23 @@ export const BookingSection = ({
                 {rideDetails.pickupAddress}
               </p>
               <p className="text-sm text-gray-500">Departure: {departure}</p>
-              {/* <p className="text-sm font-semibold text-blue-600">OTP: {1234}</p> */}
-              <p className="text-sm font-semibold text-blue-600 cursor-pointer underline">
-                View OTP
-              </p>
+              {rideOtp.otp && (
+                <p className="text-sm font-semibold text-blue-600">
+                  OTP: {rideOtp.otp}
+                </p>
+              )}
+              {!rideOtp.otp && (
+                <p
+                  className="text-sm font-semibold text-blue-600 cursor-pointer underline"
+                  onClick={handleViewOtp}
+                >
+                  {rideOtp.loading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    'View OTP'
+                  )}
+                </p>
+              )}
             </div>
           </div>
 
