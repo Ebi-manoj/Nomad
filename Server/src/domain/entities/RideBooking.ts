@@ -131,4 +131,8 @@ export class RideBooking {
     this.status = RideBookingStatus.COMPLETED;
     this.updatedAt = new Date();
   }
+  setStatus(status: RideBookingStatus) {
+    this.status = status;
+    this.updatedAt = new Date();
+  }
 }

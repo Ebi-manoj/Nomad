@@ -34,3 +34,9 @@ export interface GetTaskResponseDTO {
     isVerified: boolean;
   };
 }
+
+export interface CompleteTaskReqDTO {
+  otp?: string;
+  taskId: string;
+  userId: string;
+}

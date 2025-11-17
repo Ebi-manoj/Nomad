@@ -11,3 +11,13 @@ export class TaskOTPNotFound extends CustomError {
     super(HttpStatus.NOT_FOUND, message);
   }
 }
+export class TaskAlreadyComplted extends CustomError {
+  constructor(message = 'Task already in completed state') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
+export class TaskNotInHighestPriority extends CustomError {
+  constructor(message = 'Complete Task in Highest Priority') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
