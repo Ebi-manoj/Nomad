@@ -11,5 +11,15 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
   );
   return res.status(adapter.statusCode).json(adapter.body);
 });
+router.get(
+  '/otp/:rideBookingId',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      taskComposer().getTaskOTPForHiker(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

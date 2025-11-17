@@ -22,49 +22,44 @@ export default function ChatInterface({
   const socket = role === 'rider' ? riderSocket : hikerSocket;
   const roomId = user.socketId;
 
-  useEffect(() => {
-    let isMounted = true;
+  const handleIncoming = (m: ChatMessageDTO) => {
+    if (m.roomId !== roomId) return;
+    if (m.senderId === currentUserId) return;
+    setMessages(prev => [
+      ...prev,
+      {
+        id: m.id,
+        from: 'other',
+        text: m.message,
+        createdAt: m.createdAt,
+      },
+    ]);
+  };
 
+  const loadChats = async () => {
+    try {
+      const history = await getChatMessages(roomId);
+      setMessages(
+        history.map(m => ({
+          id: m.id,
+          from: m.senderId === currentUserId ? 'me' : 'other',
+          text: m.message,
+          createdAt: m.createdAt,
+        }))
+      );
+    } catch (error) {}
+  };
+
+  useEffect(() => {
     if (!socket.connected) {
       socket.connect();
     }
 
     socket.emit('chat:join', roomId);
-
-    getChatMessages(roomId)
-      .then(history => {
-        if (!isMounted) return;
-        setMessages(
-          history.map(m => ({
-            id: m.id,
-            from: m.senderId === currentUserId ? 'me' : 'other',
-            text: m.message,
-            createdAt: m.createdAt,
-          }))
-        );
-      })
-      .catch(() => {
-        // ignore history load errors for now
-      });
-
-    const handleIncoming = (m: ChatMessageDTO) => {
-      if (m.roomId !== roomId) return;
-      if (m.senderId === currentUserId) return;
-      setMessages(prev => [
-        ...prev,
-        {
-          id: m.id,
-          from: 'other',
-          text: m.message,
-          createdAt: m.createdAt,
-        },
-      ]);
-    };
-
+    loadChats();
     socket.on('chat:message', handleIncoming);
 
     return () => {
-      isMounted = false;
       socket.off('chat:message', handleIncoming);
       socket.emit('chat:leave', roomId);
     };
@@ -87,9 +82,7 @@ export default function ChatInterface({
           createdAt: sent.createdAt,
         },
       ]);
-    } catch {
-      // optional: handle send error (e.g., toast)
-    }
+    } catch {}
   };
 
   return (

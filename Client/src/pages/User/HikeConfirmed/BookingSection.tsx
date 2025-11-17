@@ -88,6 +88,10 @@ export const BookingSection = ({
                 {rideDetails.pickupAddress}
               </p>
               <p className="text-sm text-gray-500">Departure: {departure}</p>
+              {/* <p className="text-sm font-semibold text-blue-600">OTP: {1234}</p> */}
+              <p className="text-sm font-semibold text-blue-600 cursor-pointer underline">
+                View OTP
+              </p>
             </div>
           </div>
 

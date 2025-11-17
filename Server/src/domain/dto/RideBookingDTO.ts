@@ -34,3 +34,8 @@ export interface RideBookingResponseDTO {
     duration: number;
   };
 }
+
+export interface RideBookingOTPReqDTO {
+  rideBookingId: string;
+  userId: string;
+}
