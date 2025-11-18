@@ -30,6 +30,11 @@ export function RideMatching() {
   const [loading, setLoading] = useState(false);
 
   if (!hikeData) return <Navigate to="/hike" replace />;
+  useEffect(() => {
+    if (hikeData?.confirmed && hikeData?.bookingId) {
+      navigate(`/hike/started/${hikeData.bookingId}`, { replace: true });
+    }
+  }, [hikeData, navigate]);
 
   const { hikerSocket } = useSocket();
   useEffect(() => {

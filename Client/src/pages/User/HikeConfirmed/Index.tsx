@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { getRideBookingThunk } from '@/store/features/user/rideBooking/rideBooking.thunk';
 import type { RootState } from '@/store/store';
@@ -10,6 +10,8 @@ import { BookingSection } from './BookingSection';
 import type { ChatInterfaceProps } from '@/types/chat';
 import ChatInterface from '../../../components/ChatInterface';
 import { AlertCircle, CheckCircle } from 'lucide-react';
+import { markDropOff } from '@/api/rideBooking';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 export const HikeStartedPage = () => {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
@@ -18,11 +20,19 @@ export const HikeStartedPage = () => {
   const { booking, loading } = useSelector(
     (state: RootState) => state.rideBooking
   );
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (!bookingId) return;
     dispatch(getRideBookingThunk(bookingId));
   }, [bookingId, dispatch]);
+
+  useEffect(() => {
+    if (!booking) return;
+    const status = booking.rideBooking.status;
+    if (status !== 'CONFIRMED' && status !== 'PICKED UP') {
+      navigate(`/hike/${booking.rideBooking.hikeId}`, { replace: true });
+    }
+  }, [navigate, booking]);
 
   if (loading) {
     return (
@@ -63,6 +73,16 @@ export const HikeStartedPage = () => {
     });
   };
 
+  const handleMarkDropOff = async () => {
+    if (!bookingId) return;
+    try {
+      await markDropOff(bookingId);
+      navigate(`/hike/${booking.rideBooking.hikeId}`, { replace: true });
+    } catch (error) {
+      useHandleApiError(error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -80,7 +100,10 @@ export const HikeStartedPage = () => {
             {rideBooking.status}
           </span>
           {rideBooking.status == 'PICKED UP' ? (
-            <button className="cursor-pointer group relative px-4 py-3 rounded-xl text-white font-bold overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            <button
+              className="cursor-pointer group relative px-4 py-3 rounded-xl text-white font-bold overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleMarkDropOff}
+            >
               <div className="absolute inset-0 bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 bg-[length:200%_100%] group-hover:bg-[position:100%_0] transition-all duration-500" />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
 
@@ -91,7 +114,7 @@ export const HikeStartedPage = () => {
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-white/40 rounded-full blur-sm group-hover:w-full transition-all duration-300" />
             </button>
           ) : (
-            <button className="group relative px-4 py-2 rounded-xl text-white font-semibold overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            <button className="cursor-pointer group relative px-4 py-2 rounded-xl text-white font-semibold overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
               <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-rose-600 to-red-600 bg-[length:200%_100%] group-hover:bg-[position:100%_0] transition-all duration-500" />
               <div className="relative flex items-center justify-center gap-2">
                 <AlertCircle className="w-4 h-4 group-hover:rotate-12 transition-transform" />

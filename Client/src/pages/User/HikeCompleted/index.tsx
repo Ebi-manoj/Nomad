@@ -11,27 +11,25 @@ import {
   Sparkles,
 } from 'lucide-react';
 import type { GetHikeDetailsResponseDTO } from '@/types/hike';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getHikeDetails } from '@/api/hike';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 import { HomeSkeleton } from '@/components/skeletons/HomeSkeleton';
 import { formatDuration } from '@/utils/dateFormater';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { clearHikeData } from '@/store/features/user/hike/hikeSlice';
 
 export const HikeCompletedPage = () => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [hikeDetails, setHikeDetails] =
     useState<GetHikeDetailsResponseDTO | null>(null);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
 
   const { hikeId } = useParams();
-
-  const handleSubmit = () => {
-    alert(
-      `Thank you for your feedback!\nRating: ${rating} stars\nFeedback: ${feedback}`
-    );
-  };
 
   useEffect(() => {
     if (!hikeId) return;
@@ -53,6 +51,11 @@ export const HikeCompletedPage = () => {
   if (loading) return <HomeSkeleton />;
 
   if (!hikeDetails) return <div>Hike Details not Found</div>;
+
+  const handleRedirect = () => {
+    dispatch(clearHikeData());
+    navigate('/hike', { replace: true });
+  };
 
   return (
     <div className="min-h-screen ">
@@ -228,7 +231,6 @@ export const HikeCompletedPage = () => {
 
               {/* Submit */}
               <button
-                onClick={handleSubmit}
                 className="w-full bg-emerald-600 hover:bg-emerald-700
                  text-white font-semibold py-3 rounded-lg
                  transition-all shadow"
@@ -238,7 +240,10 @@ export const HikeCompletedPage = () => {
             </div>
           </div>
         </div>
-        <button className="cursor-pointer flex items-center justify-center gap-2 mx-auto mt-8 text-gray-600 hover:text-gray-900 font-medium transition-colors group">
+        <button
+          className="cursor-pointer flex items-center justify-center gap-2 mx-auto mt-8 text-gray-600 hover:text-gray-900 font-medium transition-colors group"
+          onClick={handleRedirect}
+        >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           Go back home
         </button>

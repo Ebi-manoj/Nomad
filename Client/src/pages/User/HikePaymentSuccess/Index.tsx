@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { PaymentLoading } from './Loading';
 import { PaymentSuccess } from './Success';
 import { PaymentFailed } from './Failed';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { confirmPayment } from '@/api/payment';
 import type { ConfirmHikerPaymentDTO } from '@/types/payment';
 
@@ -10,6 +10,7 @@ export const PaymentSuccessPage = () => {
   const [status, setStatus] = useState<'loading' | 'success' | 'failed'>(
     'loading'
   );
+  const navigate = useNavigate();
   const [bookingDetails, setBookingDetails] =
     useState<ConfirmHikerPaymentDTO | null>(null);
   const [countdown, setCountdown] = useState(100);
@@ -17,7 +18,6 @@ export const PaymentSuccessPage = () => {
   const [searchParams] = useSearchParams();
   const paymentIntentId = searchParams.get('payment_intent');
 
-  // Simulate API call
   useEffect(() => {
     if (!paymentIntentId) {
       setStatus('failed');
@@ -46,7 +46,7 @@ export const PaymentSuccessPage = () => {
     }
     if (status === 'success' && countdown === 0) {
       if (!bookingDetails) return;
-      window.location.href = `/hike/started/${bookingDetails.bookingId}`;
+      navigate(`/hike/started/${bookingDetails.bookingId}`, { replace: true });
     }
   }, [status, countdown]);
 
@@ -59,8 +59,7 @@ export const PaymentSuccessPage = () => {
   };
 
   const handleRedirect = (id: string) => {
-    console.log(id);
-    window.location.href = `/hike/started/${id}`;
+    navigate(`/hike/started/${id}`, { replace: true });
   };
 
   //  Loading State

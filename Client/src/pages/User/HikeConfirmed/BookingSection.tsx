@@ -33,7 +33,6 @@ export const BookingSection = ({
     loading: false,
   });
 
-  console.log(rideOtp);
   useEffect(() => {
     if (!booking) return;
     setDeparture(timeFormater(rideDetails.departure));

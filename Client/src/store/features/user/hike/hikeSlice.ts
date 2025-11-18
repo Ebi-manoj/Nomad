@@ -15,6 +15,11 @@ const hikeSlice = createSlice({
     setActiveHike(state, action: PayloadAction<HikeResponseDTO | null>) {
       state.hikeData = action.payload;
     },
+    clearHikeData: state => {
+      state.hikeData = null;
+      state.error = '';
+      state.loading = false;
+    },
   },
   extraReducers: builder => {
     builder
@@ -32,5 +37,5 @@ const hikeSlice = createSlice({
   },
 });
 
-export const { setActiveHike } = hikeSlice.actions;
+export const { setActiveHike, clearHikeData } = hikeSlice.actions;
 export default hikeSlice.reducer;

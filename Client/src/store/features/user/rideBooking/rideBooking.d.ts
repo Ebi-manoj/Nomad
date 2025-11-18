@@ -1,3 +1,10 @@
+export type RideBookingStatus =
+  | 'CONFIRMED'
+  | 'CANCELLED'
+  | 'COMPLETED'
+  | 'PICKED UP'
+  | 'DROPPED OFF';
+
 export interface RideBookingResponseDTO {
   rideBooking: {
     bookingId: string;
@@ -10,7 +17,7 @@ export interface RideBookingResponseDTO {
     platformFee: number;
     pickupLocation: [number, number];
     dropoffLocation: [number, number];
-    status: string;
+    status: RideBookingStatus;
   };
   rider: {
     name: string;

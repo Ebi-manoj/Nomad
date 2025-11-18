@@ -19,6 +19,7 @@ export function hikeMapper(hike: HikeLog): HikeResponseDTO {
     seatsRequested: hike.getSeatsRequested(),
     estimatedPrice: hike.getEstimatedPrice(),
     riderId: hike.getRiderId() || null,
+    bookingId: hike.getBookingId() || null,
     confirmed: hike.getConfirmed(),
     createdAt: hike.getCreatedAt(),
   };

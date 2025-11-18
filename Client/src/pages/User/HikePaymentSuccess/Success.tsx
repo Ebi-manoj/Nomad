@@ -82,7 +82,7 @@ export const PaymentSuccess = ({
 
           <Button
             onClick={handleRedirect}
-            className="w-3/4 bg-green-600 hover:bg-green-700 text-white"
+            className="w-3/4 bg-green-600 hover:bg-green-700 text-white cursor-pointer"
           >
             Start Your Adventure <ArrowRight className="w-5 h-5 ml-2" />
           </Button>

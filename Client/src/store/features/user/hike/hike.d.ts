@@ -21,6 +21,7 @@ export interface HikeResponseDTO {
   seatsRequested: number;
   estimatedPrice: number;
   riderId: string | null;
+  bookingId: string | null;
   confirmed: boolean;
   createdAt: Date;
 }
