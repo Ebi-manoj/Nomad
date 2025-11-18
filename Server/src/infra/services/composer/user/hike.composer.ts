@@ -16,6 +16,8 @@ import { LocationRepository } from '../../../repositories/LocationRepository';
 import { PaymentRepository } from '../../../repositories/PaymentRepository';
 import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
+import { GetHikeDetailsUseCase } from '../../../../application/usecases/User/Hike/GetHikeDetails';
+import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
 
 export function hikeComposer(): IHikeController {
   const userRepository = new MongoUserRepository();
@@ -26,6 +28,7 @@ export function hikeComposer(): IHikeController {
   const locationRepository = new LocationRepository();
   const joinRequestRepository = new JoinRequestRepository();
   const paymentRepository = new PaymentRepository();
+  const bookingRepository = new RideBookingRepository();
   const fareCalculator = new FareCalculator();
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
@@ -60,9 +63,17 @@ export function hikeComposer(): IHikeController {
     realtimeGateway
   );
 
+  const gethikeDetailsUseCase = new GetHikeDetailsUseCase(
+    hikeRepository,
+    bookingRepository,
+    paymentRepository,
+    userRepository
+  );
+
   return new HikeController(
     createHikeUseCase,
     findMatchRidesUseCase,
-    createJoinRequestUseCase
+    createJoinRequestUseCase,
+    gethikeDetailsUseCase
   );
 }

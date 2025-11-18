@@ -3,7 +3,7 @@ import { HttpStatus } from '../enums/HttpStatusCode';
 import { CustomError } from './CustomError';
 
 export class HikeNotFound extends CustomError {
-  constructor(message = ErrorMessages.RIDE_NOT_FOUND) {
+  constructor(message = ErrorMessages.HIKE_NOT_FOUND) {
     super(HttpStatus.NOT_FOUND, message);
   }
 }

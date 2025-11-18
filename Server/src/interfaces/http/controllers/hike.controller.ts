@@ -11,12 +11,15 @@ import { IHikeController } from './IHikeController';
 import { ICreateHikeUseCase } from '../../../application/usecases/User/Hike/ICreateHikeUseCase';
 import { IFindMatchRideUseCase } from '../../../application/usecases/User/Hike/IFindMatchRideUseCase';
 import { ICreateJoinRequestUseCase } from '../../../application/usecases/User/Hike/ICreateJoinRequestUseCase';
+import { Unauthorized } from '../../../domain/errors/CustomError';
+import { IGetHikeDetailsUseCase } from '../../../application/usecases/User/Hike/IGetHikeDetails';
 
 export class HikeController implements IHikeController {
   constructor(
     private readonly createHikeUseCase: ICreateHikeUseCase,
     private readonly findMatchRidesUseCase: IFindMatchRideUseCase,
-    private readonly createJoinRequestUseCase: ICreateJoinRequestUseCase
+    private readonly createJoinRequestUseCase: ICreateJoinRequestUseCase,
+    private readonly gethikeDetailsUseCase: IGetHikeDetailsUseCase
   ) {}
   async createHike(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto: CreateHikeDTO = httpRequest.body as CreateHikeDTO;
@@ -37,5 +40,14 @@ export class HikeController implements IHikeController {
     const result = await this.createJoinRequestUseCase.execute(dto);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
+  }
+
+  async getHikeDetails(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { hikeId } = httpRequest.path as { hikeId: string };
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+    const result = await this.gethikeDetailsUseCase.execute({ hikeId, userId });
+    const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
   }
 }

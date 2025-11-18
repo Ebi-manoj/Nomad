@@ -25,4 +25,9 @@ export class RideBookingRepository
     const rideBookings = await this.model.find({ rideId: id });
     return rideBookings.map(r => this.mapper.toDomain(r));
   }
+
+  async findByHikeId(id: string): Promise<RideBooking | null> {
+    const booking = await this.model.findOne({ hikeId: id });
+    return booking ? this.mapper.toDomain(booking) : null;
+  }
 }

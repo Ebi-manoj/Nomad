@@ -84,6 +84,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
         );
         joinRequest.confirm();
         hike.setBookingId(savedBooking.getId()!);
+        hike.assignRider(ride.getRiderId());
         hike.toggleConfirmed();
 
         await Promise.all([
@@ -104,7 +105,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
       booking.getRideId(),
       'hike:confirmed',
       {
-        message:"New Hike confirmed successfully",
+        message: 'New Hike confirmed successfully',
         bookingId: booking.getId()!,
         seatsBooked: booking.getSeatsBooked(),
         amount: booking.getCostShared(),

@@ -15,7 +15,6 @@ import {
   TaskAlreadyComplted,
   TaskNotFound,
   TaskNotInHighestPriority,
-  TaskOTPNotFound,
 } from '../../../../domain/errors/TaskError';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { ITaskRepository } from '../../../repositories/ITaskRepository';

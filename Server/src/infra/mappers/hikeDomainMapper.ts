@@ -33,7 +33,7 @@ export const hikeMapper: IMapper<HikeLog, IHikeLog> = {
       hasHelmet: persistence.hasHelmet,
       seatsRequested: persistence.seatsRequested,
       riderId: persistence.riderId?.toString() || null,
-      bookingId: persistence.riderId?.toString() || null,
+      bookingId: persistence.bookingId?.toString() || null,
       status: persistence.status,
       confirmed: persistence.confirmed,
       createdAt: persistence.createdAt,
