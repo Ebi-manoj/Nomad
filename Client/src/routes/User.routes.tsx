@@ -45,7 +45,7 @@ export const UserRoutes = (
         </ProtectedSession>
       }
     />
-    <Route path="hike/completed" element={<HikeCompletedPage />} />
+    <Route path="hike/:hikeId" element={<HikeCompletedPage />} />
     <Route path="/profile" element={<ProfilePage />} />
     <Route
       path="/ride"

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Check,
   MapPin,
@@ -10,16 +10,49 @@ import {
   ArrowLeft,
   Sparkles,
 } from 'lucide-react';
+import type { GetHikeDetailsResponseDTO } from '@/types/hike';
+import { useParams } from 'react-router-dom';
+import { getHikeDetails } from '@/api/hike';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { HomeSkeleton } from '@/components/skeletons/HomeSkeleton';
+import { formatDuration } from '@/utils/dateFormater';
 
 export const HikeCompletedPage = () => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
+  const [hikeDetails, setHikeDetails] =
+    useState<GetHikeDetailsResponseDTO | null>(null);
+
+  const [loading, setLoading] = useState(false);
+
+  const { hikeId } = useParams();
 
   const handleSubmit = () => {
     alert(
       `Thank you for your feedback!\nRating: ${rating} stars\nFeedback: ${feedback}`
     );
   };
+
+  useEffect(() => {
+    if (!hikeId) return;
+    const fetch = async () => {
+      setLoading(true);
+      try {
+        const data = await getHikeDetails(hikeId);
+        console.log(data);
+        setHikeDetails(data);
+      } catch (error) {
+        useHandleApiError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetch();
+  }, [hikeId]);
+
+  if (loading) return <HomeSkeleton />;
+
+  if (!hikeDetails) return <div>Hike Details not Found</div>;
 
   return (
     <div className="min-h-screen ">
@@ -72,7 +105,7 @@ export const HikeCompletedPage = () => {
                   <div>
                     <p className="text-gray-500 text-sm">Pickup</p>
                     <p className="font-semibold text-base">
-                      Thiruvananthapuram
+                      {hikeDetails.pickupAddress.split(',')[0]}
                     </p>
                   </div>
                 </div>
@@ -84,7 +117,9 @@ export const HikeCompletedPage = () => {
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Destination</p>
-                    <p className="font-semibold text-base">Kochi</p>
+                    <p className="font-semibold text-base">
+                      {hikeDetails.destinationAddress.split(',')[0]}
+                    </p>
                   </div>
                 </div>
 
@@ -95,7 +130,9 @@ export const HikeCompletedPage = () => {
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Total Distance</p>
-                    <p className="font-semibold text-base">20 km</p>
+                    <p className="font-semibold text-base">
+                      {hikeDetails.totalDistance.toFixed(2)}km
+                    </p>
                   </div>
                 </div>
 
@@ -106,7 +143,12 @@ export const HikeCompletedPage = () => {
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Duration</p>
-                    <p className="font-semibold text-base">1 hr 20 min</p>
+                    <p className="font-semibold text-base">
+                      {formatDuration(
+                        hikeDetails.bookingDetails?.completedAt!,
+                        hikeDetails.createdAt
+                      )}
+                    </p>
                   </div>
                 </div>
 
@@ -117,7 +159,9 @@ export const HikeCompletedPage = () => {
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Cost Shared</p>
-                    <p className="font-semibold text-base">₹200</p>
+                    <p className="font-semibold text-base">
+                      ₹{hikeDetails.paymentDetails?.amount}
+                    </p>
                   </div>
                 </div>
 
@@ -132,7 +176,9 @@ export const HikeCompletedPage = () => {
 
                     <div className="flex items-center gap-1 mt-1">
                       <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                      <span className="text-sm font-medium">4.5</span>
+                      <span className="text-sm font-medium">
+                        {hikeDetails.rider?.rating}
+                      </span>
                     </div>
                   </div>
                 </div>

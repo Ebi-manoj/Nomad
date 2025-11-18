@@ -34,3 +34,37 @@ export interface RideMatchResponseDTO {
   requestStatus: null | JoinRequestStatus;
   paymentId: null | string;
 }
+
+export interface GetHikeDetailsResponseDTO {
+  hikeId: string;
+  userId: string;
+  pickupAddress: string;
+  destinationAddress: string;
+  totalDistance: number;
+  hasHelmet: boolean;
+  seatsRequested: number;
+  status: string;
+  confirmed: boolean;
+  createdAt: Date;
+  rider: null | {
+    fullname: string;
+    verified: boolean;
+    rating: number;
+    profilePic: string;
+  };
+  bookingDetails: null | {
+    bookingId: string;
+    pickupLocation: [number, number];
+    dropOffLocation: [number, number];
+    status: string;
+    createdAt: Date;
+    completedAt: Date | undefined;
+  };
+  paymentDetails: null | {
+    paymentId: string;
+    amount: number;
+    platFormFee: number;
+    status: PaymentStatus;
+    createdAt: Date;
+  };
+}

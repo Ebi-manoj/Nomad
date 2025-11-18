@@ -17,3 +17,17 @@ export function timeFormater(num: number) {
   });
   return dep;
 }
+
+export function formatDuration(start: Date, end: Date) {
+  const diffMs = Math.abs(new Date(end).getTime() - new Date(start).getTime());
+
+  const totalMinutes = Math.floor(diffMs / 60000);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  let result = '';
+  if (hours > 0) result += `${hours} hr `;
+  if (minutes > 0) result += `${minutes} min`;
+
+  return result.trim();
+}
