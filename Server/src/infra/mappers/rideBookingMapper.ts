@@ -17,6 +17,7 @@ export const rideBookingMapper: IMapper<RideBooking, IRideBookingDocument> = {
       platformFee: domain.getPlatformFee(),
       pickupLocation: domain.getPickupLocation(),
       dropoffLocation: domain.getDropoffLocation(),
+      completedAt: domain.getCompletedAt(),
       status: domain.getStatus(),
     };
   },
@@ -36,6 +37,7 @@ export const rideBookingMapper: IMapper<RideBooking, IRideBookingDocument> = {
       pickupLocation: persistence.pickupLocation,
       dropoffLocation: persistence.dropoffLocation,
       status: persistence.status,
+      completedAt: persistence.completedAt,
       createdAt: persistence.createdAt,
       updatedAt: persistence.updatedAt,
     });

@@ -116,4 +116,8 @@ export class HikeLog {
   getEstimatedPrice(): number {
     return +(this.totalDistance * COST_SHARING_LIMIT).toFixed(2);
   }
+
+  complete() {
+    this.status = HikeStatus.COMPLETED;
+  }
 }

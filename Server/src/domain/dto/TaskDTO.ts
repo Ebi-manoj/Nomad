@@ -44,3 +44,12 @@ export interface CompleteTaskResponseDTO {
   taskId: string;
   status: TaskStatus;
 }
+
+export interface MarkDroppOffReqDTO {
+  bookingId: string;
+  userId: string;
+}
+export interface MarkDroppOffResDTO {
+  bookingId: string;
+  message: string;
+}

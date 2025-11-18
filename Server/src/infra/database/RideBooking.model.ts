@@ -14,6 +14,7 @@ export interface IRideBookingDocument extends Document {
   pickupLocation: GeoJSON.Point;
   dropoffLocation: GeoJSON.Point;
   status: RideBookingStatus;
+  completedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -82,6 +83,10 @@ const RideBookingSchema = new Schema<IRideBookingDocument>(
       enum: Object.values(RideBookingStatus),
       default: RideBookingStatus.CONFIRMED,
       index: true,
+    },
+    completedAt: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }

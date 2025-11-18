@@ -14,6 +14,7 @@ export interface RideBookingProps {
   pickupLocation: GeoJSON.Point;
   dropoffLocation: GeoJSON.Point;
   status: RideBookingStatus;
+  completedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -32,6 +33,7 @@ export class RideBooking {
   private pickupLocation: GeoJSON.Point;
   private dropoffLocation: GeoJSON.Point;
   private status: RideBookingStatus;
+  private completedAt?: Date;
   private createdAt: Date;
   private updatedAt: Date;
 
@@ -49,6 +51,7 @@ export class RideBooking {
     this.pickupLocation = props.pickupLocation;
     this.dropoffLocation = props.dropoffLocation;
     this.status = props.status;
+    this.completedAt = props.completedAt;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
   }
@@ -106,6 +109,9 @@ export class RideBooking {
     return this.status;
   }
 
+  getCompletedAt(): Date | undefined {
+    return this.completedAt;
+  }
   getCreatedAt(): Date {
     return this.createdAt;
   }
@@ -134,5 +140,10 @@ export class RideBooking {
   setStatus(status: RideBookingStatus) {
     this.status = status;
     this.updatedAt = new Date();
+  }
+  markDroppedOff() {
+    this.status = RideBookingStatus.DROPPEDOFF;
+    this.updatedAt = new Date();
+    this.completedAt = new Date();
   }
 }

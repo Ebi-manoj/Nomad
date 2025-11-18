@@ -38,4 +38,15 @@ router.get(
   }
 );
 
+router.patch(
+  '/:bookingId/dropoff',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      ridebookingComposer().markDroppOff(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;

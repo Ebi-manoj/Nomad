@@ -1,4 +1,6 @@
 import { IGetRideBookingUseCase } from '../../../application/usecases/User/RideBooking/IGetRideBookingUseCase';
+import { IMarkDropOffUseCase } from '../../../application/usecases/User/Task/IMarkDropOffUseCase';
+import { MarkDroppOffReqDTO } from '../../../domain/dto/TaskDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { Unauthorized } from '../../../domain/errors/CustomError';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
@@ -7,7 +9,10 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IRideBookingController } from './IRideBookingController';
 
 export class RideBookingController implements IRideBookingController {
-  constructor(private readonly getRideBookingUseCase: IGetRideBookingUseCase) {}
+  constructor(
+    private readonly getRideBookingUseCase: IGetRideBookingUseCase,
+    private readonly markDroppOffUseCase: IMarkDropOffUseCase
+  ) {}
 
   async getRideBooking(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;
@@ -16,6 +21,18 @@ export class RideBookingController implements IRideBookingController {
     const dto = { bookingId, userId };
     const result = await this.getRideBookingUseCase.execute(dto);
     const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async markDroppOff(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { bookingId } = httpRequest.path as { bookingId: string };
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+    const dto: MarkDroppOffReqDTO = { bookingId, userId };
+
+    const result = await this.markDroppOffUseCase.execute(dto);
+    const response = ApiDTO.success(result);
+
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

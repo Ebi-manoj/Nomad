@@ -1,6 +1,8 @@
 import { GetRideBookingUseCase } from '../../../../application/usecases/User/RideBooking/GetRideBookingUseCase';
+import { MarkDropOffUseCase } from '../../../../application/usecases/User/Task/MarkDroppOffUseCase';
 import { IRideBookingController } from '../../../../interfaces/http/controllers/IRideBookingController';
 import { RideBookingController } from '../../../../interfaces/http/controllers/rideBooking.controller';
+import { MongoTransactionManager } from '../../../database/MongoTransactionManger';
 import { GoogleApiService } from '../../../providers/GoogleApi';
 import { HikeRepository } from '../../../repositories/HikeRepository';
 import { LocationRepository } from '../../../repositories/LocationRepository';
@@ -24,6 +26,15 @@ export function ridebookingComposer(): IRideBookingController {
     googleApi,
     locationRepository
   );
+  const transactionManager = new MongoTransactionManager([
+    rideBookinRepository,
+    hikeRepository,
+  ]);
 
-  return new RideBookingController(getRideBookingUseCase);
+  const markDroppOffUseCase = new MarkDropOffUseCase(
+    rideBookinRepository,
+    hikeRepository,
+    transactionManager
+  );
+  return new RideBookingController(getRideBookingUseCase, markDroppOffUseCase);
 }
