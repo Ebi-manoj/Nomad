@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Marker, Polyline } from '@react-google-maps/api';
 import { MapComponent } from '@/components/MapComponent';
+import type { RideBookingStatus } from '@/store/features/user/rideBooking/rideBooking';
 
 interface HikeStartedMapProps {
   riderLocation: google.maps.LatLngLiteral;
   pickup: google.maps.LatLngLiteral;
   destination: google.maps.LatLngLiteral;
+  bookingStatus: RideBookingStatus;
 }
 
 export const HikeStartedMap = ({
   riderLocation,
   pickup,
   destination,
+  bookingStatus,
 }: HikeStartedMapProps) => {
   const [riderToPickup, setRiderToPickup] =
     useState<google.maps.DirectionsResult | null>(null);
@@ -69,15 +72,17 @@ export const HikeStartedMap = ({
   const hikerPath = [currentPosition, pickup];
 
   return (
-    <MapComponent center={riderLocation} zoom={14}>
+    <MapComponent key={bookingStatus} center={currentPosition} zoom={14}>
       {/* Rider Marker */}
-      <Marker
-        position={riderLocation}
-        icon={{
-          url: '/motorcycle-icon.png',
-          scaledSize: new google.maps.Size(40, 40),
-        }}
-      />
+      {bookingStatus == 'CONFIRMED' && (
+        <Marker
+          position={riderLocation}
+          icon={{
+            url: '/motorcycle-icon.png',
+            scaledSize: new google.maps.Size(40, 40),
+          }}
+        />
+      )}
 
       {/* Hiker Marker */}
       <Marker
@@ -119,7 +124,7 @@ export const HikeStartedMap = ({
       />
 
       {/* Rider → Pickup (black line) */}
-      {riderToPickup && (
+      {bookingStatus == 'CONFIRMED' && riderToPickup && (
         <Polyline
           path={riderToPickup.routes[0].overview_path}
           options={{
@@ -143,29 +148,31 @@ export const HikeStartedMap = ({
       )}
 
       {/* Hiker current → Pickup (dotted gray) */}
-      <Polyline
-        path={hikerPath}
-        options={{
-          strokeOpacity: 0,
-          strokeWeight: 0,
-          strokeColor: 'transparent',
-          icons: [
-            {
-              icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                fillColor: '#ef4444',
-                fillOpacity: 1,
-                strokeColor: '#ef4444',
-                strokeOpacity: 1,
-                strokeWeight: 1,
-                scale: 2.5,
+      {bookingStatus === 'CONFIRMED' && (
+        <Polyline
+          path={hikerPath}
+          options={{
+            strokeOpacity: 0,
+            strokeWeight: 0,
+            strokeColor: 'transparent',
+            icons: [
+              {
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  fillColor: '#ef4444',
+                  fillOpacity: 1,
+                  strokeColor: '#ef4444',
+                  strokeOpacity: 1,
+                  strokeWeight: 1,
+                  scale: 2.5,
+                },
+                offset: '0',
+                repeat: '12px',
               },
-              offset: '0',
-              repeat: '12px',
-            },
-          ],
-        }}
-      />
+            ],
+          }}
+        />
+      )}
     </MapComponent>
   );
 };

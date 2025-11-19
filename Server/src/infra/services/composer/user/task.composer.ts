@@ -24,7 +24,8 @@ export function taskComposer(): ITaskController {
 
   const completeTaskUseCase = new CompleteTaskUseCase(
     taskRepository,
-    bookingRepository
+    bookingRepository,
+    rideRepository
   );
 
   return new TaskController(

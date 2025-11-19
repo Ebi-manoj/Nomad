@@ -33,6 +33,7 @@ const rideBookingSlice = createSlice({
       if (state.booking) {
         state.booking.rider.currentLocation = action.payload.currentLocation;
         state.booking.rideDetails.departure = action.payload.departure;
+        state.booking.rideBooking.status = action.payload.status;
       }
     });
   },

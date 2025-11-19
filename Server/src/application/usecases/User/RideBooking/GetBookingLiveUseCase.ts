@@ -47,6 +47,7 @@ export class GetBookingLiveUseCase implements IGetBookingLiveUseCase {
     return {
       currentLocation: riderLocation,
       departure: duration,
+      status: booking.getStatus(),
     };
   }
 }

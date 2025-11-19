@@ -1,4 +1,5 @@
 import { Position } from 'geojson';
+import { RideBookingStatus } from '../enums/RideBooking';
 
 export interface RideBookingRequestDTO {
   bookingId: string;
@@ -48,4 +49,5 @@ export interface BookingLiveReqDTO {
 export interface BookingLiveResDTO {
   currentLocation: { lat: number; lng: number };
   departure: number;
+  status: RideBookingStatus;
 }

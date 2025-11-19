@@ -38,6 +38,7 @@ export interface RideBookingResponseDTO {
 export interface BookingLiveResDTO {
   currentLocation: { lat: number; lng: number };
   departure: number;
+  status: RideBookingStatus;
 }
 
 export interface RideBookingState {

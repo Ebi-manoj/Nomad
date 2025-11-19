@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RideData, RideState } from './ride';
 import { createRide } from './ride.thunk';
+import { completeTask } from '../riderTasks/riderTasks.thunk';
 
 const initialState: RideState = {
   rideData: null,
@@ -28,6 +29,11 @@ const rideSlice = createSlice({
       .addCase(createRide.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(completeTask.fulfilled, (state, action) => {
+        if (state.rideData) {
+          state.rideData.seatsAvailable = action.payload.seatsAvailable;
+        }
       });
   },
 });

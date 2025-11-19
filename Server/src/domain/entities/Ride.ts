@@ -141,4 +141,7 @@ export class RideLog {
     if (this.seatsAvailable < count) throw new SeatsNotAvailable();
     this.seatsAvailable -= count;
   }
+  releaseSeats(count: number) {
+    this.seatsAvailable += count;
+  }
 }

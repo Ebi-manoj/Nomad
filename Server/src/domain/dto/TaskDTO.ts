@@ -43,6 +43,7 @@ export interface CompleteTaskReqDTO {
 export interface CompleteTaskResponseDTO {
   taskId: string;
   status: TaskStatus;
+  seatsAvailable: number;
 }
 
 export interface MarkDroppOffReqDTO {

@@ -10,7 +10,7 @@ import { ProtectedSession } from './ProtectedSessions';
 import { Payment } from '@/pages/User/HikerPayment/Payment';
 import { PaymentSuccessPage } from '@/pages/User/HikePaymentSuccess/Index';
 import { HikeStartedPage } from '@/pages/User/HikeConfirmed/Index';
-import { HikeCompletedPage } from '@/pages/User/HikeCompleted';
+import { HikeCompletedPage } from '@/pages/User/HikeCompleted/Index';
 
 export const UserRoutes = (
   <Route

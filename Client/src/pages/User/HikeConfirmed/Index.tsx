@@ -157,6 +157,7 @@ export const HikeStartedPage = () => {
             <RotateCw size={20} />
           </button>
           <HikeStartedMap
+            bookingStatus={rideBooking.status}
             riderLocation={riderLocation}
             pickup={hikerPickup}
             destination={hikerDestination}

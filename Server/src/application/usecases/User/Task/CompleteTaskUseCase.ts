@@ -10,6 +10,7 @@ import {
   UpdateFailed,
 } from '../../../../domain/errors/CustomError';
 import { RideBookingNotFound } from '../../../../domain/errors/RideBookingError';
+import { RideNotFound } from '../../../../domain/errors/RideErrors';
 import {
   HikerNotMarkedDropOff,
   TaskAlreadyComplted,
@@ -17,13 +18,15 @@ import {
   TaskNotInHighestPriority,
 } from '../../../../domain/errors/TaskError';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
+import { IRideRepository } from '../../../repositories/IRideRepository';
 import { ITaskRepository } from '../../../repositories/ITaskRepository';
 import { ICompleteTaskUseCase } from './ICompleteTaskUseCase';
 
 export class CompleteTaskUseCase implements ICompleteTaskUseCase {
   constructor(
     private readonly taskRepository: ITaskRepository,
-    private readonly bookingRepository: IRideBookingRepository
+    private readonly bookingRepository: IRideBookingRepository,
+    private readonly rideRepository: IRideRepository
   ) {}
 
   async execute(data: CompleteTaskReqDTO): Promise<CompleteTaskResponseDTO> {
@@ -49,9 +52,13 @@ export class CompleteTaskUseCase implements ICompleteTaskUseCase {
     );
     if (!booking) throw new RideBookingNotFound();
 
+    const ride = await this.rideRepository.findById(booking.getRideId());
+    if (!ride) throw new RideNotFound();
+
     if (task.getTaskType() == TaskType.DROPOFF) {
       if (booking.getStatus() !== RideBookingStatus.DROPPEDOFF)
         throw new HikerNotMarkedDropOff();
+      ride.releaseSeats(booking.getSeatsBooked());
     }
 
     const bookingStatus =
@@ -62,15 +69,17 @@ export class CompleteTaskUseCase implements ICompleteTaskUseCase {
     booking.setStatus(bookingStatus);
     task.complete();
 
-    const [updatedBooking, updatedTask] = await Promise.all([
+    const [updatedBooking, updatedTask, updatedRide] = await Promise.all([
       this.bookingRepository.update(booking.getId(), booking),
       this.taskRepository.update(task.getId(), task),
+      this.rideRepository.update(ride.getRideId(), ride),
     ]);
-    if (!updatedTask) throw new UpdateFailed();
+    if (!updatedTask || !updatedRide) throw new UpdateFailed();
 
     return {
       taskId: updatedTask.getId()!,
       status: updatedTask.getStatus(),
+      seatsAvailable: updatedRide.getSeatsAvailable(),
     };
   }
 }
