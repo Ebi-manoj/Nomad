@@ -43,6 +43,16 @@ router.get(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+router.get(
+  '/:bookingId/booking/live',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      ridebookingComposer().getRideBookingLive(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 router.patch(
   '/:bookingId/dropoff',

@@ -39,3 +39,13 @@ export interface RideBookingOTPReqDTO {
   rideBookingId: string;
   userId: string;
 }
+
+export interface BookingLiveReqDTO {
+  bookingId: string;
+  userId: string;
+}
+
+export interface BookingLiveResDTO {
+  currentLocation: { lat: number; lng: number };
+  departure: number;
+}

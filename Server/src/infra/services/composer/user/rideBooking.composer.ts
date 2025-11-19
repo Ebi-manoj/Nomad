@@ -1,3 +1,4 @@
+import { GetBookingLiveUseCase } from '../../../../application/usecases/User/RideBooking/GetBookingLiveUseCase';
 import { GetRideBookingUseCase } from '../../../../application/usecases/User/RideBooking/GetRideBookingUseCase';
 import { MarkDropOffUseCase } from '../../../../application/usecases/User/Task/MarkDroppOffUseCase';
 import { IRideBookingController } from '../../../../interfaces/http/controllers/IRideBookingController';
@@ -36,5 +37,16 @@ export function ridebookingComposer(): IRideBookingController {
     hikeRepository,
     transactionManager
   );
-  return new RideBookingController(getRideBookingUseCase, markDroppOffUseCase);
+
+  const getBookingLiveUseCase = new GetBookingLiveUseCase(
+    rideBookinRepository,
+    locationRepository,
+    googleApi
+  );
+
+  return new RideBookingController(
+    getRideBookingUseCase,
+    markDroppOffUseCase,
+    getBookingLiveUseCase
+  );
 }

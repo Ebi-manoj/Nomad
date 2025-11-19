@@ -2,14 +2,17 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { getRideBookingThunk } from '@/store/features/user/rideBooking/rideBooking.thunk';
+import {
+  getBookingLiveThunk,
+  getRideBookingThunk,
+} from '@/store/features/user/rideBooking/rideBooking.thunk';
 import type { RootState } from '@/store/store';
 import { HikeStartedMap } from './HikeMap';
 import { latlangFormat } from '@/utils/LatLangFormater';
 import { BookingSection } from './BookingSection';
 import type { ChatInterfaceProps } from '@/types/chat';
 import ChatInterface from '../../../components/ChatInterface';
-import { AlertCircle, CheckCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle, RotateCw } from 'lucide-react';
 import { markDropOff } from '@/api/rideBooking';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 
@@ -83,6 +86,11 @@ export const HikeStartedPage = () => {
     }
   };
 
+  const handleRefresh = () => {
+    if (!bookingId) return;
+    dispatch(getBookingLiveThunk(bookingId));
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -141,7 +149,13 @@ export const HikeStartedPage = () => {
         )}
 
         {/* Map Section */}
-        <div className="space-y-4 h-full">
+        <div className="space-y-4 h-full relative">
+          <button
+            className="absolute bottom-2 left-2 z-10 bg-white rounded-full p-2 cursor-pointer"
+            onClick={handleRefresh}
+          >
+            <RotateCw size={20} />
+          </button>
           <HikeStartedMap
             riderLocation={riderLocation}
             pickup={hikerPickup}

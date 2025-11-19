@@ -69,7 +69,7 @@ export const HikeStartedMap = ({
   const hikerPath = [currentPosition, pickup];
 
   return (
-    <MapComponent center={pickup} zoom={14}>
+    <MapComponent center={riderLocation} zoom={14}>
       {/* Rider Marker */}
       <Marker
         position={riderLocation}

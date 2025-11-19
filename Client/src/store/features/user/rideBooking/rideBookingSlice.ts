@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RideBookingState } from './rideBooking';
-import { getRideBookingThunk } from './rideBooking.thunk';
+import { getBookingLiveThunk, getRideBookingThunk } from './rideBooking.thunk';
 
 const initialState: RideBookingState = {
   loading: false,
@@ -28,6 +28,12 @@ const rideBookingSlice = createSlice({
       state.loading = false;
       state.error = action.payload as string;
       state.booking = null;
+    });
+    builder.addCase(getBookingLiveThunk.fulfilled, (state, action) => {
+      if (state.booking) {
+        state.booking.rider.currentLocation = action.payload.currentLocation;
+        state.booking.rideDetails.departure = action.payload.departure;
+      }
     });
   },
 });

@@ -6,3 +6,8 @@ export class RideBookingNotFound extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class FailToFetchLiveUpdates extends CustomError {
+  constructor(message = 'Fail to fetch live updates') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
