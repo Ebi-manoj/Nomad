@@ -7,9 +7,19 @@ export class RideNotFound extends CustomError {
     super(HttpStatus.NOT_FOUND, message);
   }
 }
+export class RideIsNotActiveStatus extends CustomError {
+  constructor(message = 'Ride is not in active status') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
 
 export class RideLocationNotFound extends CustomError {
   constructor(message = 'Ride Location not found') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
+export class RideHavePendingTasks extends CustomError {
+  constructor(message = 'Ride have pending tasks') {
     super(HttpStatus.NOT_FOUND, message);
   }
 }

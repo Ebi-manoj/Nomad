@@ -108,7 +108,9 @@ export class RideLog {
   getHikersMatched() {
     return this.hikersMatched;
   }
-
+  getCreatedAt() {
+    return this.createdAt;
+  }
   updateStatus(newStatus: RideStatus) {
     this.status = newStatus;
     this.updatedAt = new Date();

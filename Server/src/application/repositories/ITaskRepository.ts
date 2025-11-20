@@ -7,4 +7,5 @@ export interface ITaskRepository extends IBaseRepository<Task> {
   findByRideId(rideId: string): Promise<Task[]>;
   findPendingPickupTasks(riderId: string, rideId: string): Promise<Task[]>;
   findPendingDropoffTasks(riderId: string, rideId: string): Promise<Task[]>;
+  findPendingTasks(rideId: string): Promise<Task[]>;
 }
