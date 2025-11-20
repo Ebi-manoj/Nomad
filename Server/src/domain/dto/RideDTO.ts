@@ -1,4 +1,4 @@
-import { VehicleType } from '../enums/Ride';
+import { RideStatus, VehicleType } from '../enums/Ride';
 
 export interface CreateRideDTO {
   userId: string;
@@ -43,4 +43,53 @@ export interface GetHikersMatchedResponseDTO {
     seatsRequested: number;
     status: string;
   };
+}
+
+export interface EndRideReqDTO {
+  userId: string;
+  rideId: string;
+}
+export interface EndRideResDTO {
+  rideId: string;
+  status: string;
+}
+
+export interface GetRideDetailsReqDTO {
+  userId: string;
+  rideId: string;
+}
+
+export interface GetRideDetailsResDTO {
+  rideId: string;
+  userId: string;
+  startAddress: string;
+  endAddress: string;
+  totalDistance: number;
+  vehicleType: string;
+  vehicleModel: string;
+  vehicleNumber: string;
+  hasHelmet: boolean;
+  costSharing: number;
+  status: RideStatus;
+  createdAt: Date;
+  completedAt: Date | null;
+  totalCostShared: number;
+  hikersMatched: [
+    {
+      bookingId: string;
+      hikeId: string;
+      pickupAddress: string;
+      destinationAddress: string;
+      duration: number;
+      amount: number;
+      status: string;
+      seatsBooked: number;
+      hiker: {
+        fullName: string;
+        profilePic: string;
+        rating: number;
+        verified: boolean;
+      };
+    }
+  ];
 }

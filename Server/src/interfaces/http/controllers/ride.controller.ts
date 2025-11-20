@@ -15,6 +15,7 @@ import { IAcceptJoinRequestUseCase } from '../../../application/usecases/User/Ri
 import { IDeclineJoinRequestUseCase } from '../../../application/usecases/User/Ride/IDeclineJoinRequest';
 import { Unauthorized } from '../../../domain/errors/CustomError';
 import { IGetHikerMatchedUseCase } from '../../../application/usecases/User/Ride/IGetHikersMatched';
+import { IEndRideUseCase } from '../../../application/usecases/User/Ride/IEndRideUseCase';
 
 export class RideController implements IRideController {
   constructor(
@@ -22,7 +23,8 @@ export class RideController implements IRideController {
     private readonly getPendingRequestUseCase: IGetPendingRequestUseCase,
     private readonly acceptJoinRequestUseCase: IAcceptJoinRequestUseCase,
     private readonly declienJoinRequestUseCase: IDeclineJoinRequestUseCase,
-    private readonly getHikerMatchedUseCase: IGetHikerMatchedUseCase
+    private readonly getHikerMatchedUseCase: IGetHikerMatchedUseCase,
+    private readonly endRideUseCase: IEndRideUseCase
   ) {}
 
   async createRide(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -62,7 +64,6 @@ export class RideController implements IRideController {
 
   async getHikersMatched(httpRequest: HttpRequest): Promise<HttpResponse> {
     const { rideId } = httpRequest.path as { rideId: string };
-    // const { userId } = httpRequest.body as { userId: string };
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
     const result = await this.getHikerMatchedUseCase.execute({
@@ -71,5 +72,15 @@ export class RideController implements IRideController {
     });
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
+  }
+  async endRide(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { rideId } = httpRequest.path as { rideId: string };
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+
+    const result = await this.endRideUseCase.execute({ rideId, userId });
+    const response = ApiDTO.success(result);
+
+    return new HttpResponse(HttpStatus.OK, response);
   }
 }

@@ -55,5 +55,15 @@ router.get(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+router.patch(
+  '/:rideId/end',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      rideComposer().endRide(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

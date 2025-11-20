@@ -15,6 +15,7 @@ import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
 import { GetHikersMatchedUseCase } from '../../../../application/usecases/User/Ride/GetHikersMatched';
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
+import { EndRideUseCase } from '../../../../application/usecases/User/Ride/EndRideUseCase';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -61,11 +62,14 @@ export function rideComposer(): IRideController {
     userRepository
   );
 
+  const endRideUseCase = new EndRideUseCase(rideRepository);
+
   return new RideController(
     createRideUseCase,
     getPendingRequestUseCase,
     acceptJoinRequestUseCase,
     declienJoinRequestUseCase,
-    getHikersMatchedUseCase
+    getHikersMatchedUseCase,
+    endRideUseCase
   );
 }

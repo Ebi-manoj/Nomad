@@ -144,4 +144,8 @@ export class RideLog {
   releaseSeats(count: number) {
     this.seatsAvailable += count;
   }
+  complete() {
+    this.status = RideStatus.COMPLETED;
+    this.updatedAt = new Date();
+  }
 }

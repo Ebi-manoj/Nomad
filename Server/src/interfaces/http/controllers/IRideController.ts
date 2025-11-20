@@ -7,4 +7,5 @@ export interface IRideController {
   acceptJoinRequests(httpRequest: HttpRequest): Promise<HttpResponse>;
   declineJoinRequests(httpRequest: HttpRequest): Promise<HttpResponse>;
   getHikersMatched(httpRequest: HttpRequest): Promise<HttpResponse>;
+  endRide(httpRequest: HttpRequest): Promise<HttpResponse>;
 }
