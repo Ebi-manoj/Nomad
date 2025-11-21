@@ -11,7 +11,7 @@ router.post('/create', async (req: Request, res: Response) => {
   );
   return res.status(adapter.statusCode).json(adapter.body);
 });
-router.get('/:rideId', async (req: Request, res: Response) => {
+router.get('/:rideId', authMiddleware, async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpReq =>
     rideComposer().getRideDetails(httpReq)
   );

@@ -23,11 +23,11 @@ export class EndRideUseCase implements IEndRideUseCase {
       throw new RideIsNotActiveStatus();
 
     if (ride.getRiderId() !== data.userId) throw new Forbidden();
-    ride.complete();
 
     const pendingTask = await this.taskRepository.findPendingTasks(data.rideId);
     if (pendingTask.length) throw new RideHavePendingTasks();
 
+    ride.complete();
     const updated = await this.rideRepository.update(ride.getRideId()!, ride);
     if (!updated) throw new UpdateFailed();
     return {

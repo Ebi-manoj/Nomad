@@ -87,8 +87,7 @@ export class RideController implements IRideController {
   }
   async getRideDetails(httpRequest: HttpRequest): Promise<HttpResponse> {
     const { rideId } = httpRequest.path as { rideId: string };
-    // const userId = httpRequest.user?.id;
-    const { userId } = httpRequest.body as { userId: string };
+    const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
 
     const result = await this.getRideDetailsUseCase.execute({ userId, rideId });

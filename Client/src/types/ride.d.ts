@@ -38,3 +38,40 @@ export interface DeclineJoinResponseDTO {
   hikeId: string;
   status: JoinRequestStatus;
 }
+
+export interface HikerMatchedDTO {
+  bookingId: string;
+  hikeId: string;
+  pickupAddress: string;
+  destinationAddress: string;
+  amount: number;
+  status: string;
+  seatsBooked: number;
+  createdAt: Date;
+  completedAt: Date | undefined;
+  hiker: {
+    userId: string;
+    fullName: string;
+    profilePic: string;
+    rating: number;
+    verified: boolean;
+  };
+}
+
+export interface GetRideDetailsResDTO {
+  rideId: string;
+  userId: string;
+  startAddress: string;
+  endAddress: string;
+  totalDistance: number;
+  vehicleType: string;
+  vehicleModel: string;
+  vehicleNumber: string;
+  hasHelmet: boolean;
+  costSharing: number;
+  status: RideStatus;
+  createdAt: Date;
+  completedAt: Date | null;
+  totalCostShared: number;
+  hikersMatched: HikerMatchedDTO[];
+}

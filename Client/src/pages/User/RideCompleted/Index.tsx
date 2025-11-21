@@ -1,3 +1,7 @@
+import { getRideDetails } from '@/api/ride';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
+import type { GetRideDetailsResDTO } from '@/types/ride';
+import { formatDuration } from '@/utils/dateFormater';
 import {
   MapPin,
   Navigation,
@@ -9,58 +13,33 @@ import {
   ArrowLeft,
   Users,
 } from 'lucide-react';
-
-// Sample data structure
-const rideData = {
-  _id: 'R-123456789',
-  pickupAddress: 'Trivandrum Central, Kerala',
-  destinationAddress: 'Kochi International Airport, Kerala',
-  totalDistance: 200,
-  duration: '2h 30m',
-  vehicleType: 'Car',
-  vehicleModel: 'Toyota Innova',
-  vehicleNumber: 'KL 07 AB 1234',
-  totalEarnings: 300,
-  status: 'completed',
-  rating: 4.8,
-  safetyScore: 95,
-  createdAt: new Date('2025-03-15T10:00:00'),
-  completedAt: new Date('2025-03-15T12:30:00'),
-  hikersMatched: [
-    {
-      _id: 'hiker1',
-      name: 'Liam Carter',
-      pickup: 'Trivandrum Central',
-      dropoff: 'Kochi Airport',
-      duration: '2h 30m',
-      costShared: 100,
-      avatar: 'LC',
-    },
-    {
-      _id: 'hiker2',
-      name: 'Olivia Bennett',
-      pickup: 'Trivandrum Central',
-      dropoff: 'Kochi Airport',
-      duration: '2h 30m',
-      costShared: 100,
-      avatar: 'OB',
-    },
-    {
-      _id: 'hiker3',
-      name: 'Noah Thompson',
-      pickup: 'Trivandrum Central',
-      dropoff: 'Kochi Airport',
-      duration: '2h 30m',
-      costShared: 100,
-      avatar: 'NT',
-    },
-  ],
-};
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const RideCompletedPage = () => {
+  const [rideData, setRideData] = useState<GetRideDetailsResDTO | undefined>(
+    undefined
+  );
   const handleRedirect = () => {
     window.location.href = '/';
   };
+
+  const { rideId } = useParams();
+
+  useEffect(() => {
+    if (!rideId) return;
+    const fetch = async () => {
+      try {
+        const data = await getRideDetails(rideId);
+        setRideData(data);
+      } catch (error) {
+        useHandleApiError(error);
+      }
+    };
+    fetch();
+  }, []);
+
+  if (!rideData) return <div>No Ride Found</div>;
 
   return (
     <div className="min-h-screen bg-background">
@@ -87,7 +66,7 @@ const RideCompletedPage = () => {
             <p className="text-muted-foreground text-lg">
               Excellent work! You've earned{' '}
               <span className="font-bold text-green-600">
-                ₹{rideData.totalEarnings}
+                ₹{rideData.totalCostShared}
               </span>
             </p>
             <p className="text-muted-foreground text-sm mt-1">
@@ -107,7 +86,7 @@ const RideCompletedPage = () => {
                       Total Earnings
                     </p>
                     <p className="text-3xl font-bold text-green-600">
-                      ₹{rideData.totalEarnings}
+                      ₹{rideData.totalCostShared}
                     </p>
                   </div>
                   <div className="text-right">
@@ -125,7 +104,7 @@ const RideCompletedPage = () => {
                     <p className="text-3xl font-bold text-green-600">
                       ₹
                       {Math.round(
-                        rideData.totalEarnings / rideData.hikersMatched.length
+                        rideData.totalCostShared / rideData.hikersMatched.length
                       )}
                     </p>
                   </div>
@@ -141,7 +120,7 @@ const RideCompletedPage = () => {
                     Trip Details
                   </h2>
                   <p className="text-xs text-muted-foreground">
-                    ID: {rideData._id}
+                    ID: {rideData.rideId}
                   </p>
                 </div>
               </div>
@@ -157,7 +136,7 @@ const RideCompletedPage = () => {
                       Pickup Location
                     </p>
                     <p className="font-semibold text-base text-foreground">
-                      {rideData.pickupAddress.split(',')[0]}
+                      {rideData.startAddress.split(',')[0]}
                     </p>
                   </div>
                 </div>
@@ -172,7 +151,7 @@ const RideCompletedPage = () => {
                       Drop Location
                     </p>
                     <p className="font-semibold text-base text-foreground">
-                      {rideData.destinationAddress.split(',')[0]}
+                      {rideData.endAddress.split(',')[0]}
                     </p>
                   </div>
                 </div>
@@ -202,7 +181,10 @@ const RideCompletedPage = () => {
                       Trip Duration
                     </p>
                     <p className="font-semibold text-base text-foreground">
-                      {rideData.duration}
+                      {formatDuration(
+                        rideData.createdAt,
+                        rideData.completedAt!
+                      )}
                     </p>
                   </div>
                 </div>
@@ -233,7 +215,7 @@ const RideCompletedPage = () => {
                   <div>
                     <p className="text-muted-foreground text-sm">Your Rating</p>
                     <p className="font-semibold text-base text-foreground">
-                      {rideData.rating} / 5.0
+                      {4.8} / 5.0
                     </p>
                   </div>
                 </div>
@@ -260,36 +242,39 @@ const RideCompletedPage = () => {
                       Total collected
                     </p>
                     <p className="text-lg font-bold text-green-600">
-                      ₹{rideData.totalEarnings}
+                      ₹{rideData.totalCostShared}
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  {rideData.hikersMatched.map(hiker => (
+                  {rideData.hikersMatched.map(booking => (
                     <div
-                      key={hiker._id}
+                      key={booking.bookingId}
                       className="flex items-center gap-4 p-4 border rounded-xl bg-gradient-to-r from-muted/30 to-muted/10 hover:from-muted/50 hover:to-muted/30 transition-colors"
                     >
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
-                        {hiker.avatar}
+                        {booking.hiker.profilePic}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <h4 className="font-semibold text-foreground">
-                            {hiker.name}
+                            {booking.hiker.fullName}
                           </h4>
                         </div>
                         <p className="text-xs text-muted-foreground truncate mt-0.5">
-                          {hiker.pickup} → {hiker.dropoff}
+                          {booking.pickupAddress} → {booking.destinationAddress}
                         </p>
                       </div>
                       <div className="text-right flex-shrink-0">
                         <p className="font-bold text-green-600 text-lg">
-                          ₹{hiker.costShared}
+                          ₹{booking.amount}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {hiker.duration}
+                          {formatDuration(
+                            booking.createdAt,
+                            booking.completedAt!
+                          )}
                         </p>
                       </div>
                     </div>
