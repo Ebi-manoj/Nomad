@@ -65,7 +65,7 @@ export const UserRoutes = (
       }
     />
     <Route
-      path="/ride/started/:rideId"
+      path="/ride/:rideId"
       element={
         <ProtectedSession requireActiveRide>
           <RideCompletedPage />

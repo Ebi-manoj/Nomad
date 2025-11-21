@@ -65,4 +65,12 @@ export class TaskRepository
       .sort({ priority: -1, createdAt: 1 });
     return found.map(doc => this.mapper.toDomain(doc));
   }
+
+  async findPendingTasks(rideId: string): Promise<Task[]> {
+    const result = await this.model.find({
+      rideId,
+      status: TaskStatus.PENDING,
+    });
+    return result.map(doc => this.mapper.toDomain(doc));
+  }
 }

@@ -16,6 +16,8 @@ import { MongoUserRepository } from '../../../repositories/UserRepository';
 import { GetHikersMatchedUseCase } from '../../../../application/usecases/User/Ride/GetHikersMatched';
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
 import { EndRideUseCase } from '../../../../application/usecases/User/Ride/EndRideUseCase';
+import { GetRideDetailsUseCase } from '../../../../application/usecases/User/Ride/GetRideDetailsUseCase';
+import { TaskRepository } from '../../../repositories/TaskRepository';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -24,6 +26,7 @@ export function rideComposer(): IRideController {
   const joinRequestRepository = new JoinRequestRepository();
   const hikeRepository = new HikeRepository();
   const paymentRepository = new PaymentRepository();
+  const taskRepository = new TaskRepository();
   const fareCalculator = new FareCalculator();
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
@@ -62,7 +65,14 @@ export function rideComposer(): IRideController {
     userRepository
   );
 
-  const endRideUseCase = new EndRideUseCase(rideRepository);
+  const endRideUseCase = new EndRideUseCase(rideRepository, taskRepository);
+
+  const getRideDetailsUseCase = new GetRideDetailsUseCase(
+    rideRepository,
+    ridebookingRepository,
+    userRepository,
+    hikeRepository
+  );
 
   return new RideController(
     createRideUseCase,
@@ -70,6 +80,7 @@ export function rideComposer(): IRideController {
     acceptJoinRequestUseCase,
     declienJoinRequestUseCase,
     getHikersMatchedUseCase,
-    endRideUseCase
+    endRideUseCase,
+    getRideDetailsUseCase
   );
 }

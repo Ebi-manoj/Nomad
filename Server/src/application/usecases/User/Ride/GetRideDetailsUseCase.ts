@@ -27,6 +27,7 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
 
     const totalCostShared =
       await this.bookingRepository.getTotalCostShareOfRide(data.rideId);
+    console.log(totalCostShared);
 
     const bookings = await this.bookingRepository.findByRideId(data.rideId);
 

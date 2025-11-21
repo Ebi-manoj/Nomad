@@ -7,7 +7,7 @@ let store: Store;
 export const injectStore = (_store: Store) => (store = _store);
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: `${import.meta.env.VITE_BASE_URL}/api/v1`,
   withCredentials: true,
 });
 

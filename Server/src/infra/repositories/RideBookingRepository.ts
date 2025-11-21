@@ -6,6 +6,7 @@ import {
   RideBookingModel,
 } from '../database/RideBooking.model';
 import { rideBookingMapper } from '../mappers/rideBookingMapper';
+import { Types } from 'mongoose';
 
 export class RideBookingRepository
   extends MongoBaseRepository<RideBooking, IRideBookingDocument>
@@ -29,5 +30,22 @@ export class RideBookingRepository
   async findByHikeId(id: string): Promise<RideBooking | null> {
     const booking = await this.model.findOne({ hikeId: id });
     return booking ? this.mapper.toDomain(booking) : null;
+  }
+
+  async getTotalCostShareOfRide(rideId: string): Promise<number> {
+    const result = await this.model.aggregate([
+      {
+        $match: { rideId: new Types.ObjectId(rideId) },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCost: { $sum: '$amount' },
+        },
+      },
+    ]);
+    console.log(result);
+
+    return result[0].totalCost;
   }
 }
