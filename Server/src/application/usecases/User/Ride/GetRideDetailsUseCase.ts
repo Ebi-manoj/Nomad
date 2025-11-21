@@ -72,7 +72,7 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
       costSharing: ride.getCostSharing(),
       status: ride.getStatus(),
       createdAt: ride.getCreatedAt(),
-      completedAt: ride.getCreatedAt(),
+      completedAt: ride.getCompletedAt(),
       totalCostShared,
       hikersMatched: hikersMatched.filter(Boolean) as HikerMatchedDTO[],
     };

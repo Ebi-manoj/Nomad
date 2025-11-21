@@ -19,6 +19,7 @@ export interface RideProps {
   status: RideStatus;
   createdAt?: Date;
   updatedAt?: Date;
+  completedAt?: Date;
   route: GeoJSON.LineString;
 }
 
@@ -40,6 +41,7 @@ export class RideLog {
   private status: RideStatus;
   private readonly createdAt: Date;
   private updatedAt: Date;
+  private completedAt?: Date;
   private route: GeoJSON.LineString;
 
   constructor(props: RideProps) {
@@ -60,6 +62,7 @@ export class RideLog {
     this.status = props.status || 'ACTIVE';
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
+    this.completedAt = props.completedAt;
     this.route = props.route;
   }
 
@@ -111,6 +114,9 @@ export class RideLog {
   getCreatedAt() {
     return this.createdAt;
   }
+  getCompletedAt() {
+    return this.completedAt;
+  }
   updateStatus(newStatus: RideStatus) {
     this.status = newStatus;
     this.updatedAt = new Date();
@@ -149,5 +155,6 @@ export class RideLog {
   complete() {
     this.status = RideStatus.COMPLETED;
     this.updatedAt = new Date();
+    this.completedAt = new Date();
   }
 }

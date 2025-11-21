@@ -21,6 +21,7 @@ export const rideMapper: IMapper<RideLog, IRideLog> = {
       hasHelmet: domain.getHasHelmet(),
       seatsAvailable: domain.getSeatsAvailable(),
       costSharing: domain.getCostSharing(),
+      completedAt: domain.getCompletedAt(),
       hikersMatched: domain
         .getHikersMatched()
         .map(id => new Types.ObjectId(id)),
@@ -46,6 +47,7 @@ export const rideMapper: IMapper<RideLog, IRideLog> = {
       costSharing: persistence.costSharing,
       hikersMatched: persistence.hikersMatched.map(id => id.toString()),
       status: persistence.status,
+      completedAt: persistence.completedAt,
       createdAt: persistence.createdAt,
       updatedAt: persistence.updatedAt,
     });

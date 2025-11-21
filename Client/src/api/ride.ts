@@ -9,7 +9,6 @@ import type { Task } from '@/types/task';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import axiosInstance from '@/utils/axiosInstance';
 import type { CompleteTaskReqDTO } from '@/store/features/user/riderTasks/riderTasks';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 export const CREATE_RIDE_API = '/ride/create';
 export const GET_JOIN_REQUESTS_API = (rideId: string) =>

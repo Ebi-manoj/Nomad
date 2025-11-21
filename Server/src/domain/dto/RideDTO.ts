@@ -91,7 +91,7 @@ export interface GetRideDetailsResDTO {
   costSharing: number;
   status: RideStatus;
   createdAt: Date;
-  completedAt: Date | null;
+  completedAt: Date | undefined;
   totalCostShared: number;
   hikersMatched: HikerMatchedDTO[];
 }

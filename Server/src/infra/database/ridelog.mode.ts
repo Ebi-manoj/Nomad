@@ -18,6 +18,7 @@ export interface IRideLog {
   costSharing: number;
   hikersMatched: Types.ObjectId[];
   status: RideStatus;
+  completedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -91,6 +92,10 @@ const RideLogSchema = new Schema<IRideLog>({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  completedAt: {
+    type: Date,
+    default: null,
   },
   updatedAt: {
     type: Date,
