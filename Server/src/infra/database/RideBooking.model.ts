@@ -17,6 +17,8 @@ export interface IRideBookingDocument extends Document {
   completedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
+  refundedAmount: number;
+  cancelledAt?: Date;
 }
 
 const RideBookingSchema = new Schema<IRideBookingDocument>(
@@ -85,6 +87,15 @@ const RideBookingSchema = new Schema<IRideBookingDocument>(
       index: true,
     },
     completedAt: {
+      type: Date,
+      default: null,
+    },
+    refundedAmount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    cancelledAt: {
       type: Date,
       default: null,
     },

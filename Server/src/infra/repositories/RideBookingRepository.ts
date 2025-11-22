@@ -40,11 +40,23 @@ export class RideBookingRepository
       {
         $group: {
           _id: null,
-          totalCost: { $sum: '$amount' },
+          totalCost: {
+            $sum: {
+              $subtract: [
+                {
+                  $subtract: [
+                    '$amount',
+                    { $ifNull: ['$refundedAmount', 0] },
+                  ],
+                },
+                '$platformFee',
+              ],
+            },
+          },
         },
       },
     ]);
-    console.log(result);
+    if (!result.length) return 0;
 
     return result[0].totalCost;
   }

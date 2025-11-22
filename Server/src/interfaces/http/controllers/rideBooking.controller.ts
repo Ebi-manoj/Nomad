@@ -1,7 +1,9 @@
 import { IGetBookingLiveUseCase } from '../../../application/usecases/User/RideBooking/IGetBookingLive';
 import { IGetRideBookingUseCase } from '../../../application/usecases/User/RideBooking/IGetRideBookingUseCase';
+import { ICancelRideBookingUseCase } from '../../../application/usecases/User/RideBooking/ICancelRideBookingUseCase';
 import { IMarkDropOffUseCase } from '../../../application/usecases/User/Task/IMarkDropOffUseCase';
 import { MarkDroppOffReqDTO } from '../../../domain/dto/TaskDTO';
+import { CancelRideBookingReqDTO } from '../../../domain/dto/RideBookingDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { Unauthorized } from '../../../domain/errors/CustomError';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
@@ -13,7 +15,8 @@ export class RideBookingController implements IRideBookingController {
   constructor(
     private readonly getRideBookingUseCase: IGetRideBookingUseCase,
     private readonly markDroppOffUseCase: IMarkDropOffUseCase,
-    private readonly getBookingLiveUseCase: IGetBookingLiveUseCase
+    private readonly getBookingLiveUseCase: IGetBookingLiveUseCase,
+    private readonly cancelRideBookingUseCase: ICancelRideBookingUseCase
   ) {}
 
   async getRideBooking(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -46,6 +49,16 @@ export class RideBookingController implements IRideBookingController {
       bookingId,
       userId,
     });
+    const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async cancelBooking(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+    const { bookingId } = httpRequest.path as { bookingId: string };
+    const dto: CancelRideBookingReqDTO = { bookingId, userId };
+    const result = await this.cancelRideBookingUseCase.execute(dto);
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

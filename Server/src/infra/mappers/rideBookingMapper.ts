@@ -19,6 +19,8 @@ export const rideBookingMapper: IMapper<RideBooking, IRideBookingDocument> = {
       dropoffLocation: domain.getDropoffLocation(),
       completedAt: domain.getCompletedAt(),
       status: domain.getStatus(),
+      refundedAmount: domain.getRefundedAmount(),
+      cancelledAt: domain.getCancelledAt(),
     };
   },
 
@@ -40,6 +42,8 @@ export const rideBookingMapper: IMapper<RideBooking, IRideBookingDocument> = {
       completedAt: persistence.completedAt,
       createdAt: persistence.createdAt,
       updatedAt: persistence.updatedAt,
+      refundedAmount: persistence.refundedAmount,
+      cancelledAt: persistence.cancelledAt || undefined,
     });
   },
 };

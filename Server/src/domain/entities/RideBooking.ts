@@ -17,6 +17,8 @@ export interface RideBookingProps {
   completedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
+  refundedAmount?: number;
+  cancelledAt?: Date;
 }
 
 export class RideBooking {
@@ -36,6 +38,8 @@ export class RideBooking {
   private completedAt?: Date;
   private createdAt: Date;
   private updatedAt: Date;
+  private refundedAmount: number;
+  private cancelledAt?: Date;
 
   constructor(props: RideBookingProps) {
     this.id = props.id;
@@ -54,6 +58,8 @@ export class RideBooking {
     this.completedAt = props.completedAt;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
+    this.refundedAmount = props.refundedAmount || 0;
+    this.cancelledAt = props.cancelledAt;
   }
 
   //Getters
@@ -119,8 +125,18 @@ export class RideBooking {
   getUpdatedAt(): Date {
     return this.updatedAt;
   }
+  getRefundedAmount(): number {
+    return this.refundedAmount;
+  }
+  getCancelledAt(): Date | undefined {
+    return this.cancelledAt;
+  }
   getCostShared() {
     return this.amount - this.platformFee;
+  }
+
+  getRiderEarning() {
+    return this.amount - this.refundedAmount - this.platformFee;
   }
 
   confirm() {
@@ -130,6 +146,7 @@ export class RideBooking {
 
   cancel() {
     this.status = RideBookingStatus.CANCELLED;
+    this.cancelledAt = new Date();
     this.updatedAt = new Date();
   }
 
@@ -145,5 +162,10 @@ export class RideBooking {
     this.status = RideBookingStatus.DROPPEDOFF;
     this.updatedAt = new Date();
     this.completedAt = new Date();
+  }
+
+  setRefundedAmount(amount: number) {
+    this.refundedAmount = amount;
+    this.updatedAt = new Date();
   }
 }

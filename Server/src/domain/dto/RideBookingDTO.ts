@@ -51,3 +51,22 @@ export interface BookingLiveResDTO {
   departure: number;
   status: RideBookingStatus;
 }
+
+export interface RefundServiceResDTO {
+  distance: number;
+  duration: number;
+  refundAmount: number;
+}
+
+export interface CancelRideBookingReqDTO {
+  bookingId: string;
+  userId: string;
+}
+
+export interface CancelRideBookingResDTO {
+  bookingId: string;
+  status: RideBookingStatus;
+  refundAmount: number;
+  distanceToRider: number;
+  etaMinutes: number;
+}

@@ -65,4 +65,15 @@ router.patch(
   }
 );
 
+router.patch(
+  '/:bookingId/cancel',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      ridebookingComposer().cancelBooking(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;
