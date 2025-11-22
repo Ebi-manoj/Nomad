@@ -65,6 +65,8 @@ export function HikeDetailsMapper(
           status: booking.getStatus(),
           createdAt: booking.getCreatedAt(),
           completedAt: booking.getCompletedAt(),
+          cancelledAt: booking.getCancelledAt(),
+          refundAmount: booking.getRefundedAmount(),
         },
 
     paymentDetails: !payment

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  Check,
+
   MapPin,
   Navigation,
   Clock,
@@ -8,7 +8,6 @@ import {
   User,
   Star,
   ArrowLeft,
-  Sparkles,
 } from 'lucide-react';
 import type { GetHikeDetailsResponseDTO } from '@/types/hike';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -18,6 +17,11 @@ import { HomeSkeleton } from '@/components/skeletons/HomeSkeleton';
 import { formatDuration } from '@/utils/dateFormater';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { clearHikeData } from '@/store/features/user/hike/hikeSlice';
+import { SuccessBadge } from './SuccessBadge';
+import { CancelledBadge } from './CancelledBadge';
+import { SuccessHeader } from './SuccessHeader';
+import { CancelledHeader } from './CancelledHeader';
+import { RiRefund2Fill } from 'react-icons/ri';
 
 export const HikeCompletedPage = () => {
   const [rating, setRating] = useState(0);
@@ -57,37 +61,26 @@ export const HikeCompletedPage = () => {
     navigate('/hike', { replace: true });
   };
 
+  const{status}=hikeDetails
+
   return (
     <div className="min-h-screen ">
       {/* Header Section */}
       <div className="bg-white  p-8 pb-4 mb-6 relative overflow-hidden">
         <div className="relative z-10">
           {/* Success Badge */}
-          <div className="flex items-center justify-center mb-6">
-            <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                <Check className="w-10 h-10 text-white" strokeWidth={3} />
-              </div>
-              <div className="absolute -top-2 -right-2">
-                <Sparkles className="w-8 h-8 text-yellow-400 animate-pulse" />
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-3">
-              Journey <span className="text-emerald-500">completed</span>
-              <span className="ml-2">🎉</span>
-            </h1>
-            <p className="text-gray-600 text-lg">
-              Thank you for choosing{' '}
-              <span className="font-semibold text-gray-900">Nomad</span>
-            </p>
-            <p className="text-gray-500 text-sm mt-1">
-              We hope you had a safe and pleasant journey
-            </p>
-          </div>
-
+         {status==='completed'&&
+         <>
+         <SuccessBadge/>
+         <SuccessHeader/>
+         </>
+         }
+         {status==='cancelled'&&
+         <>
+         <CancelledBadge/>
+         <CancelledHeader/>
+         </>
+         }
           {/* Trip Summary Card */}
           <div className="flex gap-6 p-2">
             {/* Trip Summary */}
@@ -140,6 +133,7 @@ export const HikeCompletedPage = () => {
                 </div>
 
                 {/* Duration */}
+                {status==='completed'&&
                 <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
                   <div className="w-9 h-9 bg-orange-100 rounded-lg flex items-center justify-center">
                     <Clock className="w-5 h-5 text-orange-600" />
@@ -154,6 +148,20 @@ export const HikeCompletedPage = () => {
                     </p>
                   </div>
                 </div>
+                }
+                {status==='cancelled'&&
+                <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
+                  <div className="w-9 h-9 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <RiRefund2Fill className="w-5 h-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Refund Amount</p>
+                    <p className="font-semibold text-base">
+                      ₹{hikeDetails.bookingDetails?.refundAmount}
+                    </p>
+                  </div>
+                </div>
+                }
 
                 {/* Cost */}
                 <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">

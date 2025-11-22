@@ -59,6 +59,8 @@ export interface GetHikeDetailsResponseDTO {
     status: string;
     createdAt: Date;
     completedAt: Date | undefined;
+    refundAmount: number;
+    cancelledAt: Date | undefined;
   };
   paymentDetails: null | {
     paymentId: string;
