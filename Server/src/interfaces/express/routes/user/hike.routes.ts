@@ -64,6 +64,16 @@ router.patch(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+router.get(
+  '/:bookingId/cancel-request',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      ridebookingComposer().reqCancelBooking(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 router.patch(
   '/:bookingId/cancel',

@@ -68,3 +68,11 @@ export interface GetHikeDetailsResponseDTO {
     createdAt: Date;
   };
 }
+
+export interface ReqCancelBookingResDTO {
+  bookingId: string;
+  refundAmount: number;
+  distanceRiderAway: number;
+  durationToPickup: number;
+  isRiderDelay: boolean;
+}

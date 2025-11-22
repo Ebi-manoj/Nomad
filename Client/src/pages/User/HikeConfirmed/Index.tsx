@@ -12,12 +12,20 @@ import { latlangFormat } from '@/utils/LatLangFormater';
 import { BookingSection } from './BookingSection';
 import type { ChatInterfaceProps } from '@/types/chat';
 import ChatInterface from '../../../components/ChatInterface';
-import { AlertCircle, CheckCircle, RotateCw } from 'lucide-react';
-import { markDropOff } from '@/api/rideBooking';
+import { AlertCircle, CheckCircle, Loader2, RotateCw } from 'lucide-react';
+import { markDropOff, reqCancel } from '@/api/rideBooking';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { GenericModal } from '@/components/GenericModel';
+import type { ReqCancelBookingResDTO } from '@/types/hike';
+import { RefundModel } from './RefundModel';
 
 export const HikeStartedPage = () => {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [reqCancelLoading, setReqCancelLoading] = useState(false);
+  const [refundData, setRefundData] = useState<ReqCancelBookingResDTO | null>(
+    null
+  );
   const dispatch = useAppDispatch();
   const { bookingId } = useParams();
   const { booking, loading } = useSelector(
@@ -91,6 +99,20 @@ export const HikeStartedPage = () => {
     dispatch(getBookingLiveThunk(bookingId));
   };
 
+  const handleReqCancel = async () => {
+    if (!bookingId) return;
+    try {
+      setReqCancelLoading(true);
+      const data = await reqCancel(bookingId);
+      setRefundData(data);
+      setIsOpen(true);
+    } catch (error) {
+      useHandleApiError(error);
+    } finally {
+      setReqCancelLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -122,11 +144,20 @@ export const HikeStartedPage = () => {
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-white/40 rounded-full blur-sm group-hover:w-full transition-all duration-300" />
             </button>
           ) : (
-            <button className="cursor-pointer group relative px-4 py-2 rounded-xl text-white font-semibold overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            <button className="cursor-pointer group relative px-4 py-2 h-10 sm:h-11 rounded-xl text-white font-semibold overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
               <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-rose-600 to-red-600 bg-[length:200%_100%] group-hover:bg-[position:100%_0] transition-all duration-500" />
-              <div className="relative flex items-center justify-center gap-2">
-                <AlertCircle className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                <span className="text-sm sm:text-base">Cancel Ride</span>
+              <div
+                className="relative flex items-center justify-center gap-2"
+                onClick={handleReqCancel}
+              >
+                {reqCancelLoading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <>
+                    <AlertCircle className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                    <span className="text-sm sm:text-base">Cancel Ride</span>
+                  </>
+                )}
               </div>
             </button>
           )}
@@ -163,6 +194,22 @@ export const HikeStartedPage = () => {
             destination={hikerDestination}
           />
         </div>
+
+        <GenericModal
+          isOpen={isOpen}
+          onClose={() => {
+            setIsOpen(false);
+          }}
+          title="Cancellation Summary"
+          subtitle="Based on rider location & ETA"
+          primaryAction={{
+            className: 'bg-red-500 hover:bg-red-600',
+            label: 'Confirm Cancel',
+            onClick: () => {},
+          }}
+        >
+          {refundData && <RefundModel refundData={refundData} />}
+        </GenericModal>
       </div>
     </div>
   );

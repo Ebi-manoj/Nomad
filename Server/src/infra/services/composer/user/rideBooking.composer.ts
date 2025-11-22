@@ -12,6 +12,8 @@ import { RideBookingRepository } from '../../../repositories/RideBookingReposito
 import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
 import { TaskRepository } from '../../../repositories/TaskRepository';
+import { ReqCancelRideBookingUseCase } from '../../../../application/usecases/User/RideBooking/ReqCancelRideBookingUseCase';
+import { RefundService } from '../../../../application/services/RefundService';
 
 export function ridebookingComposer(): IRideBookingController {
   const rideBookinRepository = new RideBookingRepository();
@@ -21,6 +23,7 @@ export function ridebookingComposer(): IRideBookingController {
   const googleApi = new GoogleApiService();
   const locationRepository = new LocationRepository();
   const taskRepository = new TaskRepository();
+  const refundService = new RefundService(locationRepository, googleApi);
 
   const getRideBookingUseCase = new GetRideBookingUseCase(
     rideBookinRepository,
@@ -54,15 +57,20 @@ export function ridebookingComposer(): IRideBookingController {
     rideRepository,
     hikeRepository,
     taskRepository,
-    locationRepository,
-    googleApi,
+    refundService,
     transactionManager
+  );
+
+  const reqCancelRideBookingUseCase = new ReqCancelRideBookingUseCase(
+    rideBookinRepository,
+    refundService
   );
 
   return new RideBookingController(
     getRideBookingUseCase,
     markDroppOffUseCase,
     getBookingLiveUseCase,
-    cancelRideBookingUseCase
+    cancelRideBookingUseCase,
+    reqCancelRideBookingUseCase
   );
 }

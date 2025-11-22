@@ -54,6 +54,7 @@ export class RefundService implements IRefundService {
         refundAmount: booking.getAmount(),
         duration: currentDistanceResult.duration,
         distance: currentDistanceResult.distance,
+        isRiderDelay: !isWithinAllowedDelay,
       };
     }
 
@@ -69,6 +70,7 @@ export class RefundService implements IRefundService {
       refundAmount,
       duration: currentDistanceResult.duration,
       distance: currentDistanceResult.distance,
+      isRiderDelay: !isWithinAllowedDelay,
     };
   }
 

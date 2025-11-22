@@ -56,6 +56,20 @@ export interface RefundServiceResDTO {
   distance: number;
   duration: number;
   refundAmount: number;
+  isRiderDelay: boolean;
+}
+
+export interface ReqCancelBookingReqDTO {
+  bookingId: string;
+  userId: string;
+}
+
+export interface ReqCancelBookingResDTO {
+  bookingId: string;
+  refundAmount: number;
+  distanceRiderAway: number;
+  durationToPickup: number;
+  isRiderDelay: boolean;
 }
 
 export interface CancelRideBookingReqDTO {

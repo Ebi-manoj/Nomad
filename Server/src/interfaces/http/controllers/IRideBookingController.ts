@@ -6,4 +6,5 @@ export interface IRideBookingController {
   getRideBookingLive(httpRequest: HttpRequest): Promise<HttpResponse>;
   markDroppOff(httpRequest: HttpRequest): Promise<HttpResponse>;
   cancelBooking(httpRequest: HttpRequest): Promise<HttpResponse>;
+  reqCancelBooking(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

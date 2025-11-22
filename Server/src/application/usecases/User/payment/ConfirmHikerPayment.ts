@@ -76,7 +76,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
 
         const riderGeo: GeoJSON.Point = {
           type: 'Point',
-          coordinates: [riderLocation.lat, riderLocation.lng],
+          coordinates: [riderLocation.lng, riderLocation.lat],
         };
 
         const rideBooking = new RideBooking({
