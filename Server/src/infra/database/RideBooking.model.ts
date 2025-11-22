@@ -11,6 +11,7 @@ export interface IRideBookingDocument extends Document {
   seatsBooked: number;
   amount: number;
   platformFee: number;
+  riderInitialLocation: GeoJSON.Point;
   pickupLocation: GeoJSON.Point;
   dropoffLocation: GeoJSON.Point;
   status: RideBookingStatus;
@@ -71,6 +72,10 @@ const RideBookingSchema = new Schema<IRideBookingDocument>(
     platformFee: {
       type: Number,
       required: true,
+    },
+    riderInitialLocation: {
+      type: { type: String, default: 'Point' },
+      coordinates: { type: [Number], required: true },
     },
     pickupLocation: {
       type: { type: String, default: 'Point' },

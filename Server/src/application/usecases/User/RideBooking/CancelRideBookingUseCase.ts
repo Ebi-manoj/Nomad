@@ -8,7 +8,10 @@ import { TaskStatus } from '../../../../domain/enums/Task';
 import { Forbidden, UpdateFailed } from '../../../../domain/errors/CustomError';
 import { HikeNotFound } from '../../../../domain/errors/HikeErrors';
 import { RideBookingNotFound } from '../../../../domain/errors/RideBookingError';
-import { RideLocationNotFound, RideNotFound } from '../../../../domain/errors/RideErrors';
+import {
+  RideLocationNotFound,
+  RideNotFound,
+} from '../../../../domain/errors/RideErrors';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { ITransactionManager } from '../../../providers/ITransactionManager';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
@@ -17,6 +20,7 @@ import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { ITaskRepository } from '../../../repositories/ITaskRepository';
 import { ICancelRideBookingUseCase } from './ICancelRideBookingUseCase';
+import { IRefundService } from '../../../services/IRefundService';
 
 export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
   constructor(
@@ -24,8 +28,7 @@ export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
     private readonly rideRepository: IRideRepository,
     private readonly hikeRepository: IHikeRepository,
     private readonly taskRepository: ITaskRepository,
-    private readonly locationRepository: ILocationRepository,
-    private readonly googleApi: IGoogleApi,
+    private readonly refundService: IRefundService,
     private readonly transactionManager: ITransactionManager
   ) {}
 
@@ -53,38 +56,8 @@ export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
           booking.getId()!
         );
 
-        let distance = 0;
-        let duration = 0;
-
-        const riderLocation = await this.locationRepository.getLocation(
-          booking.getRideId()
-        );
-
-        if (!riderLocation) {
-          throw new RideLocationNotFound();
-        }
-
-        const riderCoord = { lat: riderLocation.lat, lng: riderLocation.lng };
-        const pickupCoord = {
-          lat: booking.getPickupLocation().coordinates[1],
-          lng: booking.getPickupLocation().coordinates[0],
-        };
-
-        const distanceResult = await this.googleApi.getDistance(
-          riderCoord,
-          pickupCoord
-        );
-
-        distance = distanceResult.distance;
-        duration = distanceResult.duration;
-
-        const isFarInDistance = distance >= 5;
-        const isFarInTime = duration >= 10;
-
-        const eligibleFor50 = isFarInDistance && isFarInTime;
-        const refundPercent = eligibleFor50 ? 0.5 : 0;
-
-        const refundAmount = booking.getAmount() * refundPercent;
+        const { refundAmount, distance, duration } =
+          await this.refundService.execute(booking);
 
         booking.cancel();
         booking.setRefundedAmount(refundAmount);

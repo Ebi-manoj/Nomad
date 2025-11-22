@@ -11,6 +11,7 @@ export interface RideBookingProps {
   seatsBooked: number;
   amount: number;
   platformFee: number;
+  riderInitialLocation: GeoJSON.Point;
   pickupLocation: GeoJSON.Point;
   dropoffLocation: GeoJSON.Point;
   status: RideBookingStatus;
@@ -32,6 +33,7 @@ export class RideBooking {
   private seatsBooked: number;
   private amount: number;
   private platformFee: number;
+  private riderInitialLocation: GeoJSON.Point;
   private pickupLocation: GeoJSON.Point;
   private dropoffLocation: GeoJSON.Point;
   private status: RideBookingStatus;
@@ -52,6 +54,7 @@ export class RideBooking {
     this.seatsBooked = props.seatsBooked;
     this.amount = props.amount;
     this.platformFee = props.platformFee;
+    this.riderInitialLocation = props.riderInitialLocation;
     this.pickupLocation = props.pickupLocation;
     this.dropoffLocation = props.dropoffLocation;
     this.status = props.status;
@@ -101,6 +104,10 @@ export class RideBooking {
 
   getPlatformFee(): number {
     return this.platformFee;
+  }
+
+  getRiderInitialLocation() {
+    return this.riderInitialLocation;
   }
 
   getPickupLocation() {

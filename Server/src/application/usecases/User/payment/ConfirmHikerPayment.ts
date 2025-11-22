@@ -7,11 +7,15 @@ import {
   PaymentInfoNotFound,
   PaymentNotSuccessfull,
 } from '../../../../domain/errors/PaymentError';
-import { RideNotFound } from '../../../../domain/errors/RideErrors';
+import {
+  RideLocationNotFound,
+  RideNotFound,
+} from '../../../../domain/errors/RideErrors';
 import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 import { ITransactionManager } from '../../../providers/ITransactionManager';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
+import { ILocationRepository } from '../../../repositories/ILocationRepository';
 import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
@@ -29,7 +33,8 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
     private readonly ridebookingRepository: IRideBookingRepository,
     private readonly transactionManager: ITransactionManager,
     private readonly createTasksUseCase: ICreateTasksUseCase,
-    private readonly realtimeGateWay: IRealtimeGateway
+    private readonly realtimeGateWay: IRealtimeGateway,
+    private readonly locationRepository: ILocationRepository
   ) {}
 
   async execute(paymentIntentId: string): Promise<ConfirmHikerPaymentDTO> {
@@ -64,6 +69,16 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
           return { booking: existingBooking, shouldCreateTasks: false };
         }
 
+        const riderLocation = await this.locationRepository.getLocation(
+          ride.getRideId()!
+        );
+        if (!riderLocation) throw new RideLocationNotFound();
+
+        const riderGeo: GeoJSON.Point = {
+          type: 'Point',
+          coordinates: [riderLocation.lat, riderLocation.lng],
+        };
+
         const rideBooking = new RideBooking({
           rideId: ride.getRideId()!,
           hikeId: hike.getHikeId()!,
@@ -74,6 +89,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
           seatsBooked: joinRequest.getSeatsRequested()!,
           amount: payment.getAmount(),
           platformFee: payment.getPlatformFee(),
+          riderInitialLocation: riderGeo,
           pickupLocation: joinRequest.getPickupLocation(),
           dropoffLocation: joinRequest.getDropoffLocation(),
           status: RideBookingStatus.CONFIRMED,
