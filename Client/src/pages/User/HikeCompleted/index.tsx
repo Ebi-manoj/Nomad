@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-
   MapPin,
   Navigation,
   Clock,
@@ -61,7 +60,7 @@ export const HikeCompletedPage = () => {
     navigate('/hike', { replace: true });
   };
 
-  const{status}=hikeDetails
+  const { status } = hikeDetails;
 
   return (
     <div className="min-h-screen ">
@@ -69,18 +68,18 @@ export const HikeCompletedPage = () => {
       <div className="bg-white  p-8 pb-4 mb-6 relative overflow-hidden">
         <div className="relative z-10">
           {/* Success Badge */}
-         {status==='completed'&&
-         <>
-         <SuccessBadge/>
-         <SuccessHeader/>
-         </>
-         }
-         {status==='cancelled'&&
-         <>
-         <CancelledBadge/>
-         <CancelledHeader/>
-         </>
-         }
+          {status === 'completed' && (
+            <>
+              <SuccessBadge />
+              <SuccessHeader />
+            </>
+          )}
+          {status === 'cancelled' && (
+            <>
+              <CancelledBadge />
+              <CancelledHeader />
+            </>
+          )}
           {/* Trip Summary Card */}
           <div className="flex gap-6 p-2">
             {/* Trip Summary */}
@@ -89,7 +88,7 @@ export const HikeCompletedPage = () => {
                 <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
                   <Navigation className="w-6 h-6 text-emerald-600" />
                 </div>
-                <h2 className="text-xl font-bold">Hiking Completed</h2>
+                <h2 className="text-xl font-bold">Hiking Summary</h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -133,35 +132,35 @@ export const HikeCompletedPage = () => {
                 </div>
 
                 {/* Duration */}
-                {status==='completed'&&
-                <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
-                  <div className="w-9 h-9 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-orange-600" />
+                {status === 'completed' && (
+                  <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
+                    <div className="w-9 h-9 bg-orange-100 rounded-lg flex items-center justify-center">
+                      <Clock className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-sm">Duration</p>
+                      <p className="font-semibold text-base">
+                        {formatDuration(
+                          hikeDetails.bookingDetails?.completedAt!,
+                          hikeDetails.createdAt
+                        )}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-500 text-sm">Duration</p>
-                    <p className="font-semibold text-base">
-                      {formatDuration(
-                        hikeDetails.bookingDetails?.completedAt!,
-                        hikeDetails.createdAt
-                      )}
-                    </p>
+                )}
+                {status === 'cancelled' && (
+                  <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
+                    <div className="w-9 h-9 bg-orange-100 rounded-lg flex items-center justify-center">
+                      <RiRefund2Fill className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-sm">Refund Amount</p>
+                      <p className="font-semibold text-base">
+                        ₹{hikeDetails.bookingDetails?.refundAmount}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                }
-                {status==='cancelled'&&
-                <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
-                  <div className="w-9 h-9 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <RiRefund2Fill className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-sm">Refund Amount</p>
-                    <p className="font-semibold text-base">
-                      ₹{hikeDetails.bookingDetails?.refundAmount}
-                    </p>
-                  </div>
-                </div>
-                }
+                )}
 
                 {/* Cost */}
                 <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">

@@ -13,7 +13,7 @@ import { BookingSection } from './BookingSection';
 import type { ChatInterfaceProps } from '@/types/chat';
 import ChatInterface from '../../../components/ChatInterface';
 import { AlertCircle, CheckCircle, Loader2, RotateCw } from 'lucide-react';
-import { markDropOff, reqCancel } from '@/api/rideBooking';
+import { cancelBooking, markDropOff, reqCancel } from '@/api/rideBooking';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 import { GenericModal } from '@/components/GenericModel';
 import type { ReqCancelBookingResDTO } from '@/types/hike';
@@ -113,6 +113,19 @@ export const HikeStartedPage = () => {
     }
   };
 
+  const handleCancel = async () => {
+    if (!bookingId) return;
+    try {
+      setReqCancelLoading(true);
+      await cancelBooking(bookingId);
+      navigate(`/hike/${booking.rideBooking.hikeId}`, { replace: true });
+    } catch (error) {
+      useHandleApiError(error);
+    } finally {
+      setReqCancelLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -205,7 +218,8 @@ export const HikeStartedPage = () => {
           primaryAction={{
             className: 'bg-red-500 hover:bg-red-600',
             label: 'Confirm Cancel',
-            onClick: () => {},
+            loading: reqCancelLoading,
+            onClick: handleCancel,
           }}
         >
           {refundData && <RefundModel refundData={refundData} />}

@@ -51,7 +51,7 @@ export class RefundService implements IRefundService {
     // -----------------------------
     if (!isWithinAllowedDelay) {
       return {
-        refundAmount: booking.getAmount(),
+        refundAmount: booking.getCostShared(),
         duration: currentDistanceResult.duration,
         distance: currentDistanceResult.distance,
         isRiderDelay: !isWithinAllowedDelay,
@@ -64,7 +64,7 @@ export class RefundService implements IRefundService {
     const qualifiesFor50PercentRefund = isFarFromPickup;
 
     const refundPercent = qualifiesFor50PercentRefund ? 0.5 : 0;
-    const refundAmount = booking.getAmount() * refundPercent;
+    const refundAmount = booking.getCostShared() * refundPercent;
 
     return {
       refundAmount,
