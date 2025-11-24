@@ -15,6 +15,7 @@ interface RideTabsProps {
   setRideRequest: React.Dispatch<React.SetStateAction<RideRequestDTO[]>>;
   onCompleteTask: (taskId: string, otp?: string) => void;
   onChatClick: (hiker: GetHikersMatchedResponseDTO) => void;
+  handleRefresh: () => void;
 }
 
 export function RideTabs({
@@ -23,6 +24,7 @@ export function RideTabs({
   setRideRequest,
   onCompleteTask,
   onChatClick,
+  handleRefresh,
 }: RideTabsProps) {
   const tasks = useSelector((state: RootState) => state.riderTasks.tasks);
   const currentHikers = useSelector(
@@ -83,6 +85,7 @@ export function RideTabs({
           seatsRemaining={seatsRemaining}
           onAccept={handleAccept}
           onDecline={handleDecline}
+          handleRefresh={handleRefresh}
         />
       </TabsContent>
 

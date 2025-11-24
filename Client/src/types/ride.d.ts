@@ -49,6 +49,8 @@ export interface HikerMatchedDTO {
   seatsBooked: number;
   createdAt: Date;
   completedAt: Date | undefined;
+  cancelledAt: Date | undefined;
+  refundAmount: number;
   hiker: {
     userId: string;
     fullName: string;

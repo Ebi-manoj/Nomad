@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RideData, RideState } from './ride';
 import { createRide } from './ride.thunk';
 import { completeTask } from '../riderTasks/riderTasks.thunk';
+import { fetchMatchedHikers } from '../matchedHikers/matchedHikers.thunk';
 
 const initialState: RideState = {
   rideData: null,
@@ -15,6 +16,22 @@ const rideSlice = createSlice({
   reducers: {
     setActiveRide(state, action: PayloadAction<RideData | null>) {
       state.rideData = action.payload;
+    },
+    clearRideData(state) {
+      state.rideData = null;
+      state.error = '';
+      state.loading = false;
+    },
+    releaseSeats(state, action) {
+      if (state.rideData) {
+        console.log(action.payload);
+        state.rideData.seatsAvailable -= action.payload;
+      }
+    },
+    updateSeats(state, action) {
+      if (state.rideData) {
+        state.rideData.seatsAvailable = action.payload;
+      }
     },
   },
   extraReducers: builder => {
@@ -38,5 +55,6 @@ const rideSlice = createSlice({
   },
 });
 
-export const { setActiveRide } = rideSlice.actions;
+export const { setActiveRide, clearRideData, releaseSeats, updateSeats } =
+  rideSlice.actions;
 export default rideSlice.reducer;

@@ -19,6 +19,10 @@ import { fetchMatchedHikers } from '@/store/features/user/matchedHikers/matchedH
 import type { ChatInterfaceProps } from '@/types/chat';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { toast } from 'sonner';
+import {
+  releaseSeats,
+  updateSeats,
+} from '@/store/features/user/ride/rideSlice';
 
 export function RideStartedContent() {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
@@ -29,14 +33,20 @@ export function RideStartedContent() {
   const { riderSocket } = useSocket();
   const dispatch = useAppDispatch();
   if (!rideData) return <Navigate to="/ride" replace />;
+  const fetchPendingReq = async () => {
+    try {
+      const data = await getJoinRequest(rideData.id);
+      setRideRequest(data);
+    } catch (error) {}
+  };
+
+  const handleRefresh = () => {
+    fetchPendingReq();
+    dispatch(fetchRiderTasks(rideData.id));
+    dispatch(fetchMatchedHikers(rideData.id));
+  };
 
   useEffect(() => {
-    const fetchPendingReq = async () => {
-      try {
-        const data = await getJoinRequest(rideData.id);
-        setRideRequest(data);
-      } catch (error) {}
-    };
     fetchPendingReq();
     dispatch(fetchRiderTasks(rideData.id));
     dispatch(fetchMatchedHikers(rideData.id));
@@ -47,23 +57,25 @@ export function RideStartedContent() {
       riderSocket.connect();
     }
     riderSocket.emit('ride:join', rideData.id);
+  }, [rideData]);
 
+  useEffect(() => {
     riderSocket.on('join-request:new', (data: RideRequestDTO) => {
       console.log(' New Join Request Received:', data);
       setRideRequest(prev => [...prev, data]);
     });
 
-    riderSocket.on('hike:confirmed', async () => {
+    riderSocket.on('hike:confirmed', async data => {
       dispatch(fetchRiderTasks(rideData.id));
       dispatch(fetchMatchedHikers(rideData.id));
+      dispatch(updateSeats(data.seatsLeft));
     });
 
     return () => {
       riderSocket.off('join-request:new');
       riderSocket.off('hike:confirmed');
-      riderSocket.disconnect();
     };
-  }, [rideData, riderSocket, dispatch]);
+  }, []);
 
   const handleCompleteTask = async (taskId: string, otp?: string) => {
     try {
@@ -126,6 +138,7 @@ export function RideStartedContent() {
             setRideRequest={setRideRequest}
             onCompleteTask={handleCompleteTask}
             onChatClick={handleChatClick}
+            handleRefresh={handleRefresh}
           />
         )}
 

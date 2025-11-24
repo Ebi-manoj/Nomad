@@ -64,14 +64,7 @@ export const UserRoutes = (
         </ProtectedSession>
       }
     />
-    <Route
-      path="/ride/:rideId"
-      element={
-        <ProtectedSession requireActiveRide>
-          <RideCompletedPage />
-        </ProtectedSession>
-      }
-    />
+    <Route path="/ride/:rideId" element={<RideCompletedPage />} />
     <Route path="/payment/:paymentId" element={<Payment />} />
     <Route path="/payment-success" element={<PaymentSuccessPage />} />
   </Route>

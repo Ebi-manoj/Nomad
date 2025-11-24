@@ -1,6 +1,7 @@
 import { ConfirmHikerPaymentDTO } from '../../../../domain/dto/paymentDTO';
 import { RideBooking } from '../../../../domain/entities/RideBooking';
 import { RideBookingStatus } from '../../../../domain/enums/RideBooking';
+import { UpdateFailed } from '../../../../domain/errors/CustomError';
 import { HikeNotFound } from '../../../../domain/errors/HikeErrors';
 import { JoinRequestNotFound } from '../../../../domain/errors/JoinRequestError';
 import {
@@ -38,7 +39,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
   ) {}
 
   async execute(paymentIntentId: string): Promise<ConfirmHikerPaymentDTO> {
-    const { booking, shouldCreateTasks } =
+    const { booking, shouldCreateTasks, ride } =
       await this.transactionManager.runInTransaction(async () => {
         const payment = await this.paymentRepository.findByStripeId(
           paymentIntentId
@@ -66,7 +67,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
         const existingBooking =
           await this.ridebookingRepository.findbyPaymentId(payment.getId()!);
         if (existingBooking) {
-          return { booking: existingBooking, shouldCreateTasks: false };
+          return { booking: existingBooking, ride, shouldCreateTasks: false };
         }
 
         const riderLocation = await this.locationRepository.getLocation(
@@ -103,13 +104,19 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
         hike.assignRider(ride.getRiderId());
         hike.toggleConfirmed();
 
-        await Promise.all([
+        const [updatedRide] = await Promise.all([
+          this.rideRepository.update(ride.getRideId(), ride),
           this.hikeRepository.update(hike.getHikeId(), hike),
           this.joinRequestRepository.update(joinRequest.getId(), joinRequest),
-          this.rideRepository.update(ride.getRideId(), ride),
         ]);
 
-        return { booking: savedBooking, shouldCreateTasks: true };
+        if (!updatedRide) throw new UpdateFailed();
+
+        return {
+          booking: savedBooking,
+          ride: updatedRide,
+          shouldCreateTasks: true,
+        };
       });
 
     if (shouldCreateTasks) {
@@ -124,6 +131,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
         message: 'New Hike confirmed successfully',
         bookingId: booking.getId()!,
         seatsBooked: booking.getSeatsBooked(),
+        seatsLeft: ride.getSeatsAvailable(),
         amount: booking.getCostShared(),
       }
     );

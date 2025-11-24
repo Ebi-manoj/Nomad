@@ -1,6 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCcw } from 'lucide-react';
 import { HikerCard } from './HikerCard';
 import type { RideRequestDTO } from '@/types/ride';
 
@@ -10,6 +10,7 @@ interface HikerListProps {
   onAccept: (requestId: string) => void;
   onDecline: (requestId: string) => void;
   isLoading?: boolean;
+  handleRefresh: () => void;
 }
 
 export function HikerList({
@@ -18,16 +19,24 @@ export function HikerList({
   onAccept,
   onDecline,
   isLoading = false,
+  handleRefresh,
 }: HikerListProps) {
   return (
     <Card className="h-full border border-gray-200 flex flex-col overflow-hidden w-full">
       <CardContent className="p-4 flex flex-col h-full overflow-hidden w-full">
         {/* Header Section - Fixed */}
         <div className="flex-shrink-0 mb-3 w-full">
-          <div className="mb-2">
-            <h3 className="font-semibold text-gray-700">
-              Seats Remaining: {seatsRemaining}
-            </h3>
+          <div className="flex justify-between items-center">
+            <div className="mb-2">
+              <h3 className="font-semibold text-gray-700">
+                Seats Remaining: {seatsRemaining}
+              </h3>
+            </div>
+            <RefreshCcw
+              size={16}
+              className="cursor-pointer"
+              onClick={handleRefresh}
+            />
           </div>
           <div className="flex justify-between items-center mb-2">
             <p className="text-gray-700 text-xs">Available hikers</p>

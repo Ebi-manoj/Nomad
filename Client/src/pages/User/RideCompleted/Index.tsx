@@ -1,7 +1,9 @@
 import { getRideDetails } from '@/api/ride';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { clearRideData } from '@/store/features/user/ride/rideSlice';
 import type { GetRideDetailsResDTO } from '@/types/ride';
-import { formatDuration } from '@/utils/dateFormater';
+import { formatDate, formatDuration } from '@/utils/dateFormater';
 import {
   MapPin,
   Navigation,
@@ -14,14 +16,17 @@ import {
   Users,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const RideCompletedPage = () => {
+  const navigate = useNavigate();
   const [rideData, setRideData] = useState<GetRideDetailsResDTO | undefined>(
     undefined
   );
+  const dispatch = useAppDispatch();
   const handleRedirect = () => {
-    window.location.href = '/';
+    navigate('/ride', { replace: true });
+    dispatch(clearRideData());
   };
 
   const { rideId } = useParams();
@@ -133,7 +138,7 @@ const RideCompletedPage = () => {
                   </div>
                   <div>
                     <p className="text-muted-foreground text-sm">
-                      Pickup Location
+                      Start Location
                     </p>
                     <p className="font-semibold text-base text-foreground">
                       {rideData.startAddress.split(',')[0]}
@@ -148,7 +153,7 @@ const RideCompletedPage = () => {
                   </div>
                   <div>
                     <p className="text-muted-foreground text-sm">
-                      Drop Location
+                      End Location
                     </p>
                     <p className="font-semibold text-base text-foreground">
                       {rideData.endAddress.split(',')[0]}
@@ -261,21 +266,41 @@ const RideCompletedPage = () => {
                           <h4 className="font-semibold text-foreground">
                             {booking.hiker.fullName}
                           </h4>
+                          <span
+                            className={`px-2 py-0.5 text-xs font-medium rounded-full ${
+                              booking.status === 'COMPLETED'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-red-100 text-red-700'
+                            }`}
+                          >
+                            {booking.status}
+                          </span>
                         </div>
+
                         <p className="text-xs text-muted-foreground truncate mt-0.5">
                           {booking.pickupAddress} → {booking.destinationAddress}
                         </p>
                       </div>
                       <div className="text-right flex-shrink-0">
                         <p className="font-bold text-green-600 text-lg">
-                          ₹{booking.amount}
+                          ₹{booking.amount - booking.refundAmount}
                         </p>
-                        <p className="text-xs text-muted-foreground">
-                          {formatDuration(
-                            booking.createdAt,
-                            booking.completedAt!
-                          )}
-                        </p>
+                        {booking.status == 'COMPLETED' && (
+                          <p className="text-xs text-muted-foreground">
+                            Duration:{' '}
+                            {formatDuration(
+                              booking.createdAt,
+                              booking.completedAt!
+                            )}
+                          </p>
+                        )}
+                        {booking.status == 'CANCELLED' && (
+                          <p className="text-xs text-muted-foreground">
+                            CancelledAt:{' '}
+                            {booking.cancelledAt &&
+                              formatDate(booking.cancelledAt)}
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
