@@ -13,6 +13,8 @@ export const userMapper: IMapper<User, IUserModel> = {
       password: domain.getPassword() ?? undefined,
       role: domain.getRole(),
       isBlocked: domain.getIsBlocked(),
+      rating: domain.getRating(),
+      ratingCount: domain.getRatingCount(),
       aadhaarVerified: domain.getAadhaarVerified(),
       licenceVerified: domain.getLicenceVerified(),
     };
@@ -26,6 +28,8 @@ export const userMapper: IMapper<User, IUserModel> = {
       password: userDoc.password,
       role: userDoc.role,
       isBlocked: userDoc.isBlocked,
+      rating: userDoc.rating,
+      ratingCount: userDoc.ratingCount,
       aadhaarVerified: userDoc.aadhaarVerified,
       licenceVerified: userDoc.licenceVerified,
       createdAt: userDoc.createdAt,

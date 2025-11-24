@@ -11,6 +11,8 @@ export interface UserProps {
   isBlocked: boolean;
   aadhaarVerified: boolean;
   licenceVerified: boolean;
+  rating?: number;
+  ratingCount?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -25,6 +27,8 @@ export class User {
   private isBlocked: boolean;
   private aadhaarVerified: boolean;
   private licenceVerified: boolean;
+  private rating: number;
+  private ratingCount: number;
   private readonly createdAt: Date;
   private updatedAt: Date;
 
@@ -38,6 +42,8 @@ export class User {
     this.isBlocked = props.isBlocked || false;
     this.aadhaarVerified = props.aadhaarVerified || false;
     this.licenceVerified = props.licenceVerified || false;
+    this.rating = props.rating || 0;
+    this.ratingCount = props.ratingCount || 0;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
   }
@@ -91,5 +97,17 @@ export class User {
   }
   setLicenceVerified(data: boolean) {
     this.licenceVerified = data;
+  }
+  getRating() {
+    return this.rating;
+  }
+  getRatingCount() {
+    return this.ratingCount;
+  }
+  updateRatings(newRating: number) {
+    const totalRating = this.rating * this.ratingCount + newRating;
+    this.ratingCount++;
+    this.rating = Number((totalRating / this.ratingCount).toFixed(1));
+    this.updatedAt = new Date();
   }
 }

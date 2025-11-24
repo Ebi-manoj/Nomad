@@ -7,6 +7,7 @@ import hikeRouter from '../routes/user/hike.routes';
 import rideRouter from '../routes/user/ride.routes';
 import chatRouter from '../routes/user/chat.routes';
 import taskRouter from '../routes/user/task.routes';
+import reviewRouter from '../routes/user/review.routes';
 import userManagementRouter from '../routes/admin/user.routes';
 import documentRouter from '../routes/admin/documents.routes';
 import fileRouter from '../routes/file.routes';
@@ -40,6 +41,7 @@ app.use('/api/v1/hike', hikeRouter);
 app.use('/api/v1/ride', rideRouter);
 app.use('/api/v1/task', taskRouter);
 app.use('/api/v1/chat', chatRouter);
+app.use('/api/v1/review', reviewRouter);
 
 app.use('/api/v1/file', fileRouter);
 app.use('/api/v1/payments', paymentRouter);

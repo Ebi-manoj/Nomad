@@ -9,6 +9,8 @@ export interface IUserModel {
   role: string;
   aadhaarVerified: boolean;
   licenceVerified: boolean;
+  rating: number;
+  ratingCount: number;
   isBlocked: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -44,6 +46,14 @@ const userSchema = new Schema<IUserModel>(
     licenceVerified: {
       type: Boolean,
       default: false,
+    },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    ratingCount: {
+      type: Number,
+      default: 0,
     },
     isBlocked: {
       type: Boolean,
