@@ -5,12 +5,13 @@ import { Hike } from '@/pages/User/Hike';
 import ProfilePage from '@/pages/User/Profile';
 import { RideMatching } from '@/pages/User/MatchRideToHike';
 import { Ride } from '@/pages/User/Ride';
+import { ActivityPage } from '@/pages/User/Activity/Activity';
 import { RideStarted } from '@/pages/User/RideStarted';
 import { ProtectedSession } from './ProtectedSessions';
 import { Payment } from '@/pages/User/HikerPayment/Payment';
 import { PaymentSuccessPage } from '@/pages/User/HikePaymentSuccess/Index';
 import { HikeStartedPage } from '@/pages/User/HikeConfirmed/Index';
-import { HikeCompletedPage } from '@/pages/User/HikeCompleted/Index';
+import { HikeCompletedPage } from '@/pages/User/HikeCompleted/index';
 import RideCompletedPage from '@/pages/User/RideCompleted/Index';
 
 export const UserRoutes = (
@@ -67,5 +68,6 @@ export const UserRoutes = (
     <Route path="/ride/:rideId" element={<RideCompletedPage />} />
     <Route path="/payment/:paymentId" element={<Payment />} />
     <Route path="/payment-success" element={<PaymentSuccessPage />} />
+    <Route path="/activity" element={<ActivityPage />} />
   </Route>
 );

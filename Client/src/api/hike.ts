@@ -1,7 +1,9 @@
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 import type { ApiResponse } from '@/types/ApiResponse';
 import type {
   CreateJoinRequestDTO,
   GetHikeDetailsResponseDTO,
+  GetHikesResDTO,
 } from '@/types/hike';
 import axiosInstance from '@/utils/axiosInstance';
 
@@ -20,4 +22,15 @@ export const getHikeDetails = async (hikeId: string) => {
     GET_HIKE_DETAILS_API(hikeId)
   );
   return res.data.data;
+};
+
+export const getHikes = async (page = 1, status = '') => {
+  try {
+    const res = await axiosInstance.get<ApiResponse<GetHikesResDTO>>('/hike', {
+      params: { page, status },
+    });
+    return res.data.data;
+  } catch (error) {
+    useHandleApiError(error);
+  }
 };

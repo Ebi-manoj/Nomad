@@ -1,3 +1,4 @@
+import type { HikeResponseDTO } from '@/store/features/user/hike/hike';
 import type { JoinRequestStatus } from '@/utils/constants';
 
 export interface CreateJoinRequestDTO {
@@ -78,4 +79,9 @@ export interface ReqCancelBookingResDTO {
   distanceRiderAway: number;
   durationToPickup: number;
   isRiderDelay: boolean;
+}
+
+export interface GetHikesResDTO {
+  total: number;
+  hikes: HikeResponseDTO[];
 }

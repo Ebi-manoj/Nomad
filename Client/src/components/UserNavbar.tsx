@@ -44,14 +44,16 @@ export const UserNavbar = () => {
             <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-colors">
               <IoNotificationsSharp />
             </button>
-            <button
-              className={`cursor-pointer flex items-center gap-1 px-4 py-2 ${
-                path == '/activity' && 'border-b-2'
-              } bg-gray-100 border-black hover:bg-gray-200 rounded-lg font-medium transition-colors`}
-            >
-              <LuNotebookText />
-              Activity
-            </button>
+            <Link to={'/activity'}>
+              <button
+                className={`cursor-pointer flex items-center gap-1 pb-1   border-black hover:text-gray-600 rounded-lg font-medium transition-colors
+                  ${path == '/activity' && 'border-b-2 rounded-b-none'}
+                  `}
+              >
+                <LuNotebookText />
+                Activity
+              </button>
+            </Link>
             <ProfilePopover />
           </div>
         </div>
