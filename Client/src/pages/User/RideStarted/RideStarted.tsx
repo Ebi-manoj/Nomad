@@ -19,10 +19,7 @@ import { fetchMatchedHikers } from '@/store/features/user/matchedHikers/matchedH
 import type { ChatInterfaceProps } from '@/types/chat';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { toast } from 'sonner';
-import {
-  releaseSeats,
-  updateSeats,
-} from '@/store/features/user/ride/rideSlice';
+import { updateSeats } from '@/store/features/user/ride/rideSlice';
 
 export function RideStartedContent() {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);

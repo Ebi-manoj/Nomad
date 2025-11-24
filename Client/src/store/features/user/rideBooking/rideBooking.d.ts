@@ -8,6 +8,7 @@ export type RideBookingStatus =
 export interface RideBookingResponseDTO {
   rideBooking: {
     bookingId: string;
+    bookingNumber: string;
     rideId: string;
     hikeId: string;
     riderId: string;

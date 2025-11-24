@@ -87,6 +87,7 @@ export interface GetHikeDetailsResponseDTO {
   };
   bookingDetails: null | {
     bookingId: string;
+    bookingNumber: string;
     pickupLocation: [number, number];
     dropOffLocation: [number, number];
     status: string;

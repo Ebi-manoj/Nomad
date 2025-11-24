@@ -22,6 +22,11 @@ export class RideBookingRepository
     return this.mapper.toDomain(found);
   }
 
+  async findByBookingNumber(bookingNumber: string): Promise<RideBooking | null> {
+    const booking = await this.model.findOne({ bookingNumber });
+    return booking ? this.mapper.toDomain(booking) : null;
+  }
+
   async findByRideId(id: string): Promise<RideBooking[]> {
     const rideBookings = await this.model.find({ rideId: id });
     return rideBookings.map(r => this.mapper.toDomain(r));

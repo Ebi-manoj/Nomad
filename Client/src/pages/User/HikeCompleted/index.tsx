@@ -105,6 +105,21 @@ export const HikeCompletedPage = () => {
                   </div>
                 </div>
 
+                {/* Booking Number */}
+                {hikeDetails.bookingDetails && (
+                  <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
+                    <div className="w-9 h-9 bg-indigo-100 rounded-lg flex items-center justify-center">
+                      <span className="text-indigo-600 font-semibold text-sm">ID</span>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-sm">Booking Number</p>
+                      <p className="font-semibold text-base">
+                        {hikeDetails.bookingDetails.bookingNumber}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Destination */}
                 <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
                   <div className="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center">

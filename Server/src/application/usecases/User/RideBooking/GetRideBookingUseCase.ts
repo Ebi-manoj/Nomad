@@ -67,6 +67,7 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
     return {
       rideBooking: {
         bookingId: booking.getId()!,
+        bookingNumber: booking.getBookingNumber(),
         rideId: booking.getRideId(),
         hikeId: booking.getHikeId(),
         riderId: booking.getRiderId(),

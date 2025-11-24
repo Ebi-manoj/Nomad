@@ -58,9 +58,10 @@ export const PaymentSuccess = ({
             </h2>
             <div className="space-y-1 text-gray-700 text-sm">
               <p>
-                <span className="font-medium text-gray-800">Booking ID:</span>{' '}
-                {bookingDetails.bookingId}
+                <span className="font-medium text-gray-800">Booking Number:</span>{' '}
+                {bookingDetails.bookingNumber}
               </p>
+           
               <p>
                 <span className="font-medium text-gray-800">Payment ID:</span>{' '}
                 {bookingDetails.paymentId}

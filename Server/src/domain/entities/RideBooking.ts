@@ -8,6 +8,7 @@ export interface RideBookingProps {
   hikeId: string;
   joinRequestId: string;
   paymentId: string;
+  bookingNumber: string;
   seatsBooked: number;
   amount: number;
   platformFee: number;
@@ -30,6 +31,7 @@ export class RideBooking {
   private hikeId: string;
   private joinRequestId: string;
   private paymentId: string;
+  private bookingNumber: string;
   private seatsBooked: number;
   private amount: number;
   private platformFee: number;
@@ -51,6 +53,7 @@ export class RideBooking {
     this.hikeId = props.hikeId;
     this.joinRequestId = props.joinRequestId;
     this.paymentId = props.paymentId;
+    this.bookingNumber = props.bookingNumber;
     this.seatsBooked = props.seatsBooked;
     this.amount = props.amount;
     this.platformFee = props.platformFee;
@@ -92,6 +95,10 @@ export class RideBooking {
 
   getPaymentId(): string {
     return this.paymentId;
+  }
+
+  getBookingNumber(): string {
+    return this.bookingNumber;
   }
 
   getSeatsBooked(): number {

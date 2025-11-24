@@ -134,7 +134,7 @@ export const HikeStartedPage = () => {
           <div>
             <h1 className="text-lg font-semibold">Ride in Progress</h1>
             <p className="text-sm text-gray-500">
-              Booking ID: {rideBooking.rideId}
+              Booking Number: {rideBooking.bookingNumber}
             </p>
           </div>
         </div>

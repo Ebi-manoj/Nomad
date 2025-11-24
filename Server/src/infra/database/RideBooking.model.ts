@@ -8,6 +8,7 @@ export interface IRideBookingDocument extends Document {
   hikeId: mongoose.Types.ObjectId;
   joinRequestId: mongoose.Types.ObjectId;
   paymentId: mongoose.Types.ObjectId;
+  bookingNumber: string;
   seatsBooked: number;
   amount: number;
   platformFee: number;
@@ -58,6 +59,12 @@ const RideBookingSchema = new Schema<IRideBookingDocument>(
       type: Schema.Types.ObjectId,
       ref: 'Payment',
       required: true,
+      unique: true,
+    },
+    bookingNumber: {
+      type: String,
+      required: true,
+      index: true,
       unique: true,
     },
     seatsBooked: {

@@ -2,7 +2,6 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RideData, RideState } from './ride';
 import { createRide } from './ride.thunk';
 import { completeTask } from '../riderTasks/riderTasks.thunk';
-import { fetchMatchedHikers } from '../matchedHikers/matchedHikers.thunk';
 
 const initialState: RideState = {
   rideData: null,

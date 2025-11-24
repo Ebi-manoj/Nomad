@@ -6,4 +6,5 @@ export interface IRideBookingRepository extends IBaseRepository<RideBooking> {
   findByRideId(id: string): Promise<RideBooking[]>;
   findByHikeId(id: string): Promise<RideBooking | null>;
   getTotalCostShareOfRide(rideId: string): Promise<number>;
+  findByBookingNumber(bookingNumber: string): Promise<RideBooking | null>;
 }

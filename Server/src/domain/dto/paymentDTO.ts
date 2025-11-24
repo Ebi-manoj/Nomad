@@ -21,6 +21,7 @@ export interface HikerPaymentInfoResponseDTO {
 
 export interface ConfirmHikerPaymentDTO {
   bookingId: string;
+  bookingNumber: string;
   paymentId: string;
   seatsBooked: number;
   amount: number;

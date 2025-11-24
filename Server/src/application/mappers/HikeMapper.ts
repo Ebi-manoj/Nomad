@@ -54,6 +54,7 @@ export function HikeDetailsMapper(
       ? null
       : {
           bookingId: booking.getId()!,
+          bookingNumber: booking.getBookingNumber(),
           pickupLocation: booking.getPickupLocation().coordinates as [
             number,
             number

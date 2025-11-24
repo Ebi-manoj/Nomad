@@ -9,6 +9,7 @@ export interface RideBookingRequestDTO {
 export interface RideBookingResponseDTO {
   rideBooking: {
     bookingId: string;
+    bookingNumber: string;
     rideId: string;
     hikeId: string;
     riderId: string;

@@ -80,6 +80,8 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
           coordinates: [riderLocation.lng, riderLocation.lat],
         };
 
+        const bookingNumber = await this.generateBookingNumber();
+
         const rideBooking = new RideBooking({
           rideId: ride.getRideId()!,
           hikeId: hike.getHikeId()!,
@@ -87,6 +89,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
           hikerId: hike.getUserId()!,
           joinRequestId: joinRequest.getId()!,
           paymentId: payment.getId()!,
+          bookingNumber,
           seatsBooked: joinRequest.getSeatsRequested()!,
           amount: payment.getAmount(),
           platformFee: payment.getPlatformFee(),
@@ -138,11 +141,29 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
 
     const response: ConfirmHikerPaymentDTO = {
       bookingId: booking.getId()!,
+      bookingNumber: booking.getBookingNumber(),
       paymentId: booking.getPaymentId(),
       seatsBooked: booking.getSeatsBooked(),
       amount: booking.getAmount(),
       platformFee: booking.getPlatformFee(),
     };
     return response;
+  }
+
+  private async generateBookingNumber(): Promise<string> {
+    const prefix = 'NOMAD';
+    let attempts = 0;
+
+    while (attempts < 5) {
+      const random = Math.floor(100000 + Math.random() * 900000);
+      const bookingNumber = `${prefix}-${random}`;
+      const existing = await this.ridebookingRepository.findByBookingNumber(
+        bookingNumber
+      );
+      if (!existing) return bookingNumber;
+      attempts++;
+    }
+
+    return `${prefix}-${Date.now()}`;
   }
 }
