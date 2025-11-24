@@ -6,6 +6,12 @@ import { authMiddleware } from '../../middlewares/authMiddleware';
 
 const router = express.Router();
 
+router.get('', authMiddleware, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    hikeComposer().getHikes(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
 router.post('/create', async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpReq =>
     hikeComposer().createHike(httpReq)

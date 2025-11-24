@@ -104,3 +104,13 @@ export interface GetHikeDetailsResponseDTO {
     createdAt: Date;
   };
 }
+
+export interface GetHikesReqDTO {
+  userId: string;
+  page: number;
+  status?: string;
+}
+export interface GetHikesResDTO {
+  total: number;
+  hikes: HikeResponseDTO[];
+}

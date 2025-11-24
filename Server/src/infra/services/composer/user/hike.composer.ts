@@ -18,6 +18,7 @@ import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
 import { GetHikeDetailsUseCase } from '../../../../application/usecases/User/Hike/GetHikeDetails';
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
+import { GetAllHikesUseCase } from '../../../../application/usecases/User/Hike/GetAllHikesUseCase';
 
 export function hikeComposer(): IHikeController {
   const userRepository = new MongoUserRepository();
@@ -70,10 +71,13 @@ export function hikeComposer(): IHikeController {
     userRepository
   );
 
+  const getAllHikesUseCase = new GetAllHikesUseCase(hikeRepository);
+
   return new HikeController(
     createHikeUseCase,
     findMatchRidesUseCase,
     createJoinRequestUseCase,
-    gethikeDetailsUseCase
+    gethikeDetailsUseCase,
+    getAllHikesUseCase
   );
 }
