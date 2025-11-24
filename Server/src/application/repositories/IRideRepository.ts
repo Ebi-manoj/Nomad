@@ -10,4 +10,10 @@ export interface IRideRepository extends IBaseRepository<RideLog> {
   ): Promise<RideLog>;
 
   releaseSeats(rideId: string, seats: number): Promise<boolean>;
+  findUserRides(
+    userId: string,
+    skip: number,
+    status?: string
+  ): Promise<RideLog[]>;
+  findCountUserRides(userId: string, status?: string): Promise<number>;
 }

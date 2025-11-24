@@ -38,6 +38,33 @@ export class RideRepository
     return this.mapper.toDomain(ride);
   }
 
+  async findUserRides(
+    userId: string,
+    skip: number,
+    status?: string
+  ): Promise<RideLog[]> {
+    const query: any = { userId };
+    if (status && status !== 'all') {
+      query.status = status;
+    }
+
+    const rides = await this.model
+      .find(query)
+      .skip(skip)
+      .sort({ createdAt: -1 });
+
+    return rides.map(ride => this.mapper.toDomain(ride));
+  }
+
+  async findCountUserRides(userId: string, status?: string): Promise<number> {
+    const query: any = { userId };
+    if (status && status !== 'all') {
+      query.status = status;
+    }
+
+    return this.model.countDocuments(query);
+  }
+
   async releaseSeats(rideId: string, seats: number): Promise<boolean> {
     const result = await this.model.updateOne(
       { _id: rideId },

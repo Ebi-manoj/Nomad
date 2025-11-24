@@ -17,6 +17,7 @@ import { GetHikersMatchedUseCase } from '../../../../application/usecases/User/R
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
 import { EndRideUseCase } from '../../../../application/usecases/User/Ride/EndRideUseCase';
 import { GetRideDetailsUseCase } from '../../../../application/usecases/User/Ride/GetRideDetailsUseCase';
+import { GetAllRidesUseCase } from '../../../../application/usecases/User/Ride/GetAllRidesUseCase';
 import { TaskRepository } from '../../../repositories/TaskRepository';
 
 export function rideComposer(): IRideController {
@@ -74,6 +75,8 @@ export function rideComposer(): IRideController {
     hikeRepository
   );
 
+  const getAllRidesUseCase = new GetAllRidesUseCase(rideRepository);
+
   return new RideController(
     createRideUseCase,
     getPendingRequestUseCase,
@@ -81,6 +84,7 @@ export function rideComposer(): IRideController {
     declienJoinRequestUseCase,
     getHikersMatchedUseCase,
     endRideUseCase,
-    getRideDetailsUseCase
+    getRideDetailsUseCase,
+    getAllRidesUseCase
   );
 }

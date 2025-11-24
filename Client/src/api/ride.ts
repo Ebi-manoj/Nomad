@@ -1,8 +1,10 @@
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 import type { ApiResponse } from '@/types/ApiResponse';
 import type {
   AcceptJoinResponseDTO,
   DeclineJoinResponseDTO,
   GetRideDetailsResDTO,
+  GetRidesResDTO,
   RideRequestDTO,
 } from '@/types/ride';
 import type { Task } from '@/types/task';
@@ -77,4 +79,15 @@ export async function completeTaskApi(data: CompleteTaskReqDTO) {
 export async function endRide(rideId: string) {
   const res = await axiosInstance.patch(END_RIDE_API(rideId));
   return res.data.data;
+}
+
+export async function getRides(page = 1, status = '') {
+  try {
+    const res = await axiosInstance.get<ApiResponse<GetRidesResDTO>>('/ride', {
+      params: { page, status },
+    });
+    return res.data.data;
+  } catch (error) {
+    useHandleApiError(error);
+  }
 }

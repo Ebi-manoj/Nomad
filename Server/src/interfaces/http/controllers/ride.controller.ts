@@ -17,6 +17,7 @@ import { Unauthorized } from '../../../domain/errors/CustomError';
 import { IGetHikerMatchedUseCase } from '../../../application/usecases/User/Ride/IGetHikersMatched';
 import { IEndRideUseCase } from '../../../application/usecases/User/Ride/IEndRideUseCase';
 import { IGetRideDetailsUseCase } from '../../../application/usecases/User/Ride/IGetRideDetailsUseCase';
+import { IGetAllRidesUseCase } from '../../../application/usecases/User/Ride/IGetAllRidesUseCase';
 
 export class RideController implements IRideController {
   constructor(
@@ -26,12 +27,31 @@ export class RideController implements IRideController {
     private readonly declienJoinRequestUseCase: IDeclineJoinRequestUseCase,
     private readonly getHikerMatchedUseCase: IGetHikerMatchedUseCase,
     private readonly endRideUseCase: IEndRideUseCase,
-    private readonly getRideDetailsUseCase: IGetRideDetailsUseCase
+    private readonly getRideDetailsUseCase: IGetRideDetailsUseCase,
+    private readonly getAllRidesUseCase: IGetAllRidesUseCase
   ) {}
 
   async createRide(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as CreateRideDTO;
     const result = await this.createRideUseCase.execute(dto);
+    const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async getRides(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+
+    const parsed = httpRequest.query as Record<string, unknown>;
+    const page = Number(parsed.page) || 1;
+    const status = parsed.status as string | undefined;
+
+    const result = await this.getAllRidesUseCase.execute({
+      userId,
+      page,
+      status,
+    });
+
     const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

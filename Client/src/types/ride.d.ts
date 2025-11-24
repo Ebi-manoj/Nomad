@@ -77,3 +77,26 @@ export interface GetRideDetailsResDTO {
   totalCostShared: number;
   hikersMatched: HikerMatchedDTO[];
 }
+
+export interface RideActivityItemDTO {
+  id: string;
+  userId: string;
+  pickup: GeoJSON.Point;
+  destination: GeoJSON.Point;
+  pickupAddress: string;
+  destinationAddress: string;
+  totalDistance: number;
+  vehicleType: string;
+  vehicleModel: string;
+  vehicleNumber: string;
+  hasHelmet: boolean;
+  seatsAvailable: number;
+  costSharing: number;
+  status: RideStatus;
+  createdAt: Date;
+}
+
+export interface GetRidesResDTO {
+  total: number;
+  rides: RideActivityItemDTO[];
+}

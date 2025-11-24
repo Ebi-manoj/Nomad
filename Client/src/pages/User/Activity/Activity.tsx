@@ -1,5 +1,6 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { HikeLogs } from './HikeLogs';
+import { RideLogs } from './RideLogs';
 
 export const ActivityPage = () => {
   return (
@@ -30,7 +31,9 @@ export const ActivityPage = () => {
             <HikeLogs />
           </TabsContent>
 
-          <TabsContent value="ride">No Rides</TabsContent>
+          <TabsContent value="ride">
+            <RideLogs />
+          </TabsContent>
         </div>
       </Tabs>
     </div>
