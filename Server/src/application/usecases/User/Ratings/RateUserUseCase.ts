@@ -1,9 +1,13 @@
-import { RateUserReqDTO, RateUserResDTO } from '../../../../domain/dto/Reviews';
+import {
+  RateUserReqDTO,
+  ReviewResponseDTO,
+} from '../../../../domain/dto/Reviews';
 import { Review } from '../../../../domain/entities/Reviews';
 import { ReviewType } from '../../../../domain/enums/Reviews';
 import { Forbidden } from '../../../../domain/errors/CustomError';
 import { AlreadyReviewed } from '../../../../domain/errors/Reviews';
 import { RideBookingNotFound } from '../../../../domain/errors/RideBookingError';
+import { ReviewMapper } from '../../../mappers/ReviewMapper';
 import { IReviewRepository } from '../../../repositories/IReviewRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IUserRepository } from '../../../repositories/IUserRepository';
@@ -15,7 +19,7 @@ export class RateUserUseCase implements IRateUserUseCase {
     private readonly reviewRepository: IReviewRepository,
     private readonly userRepository: IUserRepository
   ) {}
-  async execute(data: RateUserReqDTO): Promise<RateUserResDTO> {
+  async execute(data: RateUserReqDTO): Promise<ReviewResponseDTO> {
     const booking = await this.bookingRepository.findById(data.bookingId);
     if (!booking) throw new RideBookingNotFound();
     if (
@@ -58,10 +62,6 @@ export class RateUserUseCase implements IRateUserUseCase {
       await this.userRepository.update(user.getId(), user);
     }
 
-    return {
-      message: 'Review completed succefully',
-      bookingId: savedReview.getBookingId(),
-      reviewedUserId: savedReview.getReviewedUserId(),
-    };
+    return ReviewMapper(savedReview);
   }
 }

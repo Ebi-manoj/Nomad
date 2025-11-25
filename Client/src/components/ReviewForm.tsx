@@ -1,24 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Star } from 'lucide-react';
-import { toast } from 'sonner';
-import { rateUser } from '@/api/review';
-import type { RateUserReqDTO, typeReviewType } from '@/types/review';
 import { reviewSchema, type ReviewFormData } from '@/validation/review';
 
 interface ReviewFormProps {
-  bookingId: string;
-  reviewedUserId: string;
-  type: typeReviewType;
-  onSubmitted?: () => void;
+  onSubmitted?: (data: ReviewFormData) => void;
 }
 
-export const ReviewForm = ({
-  bookingId,
-  reviewedUserId,
-  type,
-  onSubmitted,
-}: ReviewFormProps) => {
+export const ReviewForm = ({ onSubmitted }: ReviewFormProps) => {
   const {
     handleSubmit,
     register,
@@ -36,19 +25,7 @@ export const ReviewForm = ({
   const rating = watch('rating');
 
   const onSubmit = async (data: ReviewFormData) => {
-    const payload: RateUserReqDTO = {
-      bookingId,
-      reviewedUserId,
-      type,
-      rating: data.rating,
-      reviewText: data.reviewText.trim(),
-    };
-
-    const res = await rateUser(payload);
-    if (res) {
-      toast.success('Review submitted successfully');
-      onSubmitted?.();
-    }
+    onSubmitted?.(data);
   };
 
   const handleStarClick = (star: number) => {

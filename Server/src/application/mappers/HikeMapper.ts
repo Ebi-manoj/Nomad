@@ -5,6 +5,7 @@ import { GetHikeDetailsResponseDTO } from '../../domain/dto/HikeDTO';
 import { RideBooking } from '../../domain/entities/RideBooking';
 import { User } from '../../domain/entities/User';
 import { Review } from '../../domain/entities/Reviews';
+import { ReviewMapper } from './ReviewMapper';
 
 export function hikeMapper(hike: HikeLog): HikeResponseDTO {
   return {
@@ -82,16 +83,6 @@ export function HikeDetailsMapper(
           status: payment.getStatus(),
           createdAt: payment.getCreatedAt(),
         },
-    review: !review
-      ? null
-      : {
-          reviewId: review.getId()!,
-          reviewedUserId: review.getReviewedUserId(),
-          reviewerId: review.getReviewerId(),
-          reviewText: review.getReviewText(),
-          rating: review.getRating(),
-          type: review.getType(),
-          createdAt: review.getCreatedAt(),
-        },
+    review: !review ? null : ReviewMapper(review),
   };
 }

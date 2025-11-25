@@ -22,8 +22,9 @@ export class HikeRepository
   }
 
   async findUserHikes(
-    userId: string,
+    limit: number,
     skip: number,
+    userId: string,
     status?: string
   ): Promise<HikeLog[]> {
     const query: any = { userId };
@@ -34,6 +35,7 @@ export class HikeRepository
     const hikes = await this.model
       .find(query)
       .skip(skip)
+      .limit(limit)
       .sort({ createdAt: -1 });
     return hikes.map(h => this.mapper.toDomain(h));
   }

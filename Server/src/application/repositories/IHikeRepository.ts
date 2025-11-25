@@ -5,8 +5,9 @@ export interface IHikeRepository extends IBaseRepository<HikeLog> {
   findUserActiveHike(userId: string): Promise<HikeLog | null>;
   findByUserId(userId: string): Promise<HikeLog | null>;
   findUserHikes(
-    userId: string,
+    limit: number,
     skip: number,
+    userId: string,
     status?: string
   ): Promise<HikeLog[]>;
   findCountUserHikes(userId: string, status?: string): Promise<number>;

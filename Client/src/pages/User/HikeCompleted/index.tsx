@@ -22,7 +22,10 @@ import { SuccessHeader } from './SuccessHeader';
 import { CancelledHeader } from './CancelledHeader';
 import { ReviewForm } from '@/components/ReviewForm';
 import { RiRefund2Fill } from 'react-icons/ri';
-import { ReviewType } from '@/types/review';
+import { ReviewType, type RateUserReqDTO } from '@/types/review';
+import { rateUser } from '@/api/review';
+import { toast } from 'sonner';
+import type { ReviewFormData } from '@/validation/review';
 
 export const HikeCompletedPage = () => {
   const [hikeDetails, setHikeDetails] =
@@ -58,6 +61,25 @@ export const HikeCompletedPage = () => {
   const handleRedirect = () => {
     dispatch(clearHikeData());
     navigate('/hike', { replace: true });
+  };
+
+  const reviewOnSubmit = async (data: ReviewFormData) => {
+    if (!hikeDetails) return;
+    const { bookingDetails, riderId } = hikeDetails;
+    if (!bookingDetails || !riderId) return;
+    const payload: RateUserReqDTO = {
+      bookingId: bookingDetails.bookingId,
+      reviewedUserId: riderId,
+      type: ReviewType.HIKER_TO_RIDER,
+      rating: data.rating,
+      reviewText: data.reviewText.trim(),
+    };
+
+    const res = await rateUser(payload);
+    if (res) {
+      toast.success('Review submitted successfully');
+      setHikeDetails({ ...hikeDetails, review: res });
+    }
   };
 
   const { status } = hikeDetails;
@@ -221,11 +243,7 @@ export const HikeCompletedPage = () => {
               hikeDetails.riderId &&
               !hikeDetails.review && (
                 <div className="bg-white rounded-2xl p-6 basis-[35%] shadow-xs flex justify-center items-center">
-                  <ReviewForm
-                    bookingId={hikeDetails.bookingDetails.bookingId}
-                    reviewedUserId={hikeDetails.riderId}
-                    type={ReviewType.HIKER_TO_RIDER}
-                  />
+                  <ReviewForm onSubmitted={reviewOnSubmit} />
                 </div>
               )}
           </div>

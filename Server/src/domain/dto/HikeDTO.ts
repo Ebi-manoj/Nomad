@@ -2,6 +2,7 @@ import { HikeStatus } from '../enums/Hike';
 import { PaymentStatus } from '../enums/payment';
 import { ReviewType } from '../enums/Reviews';
 import { JoinRequestStatus } from '../enums/Ride';
+import { ReviewResponseDTO } from './Reviews';
 
 export interface CreateHikeDTO {
   userId: string;
@@ -105,15 +106,7 @@ export interface GetHikeDetailsResponseDTO {
     status: PaymentStatus;
     createdAt: Date;
   };
-  review: null | {
-    reviewId: string;
-    reviewText: string;
-    rating: number;
-    reviewedUserId: string;
-    reviewerId: string;
-    type: ReviewType;
-    createdAt: Date;
-  };
+  review: null | ReviewResponseDTO;
 }
 
 export interface GetHikesReqDTO {

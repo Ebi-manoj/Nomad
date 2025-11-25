@@ -1,5 +1,9 @@
-import { RateUserReqDTO, RateUserResDTO } from '../../../../domain/dto/Reviews';
+import {
+  RateUserReqDTO,
+  RateUserResDTO,
+  ReviewResponseDTO,
+} from '../../../../domain/dto/Reviews';
 
 export interface IRateUserUseCase {
-  execute(data: RateUserReqDTO): Promise<RateUserResDTO>;
+  execute(data: RateUserReqDTO): Promise<ReviewResponseDTO>;
 }

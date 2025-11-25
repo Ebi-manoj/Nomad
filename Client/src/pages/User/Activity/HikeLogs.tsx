@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 type StatusFilter = 'all' | 'active' | 'completed' | 'cancelled';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 2;
 
 export const HikeLogs = () => {
   const [hikeData, setHikeData] = useState<GetHikesResDTO | undefined>();

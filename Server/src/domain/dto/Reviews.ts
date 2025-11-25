@@ -14,3 +14,14 @@ export interface RateUserResDTO {
   bookingId: string;
   reviewedUserId: string;
 }
+
+export interface ReviewResponseDTO {
+  reviewId: string;
+  reviewerId: string;
+  reviewedUserId: string;
+  rating: number;
+  reviewText: string;
+  bookingId: string;
+  type: ReviewType;
+  createdAt: Date;
+}
