@@ -88,7 +88,10 @@ export function ProfilePopover() {
             </span>
           </button>
 
-          <button className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors">
+          <button
+            className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
+            onClick={() => navigate('/sos')}
+          >
             <span className="flex items-center gap-2">
               <IoIosWarning size={18} />
               SOS

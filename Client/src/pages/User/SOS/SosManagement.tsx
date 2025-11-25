@@ -1,35 +1,71 @@
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, UserPlus, Shield } from 'lucide-react';
 import ContactCard from './ContactCard';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import {
+  sosContactFormSchema,
+  type SosContactFormData,
+} from '@/validation/sos';
+import type { RootState } from '@/store/store';
+import {
+  fetchSosContacts,
+  addSosContact,
+} from '@/store/features/user/sos/sos.thunk';
+import type { AppDispatch } from '@/store/store';
+import { toast } from 'sonner';
 
 export const SosManagementPage = () => {
-  // Sample contacts data
-  const emergencyContacts = [
-    {
-      name: 'John Doe',
-      phone: '+1 (555) 123-4567',
-      email: 'john.doe@email.com',
-      relationship: 'Emergency Contact',
+  const dispatch = useDispatch<AppDispatch>();
+  const { contacts, loading } = useSelector((state: RootState) => state.sos);
+  const [open, setOpen] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<SosContactFormData>({
+    resolver: zodResolver(sosContactFormSchema),
+    defaultValues: {
+      name: '',
+      phone: '',
+      relation: '',
     },
-    {
-      name: 'Jane Smith',
-      phone: '+1 (555) 987-6543',
-      email: 'jane.smith@email.com',
-      relationship: 'Family Member',
-    },
-    {
-      name: 'Dr. Michael Brown',
-      phone: '+1 (555) 246-8135',
-      email: 'dr.brown@hospital.com',
-      relationship: 'Primary Physician',
-    },
-    {
-      name: 'Sarah Johnson',
-      phone: '+1 (555) 369-2580',
-      relationship: 'Neighbor',
-    },
-  ];
+  });
+
+  useEffect(() => {
+    dispatch(fetchSosContacts());
+  }, [dispatch]);
+
+  const onSubmit = async (data: SosContactFormData) => {
+    await dispatch(
+      addSosContact({
+        name: data.name.trim(),
+        phone: data.phone.trim(),
+        relation: data.relation?.trim() || undefined,
+      })
+    );
+    toast.success('SOS contact added');
+    reset();
+    setOpen(false);
+  };
+
+  const emergencyContacts = contacts.map(c => ({
+    name: c.name,
+    phone: c.phone,
+    relationship: c.relation || 'Emergency Contact',
+  }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -47,10 +83,16 @@ export const SosManagementPage = () => {
               </p>
             </div>
           </div>
-          <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2 cursor-pointer">
-            <UserPlus className="h-5 w-5" />
-            Add Contact
-          </Button>
+          {contacts.length < 3 && (
+            <Button
+              className="gap-2 cursor-pointer"
+              disabled={contacts.length >= 3}
+              onClick={() => setOpen(true)}
+            >
+              <UserPlus className="h-5 w-5" />
+              Add Contact
+            </Button>
+          )}
         </div>
 
         {/* Important Note */}
@@ -70,31 +112,103 @@ export const SosManagementPage = () => {
         {/* Contacts Grid */}
         <div>
           <h2 className="text-2xl font-semibold text-foreground mb-6">
-            Emergency Contacts ({emergencyContacts.length})
+            Emergency Contacts ({emergencyContacts.length}/3)
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {emergencyContacts.map((contact, index) => (
-              <ContactCard key={index} {...contact} />
-            ))}
-          </div>
+          {loading && emergencyContacts.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center">
+              Loading contacts...
+            </p>
+          ) : emergencyContacts.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center">
+              No SOS contacts added yet. Click "Add Contact" to create one.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {emergencyContacts.map((contact, index) => (
+                <ContactCard key={index} {...contact} />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Empty State (hidden when contacts exist) */}
-        {emergencyContacts.length === 0 && (
-          <div className="text-center py-16">
-            <Shield className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-foreground mb-2">
-              No Emergency Contacts Yet
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              Add your first emergency contact to get started
-            </p>
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
-              <UserPlus className="h-5 w-5" />
-              Add Your First Contact
-            </Button>
-          </div>
-        )}
+        {/* Add Contact Modal */}
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add SOS contact</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Name
+                </label>
+                <Input
+                  type="text"
+                  {...register('name')}
+                  placeholder="Contact name"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Phone
+                </label>
+                <Input
+                  type="tel"
+                  {...register('phone')}
+                  placeholder="Contact phone"
+                />
+                {errors.phone && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.phone.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Relation (optional)
+                </label>
+                <Input
+                  type="text"
+                  {...register('relation')}
+                  placeholder="e.g. Mother, Friend"
+                />
+                {errors.relation && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.relation.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setOpen(false);
+                    reset();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="cursor-pointer"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Saving...' : 'Save contact'}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );
