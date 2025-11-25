@@ -3,6 +3,7 @@ import { expressAdapter } from '../../../adapters/express';
 import { DocumentComposer } from '../../../../infra/services/composer/document.composer';
 import { authMiddleware } from '../../middlewares/authMiddleware';
 import { sessionComposer } from '../../../../infra/services/composer/session.composer';
+import { sosComposer } from '../../../../infra/services/composer/user/sos.composer';
 
 const router = express.Router();
 
@@ -27,5 +28,12 @@ router.get(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+
+router.post('/sos', authMiddleware, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    sosComposer().saveContacts(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
 
 export default router;
