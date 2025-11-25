@@ -18,6 +18,13 @@ router.get(
   }
 );
 
+router.get('/sos', authMiddleware, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    sosComposer().getContacts(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
 router.get(
   '/session/active',
   authMiddleware,
