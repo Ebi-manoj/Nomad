@@ -19,6 +19,7 @@ import { MongoUserRepository } from '../../../repositories/UserRepository';
 import { GetHikeDetailsUseCase } from '../../../../application/usecases/User/Hike/GetHikeDetails';
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
 import { GetAllHikesUseCase } from '../../../../application/usecases/User/Hike/GetAllHikesUseCase';
+import { ReviewRepository } from '../../../repositories/ReviewRepository';
 
 export function hikeComposer(): IHikeController {
   const userRepository = new MongoUserRepository();
@@ -33,6 +34,7 @@ export function hikeComposer(): IHikeController {
   const fareCalculator = new FareCalculator();
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
+  const reviewRepository = new ReviewRepository();
   const rideMatchService = new RideMatchService(
     userRepository,
     durationCalculator,
@@ -68,7 +70,8 @@ export function hikeComposer(): IHikeController {
     hikeRepository,
     bookingRepository,
     paymentRepository,
-    userRepository
+    userRepository,
+    reviewRepository
   );
 
   const getAllHikesUseCase = new GetAllHikesUseCase(hikeRepository);

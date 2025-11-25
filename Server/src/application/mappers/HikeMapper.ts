@@ -4,6 +4,7 @@ import { Payment } from '../../domain/entities/Payment';
 import { GetHikeDetailsResponseDTO } from '../../domain/dto/HikeDTO';
 import { RideBooking } from '../../domain/entities/RideBooking';
 import { User } from '../../domain/entities/User';
+import { Review } from '../../domain/entities/Reviews';
 
 export function hikeMapper(hike: HikeLog): HikeResponseDTO {
   return {
@@ -29,7 +30,8 @@ export function HikeDetailsMapper(
   hike: HikeLog,
   payment: Payment | null,
   booking: RideBooking | null,
-  user: User | null
+  user: User | null,
+  review: Review | null
 ): GetHikeDetailsResponseDTO {
   return {
     hikeId: hike.getHikeId()!,
@@ -41,6 +43,7 @@ export function HikeDetailsMapper(
     seatsRequested: hike.getSeatsRequested(),
     status: hike.getStatus(),
     confirmed: hike.getConfirmed(),
+    riderId: hike.getRiderId() || null,
     createdAt: hike.getCreatedAt(),
     rider: !user
       ? null
@@ -78,6 +81,17 @@ export function HikeDetailsMapper(
           platFormFee: payment.getPlatformFee(),
           status: payment.getStatus(),
           createdAt: payment.getCreatedAt(),
+        },
+    review: !review
+      ? null
+      : {
+          reviewId: review.getId()!,
+          reviewedUserId: review.getReviewedUserId(),
+          reviewerId: review.getReviewerId(),
+          reviewText: review.getReviewText(),
+          rating: review.getRating(),
+          type: review.getType(),
+          createdAt: review.getCreatedAt(),
         },
   };
 }

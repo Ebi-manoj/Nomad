@@ -46,6 +46,7 @@ export interface GetHikeDetailsResponseDTO {
   seatsRequested: number;
   status: string;
   confirmed: boolean;
+  riderId: string | null;
   createdAt: Date;
   rider: null | {
     fullname: string;
@@ -69,6 +70,15 @@ export interface GetHikeDetailsResponseDTO {
     amount: number;
     platFormFee: number;
     status: PaymentStatus;
+    createdAt: Date;
+  };
+  review: null | {
+    reviewId: string;
+    reviewText: string;
+    rating: number;
+    reviewedUserId: string;
+    reviewerId: string;
+    type: ReviewType;
     createdAt: Date;
   };
 }

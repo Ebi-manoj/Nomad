@@ -7,6 +7,7 @@ import { HikeNotFound } from '../../../../domain/errors/HikeErrors';
 import { HikeDetailsMapper } from '../../../mappers/HikeMapper';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
+import { IReviewRepository } from '../../../repositories/IReviewRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IUserRepository } from '../../../repositories/IUserRepository';
 import { IGetHikeDetailsUseCase } from './IGetHikeDetails';
@@ -16,7 +17,8 @@ export class GetHikeDetailsUseCase implements IGetHikeDetailsUseCase {
     private readonly hikeRepository: IHikeRepository,
     private readonly bookingRepository: IRideBookingRepository,
     private readonly paymentRepository: IPaymentRepository,
-    private readonly userRepository: IUserRepository
+    private readonly userRepository: IUserRepository,
+    private readonly reviewRepository: IReviewRepository
   ) {}
   async execute(
     data: GetHikeDetailsReqDTO
@@ -43,6 +45,14 @@ export class GetHikeDetailsUseCase implements IGetHikeDetailsUseCase {
       rider = await this.userRepository.findById(riderId);
     }
 
-    return HikeDetailsMapper(hike, payment, booking, rider);
+    let review = null;
+    if (booking) {
+      review = await this.reviewRepository.findByReviewerAndBooking(
+        data.userId,
+        booking.getId()!
+      );
+    }
+
+    return HikeDetailsMapper(hike, payment, booking, rider, review);
   }
 }

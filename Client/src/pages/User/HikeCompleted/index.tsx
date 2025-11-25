@@ -20,11 +20,11 @@ import { SuccessBadge } from './SuccessBadge';
 import { CancelledBadge } from './CancelledBadge';
 import { SuccessHeader } from './SuccessHeader';
 import { CancelledHeader } from './CancelledHeader';
+import { ReviewForm } from '@/components/ReviewForm';
 import { RiRefund2Fill } from 'react-icons/ri';
+import { ReviewType } from '@/types/review';
 
 export const HikeCompletedPage = () => {
-  const [rating, setRating] = useState(0);
-  const [feedback, setFeedback] = useState('');
   const [hikeDetails, setHikeDetails] =
     useState<GetHikeDetailsResponseDTO | null>(null);
   const navigate = useNavigate();
@@ -83,7 +83,11 @@ export const HikeCompletedPage = () => {
           {/* Trip Summary Card */}
           <div className="flex gap-6 p-2">
             {/* Trip Summary */}
-            <div className="bg-white rounded-2xl p-6 text-black basis-[65%] shadow-xs mx-auto">
+            <div
+              className={`bg-white rounded-2xl p-6 text-black w-full ${
+                !hikeDetails.review && 'basis-[65%]'
+              } shadow-xs mx-auto`}
+            >
               <div className="flex items-center gap-3 mb-5">
                 <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
                   <Navigation className="w-6 h-6 text-emerald-600" />
@@ -109,7 +113,9 @@ export const HikeCompletedPage = () => {
                 {hikeDetails.bookingDetails && (
                   <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
                     <div className="w-9 h-9 bg-indigo-100 rounded-lg flex items-center justify-center">
-                      <span className="text-indigo-600 font-semibold text-sm">ID</span>
+                      <span className="text-indigo-600 font-semibold text-sm">
+                        ID
+                      </span>
                     </div>
                     <div>
                       <p className="text-gray-500 text-sm">Booking Number</p>
@@ -211,55 +217,17 @@ export const HikeCompletedPage = () => {
             </div>
 
             {/* Feedback Section */}
-            <div className="bg-white rounded-2xl p-6 basis-[35%] shadow-xs">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">
-                Share Feedback
-              </h3>
-
-              {/* Rating */}
-              <div className="mb-6">
-                <p className="text-gray-700 font-medium mb-3 text-center">
-                  Rate your ride:
-                </p>
-                <div className="flex justify-center gap-2">
-                  {[1, 2, 3, 4, 5].map(star => (
-                    <button
-                      key={star}
-                      onClick={() => setRating(star)}
-                      className="group transition-transform hover:scale-110"
-                    >
-                      <Star
-                        className={`w-9 h-9 ${
-                          star <= rating
-                            ? 'text-yellow-400 fill-yellow-400'
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    </button>
-                  ))}
+            {hikeDetails.bookingDetails &&
+              hikeDetails.riderId &&
+              !hikeDetails.review && (
+                <div className="bg-white rounded-2xl p-6 basis-[35%] shadow-xs flex justify-center items-center">
+                  <ReviewForm
+                    bookingId={hikeDetails.bookingDetails.bookingId}
+                    reviewedUserId={hikeDetails.riderId}
+                    type={ReviewType.HIKER_TO_RIDER}
+                  />
                 </div>
-              </div>
-
-              {/* Feedback Text */}
-              <div className="mb-6">
-                <textarea
-                  value={feedback}
-                  onChange={e => setFeedback(e.target.value)}
-                  placeholder="Write feedback..."
-                  className="w-full h-24 px-3 py-2 border border-gray-200 rounded-lg
-                   focus:border-emerald-500 focus:outline-none text-gray-700"
-                />
-              </div>
-
-              {/* Submit */}
-              <button
-                className="w-full bg-emerald-600 hover:bg-emerald-700
-                 text-white font-semibold py-3 rounded-lg
-                 transition-all shadow"
-              >
-                Submit
-              </button>
-            </div>
+              )}
           </div>
         </div>
         <button
