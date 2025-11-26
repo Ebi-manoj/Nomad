@@ -4,7 +4,7 @@ import { AdminLayout } from '@/layouts/AdminLayout';
 import { UserMangement } from '@/pages/Admin/UserManagement';
 import DocumentVerification from '@/pages/Admin/DocumentVerification';
 import { AdminDashboard } from '@/pages/Admin/AdminDashboard';
-import SOSManagement from '@/pages/Admin/SosManagement';
+import { SOSManagement } from '@/pages/Admin/SosManagement/SosManagement';
 
 export const AdminRoutes = (
   <Route
