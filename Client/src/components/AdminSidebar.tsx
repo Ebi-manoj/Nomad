@@ -16,10 +16,10 @@ const navItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'User management', href: '/admin/users', icon: Users },
   { name: 'Documents', href: '/admin/documents', icon: IoDocumentLockSharp },
-  { name: 'Rides', href: '/rides', icon: Bike },
-  { name: 'Hikes', href: '/hikes', icon: Mountain },
-  { name: 'SOS Logs', href: '/sos-logs', icon: FileText },
-  { name: 'Sales report', href: '/sales-report', icon: BarChart3 },
+  { name: 'Rides', href: '/admin/rides', icon: Bike },
+  { name: 'Hikes', href: '/admin/hikes', icon: Mountain },
+  { name: 'SOS Logs', href: '/admin/sos-logs', icon: FileText },
+  { name: 'Sales report', href: '/admin/sales-report', icon: BarChart3 },
 ];
 
 export function AdminSidebar() {
