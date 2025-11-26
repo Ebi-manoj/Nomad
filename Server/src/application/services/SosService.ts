@@ -12,6 +12,15 @@ export class SosService implements ISosService {
   ) {}
 
   async createSosLog(params: CreateSosLogParams): Promise<SosLogResDTO> {
+    const existingSos = await this.checkExistingSos(
+      params.rideId,
+      params.bookingId
+    );
+
+    if (existingSos) {
+      return sosLogMapper(existingSos);
+    }
+
     const resolvedLocation = await this.locationResolver.resolveLocation(
       params.location,
       params.rideId
@@ -27,5 +36,15 @@ export class SosService implements ISosService {
 
     const saved = await this.sosLogRepository.create(sosLog);
     return sosLogMapper(saved);
+  }
+
+  private checkExistingSos(
+    rideId: string,
+    bookingId?: string
+  ): Promise<SosLog | null> {
+    if (bookingId) {
+      return this.sosLogRepository.findByBookingId(bookingId);
+    }
+    return this.sosLogRepository.findByRideId(rideId);
   }
 }

@@ -12,8 +12,12 @@ export class SosLogRepository
     super(SosLogModel, sosLogMapper);
   }
 
-  async findByBookingId(bookingId: string): Promise<SosLog[]> {
-    const docs = await this.model.find({ bookingId });
-    return docs.map(doc => this.mapper.toDomain(doc));
+  async findByBookingId(bookingId: string): Promise<SosLog | null> {
+    const doc = await this.model.findOne({ bookingId });
+    return doc ? this.mapper.toDomain(doc) : null;
+  }
+  async findByRideId(rideId: string): Promise<SosLog | null> {
+    const doc = await this.model.findOne({ rideId });
+    return doc ? this.mapper.toDomain(doc) : null;
   }
 }
