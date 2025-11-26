@@ -3,11 +3,14 @@ import { AlertTriangle, Filter } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { fetchAdminSosLogs } from '@/store/features/admin/sos/adminSos.thunk';
-import { markResolved } from '@/store/features/admin/sos/adminSos.slice';
+import {
+  fetchAdminSosLogs,
+  resolveSosLog,
+} from '@/store/features/admin/sos/adminSos.thunk';
 import { SosCard } from './SosCard';
 import { SosCardSkeleton } from '../../../components/skeletons/SosCardSkeleton';
 import { Pagination } from '@/components/Pagination';
+import { toast } from 'sonner';
 
 type FilterValue = 'ALL' | 'OPEN' | 'RESOLVED';
 
@@ -32,8 +35,12 @@ export const SOSManagement = () => {
     );
   }, [dispatch, page, filter]);
 
-  const handleResolve = (id: string) => {
-    dispatch(markResolved(id));
+  const handleResolve = async (id: string) => {
+    try {
+      await dispatch(resolveSosLog(id)).unwrap();
+    } catch (error) {
+      toast.error(typeof error == 'string' && error);
+    }
   };
 
   const openCount = logs.filter(item => item.status === 'OPEN').length;
@@ -66,7 +73,7 @@ export const SOSManagement = () => {
                 <button
                   key={status}
                   onClick={() => setFilter(status)}
-                  className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                  className={`cursor-pointer px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${
                     filter === status
                       ? 'bg-slate-900 text-white shadow-sm'
                       : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'

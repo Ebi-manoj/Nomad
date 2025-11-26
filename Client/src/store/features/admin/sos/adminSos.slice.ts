@@ -1,6 +1,6 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { AdminSosLog, AdminSosState } from './adminSos.d';
-import { fetchAdminSosLogs } from './adminSos.thunk';
+import { createSlice } from '@reduxjs/toolkit';
+import type { AdminSosState } from './adminSos.d';
+import { fetchAdminSosLogs, resolveSosLog } from './adminSos.thunk';
 
 const initialState: AdminSosState = {
   loading: false,
@@ -11,14 +11,7 @@ const initialState: AdminSosState = {
 const adminSosSlice = createSlice({
   name: 'adminSos',
   initialState,
-  reducers: {
-    markResolved(state, action: PayloadAction<string>) {
-      const log = state.logs.find(l => l.id === action.payload);
-      if (log) {
-        log.status = 'RESOLVED';
-      }
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder.addCase(fetchAdminSosLogs.pending, state => {
       state.loading = true;
@@ -32,8 +25,14 @@ const adminSosSlice = createSlice({
       state.loading = false;
       state.logs = [];
     });
+    builder.addCase(resolveSosLog.fulfilled, (state, action) => {
+      state.loading = false;
+      const log = state.logs.find(l => l.id === action.payload.id);
+      if (log) {
+        log.status = action.payload.status;
+      }
+    });
   },
 });
 
-export const { markResolved } = adminSosSlice.actions;
 export default adminSosSlice.reducer;
