@@ -43,4 +43,26 @@ router.post('/sos', authMiddleware, async (req: Request, res: Response) => {
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
+router.post(
+  '/sos/trigger',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      sosComposer().triggerSos(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+router.post(
+  '/sos/trigger/ride',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      sosComposer().triggerRideSos(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;

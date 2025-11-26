@@ -13,3 +13,16 @@ export const sosContactSchema = z.object({
 });
 
 export const saveSosContactsSchema = sosContactSchema;
+
+export const triggerSosSchema = z.object({
+  bookingId: z
+    .string({ message: 'Booking id is required' })
+    .trim()
+    .min(1, { message: 'Booking id is required' }),
+  location: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
+});
