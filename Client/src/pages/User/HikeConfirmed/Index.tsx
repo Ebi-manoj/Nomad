@@ -18,8 +18,16 @@ import { useHandleApiError } from '@/hooks/useHandleApiError';
 import { GenericModal } from '@/components/GenericModel';
 import type { ReqCancelBookingResDTO } from '@/types/hike';
 import { RefundModel } from './RefundModel';
+import { SosButton } from '@/components/SosButton';
+import type { TriggerSosHikerDTO } from '@/types/sos';
+import { triggerSosHiker } from '@/api/sos';
+import { toast } from 'sonner';
 
 export const HikeStartedPage = () => {
+  const [currLocation, setCurrLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [reqCancelLoading, setReqCancelLoading] = useState(false);
@@ -44,6 +52,17 @@ export const HikeStartedPage = () => {
       navigate(`/hike/${booking.rideBooking.hikeId}`, { replace: true });
     }
   }, [navigate, booking]);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+    const watchId = navigator.geolocation.watchPosition(pos => {
+      setCurrLocation({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      });
+    });
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
 
   if (loading) {
     return (
@@ -126,6 +145,21 @@ export const HikeStartedPage = () => {
     }
   };
 
+  const handleTriggerSos = async () => {
+    const dto: TriggerSosHikerDTO = {
+      bookingId: booking.rideBooking.bookingId,
+      location: currLocation,
+    };
+    try {
+      await triggerSosHiker(dto);
+      toast.warning('SOS Triggered successfully', {
+        description: 'Our support team reach you soon',
+      });
+    } catch (error) {
+      useHandleApiError(error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -174,6 +208,7 @@ export const HikeStartedPage = () => {
               </div>
             </button>
           )}
+          <SosButton handleClick={handleTriggerSos} />
         </div>
       </div>
 

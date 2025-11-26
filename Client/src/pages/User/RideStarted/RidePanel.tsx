@@ -9,6 +9,7 @@ import { useHandleApiError } from '@/hooks/useHandleApiError';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
+
 interface RidePanelProps {
   rideData: RideData;
   showDetails: boolean;
@@ -56,6 +57,7 @@ export function RidePanel({
           totalDistance={rideData?.totalDistance.toFixed(2)}
           costSharing={rideData?.costSharing}
         />
+   
         <Button
           className="mt-6 bg-gradient-to-r from-red-600 to-red-500 text-white font-semibold w-full py-3 rounded-xl shadow-md hover:shadow-lg
          hover:from-red-700 hover:to-red-600 transition cursor-pointer"

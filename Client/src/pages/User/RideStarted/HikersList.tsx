@@ -32,11 +32,14 @@ export function HikerList({
                 Seats Remaining: {seatsRemaining}
               </h3>
             </div>
-            <RefreshCcw
+           <div className='flex gap-2 items-center'>
+            
+             <RefreshCcw
               size={16}
               className="cursor-pointer"
               onClick={handleRefresh}
             />
+           </div>
           </div>
           <div className="flex justify-between items-center mb-2">
             <p className="text-gray-700 text-xs">Available hikers</p>

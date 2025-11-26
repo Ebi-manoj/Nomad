@@ -20,6 +20,10 @@ import type { ChatInterfaceProps } from '@/types/chat';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { toast } from 'sonner';
 import { updateSeats } from '@/store/features/user/ride/rideSlice';
+import { SosButton } from '@/components/SosButton';
+import type { TriggerSosRiderDTO } from '@/types/sos';
+import { triggerSosRider } from '@/api/sos';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 export function RideStartedContent() {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
@@ -102,8 +106,21 @@ export function RideStartedContent() {
     setShowChat(null);
   };
 
+  const handleTriggerSos = async () => {
+    console.log('SOS TRIGGERED');
+    const dto: TriggerSosRiderDTO = { rideId: rideData.id };
+    try {
+      await triggerSosRider(dto);
+      toast.warning('SOS Triggered successfully', {
+        description: 'Our support team reach you soon',
+      });
+    } catch (error) {
+      useHandleApiError(error);
+    }
+  };
+
   return (
-    <div className="flex h-[calc(100vh-64px)] bg-white text-black overflow-hidden">
+    <div className="flex h-[calc(100vh-64px)] bg-white text-black overflow-hidden relative">
       {/* LEFT SECTION */}
       <div className="relative flex-1 bg-gray-100 overflow-hidden">
         {!showDetails && (
@@ -146,6 +163,9 @@ export function RideStartedContent() {
             user={showChat.user}
           />
         )}
+      </div>
+      <div className="fixed rounded-full w-12 h-12 bottom-10 right-6">
+        <SosButton handleClick={handleTriggerSos} />
       </div>
     </div>
   );
