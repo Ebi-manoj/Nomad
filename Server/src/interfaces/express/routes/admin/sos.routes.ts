@@ -19,4 +19,17 @@ router.get(
   }
 );
 
+router.patch(
+  '/:sosLogId/resolve',
+  authMiddleware,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      sosAdminComposer().resolveSos(httpReq)
+    );
+
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;

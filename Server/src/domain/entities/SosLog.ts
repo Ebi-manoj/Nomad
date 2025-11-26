@@ -75,4 +75,7 @@ export class SosLog {
   getUpdatedAt() {
     return this.updatedAt;
   }
+  resolve() {
+    this.status = SosLogStatus.RESOLVED;
+  }
 }

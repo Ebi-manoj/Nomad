@@ -3,4 +3,5 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 
 export interface IAdminSosController {
   getSosLogs(httpRequest: HttpRequest): Promise<HttpResponse>;
+  resolveSos(httpRequest: HttpRequest): Promise<HttpResponse>;
 }
