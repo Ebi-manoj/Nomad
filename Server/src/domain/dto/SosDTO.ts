@@ -1,5 +1,6 @@
 import { SosLogStatus } from '../enums/SosLogStatus';
 import { SosInitiator } from '../enums/SosInitiator';
+import { UserResponseDTO } from './authDTO';
 
 export interface SosContactDTO {
   name: string;
@@ -47,4 +48,18 @@ export interface SosLogResDTO {
   initiatedBy: SosInitiator;
   status: SosLogStatus;
   triggeredAt: Date;
+}
+
+export interface GetSosLogsQuery {
+  status?: string;
+  page: number;
+}
+
+export interface SosLogResWithUser extends SosLogResDTO {
+  initiaterDetails: UserResponseDTO;
+}
+
+export interface GetSosLogsResDTO {
+  logs: SosLogResWithUser[];
+  totalCount: number;
 }
