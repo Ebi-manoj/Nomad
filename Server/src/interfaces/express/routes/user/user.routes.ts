@@ -4,6 +4,7 @@ import { DocumentComposer } from '../../../../infra/services/composer/document.c
 import { authMiddleware } from '../../middlewares/authMiddleware';
 import { sessionComposer } from '../../../../infra/services/composer/session.composer';
 import { sosComposer } from '../../../../infra/services/composer/user/sos.composer';
+import { walletComposer } from '../../../../infra/services/composer/user/wallet.composer';
 
 const router = express.Router();
 
@@ -64,5 +65,12 @@ router.post(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+
+router.get('/wallet', authMiddleware, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    walletComposer().getWallet(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
 
 export default router;
