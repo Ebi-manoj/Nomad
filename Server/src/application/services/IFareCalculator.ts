@@ -4,4 +4,8 @@ export interface IFareCalculator {
     platformFee: number;
     totalAmount: number;
   };
+  getRiderEarning(costSharing: number): {
+    platformFee: number;
+    totalEarning: number;
+  };
 }

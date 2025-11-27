@@ -19,4 +19,14 @@ export class FareCalculator implements IFareCalculator {
     const totalAmount = Number(platformFee + costSharing);
     return { platformFee, totalAmount };
   }
+  getRiderEarning(costSharing: number): {
+    platformFee: number;
+    totalEarning: number;
+  } {
+    const platformFee = Number(
+      ((costSharing * this.platformFeePerc) / 100).toFixed(2)
+    );
+    const totalEarning = Number(costSharing - platformFee);
+    return { platformFee, totalEarning };
+  }
 }

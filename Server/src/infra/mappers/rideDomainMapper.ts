@@ -26,6 +26,8 @@ export const rideMapper: IMapper<RideLog, IRideLog> = {
         .getHikersMatched()
         .map(id => new Types.ObjectId(id)),
       status: domain.getStatus(),
+      totalEarning: domain.getTotalEarning(),
+      platformFee: domain.getPlatformFeeTotal(),
     };
   },
 
@@ -50,6 +52,8 @@ export const rideMapper: IMapper<RideLog, IRideLog> = {
       completedAt: persistence.completedAt,
       createdAt: persistence.createdAt,
       updatedAt: persistence.updatedAt,
+      totalEarning: persistence.totalEarning,
+      platformFee: persistence.platformFee,
     });
   },
 };

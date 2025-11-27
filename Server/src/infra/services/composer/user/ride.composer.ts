@@ -19,6 +19,10 @@ import { EndRideUseCase } from '../../../../application/usecases/User/Ride/EndRi
 import { GetRideDetailsUseCase } from '../../../../application/usecases/User/Ride/GetRideDetailsUseCase';
 import { GetAllRidesUseCase } from '../../../../application/usecases/User/Ride/GetAllRidesUseCase';
 import { TaskRepository } from '../../../repositories/TaskRepository';
+import { WalletRepository } from '../../../repositories/WalletRepository';
+import { WalletTransactionRepository } from '../../../repositories/WalletTransactionRepository';
+import { MongoTransactionManager } from '../../../database/MongoTransactionManger';
+import { FindOrCreateWalletService } from '../../../../application/services/FindOrCreateWalletService';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -32,6 +36,15 @@ export function rideComposer(): IRideController {
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
   const ridebookingRepository = new RideBookingRepository();
+  const walletRepository = new WalletRepository();
+  const walletTransactionRepository = new WalletTransactionRepository();
+  const walletService = new FindOrCreateWalletService(walletRepository);
+  const transactionManager = new MongoTransactionManager([
+    rideRepository,
+    ridebookingRepository,
+    walletRepository,
+    walletTransactionRepository,
+  ]);
   const createRideUseCase = new CreateRideUseCase(
     userRepository,
     googleApis,
@@ -66,7 +79,16 @@ export function rideComposer(): IRideController {
     userRepository
   );
 
-  const endRideUseCase = new EndRideUseCase(rideRepository, taskRepository);
+  const endRideUseCase = new EndRideUseCase(
+    rideRepository,
+    taskRepository,
+    ridebookingRepository,
+    walletRepository,
+    walletTransactionRepository,
+    walletService,
+    transactionManager,
+    fareCalculator
+  );
 
   const getRideDetailsUseCase = new GetRideDetailsUseCase(
     rideRepository,

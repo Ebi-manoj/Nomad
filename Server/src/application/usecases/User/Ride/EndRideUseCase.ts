@@ -8,31 +8,85 @@ import {
 } from '../../../../domain/errors/RideErrors';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { ITaskRepository } from '../../../repositories/ITaskRepository';
+import { IRideBookingRepository } from '../../../repositories/IRideBooking';
+import { IWalletRepository } from '../../../repositories/IWalletRepository';
+import { IWalletTransactionRepository } from '../../../repositories/IWalletTransactionRepository';
+import { ITransactionManager } from '../../../providers/ITransactionManager';
+import {
+  TransactionReferenceType,
+  WalletTransactionType,
+} from '../../../../domain/enums/Wallet';
+import { WalletTransaction } from '../../../../domain/entities/WalletTransaction';
+import { IFindOrCreateWalletService } from '../../../services/IFindOrCreateWalletService';
 import { IEndRideUseCase } from './IEndRideUseCase';
+import { IFareCalculator } from '../../../services/IFareCalculator';
 
 export class EndRideUseCase implements IEndRideUseCase {
   constructor(
     private readonly rideRepository: IRideRepository,
-    private readonly taskRepository: ITaskRepository
+    private readonly taskRepository: ITaskRepository,
+    private readonly rideBookingRepository: IRideBookingRepository,
+    private readonly walletRepository: IWalletRepository,
+    private readonly walletTransactionRepository: IWalletTransactionRepository,
+    private readonly walletService: IFindOrCreateWalletService,
+    private readonly transactionManager: ITransactionManager,
+    private readonly fareCalculator: IFareCalculator
   ) {}
+
   async execute(data: EndRideReqDTO): Promise<EndRideResDTO> {
-    const ride = await this.rideRepository.findById(data.rideId);
-    if (!ride) throw new RideNotFound();
+    return this.transactionManager.runInTransaction<EndRideResDTO>(async () => {
+      const ride = await this.rideRepository.findById(data.rideId);
+      if (!ride) throw new RideNotFound();
 
-    if (ride.getStatus() !== RideStatus.ACTIVE)
-      throw new RideIsNotActiveStatus();
+      if (ride.getStatus() !== RideStatus.ACTIVE)
+        throw new RideIsNotActiveStatus();
 
-    if (ride.getRiderId() !== data.userId) throw new Forbidden();
+      if (ride.getRiderId() !== data.userId) throw new Forbidden();
 
-    const pendingTask = await this.taskRepository.findPendingTasks(data.rideId);
-    if (pendingTask.length) throw new RideHavePendingTasks();
+      const pendingTask = await this.taskRepository.findPendingTasks(
+        data.rideId
+      );
+      if (pendingTask.length) throw new RideHavePendingTasks();
 
-    ride.complete();
-    const updated = await this.rideRepository.update(ride.getRideId()!, ride);
-    if (!updated) throw new UpdateFailed();
-    return {
-      rideId: updated.getRideId()!,
-      status: updated.getStatus(),
-    };
+      const totalCostShared =
+        await this.rideBookingRepository.getTotalCostShareOfRide(data.rideId);
+      const { totalEarning, platformFee } =
+        this.fareCalculator.getRiderEarning(totalCostShared);
+      ride.setEarnings(totalEarning, platformFee);
+      ride.complete();
+
+      const updatedRide = await this.rideRepository.update(
+        ride.getRideId()!,
+        ride
+      );
+      if (!updatedRide) throw new UpdateFailed();
+
+      if (totalEarning > 0) {
+        const wallet = await this.walletService.execute(data.userId);
+        wallet.credit(totalEarning);
+
+        const savedWallet = await this.walletRepository.update(
+          wallet.getId(),
+          wallet
+        );
+        if (!savedWallet) throw new UpdateFailed('Failed to update wallet');
+
+        const transaction = new WalletTransaction({
+          userId: data.userId,
+          referenceType: TransactionReferenceType.RIDE,
+          referenceId: data.rideId,
+          amount: totalEarning,
+          type: WalletTransactionType.CREDIT,
+          description: `Earnings for ride ${data.rideId}`,
+        });
+
+        await this.walletTransactionRepository.create(transaction);
+      }
+
+      return {
+        rideId: updatedRide.getRideId()!,
+        status: updatedRide.getStatus(),
+      };
+    });
   }
 }

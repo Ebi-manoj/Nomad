@@ -21,6 +21,8 @@ export interface RideProps {
   updatedAt?: Date;
   completedAt?: Date;
   route: GeoJSON.LineString;
+  totalEarning?: number;
+  platformFee?: number;
 }
 
 export class RideLog {
@@ -43,6 +45,8 @@ export class RideLog {
   private updatedAt: Date;
   private completedAt?: Date;
   private route: GeoJSON.LineString;
+  private totalEarning?: number;
+  private platformFee?: number;
 
   constructor(props: RideProps) {
     this.id = props.id;
@@ -64,6 +68,8 @@ export class RideLog {
     this.updatedAt = props.updatedAt || new Date();
     this.completedAt = props.completedAt;
     this.route = props.route;
+    this.totalEarning = props.totalEarning;
+    this.platformFee = props.platformFee;
   }
 
   getRideId() {
@@ -117,6 +123,12 @@ export class RideLog {
   getCompletedAt() {
     return this.completedAt;
   }
+  getTotalEarning() {
+    return this.totalEarning ?? 0;
+  }
+  getPlatformFeeTotal() {
+    return this.platformFee ?? 0;
+  }
   updateStatus(newStatus: RideStatus) {
     this.status = newStatus;
     this.updatedAt = new Date();
@@ -151,6 +163,11 @@ export class RideLog {
   }
   releaseSeats(count: number) {
     this.seatsAvailable += count;
+  }
+  setEarnings(totalEarning: number, platformFee: number) {
+    this.totalEarning = Number(totalEarning.toFixed(2));
+    this.platformFee = Number(platformFee.toFixed(2));
+    this.updatedAt = new Date();
   }
   complete() {
     this.status = RideStatus.COMPLETED;

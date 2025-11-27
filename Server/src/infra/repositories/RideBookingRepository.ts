@@ -65,4 +65,5 @@ export class RideBookingRepository
 
     return result[0].totalCost;
   }
+ 
 }

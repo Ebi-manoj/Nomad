@@ -21,6 +21,8 @@ export interface IRideLog {
   completedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
+  totalEarning?: number;
+  platformFee?: number;
 }
 
 const RideLogSchema = new Schema<IRideLog>({
@@ -100,6 +102,14 @@ const RideLogSchema = new Schema<IRideLog>({
   updatedAt: {
     type: Date,
     default: Date.now,
+  },
+  totalEarning: {
+    type: Number,
+    default: 0,
+  },
+  platformFee: {
+    type: Number,
+    default: 0,
   },
 });
 

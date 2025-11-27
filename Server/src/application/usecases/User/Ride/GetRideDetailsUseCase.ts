@@ -25,9 +25,8 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
 
     if (ride.getRiderId() !== data.userId) throw new Forbidden();
 
-    const totalCostShared =
-      await this.bookingRepository.getTotalCostShareOfRide(data.rideId);
-    console.log(totalCostShared);
+    let totalEarning = ride.getTotalEarning();
+    let platformFeeTotal = ride.getPlatformFeeTotal();
 
     const bookings = await this.bookingRepository.findByRideId(data.rideId);
 
@@ -75,7 +74,8 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
       status: ride.getStatus(),
       createdAt: ride.getCreatedAt(),
       completedAt: ride.getCompletedAt(),
-      totalCostShared,
+      totalCostShared: totalEarning,
+      platformFee: platformFeeTotal,
       hikersMatched: hikersMatched.filter(Boolean) as HikerMatchedDTO[],
     };
   }
