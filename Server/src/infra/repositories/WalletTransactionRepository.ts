@@ -6,6 +6,8 @@ import {
   WalletTransactionModel,
 } from '../database/WalletTransaction.model';
 import { walletTransactionMapper } from '../mappers/walletTransactionMapper';
+import { WalletTransactionType } from '../../domain/enums/Wallet';
+import { Types } from 'mongoose';
 
 export class WalletTransactionRepository
   extends MongoBaseRepository<WalletTransaction, IWalletTransactionDocument>
@@ -30,5 +32,41 @@ export class WalletTransactionRepository
 
   async countByUserId(userId: string): Promise<number> {
     return this.model.countDocuments({ userId });
+  }
+  async findTotalCredits(userId: string): Promise<number> {
+    const result = await this.model.aggregate([
+      {
+        $match: {
+          type: WalletTransactionType.CREDIT,
+          userId: new Types.ObjectId(userId),
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCredits: { $sum: '$amount' },
+        },
+      },
+    ]);
+    console.log(result);
+
+    return result.length ? result[0].totalCredits : 0;
+  }
+  async findTotalDebits(userId: string): Promise<number> {
+    const result = await this.model.aggregate([
+      {
+        $match: {
+          type: WalletTransactionType.DEBIT,
+          userId: new Types.ObjectId(userId),
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalDebits: { $sum: '$amount' },
+        },
+      },
+    ]);
+    return result.length ? result[0].totalDebits : 0;
   }
 }

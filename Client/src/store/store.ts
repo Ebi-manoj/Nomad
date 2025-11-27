@@ -10,6 +10,7 @@ import rideBookingReducer from './features/user/rideBooking/rideBookingSlice';
 import riderTasksReducer from './features/user/riderTasks/riderTasksSlice';
 import matchedHikersReducer from './features/user/matchedHikers/matchedHikersSlice';
 import sosReducer from './features/user/sos/sosSlice';
+import walletReducer from './features/user/wallet/walletSlice';
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     matchedHikers: matchedHikersReducer,
     sos: sosReducer,
     adminSos: adminSosReducer,
+    wallet: walletReducer,
   },
 });
 

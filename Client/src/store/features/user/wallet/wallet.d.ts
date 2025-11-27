@@ -1,5 +1,3 @@
-import { TransactionReferenceType } from '../enums/Wallet';
-
 export interface WalletTransactionDTO {
   id: string;
   referenceType: TransactionReferenceType;
@@ -14,10 +12,16 @@ export interface WalletTransactionDTO {
 export interface WalletDetailsDTO {
   balance: number;
   currency: string;
-  transactions: WalletTransactionDTO[];
+  transactions: WalletTransactionApiDTO[];
   totalCredits: number;
   totalDebits: number;
   pagination: {
     total: number;
   };
+}
+
+export interface WalletState {
+  loading: boolean;
+  error: string;
+  walletData: WalletDetailsDTO;
 }

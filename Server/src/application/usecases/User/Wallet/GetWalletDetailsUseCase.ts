@@ -23,6 +23,11 @@ export class GetWalletDetailsUseCase {
       this.walletTransactionRepository.countByUserId(userId),
     ]);
 
+    const [totalCredits, totalDebits] = await Promise.all([
+      this.walletTransactionRepository.findTotalCredits(userId),
+      this.walletTransactionRepository.findTotalDebits(userId),
+    ]);
+
     return {
       balance: wallet.getBalance(),
       currency: wallet.getCurrency(),
@@ -35,6 +40,8 @@ export class GetWalletDetailsUseCase {
         description: t.getDescription(),
         createdAt: t.getCreatedAt(),
       })),
+      totalCredits,
+      totalDebits,
       pagination: {
         total,
       },

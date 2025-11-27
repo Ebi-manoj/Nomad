@@ -9,4 +9,6 @@ export interface IWalletTransactionRepository
     limit: number
   ): Promise<WalletTransaction[]>;
   countByUserId(userId: string): Promise<number>;
+  findTotalCredits(userId: string): Promise<number>;
+  findTotalDebits(userId: string): Promise<number>;
 }

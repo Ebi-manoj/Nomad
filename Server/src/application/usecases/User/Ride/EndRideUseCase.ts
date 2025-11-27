@@ -77,7 +77,7 @@ export class EndRideUseCase implements IEndRideUseCase {
           referenceId: data.rideId,
           amount: totalEarning,
           type: WalletTransactionType.CREDIT,
-          description: `Earnings for ride ${data.rideId}`,
+          description: `Earnings for ride`,
         });
 
         await this.walletTransactionRepository.create(transaction);
