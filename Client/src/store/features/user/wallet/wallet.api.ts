@@ -4,9 +4,12 @@ import type { WalletDetailsDTO } from './wallet';
 
 const WALLET_API = '/user/wallet';
 
-export async function fetchWalletDetailsApi() {
+export async function fetchWalletDetailsApi(page: number = 1) {
   const res = await axiosInstance.get<ApiResponse<WalletDetailsDTO>>(
-    WALLET_API
+    WALLET_API,
+    {
+      params: { page },
+    }
   );
   return res.data.data;
 }

@@ -1,18 +1,15 @@
 export interface WalletTransactionDTO {
   id: string;
-  referenceType: TransactionReferenceType;
-  referenceId: string;
-  metaData?: Record<string, unknown>;
   amount: number;
-  type: string;
+  type: string; // e.g. 'CREDIT' | 'DEBIT'
   description: string;
-  createdAt: Date;
+  createdAt: string | Date;
 }
 
 export interface WalletDetailsDTO {
   balance: number;
   currency: string;
-  transactions: WalletTransactionApiDTO[];
+  transactions: WalletTransactionDTO[];
   totalCredits: number;
   totalDebits: number;
   pagination: {
