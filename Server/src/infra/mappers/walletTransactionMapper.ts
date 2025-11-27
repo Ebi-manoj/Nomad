@@ -12,7 +12,8 @@ export const walletTransactionMapper: IMapper<
     return new WalletTransaction({
       id: doc._id.toString(),
       userId: doc.userId.toString(),
-      rideId: doc.rideId?.toString(),
+      referenceType: doc.referenceType,
+      referenceId: doc.referenceId,
       amount: doc.amount,
       type: doc.type as WalletTransactionType,
       description: doc.description,
@@ -22,12 +23,13 @@ export const walletTransactionMapper: IMapper<
     });
   },
 
-  toPersistence(domain: WalletTransaction): Partial<IWalletTransactionDocument> {
+  toPersistence(
+    domain: WalletTransaction
+  ): Partial<IWalletTransactionDocument> {
     return {
       userId: new Types.ObjectId(domain.getUserId()),
-      rideId: domain.getRideId()
-        ? new Types.ObjectId(domain.getRideId()!)
-        : undefined,
+      referenceType: domain.getReferenceType(),
+      referenceId: domain.getReferenceId(),
       amount: domain.getAmount(),
       type: domain.getType(),
       description: domain.getDescription(),

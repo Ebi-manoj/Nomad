@@ -28,7 +28,8 @@ export class GetWalletDetailsUseCase {
       currency: wallet.getCurrency(),
       transactions: transactions.map(t => ({
         id: t.getId()!,
-        rideId: t.getRideId(),
+        referenceType: t.getReferenceType(),
+        referenceId: t.getReferenceId(),
         amount: t.getAmount(),
         type: t.getType(),
         description: t.getDescription(),

@@ -1,9 +1,13 @@
-import { WalletTransactionType } from '../enums/Wallet';
+import {
+  TransactionReferenceType,
+  WalletTransactionType,
+} from '../enums/Wallet';
 
 export interface WalletTransactionProps {
   id?: string;
   userId: string;
-  rideId?: string;
+  referenceType: TransactionReferenceType;
+  referenceId: string;
   amount: number;
   type: WalletTransactionType;
   description: string;
@@ -15,7 +19,8 @@ export interface WalletTransactionProps {
 export class WalletTransaction {
   private id?: string;
   private userId: string;
-  private rideId?: string;
+  private referenceType: TransactionReferenceType;
+  private referenceId: string;
   private amount: number;
   private type: WalletTransactionType;
   private description: string;
@@ -26,7 +31,8 @@ export class WalletTransaction {
   constructor(props: WalletTransactionProps) {
     this.id = props.id;
     this.userId = props.userId;
-    this.rideId = props.rideId;
+    this.referenceType = props.referenceType;
+    this.referenceId = props.referenceId;
     this.amount = props.amount;
     this.type = props.type;
     this.description = props.description;
@@ -42,9 +48,12 @@ export class WalletTransaction {
   getUserId(): string {
     return this.userId;
   }
+  getReferenceType(): TransactionReferenceType {
+    return this.referenceType;
+  }
 
-  getRideId(): string | undefined {
-    return this.rideId;
+  getReferenceId(): string {
+    return this.referenceId;
   }
 
   getAmount(): number {

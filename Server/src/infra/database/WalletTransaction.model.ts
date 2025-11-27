@@ -1,10 +1,14 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { WalletTransactionType } from '../../domain/enums/Wallet';
+import {
+  TransactionReferenceType,
+  WalletTransactionType,
+} from '../../domain/enums/Wallet';
 
 export interface IWalletTransactionDocument extends Document {
   _id: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
-  rideId?: mongoose.Types.ObjectId;
+  referenceType: TransactionReferenceType;
+  referenceId: string;
   amount: number;
   type: WalletTransactionType;
   description: string;
@@ -21,10 +25,13 @@ const WalletTransactionSchema = new Schema<IWalletTransactionDocument>(
       required: true,
       index: true,
     },
-    rideId: {
-      type: Schema.Types.ObjectId,
-      ref: 'RideLog',
-      required: false,
+    referenceType: {
+      type: String,
+      enum: Object.values(TransactionReferenceType),
+      index: true,
+    },
+    referenceId: {
+      type: String,
       index: true,
     },
     amount: {
