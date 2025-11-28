@@ -11,6 +11,7 @@ import reviewRouter from '../routes/user/review.routes';
 import userManagementRouter from '../routes/admin/user.routes';
 import documentRouter from '../routes/admin/documents.routes';
 import adminSosRouter from '../routes/admin/sos.routes';
+import adminHikeRouter from '../routes/admin/hike.routes';
 import fileRouter from '../routes/file.routes';
 import { errorHandling } from '../middlewares/errorHandlingMiddleware';
 import { connectRedis } from '../../../infra/database/connectRedis';
@@ -49,6 +50,7 @@ app.use('/api/v1/payments', paymentRouter);
 app.use('/api/v1/admin/users', userManagementRouter);
 app.use('/api/v1/admin/documents', documentRouter);
 app.use('/api/v1/admin/sos', adminSosRouter);
+app.use('/api/v1/admin/hike', adminHikeRouter);
 
 app.use(errorHandling);
 console.log('Listener count:', process.listenerCount('uncaughtException'));

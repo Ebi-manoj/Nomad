@@ -47,4 +47,28 @@ export class HikeRepository
     const hikesCount = await this.model.countDocuments(query);
     return hikesCount;
   }
+  async findAllHikes(
+    limit: number,
+    skip: number,
+    status?: string
+  ): Promise<HikeLog[]> {
+    const query: any = {};
+    if (status) {
+      query.status = status;
+    }
+    const hikes = await this.model
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    return hikes.map(h => this.mapper.toDomain(h));
+  }
+  async countHikes(status?: string): Promise<number> {
+    const query: any = {};
+    if (status) {
+      query.status = status;
+    }
+    return await this.model.countDocuments(query);
+  }
 }
