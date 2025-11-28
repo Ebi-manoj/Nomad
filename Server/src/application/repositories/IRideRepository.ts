@@ -16,4 +16,10 @@ export interface IRideRepository extends IBaseRepository<RideLog> {
     status?: string
   ): Promise<RideLog[]>;
   findCountUserRides(userId: string, status?: string): Promise<number>;
+  findAllRides(
+    limit: number,
+    skip: number,
+    status?: string
+  ): Promise<RideLog[]>;
+  countRides(status?: string): Promise<number>;
 }
