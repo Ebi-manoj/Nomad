@@ -5,6 +5,7 @@ import { UserMangement } from '@/pages/Admin/UserManagement';
 import DocumentVerification from '@/pages/Admin/DocumentVerification';
 import { AdminDashboard } from '@/pages/Admin/AdminDashboard';
 import { SOSManagement } from '@/pages/Admin/SosManagement/SosManagement';
+import { AdminHikesPage } from '@/pages/Admin/Hikes/Hike';
 
 export const AdminRoutes = (
   <Route
@@ -19,5 +20,6 @@ export const AdminRoutes = (
     <Route path="users" element={<UserMangement />} />
     <Route path="documents" element={<DocumentVerification />} />
     <Route path="sos-logs" element={<SOSManagement />} />
+    <Route path="hikes" element={<AdminHikesPage />} />
   </Route>
 );

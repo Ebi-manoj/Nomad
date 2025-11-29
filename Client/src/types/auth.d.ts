@@ -5,6 +5,9 @@ export interface User {
   fullName: string;
   email: string;
   mobile: string | undefined;
+  rating?:number;
+  profilePic?:string
+  isVerified?:boolean;
   role: string;
   isBlocked: boolean;
   aadhaarVerified: boolean;

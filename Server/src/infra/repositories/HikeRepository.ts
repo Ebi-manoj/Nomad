@@ -71,4 +71,40 @@ export class HikeRepository
     }
     return await this.model.countDocuments(query);
   }
+
+  async getStatusCounts(): Promise<{
+    active: number;
+    cancelled: number;
+    completed: number;
+  }> {
+    const result = await this.model.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    console.log(result);
+    const response = {
+      active: 0,
+      cancelled: 0,
+      completed: 0,
+    };
+    for (const n of result) {
+      switch (n._id) {
+        case 'cancelled':
+          response.cancelled = n.count;
+          break;
+        case 'completed':
+          response.completed = n.count;
+          break;
+        case 'active':
+          response.active = n.count;
+          break;
+      }
+    }
+    console.log(response);
+    return response;
+  }
 }

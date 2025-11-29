@@ -1,12 +1,11 @@
-export function formatDate(date: string | Date) {
-  return new Date(date).toLocaleDateString('en-IN', {
-    year: 'numeric',
+export const formatDate = (date: string | Date) => {
+  return new Date(date).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   });
-}
+};
 
 export function timeFormater(num: number) {
   const now = new Date();

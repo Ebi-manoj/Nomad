@@ -17,4 +17,9 @@ export interface IHikeRepository extends IBaseRepository<HikeLog> {
     status?: string
   ): Promise<HikeLog[]>;
   countHikes(status?: string): Promise<number>;
+  getStatusCounts(): Promise<{
+    active: number;
+    cancelled: number;
+    completed: number;
+  }>;
 }
