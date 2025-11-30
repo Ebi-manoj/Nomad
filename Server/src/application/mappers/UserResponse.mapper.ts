@@ -8,6 +8,7 @@ export function userMapper(user: User): UserResponseDTO {
     email: user.getEmail(),
     mobile: user.getMobile() || undefined,
     role: user.getRole(),
+    rating: user.getRating(),
     isBlocked: user.getIsBlocked(),
     aadhaarVerified: user.getAadhaarVerified(),
     licenceVerified: user.getLicenceVerified(),

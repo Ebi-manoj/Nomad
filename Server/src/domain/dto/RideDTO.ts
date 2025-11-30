@@ -116,14 +116,3 @@ export interface RideResponseDTO {
   status: RideStatus;
   createdAt: Date;
 }
-
-export interface GetRidesReqDTO {
-  userId: string;
-  page: number;
-  status?: string;
-}
-
-export interface GetRidesResDTO {
-  total: number;
-  rides: RideResponseDTO[];
-}

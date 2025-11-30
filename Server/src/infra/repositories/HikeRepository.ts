@@ -104,7 +104,6 @@ export class HikeRepository
           break;
       }
     }
-    console.log(response);
     return response;
   }
 }

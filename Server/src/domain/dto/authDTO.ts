@@ -15,6 +15,7 @@ export interface UserResponseDTO {
   mobile: string | undefined;
   role: string;
   isBlocked: boolean;
+  rating: number;
   aadhaarVerified: boolean;
   licenceVerified: boolean;
   createdAt: Date;

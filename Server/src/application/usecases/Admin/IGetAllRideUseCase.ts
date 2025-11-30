@@ -1,5 +1,5 @@
-import { GetRidesResDTO } from '../../../domain/dto/RideDTO';
+import { GetAdminRidesResDTO } from '../../../domain/dto/adminRidesDTO';
 
 export interface IGetAllRideUseCase {
-  execute(page: number, status?: string): Promise<GetRidesResDTO>;
+  execute(page: number, status?: string): Promise<GetAdminRidesResDTO>;
 }

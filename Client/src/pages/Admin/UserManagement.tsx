@@ -15,7 +15,7 @@ export const UserMangement = () => {
   const { totalPages } = useSelector((state: RootState) => state.users);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState('');
-  const limit = 2;
+  const limit = 10;
   useEffect(() => {
     const fetch = setTimeout(async () => {
       try {

@@ -129,4 +129,35 @@ export class RideRepository
       session.endSession();
     }
   }
+
+  async getRideMetrics(): Promise<{
+    active: number;
+    completed: number;
+    cancelled: number;
+  }> {
+    const result = await this.model.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    const metrics = {
+      active: 0,
+      completed: 0,
+      cancelled: 0,
+    };
+
+    result.forEach(r => {
+      if (r._id == 'active') {
+        metrics.active = r.count;
+      } else if (r._id == 'completed') {
+        metrics.completed = r.count;
+      } else if (r._id == 'cancelled') {
+        metrics.cancelled = r.count;
+      }
+    });
+    return metrics;
+  }
 }
