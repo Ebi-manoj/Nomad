@@ -5,6 +5,7 @@ import { Pagination } from '@/components/Pagination';
 import type { GetAdminRidesResDTO } from '@/types/adminRide';
 import { getAdminRides } from '@/api/adminRide';
 import { RideCard } from './RideCard';
+import { useNavigate } from 'react-router-dom';
 
 type StatusFilter = 'all' | 'active' | 'completed' | 'cancelled';
 const PAGE_SIZE = 5;
@@ -14,6 +15,7 @@ export const AdminRideLogsPage = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [rideData, setRideData] = useState<GetAdminRidesResDTO | undefined>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRides = async () => {
@@ -38,7 +40,7 @@ export const AdminRideLogsPage = () => {
     : 1;
 
   const handleView = (id: string) => {
-    console.log(`Viewing ride ${id}`);
+    navigate(`/admin/rides/${id}`);
   };
 
   const rideMetrics = rideData?.rideMetrics;

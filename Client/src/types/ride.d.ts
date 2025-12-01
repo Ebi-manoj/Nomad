@@ -45,6 +45,7 @@ export interface HikerMatchedDTO {
   pickupAddress: string;
   destinationAddress: string;
   amount: number;
+  platformFee: number;
   status: string;
   seatsBooked: number;
   createdAt: Date;
@@ -75,6 +76,7 @@ export interface GetRideDetailsResDTO {
   createdAt: Date;
   completedAt: Date | null;
   totalCostShared: number;
+  platformFee: number;
   hikersMatched: HikerMatchedDTO[];
 }
 

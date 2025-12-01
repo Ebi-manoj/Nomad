@@ -1,5 +1,9 @@
 import { UserResponseDTO } from './authDTO';
-import { GetRideDetailsResDTO, RideResponseDTO } from './RideDTO';
+import {
+  GetRideDetailsResDTO,
+  HikerMatchedDTO,
+  RideResponseDTO,
+} from './RideDTO';
 
 export interface GetRidesReqDTO {
   userId: string;
@@ -21,6 +25,11 @@ export interface GetAdminRidesResDTO {
   rides: AdminRideResDTO[];
 }
 
+export interface AdminHikerMatchedDTO extends HikerMatchedDTO {
+  platformFee: number;
+}
+
 export interface AdminGetRideDetailsResDTO extends GetRideDetailsResDTO {
   rider: UserResponseDTO;
+  hikersMatched: AdminHikerMatchedDTO[];
 }

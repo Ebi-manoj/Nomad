@@ -76,7 +76,7 @@ export interface HikerMatchedDTO {
   pickupAddress: string;
   destinationAddress: string;
   amount: number;
-  platformFee:number;
+  platformFee: number;
   status: string;
   seatsBooked: number;
   createdAt: Date;

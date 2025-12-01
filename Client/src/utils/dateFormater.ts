@@ -17,7 +17,7 @@ export function timeFormater(num: number) {
   return dep;
 }
 
-export function formatDuration(start: Date, end: Date) {
+export function formatDuration(start: Date | string, end: Date | string) {
   const diffMs = Math.abs(new Date(end).getTime() - new Date(start).getTime());
 
   const totalMinutes = Math.floor(diffMs / 60000);

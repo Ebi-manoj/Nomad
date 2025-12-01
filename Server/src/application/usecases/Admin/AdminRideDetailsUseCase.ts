@@ -41,7 +41,7 @@ export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
           pickupAddress: hike.getPickupAddress(),
           destinationAddress: hike.getDestinationAddress(),
           amount: b.getCostShared(),
-          platformFee:b.getPlatformFee(),
+          platformFee: b.getPlatformFee(),
           status: b.getStatus(),
           seatsBooked: b.getSeatsBooked(),
           createdAt: b.getCreatedAt(),
