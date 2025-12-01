@@ -3,4 +3,5 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 
 export interface IAdminRideController {
   getAllRides(httpRequest: HttpRequest): Promise<HttpResponse>;
+  getRideDetails(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

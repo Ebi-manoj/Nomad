@@ -1,5 +1,5 @@
 import { UserResponseDTO } from './authDTO';
-import { RideResponseDTO } from './RideDTO';
+import { GetRideDetailsResDTO, RideResponseDTO } from './RideDTO';
 
 export interface GetRidesReqDTO {
   userId: string;
@@ -19,4 +19,8 @@ export interface GetAdminRidesResDTO {
     completed: number;
   };
   rides: AdminRideResDTO[];
+}
+
+export interface AdminGetRideDetailsResDTO extends GetRideDetailsResDTO {
+  rider: UserResponseDTO;
 }

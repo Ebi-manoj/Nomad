@@ -18,5 +18,17 @@ router.get(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+router.get(
+  '/:rideId',
+  authMiddleware,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      rideAdminComposer().getRideDetails(httpReq)
+    );
+
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

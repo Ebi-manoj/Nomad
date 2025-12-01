@@ -20,6 +20,17 @@ export interface UpdateLocationDTO {
   lng: number;
 }
 
+export interface GetRidesReqDTO {
+  userId: string;
+  page: number;
+  status?: string;
+}
+
+export interface GetRidesResDTO {
+  total: number;
+  rides: RideResponseDTO[];
+}
+
 export interface GetHikersMatchedReqDTO {
   userId: string;
   rideId: string;
@@ -65,6 +76,7 @@ export interface HikerMatchedDTO {
   pickupAddress: string;
   destinationAddress: string;
   amount: number;
+  platformFee:number;
   status: string;
   seatsBooked: number;
   createdAt: Date;
