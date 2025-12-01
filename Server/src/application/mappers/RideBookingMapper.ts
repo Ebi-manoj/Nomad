@@ -12,6 +12,7 @@ export function RideBookingMapper(booking: RideBooking): BookingResponseDTO {
     seatsBooked: booking.getSeatsBooked(),
     amount: booking.getAmount(),
     platformFee: booking.getPlatformFee(),
+    refundAmount: booking.getRefundedAmount(),
     status: booking.getStatus(),
     pickupLocation: booking.getPickupLocation().coordinates,
     dropoffLocation: booking.getDropoffLocation().coordinates,

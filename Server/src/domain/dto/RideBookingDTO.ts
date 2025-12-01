@@ -11,6 +11,7 @@ export interface BookingResponseDTO {
   seatsBooked: number;
   amount: number;
   platformFee: number;
+  refundAmount?: number;
   pickupLocation: Position;
   dropoffLocation: Position;
   status: string;

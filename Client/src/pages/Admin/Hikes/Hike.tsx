@@ -5,6 +5,7 @@ import { Pagination } from '@/components/Pagination';
 import type { GetAdminHikesResDTO } from '@/types/adminHike';
 import { getAdminHikes } from '@/api/adminHike';
 import { HikeCard } from './HikeCard';
+import { useNavigate } from 'react-router-dom';
 
 type StatusFilter = 'all' | 'active' | 'completed' | 'cancelled';
 const PAGE_SIZE = 5;
@@ -14,6 +15,7 @@ export const AdminHikesPage = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hikeData, setHikeData] = useState<GetAdminHikesResDTO | undefined>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHikes = async () => {
@@ -38,7 +40,7 @@ export const AdminHikesPage = () => {
     : 1;
 
   const handleView = (id: string) => {
-    console.log(`Viewing hike ${id}`);
+    navigate(`/admin/hikes/${id}`);
   };
 
   return (
