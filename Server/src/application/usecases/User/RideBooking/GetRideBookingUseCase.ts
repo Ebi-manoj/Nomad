@@ -9,6 +9,7 @@ import {
   RideLocationNotFound,
   RideNotFound,
 } from '../../../../domain/errors/RideErrors';
+import { RideBookingMapper } from '../../../mappers/RideBookingMapper';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { ILocationRepository } from '../../../repositories/ILocationRepository';
@@ -65,20 +66,7 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
     );
 
     return {
-      rideBooking: {
-        bookingId: booking.getId()!,
-        bookingNumber: booking.getBookingNumber(),
-        rideId: booking.getRideId(),
-        hikeId: booking.getHikeId(),
-        riderId: booking.getRiderId(),
-        hikerId: booking.getHikerId(),
-        seatsBooked: booking.getSeatsBooked(),
-        amount: booking.getAmount(),
-        platformFee: booking.getPlatformFee(),
-        status: booking.getStatus(),
-        pickupLocation: booking.getPickupLocation().coordinates,
-        dropoffLocation: booking.getDropoffLocation().coordinates,
-      },
+      rideBooking: RideBookingMapper(booking),
       rider: {
         name: rider.getFullName(),
         rating: 4.5,

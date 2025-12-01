@@ -1,26 +1,29 @@
 import { Position } from 'geojson';
 import { RideBookingStatus } from '../enums/RideBooking';
 
+export interface BookingResponseDTO {
+  bookingId: string;
+  bookingNumber: string;
+  rideId: string;
+  hikeId: string;
+  riderId: string;
+  hikerId: string;
+  seatsBooked: number;
+  amount: number;
+  platformFee: number;
+  pickupLocation: Position;
+  dropoffLocation: Position;
+  status: string;
+  createdAt: Date;
+}
+
 export interface RideBookingRequestDTO {
   bookingId: string;
   userId: string;
 }
 
 export interface RideBookingResponseDTO {
-  rideBooking: {
-    bookingId: string;
-    bookingNumber: string;
-    rideId: string;
-    hikeId: string;
-    riderId: string;
-    hikerId: string;
-    seatsBooked: number;
-    amount: number;
-    platformFee: number;
-    pickupLocation: Position;
-    dropoffLocation: Position;
-    status: string;
-  };
+  rideBooking: BookingResponseDTO;
   rider: {
     name: string;
     rating: number;

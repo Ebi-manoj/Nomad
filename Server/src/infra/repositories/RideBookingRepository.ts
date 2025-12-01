@@ -22,7 +22,9 @@ export class RideBookingRepository
     return this.mapper.toDomain(found);
   }
 
-  async findByBookingNumber(bookingNumber: string): Promise<RideBooking | null> {
+  async findByBookingNumber(
+    bookingNumber: string
+  ): Promise<RideBooking | null> {
     const booking = await this.model.findOne({ bookingNumber });
     return booking ? this.mapper.toDomain(booking) : null;
   }
@@ -49,10 +51,7 @@ export class RideBookingRepository
             $sum: {
               $subtract: [
                 {
-                  $subtract: [
-                    '$amount',
-                    { $ifNull: ['$refundedAmount', 0] },
-                  ],
+                  $subtract: ['$amount', { $ifNull: ['$refundedAmount', 0] }],
                 },
                 '$platformFee',
               ],
@@ -65,5 +64,9 @@ export class RideBookingRepository
 
     return result[0].totalCost;
   }
- 
+
+  async findByRiderId(riderId: string): Promise<RideBooking | null> {
+    const booking = await this.model.findOne({ riderId });
+    return booking ? this.mapper.toDomain(booking) : null;
+  }
 }

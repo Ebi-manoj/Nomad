@@ -1,3 +1,22 @@
+import { PaymentStatus } from '../enums/payment';
+
+export interface PaymentResponseDTO {
+  id: string;
+  joinRequestId: string;
+  hikerId: string;
+  riderId: string;
+  hikeId: string;
+  rideId: string;
+  amount: number;
+  platformFee: number;
+  status: PaymentStatus;
+  paymentMethod?: string;
+  stripePaymentId?: string;
+  expiresAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface HikerPaymentInfoRequestDTO {
   paymentId: string;
   userId: string;

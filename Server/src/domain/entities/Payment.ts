@@ -99,6 +99,9 @@ export class Payment {
   getExpiresAt(): Date {
     return this.expiresAt;
   }
+  getUpdatedAt(): Date {
+    return this.updatedAt;
+  }
 
   setStripePaymentId(id: string) {
     this.stripePaymentId = id;
