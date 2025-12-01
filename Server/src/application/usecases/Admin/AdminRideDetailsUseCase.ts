@@ -40,6 +40,7 @@ export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
           hikeId: b.getHikeId(),
           pickupAddress: hike.getPickupAddress(),
           destinationAddress: hike.getDestinationAddress(),
+          totalDistance: b.getTotalDistance(),
           amount: b.getCostShared(),
           platformFee: b.getPlatformFee(),
           status: b.getStatus(),

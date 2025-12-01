@@ -10,6 +10,7 @@ export interface RideBookingProps {
   paymentId: string;
   bookingNumber: string;
   seatsBooked: number;
+  totalDistance: number;
   amount: number;
   platformFee: number;
   riderInitialLocation: GeoJSON.Point;
@@ -32,6 +33,7 @@ export class RideBooking {
   private joinRequestId: string;
   private paymentId: string;
   private bookingNumber: string;
+  private totalDistance: number;
   private seatsBooked: number;
   private amount: number;
   private platformFee: number;
@@ -56,6 +58,7 @@ export class RideBooking {
     this.bookingNumber = props.bookingNumber;
     this.seatsBooked = props.seatsBooked;
     this.amount = props.amount;
+    this.totalDistance = props.totalDistance;
     this.platformFee = props.platformFee;
     this.riderInitialLocation = props.riderInitialLocation;
     this.pickupLocation = props.pickupLocation;
@@ -147,6 +150,9 @@ export class RideBooking {
   }
   getCostShared() {
     return this.amount - this.platformFee;
+  }
+  getTotalDistance() {
+    return this.totalDistance;
   }
 
   getRiderEarning() {

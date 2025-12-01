@@ -89,6 +89,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
           hikerId: hike.getUserId()!,
           joinRequestId: joinRequest.getId()!,
           paymentId: payment.getId()!,
+          totalDistance: hike.getTotalDistance(),
           bookingNumber,
           seatsBooked: joinRequest.getSeatsRequested()!,
           amount: payment.getAmount(),

@@ -14,11 +14,13 @@ import {
   Sparkles,
   ArrowLeft,
   Users,
+  Wallet,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { FaRupeeSign } from 'react-icons/fa6';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const RideCompletedPage = () => {
+export const RideCompletedPage = () => {
   const navigate = useNavigate();
   const [rideData, setRideData] = useState<GetRideDetailsResDTO | undefined>(
     undefined
@@ -45,6 +47,9 @@ const RideCompletedPage = () => {
   }, []);
 
   if (!rideData) return <div>No Ride Found</div>;
+  const grossCollected = rideData.totalCostShared + rideData.platformFee;
+  const netEarnings = rideData.totalCostShared;
+  const platformFee = rideData.platformFee;
 
   return (
     <div className="min-h-screen bg-background">
@@ -171,7 +176,7 @@ const RideCompletedPage = () => {
                       Distance Covered
                     </p>
                     <p className="font-semibold text-base text-foreground">
-                      {rideData.totalDistance} km
+                      {rideData.totalDistance.toFixed(2)} km
                     </p>
                   </div>
                 </div>
@@ -225,6 +230,58 @@ const RideCompletedPage = () => {
                   </div>
                 </div>
               </div>
+              <div className="border-t pt-6 mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                    <Wallet className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Financial Breakdown
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 text-center bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-inner">
+                  {/* 1. Total Collected */}
+                  <div className="flex flex-col items-center">
+                    <FaRupeeSign className="w-6 h-6 text-blue-600 mb-1" />
+                    <p className="text-sm text-gray-500 font-medium mb-1">
+                      Total Collected
+                    </p>
+                    <p className="text-2xl font-extrabold text-blue-700">
+                      ₹{grossCollected}
+                    </p>
+                    <p className="text-xs text-gray-400">(Before fee)</p>
+                  </div>
+
+                  {/* 2. Platform Fee */}
+                  <div className="flex flex-col items-center border-l border-r border-gray-200">
+                    <div className="w-6 h-6 mb-1 text-red-600 font-bold flex items-center justify-center">
+                      %
+                    </div>
+                    <p className="text-sm text-gray-500 font-medium mb-1">
+                      Platform Fee
+                    </p>
+                    <p className="text-2xl font-extrabold text-red-600">
+                      ₹{platformFee}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      ({((platformFee / grossCollected) * 100).toFixed(1)}%)
+                    </p>
+                  </div>
+
+                  {/* 3. Driver Earnings (Net) */}
+                  <div className="flex flex-col items-center">
+                    <Wallet className="w-6 h-6 text-green-600 mb-1" />
+                    <p className="text-sm text-gray-500 font-medium mb-1">
+                      Your Net Earnings
+                    </p>
+                    <p className="text-2xl font-extrabold text-green-600">
+                      ₹{netEarnings}
+                    </p>
+                    <p className="text-xs text-gray-400">(Your take-home)</p>
+                  </div>
+                </div>
+              </div>
 
               {/* Passengers Section */}
               <div className="border-t pt-5">
@@ -247,7 +304,7 @@ const RideCompletedPage = () => {
                       Total collected
                     </p>
                     <p className="text-lg font-bold text-green-600">
-                      ₹{rideData.totalCostShared}
+                      ₹{grossCollected}
                     </p>
                   </div>
                 </div>
@@ -280,27 +337,46 @@ const RideCompletedPage = () => {
                         <p className="text-xs text-muted-foreground truncate mt-0.5">
                           {booking.pickupAddress} → {booking.destinationAddress}
                         </p>
+                        <div className="flex items-center gap-3 mt-2">
+                          <div className="flex items-center gap-1 text-xs text-gray-500 bg-white px-2 py-1 rounded border border-gray-100">
+                            <Navigation className="w-3 h-3 text-amber-500" />
+                            <span className="font-medium">
+                              {booking.totalDistance.toFixed(2)} km
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 text-xs text-gray-500 bg-white px-2 py-1 rounded border border-gray-100">
+                            <Users className="w-3 h-3 text-indigo-500" />
+                            <span className="font-medium">
+                              {booking.seatsBooked} Seat
+                              {booking.seatsBooked > 1 ? 's' : ''}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 text-xs text-gray-500 bg-white px-2 py-1 rounded border border-gray-100">
+                            <Clock className="w-3 h-3 text-rose-600" />
+                            {booking.status == 'COMPLETED' && (
+                              <p className="text-xs text-muted-foreground">
+                                Duration:{' '}
+                                {formatDuration(
+                                  booking.createdAt,
+                                  booking.completedAt!
+                                )}
+                              </p>
+                            )}
+                            {booking.status == 'CANCELLED' && (
+                              <p className="text-xs text-muted-foreground">
+                                CancelledAt:{' '}
+                                {booking.cancelledAt &&
+                                  formatDate(booking.cancelledAt)}
+                              </p>
+                            )}
+                          </div>
+                        </div>
                       </div>
+
                       <div className="text-right flex-shrink-0">
                         <p className="font-bold text-green-600 text-lg">
                           ₹{booking.amount - booking.refundAmount}
                         </p>
-                        {booking.status == 'COMPLETED' && (
-                          <p className="text-xs text-muted-foreground">
-                            Duration:{' '}
-                            {formatDuration(
-                              booking.createdAt,
-                              booking.completedAt!
-                            )}
-                          </p>
-                        )}
-                        {booking.status == 'CANCELLED' && (
-                          <p className="text-xs text-muted-foreground">
-                            CancelledAt:{' '}
-                            {booking.cancelledAt &&
-                              formatDate(booking.cancelledAt)}
-                          </p>
-                        )}
                       </div>
                     </div>
                   ))}
@@ -322,5 +398,3 @@ const RideCompletedPage = () => {
     </div>
   );
 };
-
-export default RideCompletedPage;

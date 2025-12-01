@@ -10,6 +10,7 @@ export interface IRideBookingDocument extends Document {
   paymentId: mongoose.Types.ObjectId;
   bookingNumber: string;
   seatsBooked: number;
+  totalDistance: number;
   amount: number;
   platformFee: number;
   riderInitialLocation: GeoJSON.Point;
@@ -71,6 +72,10 @@ const RideBookingSchema = new Schema<IRideBookingDocument>(
       type: Number,
       required: true,
       min: 1,
+    },
+    totalDistance: {
+      type: Number,
+      required: true,
     },
     amount: {
       type: Number,

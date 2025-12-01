@@ -41,6 +41,7 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
           pickupAddress: hike.getPickupAddress(),
           destinationAddress: hike.getDestinationAddress(),
           amount: b.getCostShared(),
+          totalDistance: b.getTotalDistance(),
           platformFee: b.getPlatformFee(),
           status: b.getStatus(),
           seatsBooked: b.getSeatsBooked(),
