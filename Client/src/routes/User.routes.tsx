@@ -15,6 +15,7 @@ import { HikeCompletedPage } from '@/pages/User/HikeCompleted/index';
 import { SosManagementPage } from '@/pages/User/SOS/SosManagement';
 import { WalletPage } from '@/pages/User/Wallet/Index';
 import { RideCompletedPage } from '@/pages/User/RideCompleted/Index';
+import { SubscriptionPricingPage } from '@/pages/User/Subscription/Subscription';
 
 export const UserRoutes = (
   <Route
@@ -73,5 +74,6 @@ export const UserRoutes = (
     <Route path="/activity" element={<ActivityPage />} />
     <Route path="/sos" element={<SosManagementPage />} />
     <Route path="/wallet" element={<WalletPage />} />
+    <Route path="/subscriptions" element={<SubscriptionPricingPage />} />
   </Route>
 );

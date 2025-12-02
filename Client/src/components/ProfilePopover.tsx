@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { logout } from '@/store/features/auth/auth.thunks';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
+import { Crown } from 'lucide-react';
 
 export function ProfilePopover() {
   const dispatch = useAppDispatch();
@@ -98,6 +99,15 @@ export function ProfilePopover() {
             <span className="flex items-center gap-2">
               <IoIosWarning size={18} />
               SOS
+            </span>
+          </button>
+          <button
+            className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
+            onClick={() => navigate('/subscriptions')}
+          >
+            <span className="flex items-center gap-2">
+              <Crown className="text-amber-500" size={18} />
+              Subscription
             </span>
           </button>
 
