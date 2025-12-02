@@ -25,7 +25,9 @@ export const RidePassengersSection = ({
             <Users className="w-5 h-5 text-violet-600" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-foreground">Your Passengers</h3>
+            <h3 className="text-lg font-bold text-foreground">
+              Your Passengers
+            </h3>
             <p className="text-xs text-muted-foreground">
               {hikersMatched.length} people rode with you
             </p>
@@ -99,7 +101,7 @@ export const RidePassengersSection = ({
 
             <div className="text-right flex-shrink-0">
               <p className="font-bold text-green-600 text-lg">
-                ₹{booking.amount - booking.refundAmount}
+                ₹{(booking.amount - booking.refundAmount).toFixed(2)}
               </p>
               {booking.status === 'COMPLETED' && (
                 <button

@@ -1,10 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 interface GenericModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
+  titleIcon?:ReactNode
   subtitle?: string;
   children?: React.ReactNode;
   primaryAction?: {
@@ -16,6 +18,8 @@ interface GenericModalProps {
   secondaryAction?: {
     label: string;
     onClick: () => void;
+     className?: string;
+      loading?: boolean;
   };
 }
 
@@ -23,6 +27,7 @@ export const GenericModal = ({
   isOpen,
   onClose,
   title,
+  titleIcon,
   subtitle,
   children,
   primaryAction,
@@ -54,7 +59,10 @@ export const GenericModal = ({
 
             {/* Title */}
             {title && (
-              <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+              <div className='flex items-center gap-1'>
+                {titleIcon}
+                <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+              </div>
             )}
 
             {/* Subtitle */}
@@ -67,6 +75,16 @@ export const GenericModal = ({
 
             {/* CTA Buttons */}
             <div className="mt-6 flex items-center justify-center gap-3">
+              
+
+              {secondaryAction && (
+                <button
+                  onClick={secondaryAction.onClick}
+                  className={`ursor-pointer w-full py-2.5 bg-gray-100 hover:bg-gray-200 transition text-gray-700 font-medium rounded-lg ${secondaryAction.className}`
+              }>
+                  {secondaryAction.label}
+                </button>
+              )}
               {primaryAction && (
                 <button
                   onClick={primaryAction.onClick}
@@ -76,15 +94,6 @@ export const GenericModal = ({
                   {primaryAction.loading
                     ? 'Please wait...'
                     : primaryAction.label}
-                </button>
-              )}
-
-              {secondaryAction && (
-                <button
-                  onClick={secondaryAction.onClick}
-                  className="cursor-pointer w-full py-2.5 bg-gray-100 hover:bg-gray-200 transition text-gray-700 font-medium rounded-lg"
-                >
-                  {secondaryAction.label}
                 </button>
               )}
             </div>
