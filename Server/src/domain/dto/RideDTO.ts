@@ -1,4 +1,5 @@
 import { RideStatus, VehicleType } from '../enums/Ride';
+import { ReviewResponseDTO } from './Reviews';
 
 export interface CreateRideDTO {
   userId: string;
@@ -91,6 +92,7 @@ export interface HikerMatchedDTO {
     rating: number;
     verified: boolean;
   };
+  review: null | ReviewResponseDTO;
 }
 
 export interface GetRideDetailsResDTO {

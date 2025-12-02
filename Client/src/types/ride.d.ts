@@ -1,4 +1,5 @@
 import type { JoinRequestStatus } from '@/utils/constants';
+import type { ReviewResponseDTO } from './review';
 
 export interface RideRequestDTO {
   id: string;
@@ -60,6 +61,7 @@ export interface HikerMatchedDTO {
     rating: number;
     verified: boolean;
   };
+  review: ReviewResponseDTO | null;
 }
 
 export interface GetRideDetailsResDTO {

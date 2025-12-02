@@ -8,13 +8,16 @@ import { IRideRepository } from '../../repositories/IRideRepository';
 import { IUserRepository } from '../../repositories/IUserRepository';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { IAdminRideDetailsUseCase } from './IAdminRideDetailsUseCase';
+import { IReviewRepository } from '../../repositories/IReviewRepository';
+import { ReviewMapper } from '../../mappers/ReviewMapper';
 
 export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
   constructor(
     private readonly rideRepository: IRideRepository,
     private readonly bookingRepository: IRideBookingRepository,
     private readonly userRepository: IUserRepository,
-    private readonly hikeRepository: IHikeRepository
+    private readonly hikeRepository: IHikeRepository,
+    private readonly reviewRepository:IReviewRepository
   ) {}
 
   async execute(rideId: string): Promise<AdminGetRideDetailsResDTO> {
@@ -31,8 +34,11 @@ export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
 
     const hikersMatched = await Promise.all(
       bookings.map(async b => {
-        const hiker = await this.userRepository.findById(b.getHikerId());
-        const hike = await this.hikeRepository.findById(b.getHikeId());
+        const [hiker,hike,review]=await Promise.all([
+          this.userRepository.findById(b.getHikerId()),
+          this.hikeRepository.findById(b.getHikeId()),
+          this.reviewRepository.findByReviewerAndBooking(b.getRiderId(),b.getId()!)
+        ])
         if (!hiker || !hike) return null;
 
         const matched: HikerMatchedDTO = {
@@ -56,6 +62,7 @@ export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
             rating: 4.5,
             verified: hiker.getIsVerifed(),
           },
+          review:review?ReviewMapper(review):null
         };
 
         return matched;

@@ -3,6 +3,7 @@ import { GetAllRideUseCase } from '../../../../application/usecases/Admin/GetAll
 import { AdminRideController } from '../../../../interfaces/http/controllers/adminRide.controller';
 import { IAdminRideController } from '../../../../interfaces/http/controllers/IAdminRideController';
 import { HikeRepository } from '../../../repositories/HikeRepository';
+import { ReviewRepository } from '../../../repositories/ReviewRepository';
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
 import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
@@ -16,12 +17,14 @@ export function rideAdminComposer(): IAdminRideController {
     rideRepository,
     userRepository
   );
+  const reveiewRepository=new ReviewRepository()
 
   const getRideDetailsUseCase = new AdminRideDetailsUseCase(
     rideRepository,
     bookingRepository,
     userRepository,
-    hikeRepository
+    hikeRepository,
+    reveiewRepository
   );
 
   return new AdminRideController(getAllRideUseCase, getRideDetailsUseCase);

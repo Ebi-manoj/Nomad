@@ -24,7 +24,8 @@ export class RateUserUseCase implements IRateUserUseCase {
     if (!booking) throw new RideBookingNotFound();
     if (
       booking.getStatus() !== 'COMPLETED' &&
-      booking.getStatus() !== 'CANCELLED'
+      booking.getStatus() !== 'CANCELLED' &&
+      booking.getStatus() !== 'DROPPED OFF'
     ) {
       throw new Forbidden('Cannot review before the ride/hike is completed');
     }

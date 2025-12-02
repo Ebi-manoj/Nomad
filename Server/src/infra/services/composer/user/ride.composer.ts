@@ -23,6 +23,7 @@ import { WalletRepository } from '../../../repositories/WalletRepository';
 import { WalletTransactionRepository } from '../../../repositories/WalletTransactionRepository';
 import { MongoTransactionManager } from '../../../database/MongoTransactionManger';
 import { FindOrCreateWalletService } from '../../../../application/services/FindOrCreateWalletService';
+import { ReviewRepository } from '../../../repositories/ReviewRepository';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -39,6 +40,7 @@ export function rideComposer(): IRideController {
   const walletRepository = new WalletRepository();
   const walletTransactionRepository = new WalletTransactionRepository();
   const walletService = new FindOrCreateWalletService(walletRepository);
+  const reviewRepository = new ReviewRepository();
   const transactionManager = new MongoTransactionManager([
     rideRepository,
     ridebookingRepository,
@@ -94,7 +96,8 @@ export function rideComposer(): IRideController {
     rideRepository,
     ridebookingRepository,
     userRepository,
-    hikeRepository
+    hikeRepository,
+    reviewRepository
   );
 
   const getAllRidesUseCase = new GetAllRidesUseCase(rideRepository);

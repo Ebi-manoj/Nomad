@@ -5,7 +5,9 @@ import {
 } from '../../../../domain/dto/RideDTO';
 import { Forbidden } from '../../../../domain/errors/CustomError';
 import { RideNotFound } from '../../../../domain/errors/RideErrors';
+import { ReviewMapper } from '../../../mappers/ReviewMapper';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
+import { IReviewRepository } from '../../../repositories/IReviewRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
@@ -16,7 +18,8 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
     private readonly rideRepository: IRideRepository,
     private readonly bookingRepository: IRideBookingRepository,
     private readonly userRepository: IUserRepository,
-    private readonly hikeRepository: IHikeRepository
+    private readonly hikeRepository: IHikeRepository,
+    private readonly reviewRepository: IReviewRepository
   ) {}
 
   async execute(data: GetRideDetailsReqDTO): Promise<GetRideDetailsResDTO> {
@@ -32,9 +35,16 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
 
     const hikersMatched = await Promise.all(
       bookings.map(async b => {
-        const hiker = await this.userRepository.findById(b.getHikerId());
-        const hike = await this.hikeRepository.findById(b.getHikeId());
+        const [hiker, hike, review] = await Promise.all([
+          this.userRepository.findById(b.getHikerId()),
+          this.hikeRepository.findById(b.getHikeId()),
+          this.reviewRepository.findByReviewerAndBooking(
+            data.userId,
+            b.getId()!
+          ),
+        ]);
         if (!hiker || !hike) return null;
+
         const response: HikerMatchedDTO = {
           bookingId: b.getId()!,
           hikeId: b.getHikeId(),
@@ -56,6 +66,7 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
             rating: 4.5,
             verified: hiker.getIsVerifed(),
           },
+          review: review ? ReviewMapper(review) : null,
         };
 
         return response;
