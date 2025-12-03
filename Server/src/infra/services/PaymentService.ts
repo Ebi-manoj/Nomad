@@ -62,4 +62,43 @@ export class StripePaymentService implements IPaymentService {
       throw new Error(`Stripe API error while retrieving payment intent`);
     }
   }
+
+  async createSubscriptionCheckoutSession(params: {
+    priceId: string;
+    successUrl: string;
+    cancelUrl: string;
+    customerEmail?: string;
+    customerId?: string;
+    metadata?: Record<string, string>;
+    trialPeriodDays?: number;
+  }): Promise<{ id: string; url: string }> {
+    try {
+      const session = await this.stripe.checkout.sessions.create({
+        mode: 'subscription',
+        line_items: [
+          {
+            price: params.priceId,
+            quantity: 1,
+          },
+        ],
+        success_url: params.successUrl + '?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: params.cancelUrl,
+        customer_email: params.customerId ? undefined : params.customerEmail,
+        customer: params.customerId,
+        metadata: params.metadata,
+        subscription_data: params.trialPeriodDays
+          ? { trial_period_days: params.trialPeriodDays }
+          : undefined,
+      });
+
+      if (!session.url || !session.id) {
+        throw new Error('Failed to create Stripe Checkout Session');
+      }
+
+      return { id: session.id, url: session.url };
+    } catch (error) {
+      console.error('Stripe createSubscriptionCheckoutSession error:', error);
+      throw new Error('Stripe API error while creating checkout session');
+    }
+  }
 }

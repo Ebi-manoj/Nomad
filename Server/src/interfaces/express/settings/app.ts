@@ -14,6 +14,7 @@ import adminSosRouter from '../routes/admin/sos.routes';
 import adminHikeRouter from '../routes/admin/hike.routes';
 import adminRideRouter from '../routes/admin/ride.routes';
 import fileRouter from '../routes/file.routes';
+import subscriptionRouter from '../routes/subscription.routes';
 import { errorHandling } from '../middlewares/errorHandlingMiddleware';
 import { connectRedis } from '../../../infra/database/connectRedis';
 import cors from 'cors';
@@ -48,6 +49,7 @@ app.use('/api/v1/review', reviewRouter);
 
 app.use('/api/v1/file', fileRouter);
 app.use('/api/v1/payments', paymentRouter);
+app.use('/api/v1/subscriptions', subscriptionRouter);
 app.use('/api/v1/admin/users', userManagementRouter);
 app.use('/api/v1/admin/documents', documentRouter);
 app.use('/api/v1/admin/sos', adminSosRouter);
