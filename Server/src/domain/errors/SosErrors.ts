@@ -1,4 +1,3 @@
-import { ErrorMessages } from '../enums/ErrorMessage';
 import { HttpStatus } from '../enums/HttpStatusCode';
 import { CustomError } from './CustomError';
 

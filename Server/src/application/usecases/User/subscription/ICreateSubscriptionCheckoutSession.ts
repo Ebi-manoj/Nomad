@@ -1,11 +1,9 @@
-import { IPaymentService } from '../../../services/IPaymentService';
-import { IUserRepository } from '../../../repositories/IUserRepository';
+import { BillingCycle, SubscriptionTier } from '../../../../domain/enums/subscription';
 
 export interface CreateSubscriptionCheckoutSessionDTO {
   userId: string;
-  priceId: string;
-  successUrl: string;
-  cancelUrl: string;
+  tier: SubscriptionTier;
+  billingCycle: BillingCycle;
   trialPeriodDays?: number;
   metadata?: Record<string, string>;
 }

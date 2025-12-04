@@ -4,6 +4,7 @@ import { HttpRequest } from '../../helpers/implementation/httpRequest';
 import { HttpResponse } from '../../helpers/implementation/httpResponse';
 import { ICreateSubscriptionCheckoutSessionUseCase } from '../../../../application/usecases/User/subscription/ICreateSubscriptionCheckoutSession';
 import { Unauthorized } from '../../../../domain/errors/CustomError';
+import { BillingCycle, SubscriptionTier } from '../../../../domain/enums/subscription';
 
 export class SubscriptionController {
   constructor(
@@ -14,20 +15,17 @@ export class SubscriptionController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
 
-    const { priceId, successUrl, cancelUrl, trialPeriodDays, metadata } =
-      (httpRequest.body || {}) as {
-        priceId: string;
-        successUrl: string;
-        cancelUrl: string;
-        trialPeriodDays?: number;
-        metadata?: Record<string, string>;
-      };
+    const { tier, billingCycle, trialPeriodDays, metadata } = (httpRequest.body || {}) as {
+      tier: SubscriptionTier;
+      billingCycle: BillingCycle;
+      trialPeriodDays?: number;
+      metadata?: Record<string, string>;
+    };
 
     const result = await this.createCheckoutSessionUseCase.execute({
       userId,
-      priceId,
-      successUrl,
-      cancelUrl,
+      tier,
+      billingCycle,
       trialPeriodDays,
       metadata,
     });

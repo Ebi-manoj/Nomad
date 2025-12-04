@@ -21,3 +21,9 @@ export enum UserRole {
   HIKER = 'HIKER',
   RIDER = 'RIDER',
 }
+
+// Mapping of Stripe Price IDs by tier and billing cycle.
+export type PriceIdMapping = Record<
+  SubscriptionTier,
+  Partial<Record<BillingCycle, string | undefined>>
+>;

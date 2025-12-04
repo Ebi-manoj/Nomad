@@ -10,8 +10,6 @@ export interface IPaymentService {
   ): Promise<{ client_secret: string; id: string; status: string }>;
   createSubscriptionCheckoutSession(params: {
     priceId: string;
-    successUrl: string;
-    cancelUrl: string;
     customerEmail?: string;
     customerId?: string;
     metadata?: Record<string, string>;

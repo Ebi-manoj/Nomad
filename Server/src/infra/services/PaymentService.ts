@@ -65,8 +65,6 @@ export class StripePaymentService implements IPaymentService {
 
   async createSubscriptionCheckoutSession(params: {
     priceId: string;
-    successUrl: string;
-    cancelUrl: string;
     customerEmail?: string;
     customerId?: string;
     metadata?: Record<string, string>;
@@ -81,8 +79,10 @@ export class StripePaymentService implements IPaymentService {
             quantity: 1,
           },
         ],
-        success_url: params.successUrl + '?session_id={CHECKOUT_SESSION_ID}',
-        cancel_url: params.cancelUrl,
+        success_url:
+          `${env.CLIENT_URL}/subscription/success` +
+          '?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: `${env.CLIENT_URL}/subscription`,
         customer_email: params.customerId ? undefined : params.customerEmail,
         customer: params.customerId,
         metadata: params.metadata,
