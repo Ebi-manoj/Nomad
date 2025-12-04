@@ -82,7 +82,7 @@ export class StripePaymentService implements IPaymentService {
         success_url:
           `${env.CLIENT_URL}/subscription/success` +
           '?session_id={CHECKOUT_SESSION_ID}',
-        cancel_url: `${env.CLIENT_URL}/subscription`,
+        cancel_url: `${env.CLIENT_URL}/subscriptions`,
         customer_email: params.customerId ? undefined : params.customerEmail,
         customer: params.customerId,
         metadata: params.metadata,

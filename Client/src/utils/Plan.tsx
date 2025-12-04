@@ -1,7 +1,10 @@
 import { Crown, User } from 'lucide-react';
 import { RiMotorbikeFill } from 'react-icons/ri';
 import { FaHiking } from 'react-icons/fa';
-import { SubscriptionTier, type SubscriptionTierType } from '@/types/subscription';
+import {
+  SubscriptionTier,
+  type SubscriptionTierType,
+} from '@/types/subscription';
 import type { ReactNode } from 'react';
 
 type Feature = {
@@ -27,7 +30,7 @@ export const plans: Plan[] = [
   {
     title: 'Free Tier',
     code: SubscriptionTier.FREE,
-    icon: <User className="w-6 h-6 text-gray-400" />,
+    icon: <User className="w-6 h-6 text-white" />,
     description: 'For casual nomads just starting out.',
     price: { monthly: 0, yearly: 0 },
     platformFee: '10%',
