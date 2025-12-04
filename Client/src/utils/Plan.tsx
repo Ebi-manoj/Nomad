@@ -1,9 +1,32 @@
 import { Crown, User } from 'lucide-react';
 import { RiMotorbikeFill } from 'react-icons/ri';
 import { FaHiking } from 'react-icons/fa';
-export const plans = [
+import { SubscriptionTier, type SubscriptionTierType } from '@/types/subscription';
+import type { ReactNode } from 'react';
+
+type Feature = {
+  text: string;
+  included: boolean;
+  subtext?: string;
+};
+
+type Plan = {
+  title: string;
+  code: SubscriptionTierType;
+  icon: ReactNode;
+  description: string;
+  price: { monthly: number; yearly: number };
+  platformFee: string;
+  features: Feature[];
+  cta: string;
+  popular: boolean;
+  color: 'gray' | 'emerald' | 'blue' | 'amber';
+};
+
+export const plans: Plan[] = [
   {
     title: 'Free Tier',
+    code: SubscriptionTier.FREE,
     icon: <User className="w-6 h-6 text-gray-400" />,
     description: 'For casual nomads just starting out.',
     price: { monthly: 0, yearly: 0 },
@@ -23,6 +46,7 @@ export const plans = [
   },
   {
     title: 'Hiker PRO',
+    code: SubscriptionTier.HIKER_PRO,
     icon: <FaHiking className="w-6 h-6 text-emerald-400" />,
     description: 'Perfect for frequent travelers looking for rides.',
     price: { monthly: 199, yearly: 1910 },
@@ -46,6 +70,7 @@ export const plans = [
   },
   {
     title: 'Rider PRO',
+    code: SubscriptionTier.RIDER_PRO,
     icon: <RiMotorbikeFill className="w-6 h-6 text-blue-400" />,
     description: 'For bike owners who love company.',
     price: { monthly: 299, yearly: 2870 },
@@ -65,6 +90,7 @@ export const plans = [
   },
   {
     title: 'Premium Plus',
+    code: SubscriptionTier.PREMIUM_PLUS,
     icon: <Crown className="w-6 h-6 text-amber-400" />,
     description: 'The ultimate kit for full-time nomads.',
     price: { monthly: 449, yearly: 4310 },

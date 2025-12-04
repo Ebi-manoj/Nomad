@@ -1,9 +1,29 @@
 import { useState } from 'react';
 import { Check, X, Zap, Crown } from 'lucide-react';
 import { plans } from '@/utils/Plan';
+import {
+  type BillingCycle,
+  type CreateSubscriptionCheckoutSessionDTO,
+  type SubscriptionTierType,
+} from '@/types/subscription';
+import { getSubscriptionCheckout } from '@/api/subscription';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 export const SubscriptionPricingPage = () => {
-  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>('MONTHLY');
+
+  const handleSubscription = async (code: SubscriptionTierType) => {
+    const dto: CreateSubscriptionCheckoutSessionDTO = {
+      tier: code,
+      billingCycle,
+    };
+    try {
+      const data = await getSubscriptionCheckout(dto);
+      window.location.assign(data.url);
+    } catch (error) {
+      useHandleApiError(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans selection:bg-emerald-500/30">
@@ -32,7 +52,7 @@ export const SubscriptionPricingPage = () => {
           <div className="mt-8 flex justify-center items-center gap-4">
             <span
               className={`text-sm font-medium ${
-                billingCycle === 'monthly' ? 'text-white' : 'text-slate-500'
+                billingCycle === 'MONTHLY' ? 'text-white' : 'text-slate-500'
               }`}
             >
               Monthly
@@ -40,20 +60,20 @@ export const SubscriptionPricingPage = () => {
             <button
               onClick={() =>
                 setBillingCycle(
-                  billingCycle === 'monthly' ? 'yearly' : 'monthly'
+                  billingCycle === 'MONTHLY' ? 'YEARLY' : 'MONTHLY'
                 )
               }
               className="cursor-pointer relative w-14 h-8 bg-slate-800 rounded-full p-1 border border-slate-700 transition-colors focus:outline-none ring-offset-2 ring-offset-slate-900 focus:ring-2 focus:ring-emerald-500"
             >
               <div
                 className={`w-6 h-6 bg-emerald-500 rounded-full shadow-md transform transition-transform duration-300 ${
-                  billingCycle === 'yearly' ? 'translate-x-6' : 'translate-x-0'
+                  billingCycle === 'YEARLY' ? 'translate-x-6' : 'translate-x-0'
                 }`}
               ></div>
             </button>
             <span
               className={`text-sm font-medium ${
-                billingCycle === 'yearly' ? 'text-white' : 'text-slate-500'
+                billingCycle === 'YEARLY' ? 'text-white' : 'text-slate-500'
               }`}
             >
               Yearly{' '}
@@ -101,15 +121,15 @@ export const SubscriptionPricingPage = () => {
                 <div className="flex items-baseline gap-1">
                   <span className="text-3xl font-bold text-white">
                     ₹
-                    {billingCycle === 'monthly'
+                    {billingCycle === 'MONTHLY'
                       ? plan.price.monthly
                       : plan.price.yearly}
                   </span>
                   <span className="text-slate-500">
-                    /{billingCycle === 'monthly' ? 'mo' : 'yr'}
+                    /{billingCycle === 'MONTHLY' ? 'mo' : 'yr'}
                   </span>
                 </div>
-                {billingCycle === 'yearly' && plan.price.monthly > 0 && (
+                {billingCycle === 'YEARLY' && plan.price.monthly > 0 && (
                   <div className="text-xs text-emerald-400 mt-1">
                     Save ₹{plan.price.monthly * 12 - plan.price.yearly} / year
                   </div>
@@ -169,6 +189,7 @@ export const SubscriptionPricingPage = () => {
                     : 'bg-slate-700 hover:bg-slate-600 text-white'
                 }
               `}
+                onClick={() => handleSubscription(plan.code)}
               >
                 {plan.cta}
               </button>
