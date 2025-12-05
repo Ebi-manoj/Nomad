@@ -15,6 +15,7 @@ import adminHikeRouter from '../routes/admin/hike.routes';
 import adminRideRouter from '../routes/admin/ride.routes';
 import fileRouter from '../routes/file.routes';
 import subscriptionRouter from '../routes/subscription.routes';
+import webhookRouter from '../routes/webhook.routes';
 import { errorHandling } from '../middlewares/errorHandlingMiddleware';
 import { connectRedis } from '../../../infra/database/connectRedis';
 import cors from 'cors';
@@ -27,8 +28,10 @@ connectMongo();
 connectRedis();
 const app = express();
 const server = createServer(app);
-app.use(express.json());
 app.use(cookieparser());
+
+app.use('/api/v1/webhook', webhookRouter);
+app.use(express.json());
 app.use(
   cors({
     credentials: true,

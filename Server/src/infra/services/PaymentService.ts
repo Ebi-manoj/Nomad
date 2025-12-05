@@ -101,4 +101,22 @@ export class StripePaymentService implements IPaymentService {
       throw new Error('Stripe API error while creating checkout session');
     }
   }
+
+  async constructWebhookEvent(
+    payload: Buffer | string,
+    signature: string
+  ): Promise<{ type: string; data: any }> {
+    try {
+      const secret = env.STRIPE_WEBHOOKSECERTKEY;
+      const event = this.stripe.webhooks.constructEvent(
+        payload,
+        signature,
+        secret
+      );
+      return { type: event.type, data: event.data };
+    } catch (error) {
+      console.error('Stripe constructWebhookEvent error:', error);
+      throw new Error('Invalid Stripe webhook signature');
+    }
+  }
 }

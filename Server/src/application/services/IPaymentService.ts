@@ -15,9 +15,10 @@ export interface IPaymentService {
     metadata?: Record<string, string>;
     trialPeriodDays?: number;
   }): Promise<{ id: string; url: string }>;
-  //   confirmPayment(paymentIntentId: string): Promise<void>;
-  //   constructWebhookEvent(
-  //     payload: Record<string, string>,
-  //     signature: string
-  //   ): Promise<void>;
+
+  constructWebhookEvent(
+    payload: Buffer | string,
+    signature: string
+  ): Promise<{ type: string; data: any }>;
+
 }
