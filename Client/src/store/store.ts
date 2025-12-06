@@ -11,6 +11,7 @@ import riderTasksReducer from './features/user/riderTasks/riderTasksSlice';
 import matchedHikersReducer from './features/user/matchedHikers/matchedHikersSlice';
 import sosReducer from './features/user/sos/sosSlice';
 import walletReducer from './features/user/wallet/walletSlice';
+import subscriptionReducer from './features/user/subscription/subscriptionSlice';
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     sos: sosReducer,
     adminSos: adminSosReducer,
     wallet: walletReducer,
+    subscription: subscriptionReducer,
   },
 });
 
