@@ -32,4 +32,11 @@ export class SubscriptionRepository
     });
     return docs.map(doc => subscriptionMapper.toDomain(doc));
   }
+
+  async findByStripeSubscriptionId(
+    stripeSubscriptionId: string
+  ): Promise<Subscription | null> {
+    const doc = await SubscriptionModel.findOne({ stripeSubscriptionId });
+    return doc ? subscriptionMapper.toDomain(doc) : null;
+  }
 }

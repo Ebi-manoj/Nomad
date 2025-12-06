@@ -39,7 +39,7 @@ export class CreateSubscriptionCheckoutSessionUseCase
     const session = await this.payments.createSubscriptionCheckoutSession({
       priceId,
       customerEmail: user.getEmail(),
-      metadata: data.metadata,
+      metadata: { ...data, ...data.metadata },
       trialPeriodDays: data.trialPeriodDays,
     });
 

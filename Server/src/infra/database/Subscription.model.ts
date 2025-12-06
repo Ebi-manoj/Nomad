@@ -16,6 +16,9 @@ export interface ISubscriptionDocument extends Document {
   autoRenew: boolean;
   price: number;
   currency: string;
+  stripeSubscriptionId?: string | null;
+  stripeCustomerId?: string | null;
+  stripePriceId?: string | null;
   createdAt: Date;
   updatedAt: Date;
   cancelledAt?: Date | null;
@@ -44,6 +47,20 @@ const SubscriptionSchema = new Schema<ISubscriptionDocument>(
       enum: Object.values(SubscriptionStatus),
       required: true,
       index: true,
+    },
+    stripeSubscriptionId: {
+      type: String,
+      default: null,
+      index: true,
+    },
+    stripeCustomerId: {
+      type: String,
+      default: null,
+      index: true,
+    },
+    stripePriceId: {
+      type: String,
+      default: null,
     },
     startDate: {
       type: Date,

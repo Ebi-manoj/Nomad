@@ -119,4 +119,43 @@ export class StripePaymentService implements IPaymentService {
       throw new Error('Invalid Stripe webhook signature');
     }
   }
+
+  async retrieveSubscription(subscriptionId: string): Promise<{
+    id: string;
+    status: string;
+    current_period_start: number;
+    current_period_end: number;
+    customer: string | null;
+    items: Array<{
+      price: { id: string; unit_amount: number | null; currency: string; recurring?: { interval?: string } };
+    }>;
+  }> {
+    const sub = (await this.stripe.subscriptions.retrieve(subscriptionId, {
+      expand: ['items.data.price'],
+    })) as any;
+
+    return {
+      id: sub.id,
+      status: sub.status,
+      current_period_start: sub.current_period_start,
+      current_period_end: sub.current_period_end,
+      customer: typeof sub.customer === 'string' ? sub.customer : sub.customer?.id || null,
+      items: sub.items.data.map((it: any) => ({
+        price: {
+          id: it.price.id,
+          unit_amount: it.price.unit_amount ?? null,
+          currency: it.price.currency,
+          recurring: { interval: (it.price.recurring && it.price.recurring.interval) || undefined },
+        },
+      })),
+    };
+  }
+
+  async retrieveCustomer(customerId: string): Promise<{
+    id: string;
+    email: string | null | undefined;
+  }> {
+    const customer = (await this.stripe.customers.retrieve(customerId)) as any;
+    return { id: customer.id, email: customer.email };
+  }
 }

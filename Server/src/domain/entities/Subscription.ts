@@ -50,6 +50,9 @@ export interface SubscriptionProps {
   autoRenew?: boolean;
   price: number;
   currency?: string;
+  stripeSubscriptionId?: string;
+  stripeCustomerId?: string;
+  stripePriceId?: string;
   createdAt?: Date;
   updatedAt?: Date;
   cancelledAt?: Date;
@@ -66,6 +69,9 @@ export class Subscription {
   private autoRenew: boolean;
   private price: number;
   private currency: string;
+  private stripeSubscriptionId?: string;
+  private stripeCustomerId?: string;
+  private stripePriceId?: string;
   private createdAt: Date;
   private updatedAt: Date;
   private cancelledAt?: Date;
@@ -82,6 +88,9 @@ export class Subscription {
     this.autoRenew = props.autoRenew ?? true;
     this.price = props.price;
     this.currency = props.currency || 'INR';
+    this.stripeSubscriptionId = props.stripeSubscriptionId;
+    this.stripeCustomerId = props.stripeCustomerId;
+    this.stripePriceId = props.stripePriceId;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
     this.cancelledAt = props.cancelledAt;
@@ -141,6 +150,16 @@ export class Subscription {
 
   getCurrency(): string {
     return this.currency;
+  }
+
+  getStripeSubscriptionId(): string | undefined {
+    return this.stripeSubscriptionId;
+  }
+  getStripeCustomerId(): string | undefined {
+    return this.stripeCustomerId;
+  }
+  getStripePriceId(): string | undefined {
+    return this.stripePriceId;
   }
 
   getFeatures(): SubscriptionFeatures {

@@ -23,3 +23,17 @@ export const stripePriceConfig: PriceIdMapping = {
     [BillingCycle.YEARLY]: env.STRIPE_PREMIUM_PLUS_YEARLY,
   },
 };
+
+export function findPlanByPriceId(priceId: string):
+  | { tier: SubscriptionTier; billingCycle: BillingCycle }
+  | null {
+  for (const tier of Object.values(SubscriptionTier)) {
+    const mapping = stripePriceConfig[tier as SubscriptionTier];
+    for (const cycle of Object.values(BillingCycle)) {
+      if (mapping?.[cycle as BillingCycle] === priceId) {
+        return { tier: tier as SubscriptionTier, billingCycle: cycle as BillingCycle };
+      }
+    }
+  }
+  return null;
+}
