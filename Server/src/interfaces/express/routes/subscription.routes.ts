@@ -16,4 +16,11 @@ router.post(
   }
 );
 
+router.get('/verify', authMiddleware, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    subscriptionComposer().verifySubscription(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
 export default router;

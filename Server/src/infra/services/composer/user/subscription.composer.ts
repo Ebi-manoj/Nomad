@@ -7,6 +7,7 @@ import { SubscriptionController } from '../../../../interfaces/http/controllers/
 import { HandleSubscriptionWebhookUseCase } from '../../../../application/usecases/User/subscription/HandleSubscriptionWebhookUseCase';
 import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
 import { RedisCheckoutSessionRepository } from '../../../repositories/RedisCheckoutSessionRepository';
+import { VerifySubscriptionUseCase } from '../../../../application/usecases/User/subscription/VerifySubscriptionUseCase';
 
 export function subscriptionComposer(): ISubscriptionController {
   const users = new MongoUserRepository();
@@ -26,6 +27,14 @@ export function subscriptionComposer(): ISubscriptionController {
     users,
     checkoutSessions
   );
+  const verifySubscriptionUseCase = new VerifySubscriptionUseCase(
+    checkoutSessions,
+    subscriptions
+  );
 
-  return new SubscriptionController(createSession, handleWebhook);
+  return new SubscriptionController(
+    createSession,
+    handleWebhook,
+    verifySubscriptionUseCase
+  );
 }

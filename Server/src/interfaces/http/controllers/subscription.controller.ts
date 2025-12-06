@@ -10,11 +10,13 @@ import {
 import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { ISubscriptionController } from './ISubscriptionController';
 import { IHandleSubscriptionWebhookUseCase } from '../../../application/usecases/User/subscription/IHandleSubscriptionWebhookUseCase';
+import { IVerifySubscriptionUseCase } from '../../../application/usecases/User/subscription/IVerifySubscriptionUseCase';
 
 export class SubscriptionController implements ISubscriptionController {
   constructor(
     private readonly createCheckoutSessionUseCase: ICreateSubscriptionCheckoutSessionUseCase,
-    private readonly handleWebhookUseCase: IHandleSubscriptionWebhookUseCase
+    private readonly handleWebhookUseCase: IHandleSubscriptionWebhookUseCase,
+    private readonly verifySubscriptionUseCase: IVerifySubscriptionUseCase
   ) {}
 
   async createCheckoutSession(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -43,15 +45,29 @@ export class SubscriptionController implements ISubscriptionController {
 
   async handleWebhook(httpRequest: HttpRequest): Promise<HttpResponse> {
     // Stripe signature header
-    const headers = (httpRequest.header || {}) as Record<string, any>;
-    const signature = headers['stripe-signature'] || headers['Stripe-Signature'];
+    const headers = (httpRequest.header || {}) as Record<string, unknown>;
+    const signature =
+      headers['stripe-signature'] || headers['Stripe-Signature'];
 
-    // Body is expected to be raw (Buffer) when using express.raw on the route
-    const payload = httpRequest.body as any;
+    const payload = httpRequest.body as Buffer;
 
-    await this.handleWebhookUseCase.execute(payload, signature);
+    await this.handleWebhookUseCase.execute(payload, signature as string);
 
     const response = ApiDTO.success({ received: true });
+    return new HttpResponse(HttpStatusCode.Ok, response);
+  }
+
+  async verifySubscription(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+    const q = httpRequest.query as { session_id: string };
+    const sessionId = q.session_id || '';
+
+    const result = await this.verifySubscriptionUseCase.execute({
+      userId,
+      sessionId,
+    });
+    const response = ApiDTO.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 }

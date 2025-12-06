@@ -17,11 +17,9 @@ export class SubscriptionRepository
   }
 
   async findActiveByUserId(userId: string): Promise<Subscription | null> {
-    const now = new Date();
     const doc = await SubscriptionModel.findOne({
       userId,
       status: SubscriptionStatus.ACTIVE,
-      endDate: { $gt: now },
     }).sort({ endDate: -1 });
     return doc ? subscriptionMapper.toDomain(doc) : null;
   }

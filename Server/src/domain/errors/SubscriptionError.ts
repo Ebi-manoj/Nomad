@@ -12,3 +12,9 @@ export class InvalidPlanTierOrBilling extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+
+export class SubscriptionSessionNotFound extends CustomError {
+  constructor(message = 'Subscription Session not found') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
