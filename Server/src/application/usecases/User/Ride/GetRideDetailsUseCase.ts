@@ -28,8 +28,8 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
 
     if (ride.getRiderId() !== data.userId) throw new Forbidden();
 
-    let totalEarning = ride.getTotalEarning();
-    let platformFeeTotal = ride.getPlatformFeeTotal();
+    const totalEarning = ride.getTotalEarning();
+    const platformFeeTotal = ride.getPlatformFeeTotal();
 
     const bookings = await this.bookingRepository.findByRideId(data.rideId);
 

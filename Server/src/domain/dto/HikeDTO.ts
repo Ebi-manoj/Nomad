@@ -1,6 +1,5 @@
 import { HikeStatus } from '../enums/Hike';
 import { PaymentStatus } from '../enums/payment';
-import { ReviewType } from '../enums/Reviews';
 import { JoinRequestStatus } from '../enums/Ride';
 import { ReviewResponseDTO } from './Reviews';
 

@@ -1,8 +1,6 @@
 import { redisClient } from '../database/connectRedis';
-import {
-  CheckoutSessionRecord,
-  ICheckoutSessionRepository,
-} from '../../application/repositories/ICheckoutSessionRepository';
+import { ICheckoutSessionRepository } from '../../application/repositories/ICheckoutSessionRepository';
+import { CheckoutSessionRecord } from '../../domain/entities/CheckoutSession';
 
 export class RedisCheckoutSessionRepository
   implements ICheckoutSessionRepository
@@ -42,5 +40,23 @@ export class RedisCheckoutSessionRepository
     const sessionId = await redisClient.get(this.idempKey(idempotencyKey));
     if (!sessionId) return null;
     return this.getByStripeSessionId(sessionId);
+  }
+
+  async updateStatus(
+    stripeSessionId: string,
+    status: CheckoutSessionRecord['status']
+  ): Promise<void> {
+    const key = this.sessionKey(stripeSessionId);
+    const data = await redisClient.get(key);
+    if (!data) return;
+    const ttl = await redisClient.ttl(key);
+    const record = JSON.parse(data) as CheckoutSessionRecord;
+    record.status = status;
+    const payload = JSON.stringify(record);
+    if (ttl && ttl > 0) {
+      await redisClient.set(key, payload, { EX: ttl });
+    } else {
+      await redisClient.set(key, payload);
+    }
   }
 }

@@ -1,7 +1,6 @@
 import {
   GetHikesReqDTO,
   GetHikesResDTO,
-  HikeResponseDTO,
 } from '../../../../domain/dto/HikeDTO';
 import { hikeMapper } from '../../../mappers/HikeMapper';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';

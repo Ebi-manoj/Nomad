@@ -1,8 +1,6 @@
 import {
-  GetHikeDetailsResponseDTO,
   GetHikesReqDTO,
   GetHikesResDTO,
-  HikeResponseDTO,
 } from '../../../../domain/dto/HikeDTO';
 
 export interface IGetAllHikesUseCase {

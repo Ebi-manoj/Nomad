@@ -9,13 +9,10 @@ import { Forbidden, UpdateFailed } from '../../../../domain/errors/CustomError';
 import { HikeNotFound } from '../../../../domain/errors/HikeErrors';
 import { RideBookingNotFound } from '../../../../domain/errors/RideBookingError';
 import {
-  RideLocationNotFound,
   RideNotFound,
 } from '../../../../domain/errors/RideErrors';
-import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { ITransactionManager } from '../../../providers/ITransactionManager';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
-import { ILocationRepository } from '../../../repositories/ILocationRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { ITaskRepository } from '../../../repositories/ITaskRepository';

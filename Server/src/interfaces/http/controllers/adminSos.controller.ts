@@ -1,5 +1,4 @@
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import { SosLogStatus } from '../../../domain/enums/SosLogStatus';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';

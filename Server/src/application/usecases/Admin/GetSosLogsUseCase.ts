@@ -1,7 +1,6 @@
 import type {
   GetSosLogsQuery,
   GetSosLogsResDTO,
-  SosLogResDTO,
   SosLogResWithUser,
 } from '../../../domain/dto/SosDTO';
 import { sosLogMapper } from '../../mappers/SosLogMapper';

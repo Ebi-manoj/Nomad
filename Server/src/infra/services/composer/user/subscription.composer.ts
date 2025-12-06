@@ -23,7 +23,8 @@ export function subscriptionComposer(): ISubscriptionController {
   const handleWebhook = new HandleSubscriptionWebhookUseCase(
     payments,
     subscriptions,
-    users
+    users,
+    checkoutSessions
   );
 
   return new SubscriptionController(createSession, handleWebhook);

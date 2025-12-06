@@ -9,6 +9,7 @@ import {
   SubscriptionTier,
 } from '../../../../domain/enums/subscription';
 import { findPlanByPriceId } from '../../../../infra/providers/StripePriceConfig';
+import { ICheckoutSessionRepository } from '../../../repositories/ICheckoutSessionRepository';
 
 export class HandleSubscriptionWebhookUseCase
   implements IHandleSubscriptionWebhookUseCase
@@ -16,7 +17,8 @@ export class HandleSubscriptionWebhookUseCase
   constructor(
     private readonly paymentService: IPaymentService,
     private readonly subscriptions: ISubscriptionRepository,
-    private readonly users: IUserRepository
+    private readonly users: IUserRepository,
+    private readonly checkoutSessions: ICheckoutSessionRepository
   ) {}
 
   async execute(payload: Buffer | string, signature?: string): Promise<void> {
@@ -26,17 +28,17 @@ export class HandleSubscriptionWebhookUseCase
     switch (eventType) {
       case 'checkout.session.completed': {
         console.log('StripeWebhook checkout.session.completed');
-        this.handleCreateSubscription(data);
+        await this.handleCreateSubscription(data);
         break;
       }
       case 'customer.subscription.updated': {
         console.log('StripeWebhook customer.subscription.updated');
-        this.handleUpdateSubscription(data);
+        await this.handleUpdateSubscription(data);
         break;
       }
       case 'customer.subscription.deleted': {
         console.log('StripeWebhook customer.subscription.deleted');
-        this.handleDeleteSubscription(data);
+        await this.handleDeleteSubscription(data);
         break;
       }
 
@@ -91,6 +93,7 @@ export class HandleSubscriptionWebhookUseCase
     const stripeSubscriptionId: string | undefined = session.subscription;
     const stripeCustomerId: string | undefined = session.customer;
     const metadata: Record<string, string> | undefined = session.metadata;
+    await this.checkoutSessions.updateStatus(session.id, 'completed');
 
     if (!stripeSubscriptionId) return;
 

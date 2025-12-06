@@ -46,7 +46,7 @@ export class CreateSubscriptionCheckoutSessionUseCase
     const findExistingSession = await this.checkoutSessions.getByIdempotencyKey(
       idempotencyKey
     );
-    if (findExistingSession) {
+    if (findExistingSession && findExistingSession.status == 'pending') {
       console.log('From the session');
       return {
         id: findExistingSession.stripeSessionId,

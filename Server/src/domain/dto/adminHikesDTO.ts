@@ -1,7 +1,7 @@
 import { UserResponseDTO } from './authDTO';
 import { HikeResponseDTO } from './HikeDTO';
 import { PaymentResponseDTO } from './paymentDTO';
-import { BookingResponseDTO, RideBookingResponseDTO } from './RideBookingDTO';
+import { BookingResponseDTO } from './RideBookingDTO';
 
 export interface adminHikeResponseDTO extends HikeResponseDTO {
   user: UserResponseDTO;

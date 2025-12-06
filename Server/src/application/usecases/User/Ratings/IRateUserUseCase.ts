@@ -1,6 +1,5 @@
 import {
   RateUserReqDTO,
-  RateUserResDTO,
   ReviewResponseDTO,
 } from '../../../../domain/dto/Reviews';
 

@@ -1,5 +1,4 @@
 import { SosLog } from '../../domain/entities/SosLog';
-import { SosLogStatus } from '../../domain/enums/SosLogStatus';
 import { IBaseRepository } from './IBaseRepository';
 
 export interface ISosLogRepository extends IBaseRepository<SosLog> {
