@@ -1,5 +1,8 @@
 import { SubscriptionResDTO } from '../../domain/dto/SubscriptionDTO';
-import { Subscription } from '../../domain/entities/Subscription';
+import {
+  Subscription,
+  SubscriptionFeatures,
+} from '../../domain/entities/Subscription';
 
 export function SubscriptionMapper(sub: Subscription): SubscriptionResDTO {
   return {
@@ -16,5 +19,6 @@ export function SubscriptionMapper(sub: Subscription): SubscriptionResDTO {
     currency: sub.getCurrency(),
     cancelledAt: sub.getCancelledAt(),
     createdAt: sub.getCreatedAt(),
+    features: sub.getFeatures(),
   };
 }

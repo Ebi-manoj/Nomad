@@ -84,7 +84,7 @@ export class Subscription {
     this.billingCycle = props.billingCycle;
     this.status = props.status;
     this.startDate = props.startDate || new Date();
-    this.endDate = props.endDate || new Date();
+    this.endDate = props.endDate || this.setEndDate();
     this.autoRenew = props.autoRenew ?? true;
     this.price = props.price;
     this.currency = props.currency || 'INR';
@@ -118,6 +118,16 @@ export class Subscription {
 
   getUserId(): string {
     return this.userId;
+  }
+
+  private setEndDate(): Date {
+    const startDate = this.startDate.getTime();
+    const duration =
+      this.billingCycle === 'MONTHLY'
+        ? 30 * 24 * 60 * 60 * 1000
+        : 365 * 24 * 60 * 60 * 1000;
+
+    return new Date(startDate + duration);
   }
 
   getTier(): SubscriptionTier {
@@ -179,7 +189,9 @@ export class Subscription {
   }
 
   isActive(): boolean {
-    return this.status === SubscriptionStatus.ACTIVE && new Date() < this.endDate;
+    return (
+      this.status === SubscriptionStatus.ACTIVE && new Date() < this.endDate
+    );
   }
 
   isExpired(): boolean {

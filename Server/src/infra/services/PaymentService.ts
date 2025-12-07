@@ -124,10 +124,14 @@ export class StripePaymentService implements IPaymentService {
     id: string;
     status: string;
     current_period_start: number;
-    current_period_end: number;
     customer: string | null;
     items: Array<{
-      price: { id: string; unit_amount: number | null; currency: string; recurring?: { interval?: string } };
+      price: {
+        id: string;
+        unit_amount: number | null;
+        currency: string;
+        recurring?: { interval?: string };
+      };
     }>;
   }> {
     const sub = (await this.stripe.subscriptions.retrieve(subscriptionId, {
@@ -137,15 +141,20 @@ export class StripePaymentService implements IPaymentService {
     return {
       id: sub.id,
       status: sub.status,
-      current_period_start: sub.current_period_start,
-      current_period_end: sub.current_period_end,
-      customer: typeof sub.customer === 'string' ? sub.customer : sub.customer?.id || null,
+      current_period_start: sub.billing_cycle_anchor,
+      customer:
+        typeof sub.customer === 'string'
+          ? sub.customer
+          : sub.customer?.id || null,
       items: sub.items.data.map((it: any) => ({
         price: {
           id: it.price.id,
           unit_amount: it.price.unit_amount ?? null,
           currency: it.price.currency,
-          recurring: { interval: (it.price.recurring && it.price.recurring.interval) || undefined },
+          recurring: {
+            interval:
+              (it.price.recurring && it.price.recurring.interval) || undefined,
+          },
         },
       })),
     };

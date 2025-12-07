@@ -126,7 +126,6 @@ export class HandleSubscriptionWebhookUseCase
     if (!plan) return;
 
     const startDate = new Date((sub.current_period_start || 0) * 1000);
-    const endDate = new Date((sub.current_period_end || 0) * 1000);
     const price = (firstItem?.price?.unit_amount ?? 0) / 100;
     const currency = firstItem?.price?.currency?.toUpperCase?.() || 'INR';
 
@@ -142,7 +141,6 @@ export class HandleSubscriptionWebhookUseCase
       billingCycle: plan.billingCycle,
       status: SubscriptionStatus.ACTIVE,
       startDate,
-      endDate,
       autoRenew: true,
       price,
       currency,
@@ -167,7 +165,6 @@ export class HandleSubscriptionWebhookUseCase
     const priceId = firstItem?.price?.id;
     const plan = priceId ? findPlanByPriceId(priceId) : null;
     const startDate = new Date((sub.current_period_start || 0) * 1000);
-    const endDate = new Date((sub.current_period_end || 0) * 1000);
     const price = (firstItem?.price?.unit_amount ?? 0) / 100;
     const currency =
       firstItem?.price?.currency?.toUpperCase?.() || existing.getCurrency();
@@ -184,7 +181,6 @@ export class HandleSubscriptionWebhookUseCase
       billingCycle: plan?.billingCycle || existing.getBillingCycle(),
       status,
       startDate,
-      endDate,
       autoRenew: true,
       price,
       currency,

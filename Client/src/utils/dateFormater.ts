@@ -1,3 +1,13 @@
+// Format Date Helper
+export const formatDateWithYear = (dateString?: string) => {
+  if (!dateString) return 'N/A';
+  return new Date(dateString).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
 export const formatDate = (date: string | Date) => {
   return new Date(date).toLocaleDateString('en-US', {
     month: 'short',

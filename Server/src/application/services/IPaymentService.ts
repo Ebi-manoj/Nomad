@@ -25,7 +25,6 @@ export interface IPaymentService {
     id: string;
     status: string;
     current_period_start: number;
-    current_period_end: number;
     customer: string | null;
     items: Array<{
       price: { id: string; unit_amount: number | null; currency: string };

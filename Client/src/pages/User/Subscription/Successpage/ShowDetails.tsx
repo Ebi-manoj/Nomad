@@ -1,4 +1,5 @@
 import type { SubscriptionDTO } from '@/types/subscription';
+import { formatDateWithYear } from '@/utils/dateFormater';
 import { plans } from '@/utils/Plan';
 import {
   ArrowRight,
@@ -16,7 +17,7 @@ export interface DetailProps {
 export const ShowDetails = ({ subscription }: DetailProps) => {
   const getPlanDetails = () => {
     if (!subscription) return null;
-    return plans.find(plan => plan.code === subscription.tier) || plans[0]; // Fallback for demo
+    return plans.find(plan => plan.code === subscription.tier);
   };
 
   const navigate = useNavigate();
@@ -25,16 +26,6 @@ export const ShowDetails = ({ subscription }: DetailProps) => {
   };
 
   const planDetails = getPlanDetails();
-
-  // Format Date Helper
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
 
   if (!subscription) return null;
 
@@ -104,7 +95,7 @@ export const ShowDetails = ({ subscription }: DetailProps) => {
                   <span className="text-xs font-medium uppercase">Renews</span>
                 </div>
                 <p className="font-semibold text-gray-900">
-                  {formatDate(subscription.endDate)}
+                  {formatDateWithYear(subscription.endDate)}
                 </p>
               </div>
             </div>

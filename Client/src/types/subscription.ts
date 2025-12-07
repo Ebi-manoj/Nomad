@@ -24,13 +24,21 @@ export interface SubscriptionDTO {
   tier: SubscriptionTierType;
   stripeSubscriptionId?: string;
   stripeCustomerId?: string;
-  startDate: string; 
+  startDate: string;
   endDate: string;
   autoRenew: boolean;
   price: number;
   currency: string;
   cancelledAt?: string | null;
-  createdAt: string; 
+  createdAt: string;
+  features: {
+    maxJoinRequestsPerRide: number | null;
+    maxRideAcceptancesPerMonth: number | null;
+    platformFeePercentage: number;
+    verificationBadge: boolean;
+    priorityInList: boolean;
+    customCostSharing: boolean;
+  };
 }
 
 export interface VerifySubscriptionResponse {

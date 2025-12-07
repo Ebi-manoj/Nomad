@@ -1,3 +1,4 @@
+import { SubscriptionFeatures } from '../entities/Subscription';
 import { BillingCycle, SubscriptionTier } from '../enums/subscription';
 
 export interface SubscriptionResDTO {
@@ -14,6 +15,7 @@ export interface SubscriptionResDTO {
   currency: string;
   cancelledAt: undefined | Date;
   createdAt: Date;
+  features: SubscriptionFeatures;
 }
 
 export interface HandleWebHookReqDTO {

@@ -4,7 +4,6 @@ import {
 } from '../../../../domain/dto/SubscriptionDTO';
 import { Forbidden } from '../../../../domain/errors/CustomError';
 import { SubscriptionSessionNotFound } from '../../../../domain/errors/SubscriptionError';
-import { subscriptionMapper } from '../../../../infra/mappers/subscriptionDomainMapper';
 import { SubscriptionMapper } from '../../../mappers/SubscriptionMapper';
 import { ICheckoutSessionRepository } from '../../../repositories/ICheckoutSessionRepository';
 import { ISubscriptionRepository } from '../../../repositories/ISubscriptionRepository';
@@ -29,8 +28,6 @@ export class VerifySubscriptionUseCase implements IVerifySubscriptionUseCase {
     const subscription = await this.subscriptionRepository.findActiveByUserId(
       data.userId
     );
-    console.log(subscription);
-
     if (subscription) {
       return {
         status: 'completed',

@@ -47,7 +47,6 @@ export class CreateSubscriptionCheckoutSessionUseCase
       idempotencyKey
     );
     if (findExistingSession && findExistingSession.status == 'pending') {
-      console.log('From the session');
       return {
         id: findExistingSession.stripeSessionId,
         url: findExistingSession.url,
