@@ -8,12 +8,18 @@ import { HandleSubscriptionWebhookUseCase } from '../../../../application/usecas
 import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
 import { RedisCheckoutSessionRepository } from '../../../repositories/RedisCheckoutSessionRepository';
 import { VerifySubscriptionUseCase } from '../../../../application/usecases/User/subscription/VerifySubscriptionUseCase';
+import { GetSubscriptionDetailUseCase } from '../../../../application/usecases/User/subscription/GetSubscriptionDetails';
+import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
+import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionUsageRepository';
 
 export function subscriptionComposer(): ISubscriptionController {
   const users = new MongoUserRepository();
   const payments = new StripePaymentService();
   const subscriptions = new SubscriptionRepository();
   const checkoutSessions = new RedisCheckoutSessionRepository();
+  const usageRepository = new SubscriptionUsageRepository();
+
+  const usageService = new SubscriptionUsageService(usageRepository);
 
   const createSession = new CreateSubscriptionCheckoutSessionUseCase(
     users,
@@ -32,9 +38,15 @@ export function subscriptionComposer(): ISubscriptionController {
     subscriptions
   );
 
+  const getSubscriptionUseCase = new GetSubscriptionDetailUseCase(
+    subscriptions,
+    usageService
+  );
+
   return new SubscriptionController(
     createSession,
     handleWebhook,
-    verifySubscriptionUseCase
+    verifySubscriptionUseCase,
+    getSubscriptionUseCase
   );
 }

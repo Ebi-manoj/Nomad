@@ -1,8 +1,5 @@
 import { SubscriptionResDTO } from '../../domain/dto/SubscriptionDTO';
-import {
-  Subscription,
-  SubscriptionFeatures,
-} from '../../domain/entities/Subscription';
+import { Subscription } from '../../domain/entities/Subscription';
 
 export function SubscriptionMapper(sub: Subscription): SubscriptionResDTO {
   return {

@@ -5,6 +5,13 @@ import { subscriptionComposer } from '../../../infra/services/composer/user/subs
 
 const router = express.Router();
 
+router.get('/', authMiddleware, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    subscriptionComposer().getSubscription(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
 router.post(
   '/checkout',
   authMiddleware,

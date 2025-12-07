@@ -1,7 +1,6 @@
 export interface SubscriptionUsageProps {
   id?: string;
   userId: string;
-  subscriptionId: string;
   month: string;
   joinRequestsCount?: number;
   rideAcceptancesCount?: number;
@@ -12,7 +11,6 @@ export interface SubscriptionUsageProps {
 export class SubscriptionUsage {
   private id?: string;
   private userId: string;
-  private subscriptionId: string;
   private month: string;
   private joinRequestsCount: number;
   private rideAcceptancesCount: number;
@@ -22,7 +20,6 @@ export class SubscriptionUsage {
   constructor(props: SubscriptionUsageProps) {
     this.id = props.id;
     this.userId = props.userId;
-    this.subscriptionId = props.subscriptionId;
     this.month = props.month;
     this.joinRequestsCount = props.joinRequestsCount ?? 0;
     this.rideAcceptancesCount = props.rideAcceptancesCount ?? 0;
@@ -36,10 +33,6 @@ export class SubscriptionUsage {
 
   getUserId(): string {
     return this.userId;
-  }
-
-  getSubscriptionId(): string {
-    return this.subscriptionId;
   }
 
   getMonth(): string {

@@ -19,15 +19,11 @@ export class SubscriptionUsageRepository
     userId: string,
     month: string
   ): Promise<SubscriptionUsage | null> {
-    const doc = await SubscriptionUsageModel.findOne({ userId, month });
-    return doc ? subscriptionUsageMapper.toDomain(doc) : null;
+    const doc = await this.model.findOne({ userId, month });
+    return doc ? this.mapper.toDomain(doc) : null;
   }
-
-  async findBySubscriptionAndMonth(
-    subscriptionId: string,
-    month: string
-  ): Promise<SubscriptionUsage | null> {
-    const doc = await SubscriptionUsageModel.findOne({ subscriptionId, month });
-    return doc ? subscriptionUsageMapper.toDomain(doc) : null;
+  async findByUserId(userId: string): Promise<SubscriptionUsage | null> {
+    const doc = await this.model.findOne({ userId });
+    return doc ? this.mapper.toDomain(doc) : null;
   }
 }

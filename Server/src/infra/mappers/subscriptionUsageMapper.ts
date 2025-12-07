@@ -11,7 +11,6 @@ export const subscriptionUsageMapper: IMapper<
     return new SubscriptionUsage({
       id: persistence._id.toString(),
       userId: persistence.userId.toString(),
-      subscriptionId: persistence.subscriptionId.toString(),
       month: persistence.month,
       joinRequestsCount: persistence.joinRequestsCount,
       rideAcceptancesCount: persistence.rideAcceptancesCount,
@@ -20,10 +19,11 @@ export const subscriptionUsageMapper: IMapper<
     });
   },
 
-  toPersistence(domain: SubscriptionUsage): Partial<ISubscriptionUsageDocument> {
+  toPersistence(
+    domain: SubscriptionUsage
+  ): Partial<ISubscriptionUsageDocument> {
     return {
       userId: new Types.ObjectId(domain.getUserId()),
-      subscriptionId: new Types.ObjectId(domain.getSubscriptionId()),
       month: domain.getMonth(),
       joinRequestsCount: domain.getJoinRequestsCount(),
       rideAcceptancesCount: domain.getRideAcceptancesCount(),

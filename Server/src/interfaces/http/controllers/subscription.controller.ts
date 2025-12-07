@@ -11,12 +11,14 @@ import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { ISubscriptionController } from './ISubscriptionController';
 import { IHandleSubscriptionWebhookUseCase } from '../../../application/usecases/User/subscription/IHandleSubscriptionWebhookUseCase';
 import { IVerifySubscriptionUseCase } from '../../../application/usecases/User/subscription/IVerifySubscriptionUseCase';
+import { IGetSubscriptionDetailsUseCase } from '../../../application/usecases/User/subscription/IGetSubscriptionDetails';
 
 export class SubscriptionController implements ISubscriptionController {
   constructor(
     private readonly createCheckoutSessionUseCase: ICreateSubscriptionCheckoutSessionUseCase,
     private readonly handleWebhookUseCase: IHandleSubscriptionWebhookUseCase,
-    private readonly verifySubscriptionUseCase: IVerifySubscriptionUseCase
+    private readonly verifySubscriptionUseCase: IVerifySubscriptionUseCase,
+    private readonly getSubscriptionUseCase: IGetSubscriptionDetailsUseCase
   ) {}
 
   async createCheckoutSession(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -68,6 +70,15 @@ export class SubscriptionController implements ISubscriptionController {
       sessionId,
     });
     const response = ApiDTO.success(result);
+    return new HttpResponse(HttpStatusCode.Ok, response);
+  }
+  async getSubscription(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+
+    const result = await this.getSubscriptionUseCase.execute(userId);
+    const response = ApiDTO.success(result);
+
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 }

@@ -7,8 +7,6 @@ export interface ISubscriptionUsageRepository
     userId: string,
     month: string
   ): Promise<SubscriptionUsage | null>;
-  findBySubscriptionAndMonth(
-    subscriptionId: string,
-    month: string
-  ): Promise<SubscriptionUsage | null>;
+
+  findByUserId(userId: string): Promise<SubscriptionUsage | null>;
 }

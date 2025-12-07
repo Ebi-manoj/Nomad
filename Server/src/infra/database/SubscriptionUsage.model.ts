@@ -3,7 +3,6 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface ISubscriptionUsageDocument extends Document {
   _id: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
-  subscriptionId: mongoose.Types.ObjectId;
   month: string;
   joinRequestsCount: number;
   rideAcceptancesCount: number;
@@ -16,12 +15,6 @@ const SubscriptionUsageSchema = new Schema<ISubscriptionUsageDocument>(
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
-      index: true,
-    },
-    subscriptionId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Subscription',
       required: true,
       index: true,
     },
