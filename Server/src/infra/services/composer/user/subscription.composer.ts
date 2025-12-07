@@ -11,6 +11,7 @@ import { VerifySubscriptionUseCase } from '../../../../application/usecases/User
 import { GetSubscriptionDetailUseCase } from '../../../../application/usecases/User/subscription/GetSubscriptionDetails';
 import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
 import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionUsageRepository';
+import { SubscriptionService } from '../../../../application/services/SubscriptionService';
 
 export function subscriptionComposer(): ISubscriptionController {
   const users = new MongoUserRepository();
@@ -20,6 +21,7 @@ export function subscriptionComposer(): ISubscriptionController {
   const usageRepository = new SubscriptionUsageRepository();
 
   const usageService = new SubscriptionUsageService(usageRepository);
+  const subService = new SubscriptionService(subscriptions);
 
   const createSession = new CreateSubscriptionCheckoutSessionUseCase(
     users,
@@ -40,7 +42,8 @@ export function subscriptionComposer(): ISubscriptionController {
 
   const getSubscriptionUseCase = new GetSubscriptionDetailUseCase(
     subscriptions,
-    usageService
+    usageService,
+    subService
   );
 
   return new SubscriptionController(

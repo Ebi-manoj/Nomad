@@ -1,4 +1,4 @@
-import { SubscriptionFeatures } from '../entities/Subscription';
+import { Subscription, SubscriptionFeatures } from '../entities/Subscription';
 import { SubscriptionUsage } from '../entities/SubscriptionUsage';
 import { BillingCycle, SubscriptionTier } from '../enums/subscription';
 
@@ -36,6 +36,13 @@ export interface VerifySubscriptionResDTO {
 
 export interface GetSubscriptionDetailsResDTO {
   tier: SubscriptionTier;
+  features: SubscriptionFeatures;
   subscription?: SubscriptionResDTO | null;
   subscriptionUsage: SubscriptionUsage;
+}
+
+export interface SubscriptionServiceResDTO {
+  tier: SubscriptionTier;
+  features: SubscriptionFeatures;
+  subscription: Subscription | null;
 }
