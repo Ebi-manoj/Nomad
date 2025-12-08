@@ -17,6 +17,15 @@ export interface CreateSubscriptionCheckoutSessionDTO {
   metadata?: Record<string, string>;
 }
 
+export interface SubscriptionFeatures {
+  maxJoinRequestsPerRide: number | null;
+  maxRideAcceptancesPerMonth: number | null;
+  platformFeePercentage: number;
+  verificationBadge: boolean;
+  priorityInList: boolean;
+  customCostSharing: boolean;
+}
+
 export interface SubscriptionDTO {
   id: string;
   userId: string;
@@ -31,17 +40,27 @@ export interface SubscriptionDTO {
   currency: string;
   cancelledAt?: string | null;
   createdAt: string;
-  features: {
-    maxJoinRequestsPerRide: number | null;
-    maxRideAcceptancesPerMonth: number | null;
-    platformFeePercentage: number;
-    verificationBadge: boolean;
-    priorityInList: boolean;
-    customCostSharing: boolean;
-  };
+  features: SubscriptionFeatures;
 }
 
 export interface VerifySubscriptionResponse {
   status: 'processing' | 'completed';
   subscription: SubscriptionDTO | null;
+}
+
+export interface SubscriptionUsageDTO {
+  id?: string;
+  userId: string;
+  month: string;
+  joinRequestsCount: number;
+  rideAcceptancesCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetSubscriptionDetailsResDTO {
+  tier: SubscriptionTierType;
+  features: SubscriptionFeatures;
+  subscription?: SubscriptionDTO | null;
+  subscriptionUsage: SubscriptionUsageDTO;
 }

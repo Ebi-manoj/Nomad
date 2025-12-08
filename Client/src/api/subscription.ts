@@ -2,11 +2,13 @@ import type { ApiResponse } from '@/types/ApiResponse';
 import type {
   CreateSubscriptionCheckoutSessionDTO,
   VerifySubscriptionResponse,
+  GetSubscriptionDetailsResDTO,
 } from '@/types/subscription';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const SUBSCRIPTION_CHECKOUT_API = '/subscriptions/checkout';
 export const VERIFY_SUBSCRIPTION_API = '/subscriptions/verify';
+export const SUBSCRIPTION_DETAILS_API = '/subscriptions';
 
 export const getSubscriptionCheckout = async (
   data: CreateSubscriptionCheckoutSessionDTO
@@ -24,5 +26,12 @@ export const verifySubscriptionApi = async (sessionId: string) => {
       params: { session_id: sessionId },
     }
   );
+  return res.data.data;
+};
+
+export const getSubscriptionDetailsApi = async () => {
+  const res = await axiosInstance.get<
+    ApiResponse<GetSubscriptionDetailsResDTO>
+  >(SUBSCRIPTION_DETAILS_API);
   return res.data.data;
 };
