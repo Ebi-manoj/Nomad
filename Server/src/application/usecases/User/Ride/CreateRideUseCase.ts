@@ -5,16 +5,22 @@ import { UserNotFound } from '../../../../domain/errors/CustomError';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { ISubscriptionValidator } from '../../../services/ISubscriptionValidator';
 import { ICreateRideUseCase } from './ICreateRideUseCase';
 
 export class CreateRideUseCase implements ICreateRideUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly googleApis: IGoogleApi,
-    private readonly rideRepository: IRideRepository
+    private readonly rideRepository: IRideRepository,
+    private readonly subcriptionValidator: ISubscriptionValidator
   ) {}
 
   async execute(data: CreateRideDTO): Promise<RideLog> {
+    await this.subcriptionValidator.validateCreateRide(
+      data.costSharing,
+      data.userId
+    );
     const user = await this.userRepository.findById(data.userId);
     if (!user) throw new UserNotFound();
     const pickup = {

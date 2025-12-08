@@ -1,4 +1,6 @@
+import { FREE_TIER_COST_SHARING } from '../../domain/enums/Constants';
 import {
+  CustomCostSharingNotEligible,
   JoinRequestLimitExceeded,
   RideAcceptanceLimitExceeded,
 } from '../../domain/errors/SubscriptionError';
@@ -40,5 +42,15 @@ export class SubscriptionValidator
 
     const currentUsage = usage.getRideAcceptancesCount() ?? 0;
     if (currentUsage >= limit) throw new RideAcceptanceLimitExceeded();
+  }
+  async validateCreateRide(costSharing: number, userId: string): Promise<void> {
+    const { features } = await this.getActiveSubscription(userId);
+    if (
+      !features.hasCustomCostSharing() &&
+      costSharing !== FREE_TIER_COST_SHARING
+    )
+      throw new CustomCostSharingNotEligible();
+
+    await this.validateRideAcceptance(userId);
   }
 }

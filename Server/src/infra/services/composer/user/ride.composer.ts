@@ -64,7 +64,8 @@ export function rideComposer(): IRideController {
   const createRideUseCase = new CreateRideUseCase(
     userRepository,
     googleApis,
-    rideRepository
+    rideRepository,
+    subscriptionValidator
   );
 
   const getPendingRequestUseCase = new GetPendingRequestUseCase(

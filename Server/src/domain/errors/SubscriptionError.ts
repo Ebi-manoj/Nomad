@@ -30,3 +30,8 @@ export class RideAcceptanceLimitExceeded extends CustomError {
     super(HttpStatus.NOT_FOUND, message);
   }
 }
+export class CustomCostSharingNotEligible extends CustomError {
+  constructor(message = 'Custom cost sharing not available for you') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
