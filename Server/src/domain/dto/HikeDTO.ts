@@ -2,6 +2,7 @@ import { HikeStatus } from '../enums/Hike';
 import { PaymentStatus } from '../enums/payment';
 import { JoinRequestStatus } from '../enums/Ride';
 import { ReviewResponseDTO } from './Reviews';
+import { SubscriptionTier } from '../enums/subscription';
 
 export interface CreateHikeDTO {
   userId: string;
@@ -61,6 +62,8 @@ export interface JoinRequestResponseDTO {
     fullName: string;
     profilePicture?: string;
     rating?: number;
+    isVerified: boolean;
+    subscriptionTier: SubscriptionTier;
   };
 }
 
@@ -86,6 +89,7 @@ export interface GetHikeDetailsResponseDTO {
     verified: boolean;
     rating: number;
     profilePic: string;
+    subscriptionTier: SubscriptionTier;
   };
   bookingDetails: null | {
     bookingId: string;

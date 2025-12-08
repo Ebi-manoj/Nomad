@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { getRideBookingOTP } from '@/api/rideBooking';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { UserAvatar } from '@/components/ProfilePic';
 
 export type RideOTPState = {
   otp: string | null;
@@ -64,9 +65,12 @@ export const BookingSection = ({
           </h2>
 
           <div className="flex items-center gap-4 mb-6 pb-6 border-b">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-              {rider.name.charAt(0)}
-            </div>
+            <UserAvatar
+              subscriptionTier={rider.subscriptionTier}
+              fullName={rider.name}
+              showBadge
+              size="lg"
+            />
             <div className="flex-1">
               <h3 className="text-xl font-semibold">{rider.name}</h3>
               <div className="flex items-center gap-2 text-sm text-gray-600">

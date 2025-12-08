@@ -16,6 +16,7 @@ import { ILocationRepository } from '../../../repositories/ILocationRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { ISubscriptionService } from '../../../services/ISubscriptionService';
 import { IGetRideBookingUseCase } from './IGetRideBookingUseCase';
 
 export class GetRideBookingUseCase implements IGetRideBookingUseCase {
@@ -25,7 +26,8 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
     private readonly hikeRepository: IHikeRepository,
     private readonly userRepository: IUserRepository,
     private readonly googleApi: IGoogleApi,
-    private readonly locationRepository: ILocationRepository
+    private readonly locationRepository: ILocationRepository,
+    private readonly subscriptionService: ISubscriptionService
   ) {}
 
   async execute(data: RideBookingRequestDTO): Promise<RideBookingResponseDTO> {
@@ -64,12 +66,16 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
       hikerPickupCoord,
       hikerDestinationCoord
     );
+    const sub = await this.subscriptionService.getActiveSubscription(
+      rider.getId()!
+    );
 
     return {
       rideBooking: RideBookingMapper(booking),
       rider: {
         name: rider.getFullName(),
         rating: 4.5,
+        subscriptionTier: sub.tier,
         vehicleNumber: ride.getVehicleNumber(),
         vehicleModel: ride.getVehicleModel(),
         currentLocation: riderLocationCoord,

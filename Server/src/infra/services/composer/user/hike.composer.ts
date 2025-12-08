@@ -24,6 +24,7 @@ import { SubscriptionValidator } from '../../../../application/services/Subscrip
 import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
 import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionUsageRepository';
 import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
+import { SubscriptionService } from '../../../../application/services/SubscriptionService';
 
 export function hikeComposer(): IHikeController {
   const userRepository = new MongoUserRepository();
@@ -39,20 +40,23 @@ export function hikeComposer(): IHikeController {
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
   const reviewRepository = new ReviewRepository();
-  const rideMatchService = new RideMatchService(
-    userRepository,
-    durationCalculator,
-    locationRepository
-  );
+  
   const subscriptionRepo = new SubscriptionRepository();
   const subscriptionUsage = new SubscriptionUsageRepository();
   const geoService = new TurfGeoService();
-
+  const subscriptionService=new SubscriptionService(subscriptionRepo)
   const usageService = new SubscriptionUsageService(subscriptionUsage);
   const subscriptionValidator = new SubscriptionValidator(
     subscriptionRepo,
     joinRequestRepository,
     usageService
+  );
+
+  const rideMatchService = new RideMatchService(
+    userRepository,
+    durationCalculator,
+    locationRepository,
+    subscriptionService
   );
 
   const createHikeUseCase = new CreateHikeUseCase(
@@ -85,7 +89,8 @@ export function hikeComposer(): IHikeController {
     bookingRepository,
     paymentRepository,
     userRepository,
-    reviewRepository
+    reviewRepository,
+    subscriptionService
   );
 
   const getAllHikesUseCase = new GetAllHikesUseCase(hikeRepository);

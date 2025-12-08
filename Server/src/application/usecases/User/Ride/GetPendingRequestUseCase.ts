@@ -3,13 +3,15 @@ import { joinRequestMapper } from '../../../mappers/JoinRequestMapper';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IJoinRequestRepository } from '../../../repositories/IJoinRequestsRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { ISubscriptionService } from '../../../services/ISubscriptionService';
 import { IGetPendingRequestUseCase } from './IGetPendingRequestUseCase';
 
 export class GetPendingRequestUseCase implements IGetPendingRequestUseCase {
   constructor(
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository
+    private readonly userRepository: IUserRepository,
+    private readonly subscriptionService: ISubscriptionService
   ) {}
 
   async execute(rideId: string): Promise<JoinRequestResponseDTO[]> {
@@ -23,7 +25,10 @@ export class GetPendingRequestUseCase implements IGetPendingRequestUseCase {
         const user =
           hike && (await this.userRepository.findById(hike?.getUserId()));
         if (user && hike) {
-          return joinRequestMapper(jr, hike, user);
+          const sub = await this.subscriptionService.getActiveSubscription(
+            hike.getUserId()
+          );
+          return joinRequestMapper(jr, hike, user, sub.tier);
         }
         return undefined;
       })

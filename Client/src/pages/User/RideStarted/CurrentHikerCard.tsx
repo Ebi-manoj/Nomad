@@ -9,9 +9,10 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
-import { MdOutlineAirlineSeatReclineExtra } from 'react-icons/md';
+import { MdOutlineAirlineSeatReclineExtra, MdVerified } from 'react-icons/md';
 import { useRideRoute } from '@/context/RiderHikesRoutesContext';
 import {} from 'lucide-react';
+import { UserAvatar } from '@/components/ProfilePic';
 
 interface CurrentHikerCardProps {
   hiker: GetHikersMatchedResponseDTO;
@@ -55,26 +56,11 @@ export function CurrentHikerCard({
           {/* Profile Picture */}
           {/* Profile Picture */}
           <div className="relative w-14 h-14">
-            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden ring-2 ring-gray-200 shadow-md">
-              {hiker.user.profilePic ? (
-                <img
-                  src={hiker.user.profilePic}
-                  alt={hiker.user.fullName}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="text-xl font-bold text-gray-600">
-                  {hiker.user.fullName.charAt(0).toUpperCase()}
-                </span>
-              )}
-            </div>
-
-            {/* Verification Badge — FIXED */}
-            {hiker.user.isVerified && (
-              <div className="absolute bottom-0 right-0 translate-x-1 translate-y-1 bg-blue-500 rounded-full p-1 ring-2 ring-white shadow-md">
-                <CheckCircle className="w-3 h-3 text-white" />
-              </div>
-            )}
+            <UserAvatar
+              subscriptionTier={hiker.user.subscriptionTier}
+              showBadge
+              fullName={hiker.user.fullName}
+            />
           </div>
 
           {/* Content */}
@@ -82,16 +68,19 @@ export function CurrentHikerCard({
             {/* Header */}
             <div className="flex items-start justify-between mb-2">
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-1">
                   <h3 className="font-semibold text-gray-900 text-sm truncate">
                     {hiker.user.fullName}
                   </h3>
-                  <div className="flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                    <span className="text-xs font-medium text-gray-700">
-                      {hiker.user.rating.toFixed(1)}
-                    </span>
-                  </div>
+                  {hiker.user.isVerified && (
+                    <MdVerified className="text-blue-400" />
+                  )}
+                </div>
+                <div className="flex items-center gap-1 mb-2">
+                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                  <span className="text-xs font-medium text-gray-700">
+                    {hiker.user.rating.toFixed(1)}
+                  </span>
                 </div>
                 <div
                   className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(
@@ -132,7 +121,7 @@ export function CurrentHikerCard({
               </div>
               <div className="text-center p-1.5 bg-green-50 rounded-lg">
                 <p className="text-xs font-semibold text-green-700">
-                  ₹{hiker.hikeDetails.costShared}
+                  ₹{hiker.hikeDetails.costShared.toFixed(2)}
                 </p>
                 <p className="text-xs text-green-600">Cost</p>
               </div>

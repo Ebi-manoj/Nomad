@@ -11,6 +11,7 @@ import { IReviewRepository } from '../../../repositories/IReviewRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { ISubscriptionService } from '../../../services/ISubscriptionService';
 import { IGetRideDetailsUseCase } from './IGetRideDetailsUseCase';
 
 export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
@@ -19,7 +20,8 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
     private readonly bookingRepository: IRideBookingRepository,
     private readonly userRepository: IUserRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly reviewRepository: IReviewRepository
+    private readonly reviewRepository: IReviewRepository,
+    private readonly subscriptionService: ISubscriptionService
   ) {}
 
   async execute(data: GetRideDetailsReqDTO): Promise<GetRideDetailsResDTO> {
@@ -44,7 +46,9 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
           ),
         ]);
         if (!hiker || !hike) return null;
-
+        const sub = await this.subscriptionService.getActiveSubscription(
+          hiker.getId()!
+        );
         const response: HikerMatchedDTO = {
           bookingId: b.getId()!,
           hikeId: b.getHikeId(),
@@ -65,6 +69,7 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
             profilePic: '',
             rating: 4.5,
             verified: hiker.getIsVerifed(),
+            subscriptionTier: sub.tier,
           },
           review: review ? ReviewMapper(review) : null,
         };

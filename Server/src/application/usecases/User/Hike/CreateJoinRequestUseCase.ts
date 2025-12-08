@@ -69,7 +69,10 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     const saved = await this.joinRequestRepository.create(joinRequest);
     const user = await this.userRepository.findById(hike.getUserId());
     if (!user) throw new UserNotFound();
-    const response = joinRequestMapper(saved, hike, user);
+    const sub = await this.subscriptionValidator.getActiveSubscription(
+      hike.getUserId()
+    );
+    const response = joinRequestMapper(saved, hike, user, sub.tier);
 
     await this.realtimeGateway.emitToRoom(
       'rider',

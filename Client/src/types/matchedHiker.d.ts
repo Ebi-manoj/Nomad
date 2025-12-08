@@ -1,9 +1,12 @@
+import type { SubscriptionTierType } from './subscription';
+
 export interface GetHikersMatchedResponseDTO {
   user: {
     fullName: string;
     isVerified: boolean;
     rating: number;
     profilePic: string;
+    subscriptionTier: SubscriptionTierType;
   };
   hikeDetails: {
     hikeId: string;

@@ -9,6 +9,7 @@ import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { ISubscriptionService } from '../../../services/ISubscriptionService';
 import { IGetHikerMatchedUseCase } from './IGetHikersMatched';
 
 export class GetHikersMatchedUseCase implements IGetHikerMatchedUseCase {
@@ -16,7 +17,8 @@ export class GetHikersMatchedUseCase implements IGetHikerMatchedUseCase {
     private readonly rideRepository: IRideRepository,
     private readonly ridebookingRepository: IRideBookingRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository
+    private readonly userRepository: IUserRepository,
+    private readonly subscriptionService: ISubscriptionService
   ) {}
 
   async execute(
@@ -39,7 +41,10 @@ export class GetHikersMatchedUseCase implements IGetHikerMatchedUseCase {
         this.userRepository.findById(booking.getHikerId()),
       ]);
       if (hike && user) {
-        const dto = hikersMatchedMapper(user, hike, booking);
+        const sub = await this.subscriptionService.getActiveSubscription(
+          user.getId()!
+        );
+        const dto = hikersMatchedMapper(user, hike, booking, sub.tier);
         response.push(dto);
       }
     }

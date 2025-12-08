@@ -1,5 +1,6 @@
 import type { HikeResponseDTO } from '@/store/features/user/hike/hike';
 import type { JoinRequestStatus } from '@/utils/constants';
+import type { SubscriptionTierType } from './subscription';
 
 export interface CreateJoinRequestDTO {
   rideId: string;
@@ -31,6 +32,7 @@ export interface RideMatchResponseDTO {
     fullName: string;
     vehicleType: string;
     vehicleModal: string;
+    subscriptionTier: SubscriptionTierType;
   };
   requestStatus: null | JoinRequestStatus;
   paymentId: null | string;
@@ -53,6 +55,7 @@ export interface GetHikeDetailsResponseDTO {
     verified: boolean;
     rating: number;
     profilePic: string;
+    subscriptionTier: SubscriptionTierType;
   };
   bookingDetails: null | {
     bookingId: string;

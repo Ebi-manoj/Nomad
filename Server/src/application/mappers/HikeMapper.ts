@@ -6,6 +6,7 @@ import { RideBooking } from '../../domain/entities/RideBooking';
 import { User } from '../../domain/entities/User';
 import { Review } from '../../domain/entities/Reviews';
 import { ReviewMapper } from './ReviewMapper';
+import { SubscriptionTier } from '../../domain/enums/subscription';
 
 export function hikeMapper(hike: HikeLog): HikeResponseDTO {
   return {
@@ -32,7 +33,8 @@ export function HikeDetailsMapper(
   payment: Payment | null,
   booking: RideBooking | null,
   user: User | null,
-  review: Review | null
+  review: Review | null,
+  subscriptionTier?: SubscriptionTier
 ): GetHikeDetailsResponseDTO {
   return {
     hikeId: hike.getHikeId()!,
@@ -53,6 +55,7 @@ export function HikeDetailsMapper(
           verified: user.getIsVerifed(),
           rating: 4.6,
           profilePic: '',
+          subscriptionTier: subscriptionTier as SubscriptionTier,
         },
     bookingDetails: !booking
       ? null

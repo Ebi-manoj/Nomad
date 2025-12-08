@@ -5,12 +5,14 @@ import { ILocationRepository } from '../repositories/ILocationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
 import { IDurationCalculator } from './IDurationCalculator';
 import { IRideMatchService } from './IRideMatchService';
+import { ISubscriptionService } from './ISubscriptionService';
 
 export class RideMatchService implements IRideMatchService {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly durationCalculator: IDurationCalculator,
-    private readonly locationRepository: ILocationRepository
+    private readonly locationRepository: ILocationRepository,
+    private readonly susbcriptionService: ISubscriptionService
   ) {}
 
   async evaluate(
@@ -112,6 +114,9 @@ export class RideMatchService implements IRideMatchService {
       this.durationCalculator.durationBetweenTwoPoints(routeDistance);
     // Get the userDetail
     const user = await this.userRepository.findById(ride.getRiderId());
+    const { tier } = await this.susbcriptionService.getActiveSubscription(
+      ride.getRiderId()
+    );
     if (!user) return null;
 
     // Return ride match summary
@@ -133,6 +138,7 @@ export class RideMatchService implements IRideMatchService {
         fullName: user.getFullName(),
         vehicleModal: ride.getVehicleModel(),
         vehicleType: ride.getVehicleType(),
+        subscriptionTier: tier,
       },
     };
   }

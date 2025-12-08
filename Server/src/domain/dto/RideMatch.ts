@@ -1,4 +1,5 @@
 import { JoinRequestStatus } from '../enums/Ride';
+import { SubscriptionTier } from '../enums/subscription';
 
 export interface RideMatchDTO {
   pickup: GeoJSON.Point;
@@ -22,6 +23,7 @@ export interface RideMatchResponseDTO {
     fullName: string;
     vehicleType: string;
     vehicleModal: string;
+    subscriptionTier: SubscriptionTier;
   };
   requestStatus: null | JoinRequestStatus;
   paymentId: string | null;

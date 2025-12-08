@@ -10,6 +10,7 @@ import { userMapper } from '../../mappers/UserResponse.mapper';
 import { IAdminRideDetailsUseCase } from './IAdminRideDetailsUseCase';
 import { IReviewRepository } from '../../repositories/IReviewRepository';
 import { ReviewMapper } from '../../mappers/ReviewMapper';
+import { ISubscriptionService } from '../../services/ISubscriptionService';
 
 export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
   constructor(
@@ -17,7 +18,8 @@ export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
     private readonly bookingRepository: IRideBookingRepository,
     private readonly userRepository: IUserRepository,
     private readonly hikeRepository: IHikeRepository,
-    private readonly reviewRepository:IReviewRepository
+    private readonly reviewRepository: IReviewRepository,
+    private readonly subscriptionService: ISubscriptionService
   ) {}
 
   async execute(rideId: string): Promise<AdminGetRideDetailsResDTO> {
@@ -34,12 +36,19 @@ export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
 
     const hikersMatched = await Promise.all(
       bookings.map(async b => {
-        const [hiker,hike,review]=await Promise.all([
+        const [hiker, hike, review] = await Promise.all([
           this.userRepository.findById(b.getHikerId()),
           this.hikeRepository.findById(b.getHikeId()),
-          this.reviewRepository.findByReviewerAndBooking(b.getRiderId(),b.getId()!)
-        ])
+          this.reviewRepository.findByReviewerAndBooking(
+            b.getRiderId(),
+            b.getId()!
+          ),
+        ]);
         if (!hiker || !hike) return null;
+
+        const sub = await this.subscriptionService.getActiveSubscription(
+          hiker.getId()!
+        );
 
         const matched: HikerMatchedDTO = {
           bookingId: b.getId()!,
@@ -61,8 +70,9 @@ export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
             profilePic: '',
             rating: 4.5,
             verified: hiker.getIsVerifed(),
+            subscriptionTier: sub.tier,
           },
-          review:review?ReviewMapper(review):null
+          review: review ? ReviewMapper(review) : null,
         };
 
         return matched;

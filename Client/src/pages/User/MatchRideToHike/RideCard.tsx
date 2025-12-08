@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserAvatar } from '@/components/ProfilePic';
 
 export function RideCard({
   ride,
@@ -71,9 +72,11 @@ export function RideCard({
       {/* Rider Info */}
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
-            {ride.user.fullName.charAt(0)}
-          </div>
+          <UserAvatar
+            subscriptionTier={ride.user.subscriptionTier}
+            showBadge
+            fullName={ride.user.fullName}
+          />
           <div>
             <h3 className="text-sm font-bold text-slate-900">
               {ride.user.fullName}

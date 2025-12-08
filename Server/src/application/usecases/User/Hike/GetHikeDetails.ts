@@ -10,6 +10,7 @@ import { IPaymentRepository } from '../../../repositories/IPaymentRepository';
 import { IReviewRepository } from '../../../repositories/IReviewRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IUserRepository } from '../../../repositories/IUserRepository';
+import { ISubscriptionService } from '../../../services/ISubscriptionService';
 import { IGetHikeDetailsUseCase } from './IGetHikeDetails';
 
 export class GetHikeDetailsUseCase implements IGetHikeDetailsUseCase {
@@ -18,7 +19,8 @@ export class GetHikeDetailsUseCase implements IGetHikeDetailsUseCase {
     private readonly bookingRepository: IRideBookingRepository,
     private readonly paymentRepository: IPaymentRepository,
     private readonly userRepository: IUserRepository,
-    private readonly reviewRepository: IReviewRepository
+    private readonly reviewRepository: IReviewRepository,
+    private readonly subscriptionService: ISubscriptionService
   ) {}
   async execute(
     data: GetHikeDetailsReqDTO
@@ -40,9 +42,12 @@ export class GetHikeDetailsUseCase implements IGetHikeDetailsUseCase {
     }
 
     let rider = null;
+    let subscriptionTier = undefined;
     const riderId = hike.getRiderId();
     if (riderId) {
       rider = await this.userRepository.findById(riderId);
+      const sub = await this.subscriptionService.getActiveSubscription(riderId);
+      subscriptionTier = sub.tier;
     }
 
     let review = null;
@@ -53,6 +58,13 @@ export class GetHikeDetailsUseCase implements IGetHikeDetailsUseCase {
       );
     }
 
-    return HikeDetailsMapper(hike, payment, booking, rider, review);
+    return HikeDetailsMapper(
+      hike,
+      payment,
+      booking,
+      rider,
+      review,
+      subscriptionTier
+    );
   }
 }

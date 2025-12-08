@@ -2,11 +2,13 @@ import { JoinRequestResponseDTO } from '../../domain/dto/HikeDTO';
 import { HikeLog } from '../../domain/entities/Hike';
 import { JoinRequest } from '../../domain/entities/JoinRequests';
 import { User } from '../../domain/entities/User';
+import { SubscriptionTier } from '../../domain/enums/subscription';
 
 export function joinRequestMapper(
   joinRequest: JoinRequest,
   hike: HikeLog,
-  user: User
+  user: User,
+  tier: SubscriptionTier
 ): JoinRequestResponseDTO {
   return {
     id: joinRequest.getId()!,
@@ -24,8 +26,10 @@ export function joinRequestMapper(
     hiker: {
       id: user.getId()!,
       fullName: user.getFullName(),
+      isVerified: user.getIsVerifed(),
       profilePicture: '',
       rating: 4.8,
+      subscriptionTier: tier,
     },
   };
 }

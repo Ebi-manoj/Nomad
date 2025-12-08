@@ -14,15 +14,21 @@ import { createRide } from '@/store/features/user/ride/ride.thunk';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { FeatureAccessDenied } from '@/components/RidePageShield';
+import { useEffect } from 'react';
+import { FaLock } from 'react-icons/fa6';
 
 export const Ride = () => {
   const { user } = useSelector((state: RootState) => state.auth);
+  const tier = useSelector((state: RootState) => state.subscription.data?.tier);
+  const canCustomizeCost = tier === 'RIDER_PRO' || tier === 'PREMIUM_PLUS';
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<RideFormData>({
     resolver: zodResolver(rideSchema),
@@ -40,6 +46,11 @@ export const Ride = () => {
 
   const vehicleType = watch('vehicleType');
 
+  useEffect(() => {
+    if (!canCustomizeCost) {
+      setValue('costPerKm', 5);
+    }
+  }, [canCustomizeCost, setValue]);
   const onSubmit = async (data: RideFormData) => {
     console.log('Ride form submitted:', data);
     const pickup = {
@@ -248,20 +259,46 @@ export const Ride = () => {
           control={control}
           render={({ field }) => (
             <div className="mt-2">
-              <label className="text-sm font-medium text-gray-800">
-                Cost sharing{' '}
-                <span className="text-xs text-gray-500">(max 15)</span>
+              <label className="text-sm font-medium text-gray-800 flex justify-between">
+                <span>Cost sharing</span>
+                {canCustomizeCost ? (
+                  <span className="text-xs text-gray-500">(max 15)</span>
+                ) : (
+                  <span className="flex items-center gap-1 text-xs text-amber-600 font-normal">
+                    <FaLock size={10} /> Fixed rate
+                  </span>
+                )}
               </label>
-              <input
-                type="number"
-                value={field.value}
-                onChange={e => field.onChange(Number(e.target.value))}
-                className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-              />
-              {errors.costPerKm && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.costPerKm.message}
+
+              <div className="relative">
+                <input
+                  type="number"
+                  disabled={!canCustomizeCost}
+                  value={field.value}
+                  onChange={e => field.onChange(Number(e.target.value))}
+                  className={`w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black ${
+                    !canCustomizeCost
+                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed border-gray-200'
+                      : 'bg-white border-gray-300'
+                  }`}
+                />
+              </div>
+
+              {/* Helper text / Error messages */}
+              {!canCustomizeCost ? (
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  Custom sharing is only available for{' '}
+                  <span className="font-semibold text-amber-300">
+                    Pro members
+                  </span>
+                  .
                 </p>
+              ) : (
+                errors.costPerKm && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.costPerKm.message}
+                  </p>
+                )
               )}
             </div>
           )}

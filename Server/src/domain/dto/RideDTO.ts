@@ -1,5 +1,6 @@
 import { RideStatus, VehicleType } from '../enums/Ride';
 import { ReviewResponseDTO } from './Reviews';
+import { SubscriptionTier } from '../enums/subscription';
 
 export interface CreateRideDTO {
   userId: string;
@@ -41,6 +42,7 @@ export interface GetHikersMatchedResponseDTO {
   user: {
     fullName: string;
     isVerified: boolean;
+    subscriptionTier: SubscriptionTier;
     rating: number;
     profilePic: string;
   };
@@ -91,6 +93,7 @@ export interface HikerMatchedDTO {
     profilePic: string;
     rating: number;
     verified: boolean;
+    subscriptionTier: SubscriptionTier;
   };
   review: null | ReviewResponseDTO;
 }

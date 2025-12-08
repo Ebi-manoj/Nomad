@@ -7,12 +7,16 @@ import { ReviewRepository } from '../../../repositories/ReviewRepository';
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
 import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
+import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
+import { SubscriptionService } from '../../../../application/services/SubscriptionService';
 
 export function rideAdminComposer(): IAdminRideController {
   const rideRepository = new RideRepository();
   const userRepository = new MongoUserRepository();
   const hikeRepository = new HikeRepository();
   const bookingRepository = new RideBookingRepository();
+  const subscriptionRepository = new SubscriptionRepository();
+  const subscriptionService = new SubscriptionService(subscriptionRepository);
   const getAllRideUseCase = new GetAllRideUseCase(
     rideRepository,
     userRepository
@@ -24,7 +28,8 @@ export function rideAdminComposer(): IAdminRideController {
     bookingRepository,
     userRepository,
     hikeRepository,
-    reveiewRepository
+    reveiewRepository,
+    subscriptionService
   );
 
   return new AdminRideController(getAllRideUseCase, getRideDetailsUseCase);

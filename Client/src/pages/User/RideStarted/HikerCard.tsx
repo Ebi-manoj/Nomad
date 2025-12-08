@@ -1,9 +1,19 @@
-import { Check, X, MapPin, MapPinOff, Route, Clock } from 'lucide-react';
+import {
+  Check,
+  X,
+  MapPin,
+  MapPinOff,
+  Route,
+  Clock,
+  CheckIcon,
+  CheckCircle,
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { RideRequestDTO } from '@/types/ride';
-import { MdOutlineAirlineSeatReclineExtra } from 'react-icons/md';
+import { MdOutlineAirlineSeatReclineExtra, MdVerified } from 'react-icons/md';
 import { useRideRoute } from '@/context/RiderHikesRoutesContext';
+import { UserAvatar } from '@/components/ProfilePic';
 
 interface HikerCardProps {
   request: RideRequestDTO;
@@ -45,27 +55,26 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
       <CardContent className="p-3.5">
         <div className="flex gap-3">
           {/* Profile Picture */}
-          <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center flex-shrink-0 overflow-hidden ring-2 ring-gray-200 dark:ring-gray-800 ring-offset-2 ring-offset-white dark:ring-offset-gray-950">
-            {hiker.profilePicture ? (
-              <img
-                src={hiker.profilePicture}
-                alt={hiker.fullName}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-gray-400 dark:text-gray-600 text-lg">
-                👤
-              </span>
-            )}
-          </div>
+          <UserAvatar
+            subscriptionTier={request.hiker.subscriptionTier}
+            fullName={request.hiker.fullName}
+            showBadge
+          />
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
-              <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">
-                {hiker.fullName}
-              </h4>
+              <div className="flex gap-1 items-center">
+                <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">
+                  {hiker.fullName}
+                </h4>
+                {hiker.isVerified && (
+                  <span>
+                    <MdVerified className="text-blue-400" />
+                  </span>
+                )}
+              </div>
               {hiker.rating && (
                 <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-950 dark:to-amber-950 text-yellow-700 dark:text-yellow-400 flex items-center gap-0.5 border border-yellow-200 dark:border-yellow-900">
                   ⭐ {hiker.rating.toFixed(1)}

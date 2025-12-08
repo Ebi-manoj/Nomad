@@ -28,6 +28,7 @@ import { SubscriptionRepository } from '../../../repositories/SubscriptionReposi
 import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionUsageRepository';
 import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
 import { SubscriptionValidator } from '../../../../application/services/SubscriptionValidator';
+import { SubscriptionService } from '../../../../application/services/SubscriptionService';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -60,6 +61,7 @@ export function rideComposer(): IRideController {
     joinRequestRepository,
     usageService
   );
+  const subscriptionService = new SubscriptionService(subscriptionRepository);
 
   const createRideUseCase = new CreateRideUseCase(
     userRepository,
@@ -71,7 +73,8 @@ export function rideComposer(): IRideController {
   const getPendingRequestUseCase = new GetPendingRequestUseCase(
     joinRequestRepository,
     hikeRepository,
-    userRepository
+    userRepository,
+    subscriptionService
   );
 
   const acceptJoinRequestUseCase = new AcceptJoinRequestUseCase(
@@ -94,7 +97,8 @@ export function rideComposer(): IRideController {
     rideRepository,
     ridebookingRepository,
     hikeRepository,
-    userRepository
+    userRepository,
+    subscriptionService
   );
 
   const endRideUseCase = new EndRideUseCase(
@@ -113,7 +117,8 @@ export function rideComposer(): IRideController {
     ridebookingRepository,
     userRepository,
     hikeRepository,
-    reviewRepository
+    reviewRepository,
+    subscriptionService
   );
 
   const getAllRidesUseCase = new GetAllRidesUseCase(rideRepository);

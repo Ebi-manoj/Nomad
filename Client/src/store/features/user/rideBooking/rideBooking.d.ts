@@ -1,3 +1,5 @@
+import type { SubscriptionTierType } from '@/types/subscription';
+
 export type RideBookingStatus =
   | 'CONFIRMED'
   | 'CANCELLED'
@@ -26,6 +28,7 @@ export interface RideBookingResponseDTO {
     vehicleNumber: string;
     vehicleModel: string;
     currentLocation: { lat: number; lng: number };
+    subscriptionTier: SubscriptionTierType;
   };
   rideDetails: {
     pickupAddress: string;

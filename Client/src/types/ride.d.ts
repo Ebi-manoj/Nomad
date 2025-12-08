@@ -1,5 +1,6 @@
 import type { JoinRequestStatus } from '@/utils/constants';
 import type { ReviewResponseDTO } from './review';
+import type { SubscriptionTierType } from './subscription';
 
 export interface RideRequestDTO {
   id: string;
@@ -18,7 +19,9 @@ export interface RideRequestDTO {
     id: string;
     fullName: string;
     profilePicture?: string;
+    isVerified: boolean;
     rating?: number;
+    subscriptionTier: SubscriptionTierType;
   };
 }
 
@@ -60,6 +63,7 @@ export interface HikerMatchedDTO {
     profilePic: string;
     rating: number;
     verified: boolean;
+    subscriptionTier: SubscriptionTierType;
   };
   review: ReviewResponseDTO | null;
 }
