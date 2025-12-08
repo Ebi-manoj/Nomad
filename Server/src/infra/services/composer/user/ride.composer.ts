@@ -24,6 +24,10 @@ import { WalletTransactionRepository } from '../../../repositories/WalletTransac
 import { MongoTransactionManager } from '../../../database/MongoTransactionManger';
 import { FindOrCreateWalletService } from '../../../../application/services/FindOrCreateWalletService';
 import { ReviewRepository } from '../../../repositories/ReviewRepository';
+import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
+import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionUsageRepository';
+import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
+import { SubscriptionValidator } from '../../../../application/services/SubscriptionValidator';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -41,12 +45,22 @@ export function rideComposer(): IRideController {
   const walletTransactionRepository = new WalletTransactionRepository();
   const walletService = new FindOrCreateWalletService(walletRepository);
   const reviewRepository = new ReviewRepository();
+  const subscriptionRepository = new SubscriptionRepository();
+  const subscriptionUsage = new SubscriptionUsageRepository();
   const transactionManager = new MongoTransactionManager([
     rideRepository,
     ridebookingRepository,
     walletRepository,
     walletTransactionRepository,
   ]);
+
+  const usageService = new SubscriptionUsageService(subscriptionUsage);
+  const subscriptionValidator = new SubscriptionValidator(
+    subscriptionRepository,
+    joinRequestRepository,
+    usageService
+  );
+
   const createRideUseCase = new CreateRideUseCase(
     userRepository,
     googleApis,
@@ -65,7 +79,8 @@ export function rideComposer(): IRideController {
     joinRequestRepository,
     paymentRepository,
     fareCalculator,
-    realtimeGateway
+    realtimeGateway,
+    subscriptionValidator
   );
 
   const declienJoinRequestUseCase = new DeclineJoinRequestUseCase(

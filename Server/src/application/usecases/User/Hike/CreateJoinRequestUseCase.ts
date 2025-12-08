@@ -19,6 +19,7 @@ import { UserNotFound } from '../../../../domain/errors/CustomError';
 import { JoinRequestStatus } from '../../../../domain/enums/Ride';
 import { ICreateJoinRequestUseCase } from './ICreateJoinRequestUseCase';
 import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
+import { ISubscriptionValidator } from '../../../services/ISubscriptionValidator';
 
 export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
   constructor(
@@ -27,7 +28,8 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     private readonly hikeRepository: IHikeRepository,
     private readonly fareCalculator: FareCalculator,
     private readonly userRepository: IUserRepository,
-    private readonly realtimeGateway: IRealtimeGateway
+    private readonly realtimeGateway: IRealtimeGateway,
+    private readonly subscriptionValidator: ISubscriptionValidator
   ) {}
 
   async execute(data: CreateJoinRequestDTO): Promise<JoinRequestResponseDTO> {
@@ -35,6 +37,11 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     const hike = await this.hikeRepository.findById(data.hikeId);
     if (!ride) throw new RideNotFound();
     if (!hike) throw new HikeNotFound();
+
+    await this.subscriptionValidator.validateJoinRequest(
+      data.hikeId,
+      hike.getUserId()
+    );
 
     //Seats availability
     if (hike.getSeatsRequested() > ride.getSeatsAvailable())

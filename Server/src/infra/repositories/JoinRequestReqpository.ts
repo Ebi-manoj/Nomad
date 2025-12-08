@@ -32,4 +32,8 @@ export class JoinRequestRepository
 
     return requests.map(r => this.mapper.toDomain(r));
   }
+
+  async findRequestCountOfHike(hikeId: string): Promise<number> {
+    return await this.model.countDocuments({ hikeId });
+  }
 }

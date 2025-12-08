@@ -20,6 +20,10 @@ import { GetHikeDetailsUseCase } from '../../../../application/usecases/User/Hik
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
 import { GetAllHikesUseCase } from '../../../../application/usecases/User/Hike/GetAllHikesUseCase';
 import { ReviewRepository } from '../../../repositories/ReviewRepository';
+import { SubscriptionValidator } from '../../../../application/services/SubscriptionValidator';
+import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
+import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionUsageRepository';
+import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
 
 export function hikeComposer(): IHikeController {
   const userRepository = new MongoUserRepository();
@@ -40,7 +44,16 @@ export function hikeComposer(): IHikeController {
     durationCalculator,
     locationRepository
   );
+  const subscriptionRepo = new SubscriptionRepository();
+  const subscriptionUsage = new SubscriptionUsageRepository();
   const geoService = new TurfGeoService();
+
+  const usageService = new SubscriptionUsageService(subscriptionUsage);
+  const subscriptionValidator = new SubscriptionValidator(
+    subscriptionRepo,
+    joinRequestRepository,
+    usageService
+  );
 
   const createHikeUseCase = new CreateHikeUseCase(
     hikeRepository,
@@ -63,7 +76,8 @@ export function hikeComposer(): IHikeController {
     hikeRepository,
     fareCalculator,
     userRepository,
-    realtimeGateway
+    realtimeGateway,
+    subscriptionValidator
   );
 
   const gethikeDetailsUseCase = new GetHikeDetailsUseCase(

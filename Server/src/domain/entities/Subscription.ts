@@ -1,4 +1,11 @@
 import {
+  FREE_PLATFORM_FEE,
+  MAX_JOIN_REQUEST,
+  MAX_RIDE_ACCEPTANCE,
+  PREMIUM_PLATFORM_FEE,
+  PRO_PLATFORM_FEE,
+} from '../enums/Constants';
+import {
   BillingCycle,
   SubscriptionStatus,
   SubscriptionTier,
@@ -100,15 +107,50 @@ export class Subscription {
   private initializeFeatures(): SubscriptionFeatures {
     switch (this.tier) {
       case SubscriptionTier.FREE:
-        return new SubscriptionFeatures(3, 20, 10, false, false, false);
+        return new SubscriptionFeatures(
+          MAX_JOIN_REQUEST,
+          MAX_RIDE_ACCEPTANCE,
+          FREE_PLATFORM_FEE,
+          false,
+          false,
+          false
+        );
       case SubscriptionTier.HIKER_PRO:
-        return new SubscriptionFeatures(null, null, 5, true, true, false);
+        return new SubscriptionFeatures(
+          null,
+          null,
+          PRO_PLATFORM_FEE,
+          true,
+          true,
+          false
+        );
       case SubscriptionTier.RIDER_PRO:
-        return new SubscriptionFeatures(null, null, 5, true, true, true);
+        return new SubscriptionFeatures(
+          null,
+          null,
+          PRO_PLATFORM_FEE,
+          true,
+          true,
+          true
+        );
       case SubscriptionTier.PREMIUM_PLUS:
-        return new SubscriptionFeatures(null, null, 3, true, true, true);
+        return new SubscriptionFeatures(
+          null,
+          null,
+          PREMIUM_PLATFORM_FEE,
+          true,
+          true,
+          true
+        );
       default:
-        return new SubscriptionFeatures(3, 20, 10, false, false, false);
+        return new SubscriptionFeatures(
+          MAX_JOIN_REQUEST,
+          MAX_RIDE_ACCEPTANCE,
+          FREE_PLATFORM_FEE,
+          false,
+          false,
+          false
+        );
     }
   }
 

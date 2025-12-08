@@ -18,3 +18,15 @@ export class SubscriptionSessionNotFound extends CustomError {
     super(HttpStatus.NOT_FOUND, message);
   }
 }
+export class JoinRequestLimitExceeded extends CustomError {
+  constructor(message = 'Join Request limit exceeded for this current ride') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
+export class RideAcceptanceLimitExceeded extends CustomError {
+  constructor(
+    message = 'Ride accepetance limit exceeded for this current month'
+  ) {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}

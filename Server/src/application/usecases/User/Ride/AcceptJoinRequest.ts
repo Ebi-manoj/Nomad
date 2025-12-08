@@ -19,6 +19,8 @@ import { IRideRepository } from '../../../repositories/IRideRepository';
 import { FareCalculator } from '../../../services/FareCalculator';
 import { IAcceptJoinRequestUseCase } from './IAcceptJoinRequest';
 import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
+import { ISubscriptionUsageService } from '../../../services/ISubscriptionUsageService';
+import { ISubscriptionValidator } from '../../../services/ISubscriptionValidator';
 
 export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
   constructor(
@@ -27,10 +29,13 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
     private readonly joinRequestRepository: IJoinRequestRepository,
     private readonly paymentRepository: IPaymentRepository,
     private readonly fareCalculator: FareCalculator,
-    private readonly realtimeGateway: IRealtimeGateway
+    private readonly realtimeGateway: IRealtimeGateway,
+    private readonly subscriptionValidator: ISubscriptionValidator
   ) {}
 
   async execute(data: AcceptJoinRequestDTO): Promise<AcceptJoinResponseDTO> {
+    await this.subscriptionValidator.validateRideAcceptance(data.riderId);
+
     const joinRequest = await this.joinRequestRepository.findById(
       data.joinRequestId
     );

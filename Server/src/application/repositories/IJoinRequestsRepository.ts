@@ -6,4 +6,5 @@ export interface IJoinRequestRepository extends IBaseRepository<JoinRequest> {
   findByHikeId(hikeId: string): Promise<JoinRequest[]>;
   findByRideId(rideId: string): Promise<JoinRequest[]>;
   findPendingOrAccepted(rideId: string): Promise<JoinRequest[]>;
+  findRequestCountOfHike(hikeId: string): Promise<number>;
 }
