@@ -1,12 +1,12 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Mail, Phone, User2, BadgeCheck, Bike } from 'lucide-react';
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { Field } from '@/components/ProfileInput';
 import { VerificationSection } from '@/components/VerificationFields';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
+import { UserAvatar } from '@/components/ProfilePic';
 
 type Profile = {
   name: string;
@@ -31,6 +31,7 @@ const profile: Profile = {
 export default function ProfilePage() {
   const { user } = useSelector((state: RootState) => state.auth);
   const tier = useSelector((state: RootState) => state.subscription.data?.tier);
+
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 md:py-14">
       <header className="mb-8">
@@ -44,15 +45,15 @@ export default function ProfilePage() {
           <CardHeader className="pb-2">
             <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:items-start">
               <div className="flex items-center gap-4">
-                <Avatar className="size-16 border-2 border-amber-400 ring-1 ring-border">
-                  <AvatarImage alt="Profile photo" src="/initials-avatar.jpg" />
-                  <AvatarFallback className="font-semibold ">
-                    {user?.fullName
-                      .split(' ')
-                      .map(w => w[0])
-                      .join('')}
-                  </AvatarFallback>
-                </Avatar>
+                {user && (
+                  <UserAvatar
+                    fullName={user?.fullName}
+                    imageUrl={''}
+                    subscriptionTier={tier}
+                    size="lg"
+                    showBadge
+                  />
+                )}
                 <div>
                   <p className="text-lg font-semibold leading-none">
                     {user?.fullName}

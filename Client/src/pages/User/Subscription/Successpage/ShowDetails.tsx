@@ -25,6 +25,8 @@ export const ShowDetails = ({ subscription }: DetailProps) => {
     navigate('/hike', { replace: true });
   };
 
+  console.log(subscription);
+
   const planDetails = getPlanDetails();
 
   if (!subscription) return null;

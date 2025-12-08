@@ -16,9 +16,7 @@ export const SubscriptionSuccessPage = () => {
   const [status, setStatus] = useState<
     'loading' | 'success' | 'processing' | 'error'
   >('loading');
-  const { data: subscription } = useSelector(
-    (state: RootState) => state.subscription
-  );
+  const { data } = useSelector((state: RootState) => state.subscription);
   const [attempts, setAttempts] = useState(0);
   const dispatch = useAppDispatch();
 
@@ -81,6 +79,8 @@ export const SubscriptionSuccessPage = () => {
     return <ShowError />;
   }
   {
-    return subscription && <ShowDetails subscription={subscription} />;
+    return (
+      data?.subscription && <ShowDetails subscription={data.subscription} />
+    );
   }
 };
