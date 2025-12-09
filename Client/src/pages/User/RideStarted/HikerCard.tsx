@@ -1,13 +1,4 @@
-import {
-  Check,
-  X,
-  MapPin,
-  MapPinOff,
-  Route,
-  Clock,
-  CheckIcon,
-  CheckCircle,
-} from 'lucide-react';
+import { Check, X, MapPin, MapPinOff, Route, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { RideRequestDTO } from '@/types/ride';
@@ -55,11 +46,13 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
       <CardContent className="p-3.5">
         <div className="flex gap-3">
           {/* Profile Picture */}
-          <UserAvatar
-            subscriptionTier={request.hiker.subscriptionTier}
-            fullName={request.hiker.fullName}
-            showBadge
-          />
+          <div className="shrink-0">
+            <UserAvatar
+              subscriptionTier={request.hiker.subscriptionTier}
+              fullName={request.hiker.fullName}
+              showBadge
+            />
+          </div>
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">

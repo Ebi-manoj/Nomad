@@ -14,6 +14,8 @@ import { MongoUserRepository } from '../../../repositories/UserRepository';
 import { TaskRepository } from '../../../repositories/TaskRepository';
 import { ReqCancelRideBookingUseCase } from '../../../../application/usecases/User/RideBooking/ReqCancelRideBookingUseCase';
 import { RefundService } from '../../../../application/services/RefundService';
+import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
+import { SubscriptionService } from '../../../../application/services/SubscriptionService';
 
 export function ridebookingComposer(): IRideBookingController {
   const rideBookinRepository = new RideBookingRepository();
@@ -24,6 +26,9 @@ export function ridebookingComposer(): IRideBookingController {
   const locationRepository = new LocationRepository();
   const taskRepository = new TaskRepository();
   const refundService = new RefundService(locationRepository, googleApi);
+  const subscripitonRepository = new SubscriptionRepository();
+
+  const subscriptionService = new SubscriptionService(subscripitonRepository);
 
   const getRideBookingUseCase = new GetRideBookingUseCase(
     rideBookinRepository,
@@ -31,7 +36,8 @@ export function ridebookingComposer(): IRideBookingController {
     hikeRepository,
     userRepository,
     googleApi,
-    locationRepository
+    locationRepository,
+    subscriptionService
   );
   const transactionManager = new MongoTransactionManager([
     rideBookinRepository,
