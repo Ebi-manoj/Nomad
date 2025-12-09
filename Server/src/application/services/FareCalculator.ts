@@ -9,22 +9,28 @@ export class FareCalculator implements IFareCalculator {
     return Number(finalFare.toFixed(2));
   }
 
-  getHikerAmount(costSharing: number): {
+  getHikerAmount(
+    costSharing: number,
+    platformFeePerc = this.platformFeePerc
+  ): {
     platformFee: number;
     totalAmount: number;
   } {
     const platformFee = Number(
-      ((costSharing * this.platformFeePerc) / 100).toFixed(2)
+      ((costSharing * platformFeePerc) / 100).toFixed(2)
     );
     const totalAmount = Number(platformFee + costSharing);
     return { platformFee, totalAmount };
   }
-  getRiderEarning(costSharing: number): {
+  getRiderEarning(
+    costSharing: number,
+    platformFeePerc = this.platformFeePerc
+  ): {
     platformFee: number;
     totalEarning: number;
   } {
     const platformFee = Number(
-      ((costSharing * this.platformFeePerc) / 100).toFixed(2)
+      ((costSharing * platformFeePerc) / 100).toFixed(2)
     );
     const totalEarning = Number((costSharing - platformFee).toFixed(2));
     return { platformFee, totalEarning };

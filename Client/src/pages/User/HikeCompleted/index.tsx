@@ -7,6 +7,7 @@ import {
   User,
   Star,
   ArrowLeft,
+  TicketPercent,
 } from 'lucide-react';
 import type { GetHikeDetailsResponseDTO } from '@/types/hike';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -83,6 +84,12 @@ export const HikeCompletedPage = () => {
   };
 
   const { status } = hikeDetails;
+  const platformFee = hikeDetails.paymentDetails?.platFormFee;
+  const amountPaid = hikeDetails.paymentDetails?.amount;
+  let platformFeePerc = 0;
+  if (platformFee && amountPaid) {
+    platformFeePerc = Math.round((platformFee / amountPaid) * 100);
+  }
 
   return (
     <div className="min-h-screen ">
@@ -215,6 +222,28 @@ export const HikeCompletedPage = () => {
                     <p className="font-semibold text-base">
                       ₹{hikeDetails.paymentDetails?.amount}
                     </p>
+                  </div>
+                </div>
+                {/* platformfee */}
+                <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50 dark:bg-gray-900/50 dark:border-gray-800">
+                  {/* Icon Container */}
+                  <div className="w-9 h-9 shrink-0 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                    <TicketPercent className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  </div>
+
+                  {/* Text Content */}
+                  <div>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                      Platform Fee
+                    </p>
+                    <div className="flex items-baseline gap-2">
+                      <p className="font-semibold text-base text-gray-900 dark:text-gray-100">
+                        ₹{hikeDetails.paymentDetails?.platFormFee}
+                      </p>
+                      <span className="text-xs text-gray-500 dark:text-gray-500 font-medium">
+                        ({platformFeePerc.toFixed(0)}%)
+                      </span>
+                    </div>
                   </div>
                 </div>
 

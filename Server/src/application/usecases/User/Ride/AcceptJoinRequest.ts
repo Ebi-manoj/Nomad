@@ -57,8 +57,13 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
         return lockride;
       }
     );
+    const { features } = await this.subscriptionValidator.getActiveSubscription(
+      hike.getUserId()
+    );
+    const platformFeePerc = features.getPlatformFeePercentage();
     const { platformFee, totalAmount } = this.fareCalculator.getHikerAmount(
-      joinRequest.getCostSharing()
+      joinRequest.getCostSharing(),
+      platformFeePerc
     );
     try {
       const payment = new Payment({

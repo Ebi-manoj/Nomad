@@ -20,6 +20,7 @@ import { WalletTransaction } from '../../../../domain/entities/WalletTransaction
 import { IFindOrCreateWalletService } from '../../../services/IFindOrCreateWalletService';
 import { IEndRideUseCase } from './IEndRideUseCase';
 import { IFareCalculator } from '../../../services/IFareCalculator';
+import { ISubscriptionService } from '../../../services/ISubscriptionService';
 
 export class EndRideUseCase implements IEndRideUseCase {
   constructor(
@@ -30,7 +31,8 @@ export class EndRideUseCase implements IEndRideUseCase {
     private readonly walletTransactionRepository: IWalletTransactionRepository,
     private readonly walletService: IFindOrCreateWalletService,
     private readonly transactionManager: ITransactionManager,
-    private readonly fareCalculator: IFareCalculator
+    private readonly fareCalculator: IFareCalculator,
+    private readonly subscriptionService: ISubscriptionService
   ) {}
 
   async execute(data: EndRideReqDTO): Promise<EndRideResDTO> {
@@ -50,8 +52,14 @@ export class EndRideUseCase implements IEndRideUseCase {
 
       const totalCostShared =
         await this.rideBookingRepository.getTotalCostShareOfRide(data.rideId);
-      const { totalEarning, platformFee } =
-        this.fareCalculator.getRiderEarning(totalCostShared);
+      const { features } = await this.subscriptionService.getActiveSubscription(
+        ride.getRiderId()
+      );
+      const platformFeePerc = features.getPlatformFeePercentage();
+      const { totalEarning, platformFee } = this.fareCalculator.getRiderEarning(
+        totalCostShared,
+        platformFeePerc
+      );
       ride.setEarnings(totalEarning, platformFee);
       ride.complete();
 

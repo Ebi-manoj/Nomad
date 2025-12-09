@@ -109,7 +109,8 @@ export function rideComposer(): IRideController {
     walletTransactionRepository,
     walletService,
     transactionManager,
-    fareCalculator
+    fareCalculator,
+    subscriptionService
   );
 
   const getRideDetailsUseCase = new GetRideDetailsUseCase(
