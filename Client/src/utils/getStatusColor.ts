@@ -1,5 +1,5 @@
 export const getStatusColor = (s: string) => {
-  switch (s) {
+  switch (s.toLowerCase()) {
     case 'active':
       return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800';
     case 'completed':

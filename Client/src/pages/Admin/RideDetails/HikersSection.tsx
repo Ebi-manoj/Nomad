@@ -106,7 +106,7 @@ export const HikersSection: React.FC<HikersSectionProps> = ({
                         Cost Shared
                       </span>
                       <span className="text-sm font-bold text-success">
-                        ₹{hike.amount - hike.platformFee}
+                        ₹{(hike.amount - hike.platformFee).toFixed(2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between lg:justify-end gap-3">
@@ -126,7 +126,7 @@ export const HikersSection: React.FC<HikersSectionProps> = ({
                             Refunded
                           </span>
                           <span className="text-sm font-semibold text-destructive">
-                            -₹{hike.refundAmount}
+                            -₹{hike.refundAmount.toFixed(2)}
                           </span>
                         </div>
 
@@ -135,7 +135,7 @@ export const HikersSection: React.FC<HikersSectionProps> = ({
                             Net Cost
                           </span>
                           <span className="text-base font-bold text-success">
-                            ₹{actualCostShared}
+                            ₹{actualCostShared.toFixed(2)}
                           </span>
                         </div>
                       </>
@@ -148,7 +148,7 @@ export const HikersSection: React.FC<HikersSectionProps> = ({
                           Amount Paid
                         </span>
                         <span className="text-base font-bold text-success">
-                          ₹{hike.amount}
+                          ₹{hike.amount.toFixed(2)}
                         </span>
                       </div>
                     )}
