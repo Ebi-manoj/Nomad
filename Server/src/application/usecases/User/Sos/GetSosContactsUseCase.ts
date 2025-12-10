@@ -6,10 +6,10 @@ import { ISosContactRepository } from '../../../repositories/ISosContactReposito
 import { IGetSosContactsUseCase } from './IGetSosContactsUseCase';
 
 export class GetSosContactsUseCase implements IGetSosContactsUseCase {
-  constructor(private readonly sosRepository: ISosContactRepository) {}
+  constructor(private readonly _sosRepository: ISosContactRepository) {}
 
   async execute(userId: string): Promise<SaveSosContactsResDTO> {
-    const existing = await this.sosRepository.findByUserId(userId);
+    const existing = await this._sosRepository.findByUserId(userId);
 
     const contacts: SosContactDTO[] = existing.map(c => ({
       name: c.getName(),

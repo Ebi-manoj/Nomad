@@ -10,18 +10,18 @@ import { ICreateRideUseCase } from './ICreateRideUseCase';
 
 export class CreateRideUseCase implements ICreateRideUseCase {
   constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly googleApis: IGoogleApi,
-    private readonly rideRepository: IRideRepository,
-    private readonly subcriptionValidator: ISubscriptionValidator
+    private readonly _userRepository: IUserRepository,
+    private readonly _googleApis: IGoogleApi,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _subcriptionValidator: ISubscriptionValidator
   ) {}
 
   async execute(data: CreateRideDTO): Promise<RideLog> {
-    await this.subcriptionValidator.validateCreateRide(
+    await this._subcriptionValidator.validateCreateRide(
       data.costSharing,
       data.userId
     );
-    const user = await this.userRepository.findById(data.userId);
+    const user = await this._userRepository.findById(data.userId);
     if (!user) throw new UserNotFound();
     const pickup = {
       lat: data.pickup.coordinates[0],
@@ -32,12 +32,12 @@ export class CreateRideUseCase implements ICreateRideUseCase {
       lng: data.destination.coordinates[1],
     };
 
-    const { distance: totalDistance } = await this.googleApis.getDistance(
+    const { distance: totalDistance } = await this._googleApis.getDistance(
       pickup,
       destination
     );
 
-    const route = await this.googleApis.getRoute(pickup, destination);
+    const route = await this._googleApis.getRoute(pickup, destination);
 
     const rideLog = new RideLog({
       ...data,
@@ -46,7 +46,7 @@ export class CreateRideUseCase implements ICreateRideUseCase {
       hikersMatched: [],
       status: RideStatus.ACTIVE,
     });
-    const savedRide = await this.rideRepository.create(rideLog);
+    const savedRide = await this._rideRepository.create(rideLog);
     return savedRide;
   }
 }

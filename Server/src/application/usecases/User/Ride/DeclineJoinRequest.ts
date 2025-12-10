@@ -17,12 +17,12 @@ import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 
 export class DeclineJoinRequestUseCase implements IDeclineJoinRequestUseCase {
   constructor(
-    private readonly joinRequestRepository: IJoinRequestRepository,
-    private readonly rideRepository: IRideRepository,
-    private readonly realtimeGateway: IRealtimeGateway
+    private readonly _joinRequestRepository: IJoinRequestRepository,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _realtimeGateway: IRealtimeGateway
   ) {}
   async execute(data: DeclineJoinRequestDTO): Promise<DeclineJoinResponseDTO> {
-    const joinRequest = await this.joinRequestRepository.findById(
+    const joinRequest = await this._joinRequestRepository.findById(
       data.joinRequestId
     );
     if (!joinRequest) throw new JoinRequestNotFound();
@@ -30,13 +30,13 @@ export class DeclineJoinRequestUseCase implements IDeclineJoinRequestUseCase {
     if (joinRequest.getStatus() !== JoinRequestStatus.PENDING)
       throw new InvalidJoinRequestStatus();
 
-    const ride = await this.rideRepository.findById(joinRequest.getRideId());
+    const ride = await this._rideRepository.findById(joinRequest.getRideId());
     if (!ride) throw new RideNotFound();
 
     if (ride.getRiderId() !== data.riderId) throw new NotAuthorizedToAccept();
     joinRequest.updateStatus(JoinRequestStatus.DECLINED);
 
-    const updated = await this.joinRequestRepository.update(
+    const updated = await this._joinRequestRepository.update(
       joinRequest.getId(),
       joinRequest
     );
@@ -49,7 +49,7 @@ export class DeclineJoinRequestUseCase implements IDeclineJoinRequestUseCase {
       status: updated.getStatus(),
     };
 
-    await this.realtimeGateway.emitToRoom(
+    await this._realtimeGateway.emitToRoom(
       'hiker',
       response.hikeId,
       'joinRequest:declined',

@@ -14,20 +14,20 @@ import { ISosNotifier } from '../../../services/ISosNotifier';
 
 export class TriggerSosUseCase implements ITriggerSosUseCase {
   constructor(
-    private readonly rideBookingRepository: IRideBookingRepository,
-    private readonly sosService: ISosService,
-    private readonly sosNotifier: ISosNotifier
+    private readonly _rideBookingRepository: IRideBookingRepository,
+    private readonly _sosService: ISosService,
+    private readonly _sosNotifier: ISosNotifier
   ) {}
 
   async execute(data: TriggerSosReqDTO): Promise<SosLogResDTO> {
-    const booking = await this.rideBookingRepository.findById(data.bookingId);
+    const booking = await this._rideBookingRepository.findById(data.bookingId);
     if (!booking) throw new RideBookingNotFound();
 
     if (booking.getHikerId() !== data.userId) throw new Forbidden();
 
     this.validateBookingStatus(booking.getStatus());
 
-    const log = await this.sosService.createSosLog({
+    const log = await this._sosService.createSosLog({
       userId: data.userId,
       rideId: booking.getRideId(),
       bookingId: booking.getId()!,
@@ -35,7 +35,7 @@ export class TriggerSosUseCase implements ITriggerSosUseCase {
       location: data.location,
     });
 
-    await this.sosNotifier.notify(log);
+    await this._sosNotifier.notify(log);
     return log;
   }
 

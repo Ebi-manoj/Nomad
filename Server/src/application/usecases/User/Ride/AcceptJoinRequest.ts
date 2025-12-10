@@ -24,45 +24,45 @@ import { ISubscriptionValidator } from '../../../services/ISubscriptionValidator
 
 export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
   constructor(
-    private readonly hikeRepository: IHikeRepository,
-    private readonly rideRepository: IRideRepository,
-    private readonly joinRequestRepository: IJoinRequestRepository,
-    private readonly paymentRepository: IPaymentRepository,
-    private readonly fareCalculator: FareCalculator,
-    private readonly realtimeGateway: IRealtimeGateway,
-    private readonly subscriptionValidator: ISubscriptionValidator,
-    private readonly usageService: ISubscriptionUsageService
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _joinRequestRepository: IJoinRequestRepository,
+    private readonly _paymentRepository: IPaymentRepository,
+    private readonly _fareCalculator: FareCalculator,
+    private readonly _realtimeGateway: IRealtimeGateway,
+    private readonly _subscriptionValidator: ISubscriptionValidator,
+    private readonly _usageService: ISubscriptionUsageService
   ) {}
 
   async execute(data: AcceptJoinRequestDTO): Promise<AcceptJoinResponseDTO> {
-    await this.subscriptionValidator.validateRideAcceptance(data.riderId);
+    await this._subscriptionValidator.validateRideAcceptance(data.riderId);
 
-    const joinRequest = await this.joinRequestRepository.findById(
+    const joinRequest = await this._joinRequestRepository.findById(
       data.joinRequestId
     );
     if (!joinRequest || joinRequest.getStatus() !== JoinRequestStatus.PENDING) {
       throw new JoinRequestNotFound();
     }
 
-    const hike = await this.hikeRepository.findById(joinRequest.getHikeId());
-    const ride = await this.rideRepository.findById(joinRequest.getRideId());
+    const hike = await this._hikeRepository.findById(joinRequest.getHikeId());
+    const ride = await this._rideRepository.findById(joinRequest.getRideId());
     if (!hike) throw new HikeNotFound();
     if (!ride) throw new RideNotFound();
 
     if (data.riderId != ride.getRiderId()) throw new NotAuthorizedToAccept();
 
-    const updated = await this.rideRepository.updateWithLock(
+    const updated = await this._rideRepository.updateWithLock(
       ride.getRideId()!,
       async lockride => {
         lockride.reserveSeats(hike.getSeatsRequested());
         return lockride;
       }
     );
-    const { features } = await this.subscriptionValidator.getActiveSubscription(
+    const { features } = await this._subscriptionValidator.getActiveSubscription(
       hike.getUserId()
     );
     const platformFeePerc = features.getPlatformFeePercentage();
-    const { platformFee, totalAmount } = this.fareCalculator.getHikerAmount(
+    const { platformFee, totalAmount } = this._fareCalculator.getHikerAmount(
       joinRequest.getCostSharing(),
       platformFeePerc
     );
@@ -80,8 +80,8 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
       });
       joinRequest.accept();
       const [updatedJoinRequest, savedPayment] = await Promise.all([
-        this.joinRequestRepository.update(joinRequest.getId(), joinRequest),
-        this.paymentRepository.create(payment),
+        this._joinRequestRepository.update(joinRequest.getId(), joinRequest),
+        this._paymentRepository.create(payment),
       ]);
       if (!updatedJoinRequest) throw new UpdateFailed();
 
@@ -95,9 +95,9 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
         status: updatedJoinRequest.getStatus(),
         expiresAt: payment.getExpiresAt(),
       };
-      this.usageService.incrementRideAccepetance(data.riderId);
+      this._usageService.incrementRideAccepetance(data.riderId);
 
-      await this.realtimeGateway.emitToRoom(
+      await this._realtimeGateway.emitToRoom(
         'hiker',
         response.hikeId,
         'joinRequest:accepted',
@@ -106,7 +106,7 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
 
       return response;
     } catch (error) {
-      await this.rideRepository.releaseSeats(
+      await this._rideRepository.releaseSeats(
         ride.getRideId()!,
         hike.getSeatsRequested()
       );

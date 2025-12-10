@@ -10,12 +10,12 @@ import { ISaveSosContactsUseCase } from './ISaveSosContactsUseCase';
 import { ErrorMessages } from '../../../../domain/enums/ErrorMessage';
 
 export class SaveSosContactsUseCase implements ISaveSosContactsUseCase {
-  constructor(private readonly sosRepository: ISosContactRepository) {}
+  constructor(private readonly _sosRepository: ISosContactRepository) {}
 
   async execute(data: SaveSosContactsReqDTO): Promise<SaveSosContactsResDTO> {
     const { userId, contact } = data;
 
-    const existing = await this.sosRepository.findByUserId(userId);
+    const existing = await this._sosRepository.findByUserId(userId);
 
     if (existing.length >= 3) {
       throw new InvalidInputData(ErrorMessages.SOS_MAX_CONTACTS_LIMIT);
@@ -29,7 +29,7 @@ export class SaveSosContactsUseCase implements ISaveSosContactsUseCase {
       relation: contact.relation,
     });
 
-    const created = await this.sosRepository.create(sos);
+    const created = await this._sosRepository.create(sos);
 
     const allContacts = [...existing, created];
 

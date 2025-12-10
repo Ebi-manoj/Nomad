@@ -6,10 +6,10 @@ import type { IChatMessageRepository } from '../../../repositories/IChatMessageR
 import type { IGetChatMessagesUseCase } from './IGetChatMessagesUseCase';
 
 export class GetChatMessagesUseCase implements IGetChatMessagesUseCase {
-  constructor(private readonly chatRepository: IChatMessageRepository) {}
+  constructor(private readonly _chatRepository: IChatMessageRepository) {}
 
   async execute(data: GetChatMessagesReqDTO): Promise<ChatMessageDTO[]> {
-    const messages = await this.chatRepository.findByRoomId(data.roomId);
+    const messages = await this._chatRepository.findByRoomId(data.roomId);
     return messages.map(m => ({
       id: m.getId()!,
       roomId: m.getRoomId(),
