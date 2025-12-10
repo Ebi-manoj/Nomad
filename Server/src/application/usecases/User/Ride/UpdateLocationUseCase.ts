@@ -7,39 +7,46 @@ import { IUpdateLocationUseCase } from './IUpdateLocationUseCase';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { RideNotFound } from '../../../../domain/errors/RideErrors';
 import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
+import { ICreateDeviationLogUseCase } from '../Sos/ICreateDeviationLog';
 
 export class UpdateLocationUseCase implements IUpdateLocationUseCase {
   constructor(
-    private readonly locationRepository: ILocationRepository,
-    private readonly rideRepository: IRideRepository,
-    private readonly geoService: IGeoService,
-    private readonly realtimeGateway: IRealtimeGateway
+    private readonly _locationRepository: ILocationRepository,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _geoService: IGeoService,
+    private readonly _realtimeGateway: IRealtimeGateway,
+    private readonly _createDeviationUseCase: ICreateDeviationLogUseCase
   ) {}
 
   async execute(data: UpdateLocationDTO) {
     const location = new Location(data);
-    await this.locationRepository.saveLocation(location);
+    await this._locationRepository.saveLocation(location);
     data.lat = 9.97;
     data.lng = 76.32;
     const deviation = await this.calculateDeviation(data);
     console.log(deviation);
     if (deviation > 2) {
       console.log('Devaited true');
-      this.realtimeGateway.emitToRoom('rider', data.rideId, 'ride:deviated', {
+      this._realtimeGateway.emitToRoom('rider', data.rideId, 'ride:deviated', {
         message: 'Ride deviated',
+      });
+      this._createDeviationUseCase.execute({
+        rideId: data.rideId,
+        location: { lat: data.lat, lng: data.lng },
+        deviationDistance: deviation,
       });
     }
   }
 
   private async calculateDeviation(data: UpdateLocationDTO): Promise<number> {
     const currentLocation: Position = [data.lng, data.lat];
-    const point = this.geoService.createPoint(currentLocation);
-    const rideLog = await this.rideRepository.findById(data.rideId);
+    const point = this._geoService.createPoint(currentLocation);
+    const rideLog = await this._rideRepository.findById(data.rideId);
     if (!rideLog) throw new RideNotFound();
-    const routeLine = this.geoService.createLine(
+    const routeLine = this._geoService.createLine(
       rideLog.getRoute().coordinates
     );
-    const deviation = this.geoService.pointToLineDistance(point, routeLine);
+    const deviation = this._geoService.pointToLineDistance(point, routeLine);
 
     return deviation;
   }

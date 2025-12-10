@@ -22,6 +22,7 @@ import { SosButton } from '@/components/SosButton';
 import type { TriggerSosHikerDTO } from '@/types/sos';
 import { triggerSosHiker } from '@/api/sos';
 import { toast } from 'sonner';
+import { hikerSocket } from '@/config/socket';
 
 export const HikeStartedPage = () => {
   const [currLocation, setCurrLocation] = useState<{
@@ -39,6 +40,7 @@ export const HikeStartedPage = () => {
   const { booking, loading } = useSelector(
     (state: RootState) => state.rideBooking
   );
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!bookingId) return;
@@ -63,6 +65,23 @@ export const HikeStartedPage = () => {
     });
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
+
+  useEffect(() => {
+    if (!booking) return;
+    if (!hikerSocket.connected) {
+      hikerSocket.connect();
+    }
+    hikerSocket.emit('hike:join', booking.rideBooking.hikeId);
+
+    hikerSocket.on('ride:deviated', data => {
+      console.log(data);
+      toast.warning(data.message);
+    });
+
+    return () => {
+      hikerSocket.off('ride:deviated');
+    };
+  }, [booking, hikerSocket]);
 
   if (loading) {
     return (
