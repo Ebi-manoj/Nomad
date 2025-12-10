@@ -17,7 +17,7 @@ import { WalletPage } from '@/pages/User/Wallet/Index';
 import { RideCompletedPage } from '@/pages/User/RideCompleted/Index';
 import { SubscriptionPage } from '@/pages/User/Subscription/Subscription';
 import { SubscriptionSuccessPage } from '@/pages/User/Subscription/Successpage/Success';
-import { SubscriptionDetailsPage } from '@/pages/User/Subscription/SubscriptionDetails';
+import SirenButton from '@/pages/playSiren';
 
 export const UserRoutes = (
   <Route
@@ -78,5 +78,6 @@ export const UserRoutes = (
     <Route path="/wallet" element={<WalletPage />} />
     <Route path="/subscriptions" element={<SubscriptionPage />} />
     <Route path="/subscription/success" element={<SubscriptionSuccessPage />} />
+    <Route path="/siren" element={<SirenButton />} />
   </Route>
 );
