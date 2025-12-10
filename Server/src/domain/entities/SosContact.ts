@@ -3,6 +3,7 @@ export interface SosContactProps {
   userId: string;
   name: string;
   phone: string;
+  email?: string;
   relation?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -13,6 +14,7 @@ export class SosContact {
   private readonly userId: string;
   private readonly name: string;
   private readonly phone: string;
+  private readonly email?: string;
   private readonly relation?: string;
   private readonly createdAt: Date;
   private updatedAt: Date;
@@ -22,6 +24,7 @@ export class SosContact {
     this.userId = props.userId;
     this.name = props.name;
     this.phone = props.phone;
+    this.email = props.email;
     this.relation = props.relation;
     this.createdAt = props.createdAt || new Date();
     this.updatedAt = props.updatedAt || new Date();
@@ -41,6 +44,10 @@ export class SosContact {
 
   getPhone() {
     return this.phone;
+  }
+
+  getEmail() {
+    return this.email;
   }
 
   getRelation() {

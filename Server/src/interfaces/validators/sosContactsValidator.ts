@@ -9,6 +9,11 @@ export const sosContactSchema = z.object({
     .string({ message: 'Phone is required' })
     .trim()
     .min(6, { message: 'Phone number is too short' }),
+  email: z
+    .string()
+    .trim()
+    .email({ message: 'Invalid email address' })
+    .optional(),
   relation: z.string().trim().optional(),
 });
 

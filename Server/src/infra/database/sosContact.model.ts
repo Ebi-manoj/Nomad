@@ -5,6 +5,7 @@ export interface ISosContactModel {
   userId: Types.ObjectId;
   name: string;
   phone: string;
+  email?: string;
   relation?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -28,6 +29,11 @@ const SosContactSchema = new Schema<ISosContactModel>(
       required: true,
       trim: true,
     },
+    email: {
+      type: String,
+      default: null,
+      trim: true,
+    },
     relation: {
       type: String,
       default: null,
@@ -38,6 +44,7 @@ const SosContactSchema = new Schema<ISosContactModel>(
 );
 
 SosContactSchema.index({ userId: 1, phone: 1 }, { unique: true });
+SosContactSchema.index({ userId: 1, email: 1 }, { unique: true, sparse: true });
 
 export const SosContactModel = model<ISosContactModel>(
   'SosContact',

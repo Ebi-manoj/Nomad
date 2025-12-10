@@ -1,15 +1,16 @@
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Phone } from 'lucide-react';
+import { Phone, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ContactCardProps {
   name: string;
   phone: string;
+  email?: string;
   relationship: string;
 }
 
-const ContactCard = ({ name, phone, relationship }: ContactCardProps) => {
+const ContactCard = ({ name, phone, email, relationship }: ContactCardProps) => {
   const initials = name
     .split(' ')
     .map(n => n[0])
@@ -36,6 +37,12 @@ const ContactCard = ({ name, phone, relationship }: ContactCardProps) => {
             <Phone className="h-4 w-4" />
             <span className="text-sm">{phone}</span>
           </Button>
+          {email && (
+            <Button variant="outline" className="w-full justify-start gap-2">
+              <Mail className="h-4 w-4" />
+              <span className="text-sm">{email}</span>
+            </Button>
+          )}
         </div>
       </div>
     </Card>

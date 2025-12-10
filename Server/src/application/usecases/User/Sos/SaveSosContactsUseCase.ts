@@ -25,6 +25,7 @@ export class SaveSosContactsUseCase implements ISaveSosContactsUseCase {
       userId,
       name: contact.name,
       phone: contact.phone,
+      email: contact.email,
       relation: contact.relation,
     });
 
@@ -35,6 +36,7 @@ export class SaveSosContactsUseCase implements ISaveSosContactsUseCase {
     const contacts: SosContactDTO[] = allContacts.map(c => ({
       name: c.getName(),
       phone: c.getPhone(),
+      email: c.getEmail(),
       relation: c.getRelation(),
     }));
 

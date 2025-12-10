@@ -10,6 +10,7 @@ export const sosContactFormSchema = z.object({
     .trim()
     .min(6, { message: 'Phone number is too short' })
     .max(10, { message: 'Invalid phone No format' }),
+  email: z.string().trim().email({ message: 'Invalid email address' }).optional(),
   relation: z.string().trim().max(30).optional(),
 });
 

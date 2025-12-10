@@ -40,6 +40,7 @@ export const SosManagementPage = () => {
     defaultValues: {
       name: '',
       phone: '',
+      email: '',
       relation: '',
     },
   });
@@ -53,6 +54,7 @@ export const SosManagementPage = () => {
       addSosContact({
         name: data.name.trim(),
         phone: data.phone.trim(),
+        email: data.email?.trim() || undefined,
         relation: data.relation?.trim() || undefined,
       })
     );
@@ -64,6 +66,7 @@ export const SosManagementPage = () => {
   const emergencyContacts = contacts.map(c => ({
     name: c.name,
     phone: c.phone,
+    email: c.email,
     relationship: c.relation || 'Emergency Contact',
   }));
 
@@ -166,6 +169,22 @@ export const SosManagementPage = () => {
                 {errors.phone && (
                   <p className="mt-1 text-xs text-red-500">
                     {errors.phone.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Email (optional)
+                </label>
+                <Input
+                  type="email"
+                  {...register('email')}
+                  placeholder="Contact email"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.email.message}
                   </p>
                 )}
               </div>

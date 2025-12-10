@@ -1,6 +1,7 @@
 export interface SosContactDTO {
   name: string;
   phone: string;
+  email?: string;
   relation?: string;
 }
 

@@ -14,6 +14,7 @@ export class GetSosContactsUseCase implements IGetSosContactsUseCase {
     const contacts: SosContactDTO[] = existing.map(c => ({
       name: c.getName(),
       phone: c.getPhone(),
+      email: c.getEmail(),
       relation: c.getRelation(),
     }));
 
