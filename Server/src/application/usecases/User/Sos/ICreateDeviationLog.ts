@@ -1,6 +1,5 @@
 import {
   CreateDeviationReqDTO,
-  RouteDeviationResDTO,
 } from '../../../../domain/dto/RouteDeviationDTO';
 
 export interface ICreateDeviationLogUseCase {

@@ -110,7 +110,6 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
         ride.getRideId()!,
         hike.getSeatsRequested()
       );
-      console.log(error);
       throw error;
     }
   }

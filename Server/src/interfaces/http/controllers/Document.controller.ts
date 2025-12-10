@@ -5,6 +5,7 @@ import { IUploadDocumentUseCase } from '../../../application/usecases/User/IUplo
 import { VerifyDocsRequestDTO } from '../../../domain/dto/DocumentsDTO';
 import { DocumentStatus } from '../../../domain/enums/documentStatus';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
+import { Unauthorized } from '../../../domain/errors/CustomError';
 import { uploadDocSchema } from '../../validators/uploadFileValidator';
 import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
@@ -26,7 +27,8 @@ export class DocumentController implements IDocumentController {
   }
 
   async findUserDocuments(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const dto = httpRequest.user?.id!;
+    const dto = httpRequest.user?.id;
+    if (!dto) throw new Unauthorized();
     console.log(dto);
     const result = await this.fetchUserDocsUseCase.execute(dto);
     const response = ApiDTO.success(result);

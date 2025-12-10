@@ -1,5 +1,4 @@
 import { GetSubscriptionDetailsResDTO } from '../../../../domain/dto/SubscriptionDTO';
-import { SubscriptionTier } from '../../../../domain/enums/subscription';
 import { SubscriptionMapper } from '../../../mappers/SubscriptionMapper';
 import { ISubscriptionRepository } from '../../../repositories/ISubscriptionRepository';
 import { ISubscriptionService } from '../../../services/ISubscriptionService';

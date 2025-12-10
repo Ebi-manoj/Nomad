@@ -48,7 +48,6 @@ export class WalletTransactionRepository
         },
       },
     ]);
-    console.log(result);
 
     return result.length ? result[0].totalCredits : 0;
   }

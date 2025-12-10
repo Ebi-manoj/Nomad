@@ -29,8 +29,6 @@ export class TriggerRideSosUseCase implements ITriggerRideSosUseCase {
       throw new NotValidStatusToTrigger();
     }
 
-    console.log(data);
-
     const log = await this.sosService.createSosLog({
       userId: data.userId,
       rideId: ride.getRideId()!,

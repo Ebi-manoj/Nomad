@@ -29,7 +29,6 @@ export class VerifySubscriptionUseCase implements IVerifySubscriptionUseCase {
       data.userId
     );
     if (subscription) {
-      console.log(subscription);
       return {
         status: 'completed',
         subscription: SubscriptionMapper(subscription),

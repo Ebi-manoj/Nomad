@@ -45,7 +45,7 @@ function createWinstonInstance(): Logger {
 export class WinstonLogger implements ILogger {
   private logger: Logger;
 
-  constructor(label?: string) {
+  constructor() {
     this.logger = createWinstonInstance();
   }
 

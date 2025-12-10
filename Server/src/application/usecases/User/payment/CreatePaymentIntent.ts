@@ -63,7 +63,6 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         paymentIntentId: paymentIntent.id,
       };
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
