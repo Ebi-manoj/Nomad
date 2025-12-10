@@ -66,6 +66,10 @@ export function RideStartedContent() {
       setRideRequest(prev => [...prev, data]);
     });
 
+    riderSocket.on('ride:deviated', data => {
+      toast.warning(data.message);
+    });
+
     riderSocket.on('hike:confirmed', async data => {
       dispatch(fetchRiderTasks(rideData.id));
       dispatch(fetchMatchedHikers(rideData.id));
@@ -75,6 +79,7 @@ export function RideStartedContent() {
     return () => {
       riderSocket.off('join-request:new');
       riderSocket.off('hike:confirmed');
+      riderSocket.off('ride:deviated');
     };
   }, []);
 
