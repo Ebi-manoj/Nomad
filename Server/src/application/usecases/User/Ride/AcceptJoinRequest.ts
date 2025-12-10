@@ -30,7 +30,8 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
     private readonly paymentRepository: IPaymentRepository,
     private readonly fareCalculator: FareCalculator,
     private readonly realtimeGateway: IRealtimeGateway,
-    private readonly subscriptionValidator: ISubscriptionValidator
+    private readonly subscriptionValidator: ISubscriptionValidator,
+    private readonly usageService: ISubscriptionUsageService
   ) {}
 
   async execute(data: AcceptJoinRequestDTO): Promise<AcceptJoinResponseDTO> {
@@ -94,6 +95,7 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
         status: updatedJoinRequest.getStatus(),
         expiresAt: payment.getExpiresAt(),
       };
+      this.usageService.incrementRideAccepetance(data.riderId);
 
       await this.realtimeGateway.emitToRoom(
         'hiker',

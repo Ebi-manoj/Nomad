@@ -47,10 +47,17 @@ export class CreateSubscriptionCheckoutSessionUseCase
       idempotencyKey
     );
     if (findExistingSession && findExistingSession.status == 'pending') {
-      return {
-        id: findExistingSession.stripeSessionId,
-        url: findExistingSession.url,
-      };
+      const now = Date.now();
+      const expiryTime = new Date(findExistingSession.createdAt).getTime();
+
+      const isNotExpired = now - expiryTime;
+
+      if (isNotExpired < 2 * 1000 * 60) {
+        return {
+          id: findExistingSession.stripeSessionId,
+          url: findExistingSession.url,
+        };
+      }
     }
 
     const priceId = this.priceConfig[data.tier]?.[data.billingCycle];

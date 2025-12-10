@@ -3,15 +3,28 @@ import { ISubscriptionUsageRepository } from '../repositories/ISubscriptionUsage
 import { ISubscriptionUsageService } from './ISubscriptionUsageService';
 
 export class SubscriptionUsageService implements ISubscriptionUsageService {
-  constructor(private readonly usageRepository: ISubscriptionUsageRepository) {}
+  constructor(
+    private readonly _usageRepository: ISubscriptionUsageRepository
+  ) {}
 
   async getUsage(userId: string): Promise<SubscriptionUsage> {
-    let usage = await this.usageRepository.findByUserId(userId);
+    let usage = await this._usageRepository.findByUserId(userId);
     if (!usage) {
       usage = await this.createUsage(userId);
     }
 
     return usage;
+  }
+
+  async incrementRideAccepetance(riderId: string): Promise<void> {
+    const usage = await this.getUsage(riderId);
+    usage.incrementRideAcceptances();
+    await this._usageRepository.update(usage.getId()!, usage);
+  }
+  async incrementJoinRequest(hikerId: string): Promise<void> {
+    const usage = await this.getUsage(hikerId);
+    usage.incrementJoinRequests();
+    await this._usageRepository.update(usage.getId()!, usage);
   }
 
   private async createUsage(userId: string): Promise<SubscriptionUsage> {
@@ -22,6 +35,6 @@ export class SubscriptionUsageService implements ISubscriptionUsageService {
       month: month.toString(),
     });
 
-    return await this.usageRepository.create(usage);
+    return await this._usageRepository.create(usage);
   }
 }

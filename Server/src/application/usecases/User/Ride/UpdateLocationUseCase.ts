@@ -22,7 +22,7 @@ export class UpdateLocationUseCase implements IUpdateLocationUseCase {
     const location = new Location(data);
     await this._locationRepository.saveLocation(location);
     data.lat = 9.97;
-    data.lng = 76.32;
+    data.lng = 76.24;
     const deviation = await this.calculateDeviation(data);
     console.log(deviation);
     if (deviation > 2) {

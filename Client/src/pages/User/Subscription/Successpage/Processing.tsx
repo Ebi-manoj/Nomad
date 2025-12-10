@@ -1,8 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const ProcessingLoader = ({ attempts }: { attempts: number }) => {
+  const navigate = useNavigate();
+  const handleDashboard = () => {
+    navigate('/hike');
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
       <div className="text-center max-w-md">
@@ -28,7 +33,12 @@ export const ProcessingLoader = ({ attempts }: { attempts: number }) => {
                 Don't worry! You'll receive an email once your subscription is
                 ready.
               </p>
-              <Button className="w-full">Continue to Dashboard</Button>
+              <Button
+                className="w-full cursor-pointer"
+                onClick={handleDashboard}
+              >
+                Continue to Dashboard
+              </Button>
             </CardContent>
           </Card>
         )}

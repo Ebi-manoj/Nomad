@@ -84,7 +84,8 @@ export function rideComposer(): IRideController {
     paymentRepository,
     fareCalculator,
     realtimeGateway,
-    subscriptionValidator
+    subscriptionValidator,
+    usageService
   );
 
   const declienJoinRequestUseCase = new DeclineJoinRequestUseCase(

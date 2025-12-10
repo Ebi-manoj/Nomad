@@ -20,6 +20,7 @@ import { JoinRequestStatus } from '../../../../domain/enums/Ride';
 import { ICreateJoinRequestUseCase } from './ICreateJoinRequestUseCase';
 import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 import { ISubscriptionValidator } from '../../../services/ISubscriptionValidator';
+import { ISubscriptionUsageService } from '../../../services/ISubscriptionUsageService';
 
 export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
   constructor(
@@ -29,7 +30,8 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     private readonly fareCalculator: FareCalculator,
     private readonly userRepository: IUserRepository,
     private readonly realtimeGateway: IRealtimeGateway,
-    private readonly subscriptionValidator: ISubscriptionValidator
+    private readonly subscriptionValidator: ISubscriptionValidator,
+    private readonly usageService: ISubscriptionUsageService
   ) {}
 
   async execute(data: CreateJoinRequestDTO): Promise<JoinRequestResponseDTO> {
@@ -80,6 +82,7 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
       'join-request:new',
       response
     );
+    this.usageService.incrementJoinRequest(response.hiker.id);
 
     return response;
   }

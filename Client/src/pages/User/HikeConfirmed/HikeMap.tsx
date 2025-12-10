@@ -22,27 +22,48 @@ export const HikeStartedMap = ({
     useState<google.maps.DirectionsResult | null>(null);
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
 
-  //  Get hiker live location ()
+  // Get hiker live location with better error handling
   useEffect(() => {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
+    if (!navigator.geolocation) {
+      setIsLoadingLocation(false);
+      // Fallback to pickup location
+      setCurrentPosition(pickup);
+      return;
+    }
+
+    const watchId = navigator.geolocation.watchPosition(
       pos => {
         setCurrentPosition({
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
         });
+        setIsLoadingLocation(false);
       },
-      err => console.error(err),
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      err => {
+        console.error('Geolocation error:', err);
+        setIsLoadingLocation(false);
+        setCurrentPosition(pickup);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 30000,
+        maximumAge: 5000,
+      }
     );
-  }, []);
 
-  //  Fetch both direction routes
+    // Cleanup: stop watching position when component unmounts
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, [pickup]);
+
+  // Fetch both direction routes
   useEffect(() => {
+    if (!currentPosition) return;
+
     const service = new google.maps.DirectionsService();
 
-    //  Rider → Pickup (black)
+    // Rider → Pickup (black)
     service.route(
       {
         origin: riderLocation,
@@ -52,7 +73,7 @@ export const HikeStartedMap = ({
       (res, status) => status === 'OK' && setRiderToPickup(res)
     );
 
-    //  Pickup → Destination (blue)
+    // Pickup → Destination (blue)
     service.route(
       {
         origin: pickup,
@@ -61,21 +82,35 @@ export const HikeStartedMap = ({
       },
       (res, status) => status === 'OK' && setPickupToDest(res)
     );
-  }, [riderLocation, pickup, destination]);
+  }, [riderLocation, pickup, destination, currentPosition]);
 
-  if (!currentPosition)
+  // Show loading state
+  if (isLoadingLocation) {
     return (
-      <>
-        <div>Loading....</div>
-      </>
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Getting your location...</p>
+        </div>
+      </div>
     );
-  //  Dotted line: Hiker current → Pickup
+  }
+
+  if (!currentPosition) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div>Unable to load map</div>
+      </div>
+    );
+  }
+
+  // Dotted line: Hiker current → Pickup
   const hikerPath = [currentPosition, pickup];
 
   return (
     <MapComponent key={bookingStatus} center={currentPosition} zoom={14}>
       {/* Rider Marker */}
-      {bookingStatus == 'CONFIRMED' && (
+      {bookingStatus === 'CONFIRMED' && (
         <Marker
           position={riderLocation}
           icon={{
@@ -125,7 +160,7 @@ export const HikeStartedMap = ({
       />
 
       {/* Rider → Pickup (black line) */}
-      {bookingStatus == 'CONFIRMED' && riderToPickup && (
+      {bookingStatus === 'CONFIRMED' && riderToPickup && (
         <Polyline
           path={riderToPickup.routes[0].overview_path}
           options={{

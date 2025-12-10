@@ -40,11 +40,11 @@ export function hikeComposer(): IHikeController {
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
   const reviewRepository = new ReviewRepository();
-  
+
   const subscriptionRepo = new SubscriptionRepository();
   const subscriptionUsage = new SubscriptionUsageRepository();
   const geoService = new TurfGeoService();
-  const subscriptionService=new SubscriptionService(subscriptionRepo)
+  const subscriptionService = new SubscriptionService(subscriptionRepo);
   const usageService = new SubscriptionUsageService(subscriptionUsage);
   const subscriptionValidator = new SubscriptionValidator(
     subscriptionRepo,
@@ -81,7 +81,8 @@ export function hikeComposer(): IHikeController {
     fareCalculator,
     userRepository,
     realtimeGateway,
-    subscriptionValidator
+    subscriptionValidator,
+    usageService
   );
 
   const gethikeDetailsUseCase = new GetHikeDetailsUseCase(
