@@ -3,11 +3,15 @@ import { RouteDeviation } from '../../domain/entities/RouteDeviation';
 import { IRouteDeviationModel } from '../database/routeDeviation.model';
 import { IMapper } from './IMapper';
 
-export const routeDeviationMapper: IMapper<RouteDeviation, IRouteDeviationModel> = {
+export const routeDeviationMapper: IMapper<
+  RouteDeviation,
+  IRouteDeviationModel
+> = {
   toDomain(doc: IRouteDeviationModel): RouteDeviation {
     return new RouteDeviation({
       id: doc._id?.toString(),
       rideId: doc.rideId.toString(),
+      hikeId: doc.hikeId.toString(),
       riderId: doc.riderId.toString(),
       hikerId: doc.hikerId.toString(),
       currentLocation: doc.currentLocation,
@@ -22,6 +26,7 @@ export const routeDeviationMapper: IMapper<RouteDeviation, IRouteDeviationModel>
   toPersistence(domain: RouteDeviation): Partial<IRouteDeviationModel> {
     return {
       rideId: new Types.ObjectId(domain.getRideId()),
+      hikeId: new Types.ObjectId(domain.getHikeId()),
       riderId: new Types.ObjectId(domain.getRiderId()),
       hikerId: new Types.ObjectId(domain.getHikerId()),
       currentLocation: domain.getCurrentLocation(),

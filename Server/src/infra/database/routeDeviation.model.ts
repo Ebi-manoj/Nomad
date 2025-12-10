@@ -3,6 +3,7 @@ import { Schema, model, Types } from 'mongoose';
 export interface IRouteDeviationModel {
   _id: string;
   rideId: Types.ObjectId;
+  hikeId: Types.ObjectId;
   riderId: Types.ObjectId;
   hikerId: Types.ObjectId;
   currentLocation: GeoJSON.Point;
@@ -19,6 +20,11 @@ const RouteDeviationSchema = new Schema<IRouteDeviationModel>({
     ref: 'RideLog',
     required: true,
     index: true,
+  },
+  hikeId: {
+    type: Schema.Types.ObjectId,
+    ref: 'HikeLog',
+    required: true,
   },
   riderId: {
     type: Schema.Types.ObjectId,

@@ -1,6 +1,7 @@
 export interface RouteDeviationProps {
   id?: string;
   rideId: string;
+  hikeId: string;
   riderId: string;
   hikerId: string;
   currentLocation: GeoJSON.Point;
@@ -14,8 +15,9 @@ export interface RouteDeviationProps {
 export class RouteDeviation {
   private readonly id?: string;
   private readonly rideId: string;
-  private readonly riderId: string;
+  private readonly hikeId: string;
   private readonly hikerId: string;
+  private readonly riderId: string;
   private currentLocation: GeoJSON.Point;
   private deviationDistance: number;
   private acknowledged: boolean;
@@ -26,8 +28,9 @@ export class RouteDeviation {
   constructor(props: RouteDeviationProps) {
     this.id = props.id;
     this.rideId = props.rideId;
-    this.riderId = props.riderId;
+    this.hikeId = props.hikeId;
     this.hikerId = props.hikerId;
+    this.riderId = props.riderId;
     this.currentLocation = props.currentLocation;
     this.deviationDistance = props.deviationDistance;
     this.acknowledged = props.acknowledged;
@@ -44,12 +47,15 @@ export class RouteDeviation {
     return this.rideId;
   }
 
-  getRiderId(): string {
-    return this.riderId;
+  getHikeId(): string {
+    return this.hikeId;
   }
 
   getHikerId(): string {
     return this.hikerId;
+  }
+  getRiderId(): string {
+    return this.riderId;
   }
 
   getCurrentLocation(): GeoJSON.Point {

@@ -7,6 +7,7 @@ import {
 } from '../database/RideBooking.model';
 import { rideBookingMapper } from '../mappers/rideBookingMapper';
 import { Types } from 'mongoose';
+import { RideBookingStatus } from '../../domain/enums/RideBooking';
 
 export class RideBookingRepository
   extends MongoBaseRepository<RideBooking, IRideBookingDocument>
@@ -68,5 +69,13 @@ export class RideBookingRepository
   async findByRiderId(riderId: string): Promise<RideBooking | null> {
     const booking = await this.model.findOne({ riderId });
     return booking ? this.mapper.toDomain(booking) : null;
+  }
+
+  async findPickedUpByRideId(rideId: string): Promise<RideBooking[]> {
+    const doc = await this.model.find({
+      rideId,
+      status: RideBookingStatus.PICKEDUP,
+    });
+    return doc.map(d => this.mapper.toDomain(d));
   }
 }
