@@ -19,10 +19,11 @@ import { GenericModal } from '@/components/GenericModel';
 import type { ReqCancelBookingResDTO } from '@/types/hike';
 import { RefundModel } from './RefundModel';
 import { SosButton } from '@/components/SosButton';
-import type { TriggerSosHikerDTO } from '@/types/sos';
+import type { RouteDeviationResDTO, TriggerSosHikerDTO } from '@/types/sos';
 import { triggerSosHiker } from '@/api/sos';
 import { toast } from 'sonner';
 import { hikerSocket } from '@/config/socket';
+import DeviationAlertModal from './DeviationModel';
 
 export const HikeStartedPage = () => {
   const [currLocation, setCurrLocation] = useState<{
@@ -35,6 +36,15 @@ export const HikeStartedPage = () => {
   const [refundData, setRefundData] = useState<ReqCancelBookingResDTO | null>(
     null
   );
+  const [deviationAlert, setDeviationAlert] = useState<{
+    isOpen: boolean;
+    data: RouteDeviationResDTO | null;
+    message: string;
+  }>({
+    isOpen: false,
+    data: null,
+    message: '',
+  });
   const dispatch = useAppDispatch();
   const { bookingId } = useParams();
   const { booking, loading } = useSelector(
@@ -73,10 +83,17 @@ export const HikeStartedPage = () => {
     }
     hikerSocket.emit('hike:join', booking.rideBooking.hikeId);
 
-    hikerSocket.on('ride:deviated', data => {
-      console.log(data);
-      toast.warning(data.message);
-    });
+    hikerSocket.on(
+      'ride:deviated',
+      (data: { data: RouteDeviationResDTO; message: string }) => {
+        setDeviationAlert({
+          isOpen: true,
+          message: data.message,
+          data: data.data,
+        });
+        toast.warning(data.message);
+      }
+    );
 
     return () => {
       hikerSocket.off('ride:deviated');
@@ -181,6 +198,17 @@ export const HikeStartedPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {deviationAlert.data && (
+        <DeviationAlertModal
+          isOpen
+          data={deviationAlert.data}
+          handleSos={handleTriggerSos}
+          message={deviationAlert.message}
+          onClose={() =>
+            setDeviationAlert({ ...deviationAlert, isOpen: false })
+          }
+        />
+      )}
       {/* Header */}
       <div className="bg-white shadow-sm p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">

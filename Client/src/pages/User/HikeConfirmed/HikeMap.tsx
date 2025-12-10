@@ -62,6 +62,7 @@ export const HikeStartedMap = ({
       (res, status) => status === 'OK' && setPickupToDest(res)
     );
   }, [riderLocation, pickup, destination]);
+  console.log(currentPosition);
   if (!currentPosition)
     return (
       <>
