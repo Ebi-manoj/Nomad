@@ -7,7 +7,9 @@ export const sosLogMapper: IMapper<SosLog, ISosLogModel> = {
   toPersistence(domain: SosLog): Partial<ISosLogModel> {
     return {
       userId: new Types.ObjectId(domain.getUserId()),
-      bookingId: new Types.ObjectId(domain.getBookingId()),
+      bookingId: domain.getBookingId()
+        ? new Types.ObjectId(domain.getBookingId())
+        : undefined,
       rideId: new Types.ObjectId(domain.getRideId()),
       location: domain.getLocation(),
       initiatedBy: domain.getInitiatedBy(),
@@ -21,7 +23,7 @@ export const sosLogMapper: IMapper<SosLog, ISosLogModel> = {
     return new SosLog({
       id: doc._id.toString(),
       userId: doc.userId.toString(),
-      bookingId: doc.bookingId.toString(),
+      bookingId: doc.bookingId ? doc.bookingId.toString() : undefined,
       rideId: doc.rideId.toString(),
       location: doc.location,
       initiatedBy: doc.initiatedBy,

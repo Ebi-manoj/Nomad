@@ -4,6 +4,7 @@ import { TriggerSosUseCase } from '../../../../application/usecases/User/Sos/Tri
 import { TriggerRideSosUseCase } from '../../../../application/usecases/User/Sos/TriggerRideSosUseCase';
 import { LocationResolver } from '../../../../application/services/LocationResolver';
 import { SosService } from '../../../../application/services/SosService';
+import { SosEmailNotifier } from '../../../../application/services/SosEmailNotifier';
 import { ISosController } from '../../../../interfaces/http/controllers/ISosController';
 import { SosController } from '../../../../interfaces/http/controllers/sos.controller';
 import { SosContactRepository } from '../../../repositories/SosContactRepository';
@@ -11,6 +12,7 @@ import { SosLogRepository } from '../../../repositories/SosLogRepository';
 import { RideBookingRepository } from '../../../repositories/RideBookingRepository';
 import { LocationRepository } from '../../../repositories/LocationRepository';
 import { RideRepository } from '../../../repositories/RideRepository';
+import { NodemailerTransporter } from '../../../providers/emailTransporter';
 
 export function sosComposer(): ISosController {
   const sosRepository = new SosContactRepository();
@@ -24,15 +26,19 @@ export function sosComposer(): ISosController {
 
   const locationResolver = new LocationResolver(locationRepository);
   const sosService = new SosService(sosLogRepository, locationResolver);
+  const emailTransporter = new NodemailerTransporter();
+  const sosNotifier = new SosEmailNotifier(sosRepository, emailTransporter);
 
   const triggerSosUseCase = new TriggerSosUseCase(
     rideBookingRepository,
-    sosService
+    sosService,
+    sosNotifier
   );
 
   const triggerRideSosUseCase = new TriggerRideSosUseCase(
     rideRepository,
-    sosService
+    sosService,
+    sosNotifier
   );
 
   return new SosController(

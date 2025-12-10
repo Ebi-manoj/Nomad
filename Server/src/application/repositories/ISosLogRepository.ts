@@ -4,6 +4,7 @@ import { IBaseRepository } from './IBaseRepository';
 export interface ISosLogRepository extends IBaseRepository<SosLog> {
   findByBookingId(bookingId: string): Promise<SosLog | null>;
   findByRideId(rideId: string): Promise<SosLog | null>;
+  findByRiderAndRideId(rideId: string, riderId: string): Promise<SosLog | null>;
   findAll(
     skip: number,
     limit: number,

@@ -13,6 +13,7 @@ export class SosService implements ISosService {
 
   async createSosLog(params: CreateSosLogParams): Promise<SosLogResDTO> {
     const existingSos = await this.checkExistingSos(
+      params.userId,
       params.rideId,
       params.bookingId
     );
@@ -39,12 +40,13 @@ export class SosService implements ISosService {
   }
 
   private checkExistingSos(
+    userId: string,
     rideId: string,
     bookingId?: string
   ): Promise<SosLog | null> {
     if (bookingId) {
       return this.sosLogRepository.findByBookingId(bookingId);
     }
-    return this.sosLogRepository.findByRideId(rideId);
+    return this.sosLogRepository.findByRiderAndRideId(rideId, userId);
   }
 }

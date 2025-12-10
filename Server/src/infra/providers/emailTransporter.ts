@@ -25,4 +25,19 @@ export class NodemailerTransporter implements IEmailTransporter {
     };
     await this.transporter.sendMail(mailOptions);
   }
+  async sendCustomEmail(
+    email: string,
+    subject: string,
+    text: string,
+    html?: string
+  ): Promise<void> {
+    const mailOptions = {
+      from: env.EMAIL_ADDRESS,
+      to: email,
+      subject,
+      text,
+      html,
+    };
+    await this.transporter.sendMail(mailOptions);
+  }
 }

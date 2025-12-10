@@ -10,11 +10,13 @@ import { ISosService } from '../../../services/ISosService';
 import { ITriggerSosUseCase } from './ITriggerSosUseCase';
 import { SosInitiator } from '../../../../domain/enums/SosInitiator';
 import { NotValidStatusToTrigger } from '../../../../domain/errors/SosErrors';
+import { ISosNotifier } from '../../../services/ISosNotifier';
 
 export class TriggerSosUseCase implements ITriggerSosUseCase {
   constructor(
     private readonly rideBookingRepository: IRideBookingRepository,
-    private readonly sosService: ISosService
+    private readonly sosService: ISosService,
+    private readonly sosNotifier: ISosNotifier
   ) {}
 
   async execute(data: TriggerSosReqDTO): Promise<SosLogResDTO> {
@@ -25,13 +27,16 @@ export class TriggerSosUseCase implements ITriggerSosUseCase {
 
     this.validateBookingStatus(booking.getStatus());
 
-    return this.sosService.createSosLog({
+    const log = await this.sosService.createSosLog({
       userId: data.userId,
       rideId: booking.getRideId(),
       bookingId: booking.getId()!,
       initiatedBy: SosInitiator.HIKER,
       location: data.location,
     });
+
+    await this.sosNotifier.notify(log);
+    return log;
   }
 
   private validateBookingStatus(status: RideBookingStatus): void {

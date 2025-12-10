@@ -21,6 +21,13 @@ export class SosLogRepository
     const doc = await this.model.findOne({ rideId });
     return doc ? this.mapper.toDomain(doc) : null;
   }
+  async findByRiderAndRideId(
+    rideId: string,
+    riderId: string
+  ): Promise<SosLog | null> {
+    const doc = await this.model.findOne({ rideId, userId: riderId });
+    return doc ? this.mapper.toDomain(doc) : null;
+  }
 
   async findAll(
     skip: number,

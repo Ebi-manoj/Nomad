@@ -5,7 +5,7 @@ import { SosInitiator } from '../../domain/enums/SosInitiator';
 export interface ISosLogModel {
   _id: string;
   userId: Types.ObjectId;
-  bookingId: Types.ObjectId;
+  bookingId?: Types.ObjectId;
   rideId: Types.ObjectId;
   location: GeoJSON.Point;
   initiatedBy: SosInitiator;

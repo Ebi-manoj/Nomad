@@ -10,11 +10,13 @@ import { IRideRepository } from '../../../repositories/IRideRepository';
 import { ISosService } from '../../../services/ISosService';
 import { ITriggerRideSosUseCase } from './ITriggerRideSosUseCase';
 import { NotValidStatusToTrigger } from '../../../../domain/errors/SosErrors';
+import { ISosNotifier } from '../../../services/ISosNotifier';
 
 export class TriggerRideSosUseCase implements ITriggerRideSosUseCase {
   constructor(
     private readonly rideRepository: IRideRepository,
-    private readonly sosService: ISosService
+    private readonly sosService: ISosService,
+    private readonly sosNotifier: ISosNotifier
   ) {}
 
   async execute(data: TriggerRideSosReqDTO): Promise<SosLogResDTO> {
@@ -27,11 +29,16 @@ export class TriggerRideSosUseCase implements ITriggerRideSosUseCase {
       throw new NotValidStatusToTrigger();
     }
 
-    return this.sosService.createSosLog({
+    console.log(data);
+
+    const log = await this.sosService.createSosLog({
       userId: data.userId,
       rideId: ride.getRideId()!,
       initiatedBy: SosInitiator.RIDER,
       location: data.location,
     });
+
+    await this.sosNotifier.notify(log);
+    return log;
   }
 }
