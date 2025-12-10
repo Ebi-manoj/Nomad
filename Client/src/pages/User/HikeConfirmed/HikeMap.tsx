@@ -34,7 +34,7 @@ export const HikeStartedMap = ({
         });
       },
       err => console.error(err),
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   }, []);
 
@@ -62,7 +62,7 @@ export const HikeStartedMap = ({
       (res, status) => status === 'OK' && setPickupToDest(res)
     );
   }, [riderLocation, pickup, destination]);
-  console.log(currentPosition);
+
   if (!currentPosition)
     return (
       <>

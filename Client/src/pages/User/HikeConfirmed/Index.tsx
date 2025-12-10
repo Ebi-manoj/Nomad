@@ -200,7 +200,7 @@ export const HikeStartedPage = () => {
     <div className="min-h-screen bg-white">
       {deviationAlert.data && (
         <DeviationAlertModal
-          isOpen
+          isOpen={deviationAlert.isOpen}
           data={deviationAlert.data}
           handleSos={handleTriggerSos}
           message={deviationAlert.message}
