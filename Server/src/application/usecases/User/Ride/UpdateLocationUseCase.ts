@@ -21,8 +21,8 @@ export class UpdateLocationUseCase implements IUpdateLocationUseCase {
   async execute(data: UpdateLocationDTO) {
     const location = new Location(data);
     await this._locationRepository.saveLocation(location);
-    data.lat = 9.97;
-    data.lng = 76.24;
+    // data.lat = 9.97;
+    // data.lng = 76.24;
     const deviation = await this.calculateDeviation(data);
     if (deviation > 2) {
       console.log('Devaited true');

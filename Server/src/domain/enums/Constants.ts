@@ -18,5 +18,5 @@ export const MAX_RIDE_ACCEPTANCE = 20;
 export const MAX_JOIN_REQUEST = 2;
 export const PRO_PLATFORM_FEE = 5;
 export const FREE_PLATFORM_FEE = 5;
-export const PREMIUM_PLATFORM_FEE = 5;
-export const FREE_TIER_COST_SHARING = 5;
+export const PREMIUM_PLATFORM_FEE = 3;
+export const FREE_TIER_COST_SHARING = 10;
