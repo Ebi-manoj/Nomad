@@ -11,41 +11,48 @@ import {
   SubscriptionTier,
 } from '../../../../domain/enums/subscription';
 import {
+  AlreadySubscribed,
   FreeTierNotRequiredPayment,
   InvalidPlanTierOrBilling,
 } from '../../../../domain/errors/SubscriptionError';
 import { ICheckoutSessionRepository } from '../../../repositories/ICheckoutSessionRepository';
 import { CHECKOUT_SESSION_TTL } from '../../../../domain/enums/Constants';
+import { ISubscriptionRepository } from '../../../repositories/ISubscriptionRepository';
 
 export class CreateSubscriptionCheckoutSessionUseCase
   implements ICreateSubscriptionCheckoutSessionUseCase
 {
   constructor(
-    private readonly users: IUserRepository,
-    private readonly payments: IPaymentService,
-    private priceConfig: PriceIdMapping,
-    private readonly checkoutSessions: ICheckoutSessionRepository
+    private readonly _users: IUserRepository,
+    private readonly _payments: IPaymentService,
+    private _priceConfig: PriceIdMapping,
+    private readonly _checkoutSessions: ICheckoutSessionRepository,
+    private readonly _subscriptionRepository: ISubscriptionRepository
   ) {}
 
   async execute(
     data: CreateSubscriptionCheckoutSessionDTO
   ): Promise<{ id: string; url: string }> {
-    const user = await this.users.findById(data.userId);
+    const user = await this._users.findById(data.userId);
     if (!user) throw new UserNotFound();
 
     if (data.tier === SubscriptionTier.FREE) {
       throw new FreeTierNotRequiredPayment();
     }
 
-    const idempotencyKey = this.generateIdempotencyKey(
+    const isSubscribed = await this._subscriptionRepository.findActiveByUserId(
+      data.userId
+    );
+    if (isSubscribed) throw new AlreadySubscribed();
+
+    const idempotencyKey = this._generateIdempotencyKey(
       data.userId,
       data.tier,
       data.billingCycle
     );
 
-    const findExistingSession = await this.checkoutSessions.getByIdempotencyKey(
-      idempotencyKey
-    );
+    const findExistingSession =
+      await this._checkoutSessions.getByIdempotencyKey(idempotencyKey);
     if (findExistingSession && findExistingSession.status == 'pending') {
       const now = Date.now();
       const expiryTime = new Date(findExistingSession.createdAt).getTime();
@@ -60,10 +67,10 @@ export class CreateSubscriptionCheckoutSessionUseCase
       }
     }
 
-    const priceId = this.priceConfig[data.tier]?.[data.billingCycle];
+    const priceId = this._priceConfig[data.tier]?.[data.billingCycle];
     if (!priceId) throw new InvalidPlanTierOrBilling();
 
-    const session = await this.payments.createSubscriptionCheckoutSession({
+    const session = await this._payments.createSubscriptionCheckoutSession({
       priceId,
       customerEmail: user.getEmail(),
       metadata: { ...data, ...data.metadata },
@@ -75,7 +82,7 @@ export class CreateSubscriptionCheckoutSessionUseCase
     const expiresAt = new Date(
       Date.now() + CHECKOUT_SESSION_TTL * 1000
     ).toISOString();
-    await this.checkoutSessions.create(
+    await this._checkoutSessions.create(
       {
         userId: data.userId,
         stripeSessionId: session.id,
@@ -93,7 +100,7 @@ export class CreateSubscriptionCheckoutSessionUseCase
     return session;
   }
 
-  private generateIdempotencyKey(
+  private _generateIdempotencyKey(
     userId: string,
     tier: SubscriptionTier,
     billingCycle: BillingCycle

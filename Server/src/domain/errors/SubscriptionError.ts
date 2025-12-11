@@ -6,6 +6,13 @@ export class FreeTierNotRequiredPayment extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class AlreadySubscribed extends CustomError {
+  constructor(
+    message = 'Already has an active subscription,Manage your subscription first'
+  ) {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
 
 export class InvalidPlanTierOrBilling extends CustomError {
   constructor(message = 'Invalid plan tier or billing cycle') {

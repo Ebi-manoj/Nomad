@@ -27,7 +27,8 @@ export function subscriptionComposer(): ISubscriptionController {
     users,
     payments,
     stripePriceConfig,
-    checkoutSessions
+    checkoutSessions,
+    subscriptions
   );
   const handleWebhook = new HandleSubscriptionWebhookUseCase(
     payments,
