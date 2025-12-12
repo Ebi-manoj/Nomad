@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { CustomError } from '../../../domain/errors/CustomError';
-import { ApiDTO } from '../../http/helpers/implementation/apiResponse';
 import { ZodError } from 'zod';
 import { WinstonLogger } from '../../../infra/providers/winstonLogger';
+import { ApiResponse } from '../../http/helpers/implementation/apiResponse';
 
 const logger = new WinstonLogger();
 
@@ -31,6 +31,6 @@ export function errorHandling(
     path: req.path,
     statusCode,
   });
-  const response = ApiDTO.error(message);
+  const response = ApiResponse.error(message);
   res.status(statusCode).json(response);
 }

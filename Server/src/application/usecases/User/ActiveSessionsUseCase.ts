@@ -1,4 +1,6 @@
 import { ActiveSession } from '../../../domain/dto/authDTO';
+import { hikeMapper } from '../../mappers/HikeMapper';
+import { rideMapper } from '../../mappers/RideMapper';
 import { IHikeRepository } from '../../repositories/IHikeRepository';
 import { IRideRepository } from '../../repositories/IRideRepository';
 import { IActiveSessionsUseCase } from './IActiveSessionsUseCase';
@@ -10,9 +12,12 @@ export class ActiveSessionsUseCase implements IActiveSessionsUseCase {
   ) {}
 
   async execute(userId: string): Promise<ActiveSession> {
-    const activeHike = await this._hikeRepository.findUserActiveHike(userId);
-    const activeRide = await this._rideRepository.findUserActiveRide(userId);
+    const hike = await this._hikeRepository.findUserActiveHike(userId);
+    const ride = await this._rideRepository.findUserActiveRide(userId);
 
-    return { activeRide, activeHike };
+    return {
+      activeHike: hike ? hikeMapper(hike) : null,
+      activeRide: ride ? rideMapper(ride) : null,
+    };
   }
 }

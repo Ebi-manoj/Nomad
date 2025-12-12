@@ -1,5 +1,7 @@
 import { HikeLog } from '../entities/Hike';
 import { RideLog } from '../entities/Ride';
+import { HikeResponseDTO } from './HikeDTO';
+import { RideResponseDTO } from './RideDTO';
 
 export interface RegisterUserRequestDTO {
   fullName: string;
@@ -69,6 +71,6 @@ export interface RefreshTokenResponseDTO {
 }
 
 export interface ActiveSession {
-  activeRide: RideLog | null;
-  activeHike: HikeLog | null;
+  activeRide: RideResponseDTO | null;
+  activeHike: HikeResponseDTO | null;
 }

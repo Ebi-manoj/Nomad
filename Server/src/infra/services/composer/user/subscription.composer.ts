@@ -42,7 +42,6 @@ export function subscriptionComposer(): ISubscriptionController {
   );
 
   const getSubscriptionUseCase = new GetSubscriptionDetailUseCase(
-    subscriptions,
     usageService,
     subService
   );
