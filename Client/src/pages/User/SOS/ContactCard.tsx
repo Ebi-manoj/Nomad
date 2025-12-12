@@ -10,6 +10,7 @@ interface ContactCardProps {
   email?: string;
   relation: string;
   handleEdit: () => void;
+  handleDelete: () => void;
 }
 
 const ContactCard = ({
@@ -18,6 +19,7 @@ const ContactCard = ({
   email,
   relation,
   handleEdit,
+  handleDelete,
 }: ContactCardProps) => {
   const initials = name
     .split(' ')
@@ -35,7 +37,10 @@ const ContactCard = ({
         >
           <Pencil size={16} className="text-blue-400" />
         </button>
-        <button className="cursor-pointer rounded-full hover:bg-gray-100 p-2">
+        <button
+          className="cursor-pointer rounded-full hover:bg-gray-100 p-2"
+          onClick={handleDelete}
+        >
           <Trash2 size={16} className="text-red-500 cursor-pointer" />
         </button>
       </div>

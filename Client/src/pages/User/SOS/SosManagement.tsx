@@ -4,7 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle, UserPlus, Shield, Pencil } from 'lucide-react';
+import {
+  AlertCircle,
+  UserPlus,
+  Shield,
+  Pencil,
+  ShieldAlert,
+} from 'lucide-react';
 import ContactCard from './ContactCard';
 import {
   Dialog,
@@ -22,16 +28,20 @@ import {
   fetchSosContacts,
   addSosContact,
   editSosContact,
+  deleteSosContact,
 } from '@/store/features/user/sos/sos.thunk';
 import type { AppDispatch } from '@/store/store';
 import { toast } from 'sonner';
 import type { SosContactDTO } from '@/types/sos';
+import { GenericModal } from '@/components/GenericModel';
 
 export const SosManagementPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { contacts, loading } = useSelector((state: RootState) => state.sos);
   const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [editContact, setEditContact] = useState<SosContactDTO | null>(null);
+  const [deletingContact, setDeletingContact] = useState<string | null>(null);
 
   const {
     register,
@@ -81,7 +91,9 @@ export const SosManagementPage = () => {
       await dispatch(addSosContact(dto));
       toast.success('SOS contact added');
     } else {
-      await dispatch(editSosContact({ id: editContact.id, contact: dto }));
+      await dispatch(
+        editSosContact({ id: editContact.id, contact: dto })
+      ).unwrap();
       toast.success('Contact edited successfully');
     }
     reset();
@@ -96,6 +108,16 @@ export const SosManagementPage = () => {
   const handleAddClick = () => {
     setEditContact(null);
     setOpen(true);
+  };
+  const handleDelete = (id: string) => {
+    setDeletingContact(id);
+    setConfirmOpen(true);
+  };
+  const handleDeleteConfirmation = async () => {
+    if (!deletingContact) return;
+    await dispatch(deleteSosContact(deletingContact)).unwrap();
+    toast.success('Contact deleted successfully');
+    setConfirmOpen(false);
   };
 
   const emergencyContacts = contacts.map(c => ({
@@ -168,6 +190,7 @@ export const SosManagementPage = () => {
                   key={contact.id}
                   {...contact}
                   handleEdit={() => handleEdit(contact)}
+                  handleDelete={() => handleDelete(contact.id)}
                 />
               ))}
             </div>
@@ -275,6 +298,31 @@ export const SosManagementPage = () => {
           </DialogContent>
         </Dialog>
       </main>
+      <GenericModal
+        isOpen={confirmOpen}
+        onClose={() => {
+          if (loading) return;
+          setConfirmOpen(false);
+          setDeletingContact(null);
+        }}
+        title="Delete Selected Contact"
+        titleIcon={<ShieldAlert size={20} />}
+        subtitle="Are you sure you want to delete this contact "
+        primaryAction={{
+          label: 'Confirm',
+          className: 'bg-red-600 hover:bg-red-700',
+          onClick: handleDeleteConfirmation,
+          loading,
+        }}
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => {
+            if (loading) return;
+            setConfirmOpen(false);
+            setDeletingContact(null);
+          },
+        }}
+      ></GenericModal>
     </div>
   );
 };

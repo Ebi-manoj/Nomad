@@ -1,12 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 interface GenericModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
-  titleIcon?:ReactNode
+  titleIcon?: ReactNode;
   subtitle?: string;
   children?: React.ReactNode;
   primaryAction?: {
@@ -18,8 +18,8 @@ interface GenericModalProps {
   secondaryAction?: {
     label: string;
     onClick: () => void;
-     className?: string;
-      loading?: boolean;
+    className?: string;
+    loading?: boolean;
   };
 }
 
@@ -54,12 +54,12 @@ export const GenericModal = ({
               onClick={onClose}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer"
             >
-              <X size={22} />
+              <X size={16} />
             </button>
 
             {/* Title */}
             {title && (
-              <div className='flex items-center gap-1'>
+              <div className="flex items-center gap-1">
                 {titleIcon}
                 <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
               </div>
@@ -75,13 +75,11 @@ export const GenericModal = ({
 
             {/* CTA Buttons */}
             <div className="mt-6 flex items-center justify-center gap-3">
-              
-
               {secondaryAction && (
                 <button
                   onClick={secondaryAction.onClick}
-                  className={`ursor-pointer w-full py-2.5 bg-gray-100 hover:bg-gray-200 transition text-gray-700 font-medium rounded-lg ${secondaryAction.className}`
-              }>
+                  className={`ursor-pointer w-full py-2.5 bg-gray-100 hover:bg-gray-200 transition text-gray-700 font-medium rounded-lg ${secondaryAction.className}`}
+                >
                   {secondaryAction.label}
                 </button>
               )}
@@ -91,9 +89,11 @@ export const GenericModal = ({
                   disabled={primaryAction.loading}
                   className={`cursor-pointer w-full py-2.5 bg-blue-600 hover:bg-blue-700 transition text-white font-medium rounded-lg ${primaryAction.className}`}
                 >
-                  {primaryAction.loading
-                    ? 'Please wait...'
-                    : primaryAction.label}
+                  {primaryAction.loading ? (
+                    <Loader2 className="animate-spin mx-auto " size={20} />
+                  ) : (
+                    primaryAction.label
+                  )}
                 </button>
               )}
             </div>
