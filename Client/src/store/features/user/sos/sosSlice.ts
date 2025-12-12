@@ -1,7 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { SosContactDTO } from '@/types/sos';
 import type { SosState } from './sos';
-import { fetchSosContacts, addSosContact } from './sos.thunk';
+import {
+  fetchSosContacts,
+  addSosContact,
+  editSosContact,
+  deleteSosContact,
+} from './sos.thunk';
 
 const initialState: SosState = {
   contacts: [],
@@ -34,7 +39,8 @@ const sosSlice = createSlice({
       })
       .addCase(fetchSosContacts.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || 'Failed to load SOS contacts';
+        state.error =
+          (action.payload as string) || 'Failed to load SOS contacts';
       })
       .addCase(addSosContact.pending, state => {
         state.loading = true;
@@ -46,7 +52,33 @@ const sosSlice = createSlice({
       })
       .addCase(addSosContact.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || 'Failed to save SOS contact';
+        state.error =
+          (action.payload as string) || 'Failed to save SOS contact';
+      })
+      .addCase(editSosContact.pending, state => {
+        state.loading = true;
+      })
+      .addCase(editSosContact.fulfilled, (state, action) => {
+        const contact = action.payload;
+        state.contacts = state.contacts.map(c =>
+          c.id != contact.id ? c : { ...contact }
+        );
+        state.loading = false;
+      })
+      .addCase(editSosContact.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || 'Failed to edit contact';
+      })
+      .addCase(deleteSosContact.pending, state => {
+        state.loading = true;
+      })
+      .addCase(deleteSosContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.contacts = state.contacts.filter(c => c.id !== action.payload.id);
+      })
+      .addCase(deleteSosContact.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });

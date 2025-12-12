@@ -11,6 +11,11 @@ export interface SosContactsResDTO {
   contacts: SosContactDTO[];
 }
 
+export interface DeleteSosContactResDTO {
+  id: string;
+  message: string;
+}
+
 export interface TriggerSosHikerDTO {
   bookingId: string;
   location: { lat: number; lng: number } | null;

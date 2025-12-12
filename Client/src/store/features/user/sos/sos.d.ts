@@ -5,3 +5,8 @@ export interface SosState {
   loading: boolean;
   error: string;
 }
+
+interface EditContactPayload {
+  id: string;
+  contact: Omit<SosContactDTO, 'id'>;
+}
