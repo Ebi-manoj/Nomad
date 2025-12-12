@@ -24,7 +24,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
   async execute(
     data: paymentIntentRequestDTO
   ): Promise<paymentIntentResponseDTO> {
-    this._logger.info('CreatePaymentIntent executing with', data);
+    this._logger.info('CreatePaymentIntent executing with', { ...data });
     try {
       if (!data.amount || data.amount <= 0) {
         throw new InvalidAmount();
@@ -63,6 +63,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         paymentIntentId: paymentIntent.id,
       };
     } catch (error) {
+      this._logger.error('CreatePaymentIntent Failed', { error });
       throw error;
     }
   }

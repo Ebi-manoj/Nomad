@@ -65,7 +65,7 @@ export class HandleSubscriptionWebhookUseCase
         data = evt.data;
         eventType = evt.type;
       } catch (err) {
-        console.log('verification failed,parsing manually');
+        console.log('verification failed,parsing manually', err);
       }
     }
 

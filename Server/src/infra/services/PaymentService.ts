@@ -105,7 +105,7 @@ export class StripePaymentService implements IPaymentService {
   async constructWebhookEvent(
     payload: Buffer | string,
     signature: string
-  ): Promise<{ type: string; data: any }> {
+  ): Promise<{ type: string; data: unknown }> {
     try {
       const secret = env.STRIPE_WEBHOOKSECERTKEY;
       const event = this._stripe.webhooks.constructEvent(

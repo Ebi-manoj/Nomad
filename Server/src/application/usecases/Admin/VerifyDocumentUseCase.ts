@@ -24,8 +24,13 @@ export class VerifyDocumentUseCase implements IVerifyDocumentUseCase {
     if (data.status == DocumentStatus.Verified) {
       const user = await this._userRepository.findById(document.getUserId());
       if (!user) throw new UserNotFound();
-      document.getDocumentType() == 'aadhaar' && user.setAadhaarVerified(true);
-      document.getDocumentType() == 'licence' && user.setLicenceVerified(true);
+      if (document.getDocumentType() == 'aadhaar') {
+        user.setAadhaarVerified(true);
+      }
+      if (document.getDocumentType() == 'licence') {
+        user.setLicenceVerified(true);
+      }
+
       await this._userRepository.update(user.getId(), user);
       document.setVerified(true);
     }

@@ -19,7 +19,7 @@ export interface IPaymentService {
   constructWebhookEvent(
     payload: Buffer | string,
     signature: string
-  ): Promise<{ type: string; data: any }>;
+  ): Promise<{ type: string; data: unknown }>;
 
   retrieveSubscription(subscriptionId: string): Promise<{
     id: string;
