@@ -11,7 +11,7 @@ import { IFileuploadGateway } from '../providers/IFileuploadGateway';
 import { IPresignedUrlService } from './IPresignedUrlService';
 
 export class PresignedUrlService implements IPresignedUrlService {
-  constructor(private readonly fileUploader: IFileuploadGateway) {}
+  constructor(private readonly _fileUploader: IFileuploadGateway) {}
 
   async getUploadUrl(
     data: presignedURLRequestDTO
@@ -19,10 +19,10 @@ export class PresignedUrlService implements IPresignedUrlService {
     if (!allowedMimeTypes.includes(data.fileType))
       throw new InvalidFileFormat();
     if (!IMAGE_FOLDERS.includes(data.type)) throw new InvalidFolderType();
-    const urls = this.fileUploader.getPresignedURL(data);
+    const urls = this._fileUploader.getPresignedURL(data);
     return urls;
   }
   async getViewUrl(data: { fileURL: string }): Promise<string> {
-    return this.fileUploader.getViewPresignedUrl(data.fileURL);
+    return this._fileUploader.getViewPresignedUrl(data.fileURL);
   }
 }

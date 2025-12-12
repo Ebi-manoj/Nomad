@@ -16,8 +16,8 @@ export class SubscriptionValidator
 {
   constructor(
     subscriptionRepo: ISubscriptionRepository,
-    private readonly joinRequestRepo: IJoinRequestRepository,
-    private readonly usageService: ISubscriptionUsageService
+    private readonly _joinRequestRepo: IJoinRequestRepository,
+    private readonly _usageService: ISubscriptionUsageService
   ) {
     super(subscriptionRepo);
   }
@@ -28,7 +28,7 @@ export class SubscriptionValidator
     const limit = features.getMaxJoinRequestsPerRide();
     if (limit == null) return;
 
-    const joinReqCount = await this.joinRequestRepo.findRequestCountOfHike(
+    const joinReqCount = await this._joinRequestRepo.findRequestCountOfHike(
       hikeId
     );
     if (joinReqCount >= limit) throw new JoinRequestLimitExceeded();
@@ -38,7 +38,7 @@ export class SubscriptionValidator
     const { features } = await this.getActiveSubscription(userId);
     const limit = features.getMaxRideAcceptancesPerMonth();
     if (limit == null) return;
-    const usage = await this.usageService.getUsage(userId);
+    const usage = await this._usageService.getUsage(userId);
 
     const currentUsage = usage.getRideAcceptancesCount() ?? 0;
     if (currentUsage >= limit) throw new RideAcceptanceLimitExceeded();

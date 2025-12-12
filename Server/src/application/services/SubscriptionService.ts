@@ -10,12 +10,12 @@ import { ISubscriptionService } from './ISubscriptionService';
 
 export class SubscriptionService implements ISubscriptionService {
   constructor(
-    private readonly subscriptionRepository: ISubscriptionRepository
+    private readonly _subscriptionRepository: ISubscriptionRepository
   ) {}
   async getActiveSubscription(
     userId: string
   ): Promise<SubscriptionServiceResDTO> {
-    let subscription = await this.subscriptionRepository.findActiveByUserId(
+    let subscription = await this._subscriptionRepository.findActiveByUserId(
       userId
     );
     if (!subscription) {

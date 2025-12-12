@@ -6,8 +6,8 @@ import { ILocationRepository } from '../repositories/ILocationRepository';
 import { IRefundService } from './IRefundService';
 
 export class RefundService implements IRefundService {
-  private readonly THRESHOLD_DISTANCE_KM = 5;
-  private readonly THRESHOLD_DELAY_MIN = 10;
+  private readonly _THRESHOLD_DISTANCE_KM = 5;
+  private readonly _THRESHOLD_DELAY_MIN = 10;
 
   constructor(
     private readonly locationRepository: ILocationRepository,
@@ -25,7 +25,7 @@ export class RefundService implements IRefundService {
     const minutesSinceBooking = this.getMinutesSince(booking.getCreatedAt());
     const riderDelayMin = minutesSinceBooking - estimation.duration;
 
-    const isWithinAllowedDelay = riderDelayMin <= this.THRESHOLD_DELAY_MIN;
+    const isWithinAllowedDelay = riderDelayMin <= this._THRESHOLD_DELAY_MIN;
 
     //  Check Rider Current Distance
 
@@ -59,7 +59,7 @@ export class RefundService implements IRefundService {
     }
 
     const isFarFromPickup =
-      currentDistanceResult.distance >= this.THRESHOLD_DISTANCE_KM;
+      currentDistanceResult.distance >= this._THRESHOLD_DISTANCE_KM;
 
     const qualifiesFor50PercentRefund = isFarFromPickup;
 

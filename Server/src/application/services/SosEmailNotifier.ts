@@ -5,12 +5,12 @@ import { IEmailTransporter } from '../providers/IEmailTransporter';
 
 export class SosEmailNotifier implements ISosNotifier {
   constructor(
-    private readonly sosContactRepository: ISosContactRepository,
-    private readonly emailTransporter: IEmailTransporter
+    private readonly _sosContactRepository: ISosContactRepository,
+    private readonly _emailTransporter: IEmailTransporter
   ) {}
 
   async notify(log: SosLogResDTO): Promise<void> {
-    const contacts = await this.sosContactRepository.findByUserId(log.userId);
+    const contacts = await this._sosContactRepository.findByUserId(log.userId);
     const contactsWithEmail = contacts
       .map(c => c.getEmail())
       .filter((e): e is string => !!e && e.trim().length > 0);
@@ -36,17 +36,24 @@ export class SosEmailNotifier implements ISosNotifier {
     const html = `
       <div>
         <p>An emergency <strong>SOS</strong> has been triggered.</p>
-        ${log.bookingId ? `<p>Booking ID: <strong>${log.bookingId}</strong></p>` : ''}
+        ${
+          log.bookingId
+            ? `<p>Booking ID: <strong>${log.bookingId}</strong></p>`
+            : ''
+        }
         ${log.rideId ? `<p>Ride ID: <strong>${log.rideId}</strong></p>` : ''}
-        ${mapLink ? `<p>Live location: <a href="${mapLink}">${mapLink}</a></p>` : ''}
+        ${
+          mapLink
+            ? `<p>Live location: <a href="${mapLink}">${mapLink}</a></p>`
+            : ''
+        }
         <p>This is an automated alert from <strong>Nomad</strong>. Please reach out to the user immediately.</p>
       </div>
     `;
 
     await Promise.all(
       contactsWithEmail.map(email =>
-        this.emailTransporter
-          .sendCustomEmail(email, subject, text, html)
+        this._emailTransporter.sendCustomEmail(email, subject, text, html)
       )
     );
   }

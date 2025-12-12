@@ -9,10 +9,10 @@ import { ISubscriptionService } from './ISubscriptionService';
 
 export class RideMatchService implements IRideMatchService {
   constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly durationCalculator: IDurationCalculator,
-    private readonly locationRepository: ILocationRepository,
-    private readonly susbcriptionService: ISubscriptionService
+    private readonly _userRepository: IUserRepository,
+    private readonly _durationCalculator: IDurationCalculator,
+    private readonly _locationRepository: ILocationRepository,
+    private readonly _susbcriptionService: ISubscriptionService
   ) {}
 
   async evaluate(
@@ -35,7 +35,7 @@ export class RideMatchService implements IRideMatchService {
       context.destination.coordinates[1],
       context.destination.coordinates[0],
     ];
-    const riderCurrentLocation = await this.locationRepository.getLocation(
+    const riderCurrentLocation = await this._locationRepository.getLocation(
       ride.getRideId()!
     );
     if (!riderCurrentLocation) return null;
@@ -103,7 +103,7 @@ export class RideMatchService implements IRideMatchService {
       nearestPickupPoint
     );
     const departure =
-      this.durationCalculator.durationBetweenTwoPoints(departureDistance);
+      this._durationCalculator.durationBetweenTwoPoints(departureDistance);
 
     // Find Duration
     const routeDistance = geo.distanceBetweenPoints(
@@ -111,10 +111,10 @@ export class RideMatchService implements IRideMatchService {
       nearestDestPoint
     );
     const duration =
-      this.durationCalculator.durationBetweenTwoPoints(routeDistance);
+      this._durationCalculator.durationBetweenTwoPoints(routeDistance);
     // Get the userDetail
-    const user = await this.userRepository.findById(ride.getRiderId());
-    const { tier } = await this.susbcriptionService.getActiveSubscription(
+    const user = await this._userRepository.findById(ride.getRiderId());
+    const { tier } = await this._susbcriptionService.getActiveSubscription(
       ride.getRiderId()
     );
     if (!user) return null;

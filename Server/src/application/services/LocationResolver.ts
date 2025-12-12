@@ -3,7 +3,7 @@ import { ILocationRepository } from '../repositories/ILocationRepository';
 import { ILocationResolver } from './ILocationResolver';
 
 export class LocationResolver implements ILocationResolver {
-  constructor(private readonly locationRepository: ILocationRepository) {}
+  constructor(private readonly _locationRepository: ILocationRepository) {}
 
   async resolveLocation(
     providedLocation: { lat: number; lng: number } | undefined,
@@ -16,7 +16,7 @@ export class LocationResolver implements ILocationResolver {
       };
     }
 
-    const riderLocation = await this.locationRepository.getLocation(rideId);
+    const riderLocation = await this._locationRepository.getLocation(rideId);
     if (!riderLocation) {
       throw new RideLocationNotFound();
     }

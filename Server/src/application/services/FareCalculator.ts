@@ -1,17 +1,17 @@
 import { IFareCalculator } from './IFareCalculator';
 
 export class FareCalculator implements IFareCalculator {
-  private readonly platformFeePerc = 10;
-  private readonly minimumFare = 50;
+  private readonly _platformFeePerc = 10;
+  private readonly _minimumFare = 50;
   getFare(costPerKm: number, distanceInKm: number): number {
     const totalFare = costPerKm * distanceInKm;
-    const finalFare = Math.max(totalFare, this.minimumFare);
+    const finalFare = Math.max(totalFare, this._minimumFare);
     return Number(finalFare.toFixed(2));
   }
 
   getHikerAmount(
     costSharing: number,
-    platformFeePerc = this.platformFeePerc
+    platformFeePerc = this._platformFeePerc
   ): {
     platformFee: number;
     totalAmount: number;
@@ -24,7 +24,7 @@ export class FareCalculator implements IFareCalculator {
   }
   getRiderEarning(
     costSharing: number,
-    platformFeePerc = this.platformFeePerc
+    platformFeePerc = this._platformFeePerc
   ): {
     platformFee: number;
     totalEarning: number;

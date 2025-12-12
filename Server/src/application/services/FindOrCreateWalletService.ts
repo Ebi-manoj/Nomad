@@ -3,12 +3,12 @@ import { IWalletRepository } from '../repositories/IWalletRepository';
 import { IFindOrCreateWalletService } from './IFindOrCreateWalletService';
 
 export class FindOrCreateWalletService implements IFindOrCreateWalletService {
-  constructor(private readonly walletRepository: IWalletRepository) {}
+  constructor(private readonly _walletRepository: IWalletRepository) {}
 
   async execute(userId: string): Promise<Wallet> {
-    let wallet = await this.walletRepository.findByUserId(userId);
+    let wallet = await this._walletRepository.findByUserId(userId);
     if (!wallet) {
-      wallet = await this.walletRepository.create(new Wallet({ userId }));
+      wallet = await this._walletRepository.create(new Wallet({ userId }));
     }
     return wallet;
   }

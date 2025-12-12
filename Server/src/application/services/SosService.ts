@@ -7,8 +7,8 @@ import { SosLogResDTO } from '../../domain/dto/SosDTO';
 
 export class SosService implements ISosService {
   constructor(
-    private readonly sosLogRepository: ISosLogRepository,
-    private readonly locationResolver: ILocationResolver
+    private readonly _sosLogRepository: ISosLogRepository,
+    private readonly _locationResolver: ILocationResolver
   ) {}
 
   async createSosLog(params: CreateSosLogParams): Promise<SosLogResDTO> {
@@ -22,7 +22,7 @@ export class SosService implements ISosService {
       return sosLogMapper(existingSos);
     }
 
-    const resolvedLocation = await this.locationResolver.resolveLocation(
+    const resolvedLocation = await this._locationResolver.resolveLocation(
       params.location,
       params.rideId
     );
@@ -35,7 +35,7 @@ export class SosService implements ISosService {
       initiatedBy: params.initiatedBy,
     });
 
-    const saved = await this.sosLogRepository.create(sosLog);
+    const saved = await this._sosLogRepository.create(sosLog);
     return sosLogMapper(saved);
   }
 
@@ -45,8 +45,8 @@ export class SosService implements ISosService {
     bookingId?: string
   ): Promise<SosLog | null> {
     if (bookingId) {
-      return this.sosLogRepository.findByBookingId(bookingId);
+      return this._sosLogRepository.findByBookingId(bookingId);
     }
-    return this.sosLogRepository.findByRiderAndRideId(rideId, userId);
+    return this._sosLogRepository.findByRiderAndRideId(rideId, userId);
   }
 }
