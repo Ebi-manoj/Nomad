@@ -1,6 +1,11 @@
 import { DocumentsWithUserDTO } from '../../domain/dto/DocumentsDTO';
 import { Document } from '../../domain/entities/Document';
 import { IDocumentModel } from '../database/document.model';
+import { IUserModel } from '../database/user.model';
+
+export interface DocumentWithUserAggregate extends IDocumentModel {
+  users: IUserModel;
+}
 
 export function documentDomainMapper(documentDoc: IDocumentModel): Document {
   return new Document({
@@ -16,7 +21,9 @@ export function documentDomainMapper(documentDoc: IDocumentModel): Document {
   });
 }
 
-export function documentWithUserMapper(doc: any): DocumentsWithUserDTO {
+export function documentWithUserMapper(
+  doc: DocumentWithUserAggregate
+): DocumentsWithUserDTO {
   return {
     id: doc._id.toString(),
     type: doc.document_type,

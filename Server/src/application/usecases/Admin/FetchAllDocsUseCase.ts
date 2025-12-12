@@ -2,7 +2,6 @@ import {
   DocumentsWithUserDTO,
   FetchDocsQuery,
 } from '../../../domain/dto/DocumentsDTO';
-import { documentWithUserMapper } from '../../mappers/DocumentResponseMapper';
 import { IDocumentRepository } from '../../repositories/IDocumentRepository';
 import { IFetchAllDocsUseCase } from './IFetchAllDocsUseCase';
 
@@ -21,6 +20,6 @@ export class FetchAllDocsUseCase implements IFetchAllDocsUseCase {
       type,
       skip,
     });
-    return documents.map(d => documentWithUserMapper(d));
+    return documents;
   }
 }

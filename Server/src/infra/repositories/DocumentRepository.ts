@@ -5,7 +5,10 @@ import {
 } from '../../domain/dto/DocumentsDTO';
 import { Document } from '../../domain/entities/Document';
 import { DocumentModel, IDocumentModel } from '../database/document.model';
-import { documentDomainMapper } from '../mappers/documentDomainMapper';
+import {
+  documentDomainMapper,
+  documentWithUserMapper,
+} from '../mappers/documentDomainMapper';
 
 export class DocumentRepository implements IDocumentRepository {
   async findById(id: string): Promise<Document | null> {
@@ -85,6 +88,6 @@ export class DocumentRepository implements IDocumentRepository {
       { $skip: skip },
       { $limit: limit },
     ]);
-    return docs;
+    return docs.map(documentWithUserMapper);
   }
 }

@@ -17,7 +17,7 @@ export default defineConfig([
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     rules: {
       'unused-imports/no-unused-imports': 'error',
-      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-explicit-any': 'error',
       'no-console': 'warn',
     },
   },
