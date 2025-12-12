@@ -7,11 +7,11 @@ import {
   BillingCycle,
   SubscriptionTier,
 } from '../../../domain/enums/subscription';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { ISubscriptionController } from './ISubscriptionController';
 import { IHandleSubscriptionWebhookUseCase } from '../../../application/usecases/User/subscription/IHandleSubscriptionWebhookUseCase';
 import { IVerifySubscriptionUseCase } from '../../../application/usecases/User/subscription/IVerifySubscriptionUseCase';
 import { IGetSubscriptionDetailsUseCase } from '../../../application/usecases/User/subscription/IGetSubscriptionDetails';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class SubscriptionController implements ISubscriptionController {
   constructor(
@@ -41,7 +41,7 @@ export class SubscriptionController implements ISubscriptionController {
       metadata,
     });
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 
@@ -55,7 +55,7 @@ export class SubscriptionController implements ISubscriptionController {
 
     await this.handleWebhookUseCase.execute(payload, signature as string);
 
-    const response = ApiDTO.success({ received: true });
+    const response = ApiResponse.success({ received: true });
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 
@@ -69,7 +69,7 @@ export class SubscriptionController implements ISubscriptionController {
       userId,
       sessionId,
     });
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
   async getSubscription(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -77,7 +77,7 @@ export class SubscriptionController implements ISubscriptionController {
     if (!userId) throw new Unauthorized();
 
     const result = await this.getSubscriptionUseCase.execute(userId);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatusCode.Ok, response);
   }

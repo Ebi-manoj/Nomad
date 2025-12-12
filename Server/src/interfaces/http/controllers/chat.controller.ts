@@ -2,7 +2,7 @@ import type { IGetChatMessagesUseCase } from '../../../application/usecases/User
 import type { ISendChatMessageUseCase } from '../../../application/usecases/User/Chat/ISendChatMessageUseCase';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { Unauthorized } from '../../../domain/errors/CustomError';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 import type { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import type { IChatController } from './IChatController';
@@ -23,7 +23,7 @@ export class ChatController implements IChatController {
       userId,
     });
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -44,7 +44,7 @@ export class ChatController implements IChatController {
       senderId: userId,
     });
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

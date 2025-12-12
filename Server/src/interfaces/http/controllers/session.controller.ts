@@ -2,7 +2,7 @@ import { IActiveSessionsUseCase } from '../../../application/usecases/User/IActi
 import { ErrorMessages } from '../../../domain/enums/ErrorMessage';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { CustomError } from '../../../domain/errors/CustomError';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { ISessionController } from './ISessionController';
@@ -18,7 +18,7 @@ export class SessionController implements ISessionController {
       );
 
     const result = await this.activeSessionUseCase.execute(userId);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

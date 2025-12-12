@@ -1,5 +1,5 @@
 import { IhttpResponse } from '../IHttpResponse';
-import { ApiDTO } from './apiDTO';
+import { ApiDTO } from './apiResponse';
 
 export class HttpResponse implements IhttpResponse {
   statusCode: number;

@@ -1,4 +1,4 @@
-export interface IAPIDTO<T> {
+export interface IAPIResponse<T> {
   success: boolean;
   data?: T;
   error?: {

@@ -4,7 +4,6 @@ import {
   CreateJoinRequestDTO,
 } from '../../../domain/dto/HikeDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IHikeController } from './IHikeController';
@@ -14,6 +13,7 @@ import { ICreateJoinRequestUseCase } from '../../../application/usecases/User/Hi
 import { Unauthorized } from '../../../domain/errors/CustomError';
 import { IGetHikeDetailsUseCase } from '../../../application/usecases/User/Hike/IGetHikeDetails';
 import { IGetAllHikesUseCase } from '../../../application/usecases/User/Hike/IGetAllHikesUseCase';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class HikeController implements IHikeController {
   constructor(
@@ -26,7 +26,7 @@ export class HikeController implements IHikeController {
   async createHike(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto: CreateHikeDTO = httpRequest.body as CreateHikeDTO;
     const result = await this.createHikeUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -34,13 +34,13 @@ export class HikeController implements IHikeController {
     const dto = httpRequest.body as { hikeId: string };
 
     const result = await this.findMatchRidesUseCase.execute(dto.hikeId);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
   async joinRideRequest(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as CreateJoinRequestDTO;
     const result = await this.createJoinRequestUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 
@@ -49,7 +49,7 @@ export class HikeController implements IHikeController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
     const result = await this.gethikeDetailsUseCase.execute({ hikeId, userId });
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -67,7 +67,7 @@ export class HikeController implements IHikeController {
       status,
     });
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
   }

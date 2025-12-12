@@ -9,11 +9,11 @@ import {
 } from '../../../domain/dto/RideBookingDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { Unauthorized } from '../../../domain/errors/CustomError';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IRideBookingController } from './IRideBookingController';
 import { IReqCancelRideBookingUseCase } from '../../../application/usecases/User/RideBooking/IReqCancelRideBookingUseCase';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class RideBookingController implements IRideBookingController {
   constructor(
@@ -30,7 +30,7 @@ export class RideBookingController implements IRideBookingController {
     const { bookingId } = httpRequest.path as { bookingId: string };
     const dto = { bookingId, userId };
     const result = await this.getRideBookingUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -41,7 +41,7 @@ export class RideBookingController implements IRideBookingController {
     const dto: MarkDroppOffReqDTO = { bookingId, userId };
 
     const result = await this.markDroppOffUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -54,7 +54,7 @@ export class RideBookingController implements IRideBookingController {
       bookingId,
       userId,
     });
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -64,7 +64,7 @@ export class RideBookingController implements IRideBookingController {
     const { bookingId } = httpRequest.path as { bookingId: string };
     const dto: CancelRideBookingReqDTO = { bookingId, userId };
     const result = await this.cancelRideBookingUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -75,7 +75,7 @@ export class RideBookingController implements IRideBookingController {
     const dto: ReqCancelBookingReqDTO = { bookingId, userId };
 
     const result = await this.reqCancelRideBookingUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
   }

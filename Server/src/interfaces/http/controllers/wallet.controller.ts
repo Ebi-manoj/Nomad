@@ -1,10 +1,10 @@
 import { Unauthorized } from '../../../domain/errors/CustomError';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IWalletController } from './IWalletController';
 import { IGetWalletDetailsUseCase } from '../../../application/usecases/User/Wallet/IGetWalletDetailsUseCase';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class WalletController implements IWalletController {
   constructor(
@@ -19,7 +19,7 @@ export class WalletController implements IWalletController {
     const page = Number(q.page) || 1;
     const result = await this.getWalletDetailsUseCase.execute(userId, page);
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

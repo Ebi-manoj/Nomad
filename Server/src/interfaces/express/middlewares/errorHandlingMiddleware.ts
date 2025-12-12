@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { CustomError } from '../../../domain/errors/CustomError';
-import { ApiDTO } from '../../http/helpers/implementation/apiDTO';
+import { ApiDTO } from '../../http/helpers/implementation/apiResponse';
 import { ZodError } from 'zod';
 import { WinstonLogger } from '../../../infra/providers/winstonLogger';
 

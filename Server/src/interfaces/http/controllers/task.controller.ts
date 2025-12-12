@@ -4,7 +4,7 @@ import { IGetTasksUseCase } from '../../../application/usecases/User/Task/IGetTa
 import { RideBookingOTPReqDTO } from '../../../domain/dto/RideBookingDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { Unauthorized } from '../../../domain/errors/CustomError';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { ITaskController } from './ITaskController';
@@ -22,7 +22,7 @@ export class TaskController implements ITaskController {
     if (!userId) throw new Unauthorized();
     const dto = { userId, rideId };
     const result = await this.getTasksUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -32,7 +32,7 @@ export class TaskController implements ITaskController {
     if (!userId) throw new Unauthorized();
     const dto: RideBookingOTPReqDTO = { userId, rideBookingId };
     const result = await this.getRideBookingOTPUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
   async completeTask(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -43,7 +43,7 @@ export class TaskController implements ITaskController {
     const dto = { taskId, userId, otp };
 
     const result = await this.completeTaskUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
   }

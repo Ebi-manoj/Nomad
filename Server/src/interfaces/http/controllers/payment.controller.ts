@@ -1,6 +1,5 @@
 import { HttpStatusCode } from 'axios';
 import { Unauthorized } from '../../../domain/errors/CustomError';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IPaymentController } from './IPaymentController';
@@ -8,6 +7,7 @@ import { paymentIntentRequestDTO } from '../../../domain/dto/paymentService';
 import { IGetHikerPaymentInfoUseCase } from '../../../application/usecases/User/Hike/IGetHikerPaymentInfo';
 import { ICreatePaymentIntentUseCase } from '../../../application/usecases/User/payment/ICreatePaymentIntent';
 import { IConfirmHikerPayment } from '../../../application/usecases/User/payment/IConfirmHikerPayment';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class PaymentController implements IPaymentController {
   constructor(
@@ -22,7 +22,7 @@ export class PaymentController implements IPaymentController {
     const dto = { paymentId, userId };
 
     const result = await this.getHikerPaymentInfoUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
@@ -30,7 +30,7 @@ export class PaymentController implements IPaymentController {
   async createPaymentIntent(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as paymentIntentRequestDTO;
     const result = await this.createPaymentIntentUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
@@ -40,7 +40,7 @@ export class PaymentController implements IPaymentController {
     const result = await this.confirmHikerPaymentUseCase.execute(
       paymentIntentId
     );
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 }

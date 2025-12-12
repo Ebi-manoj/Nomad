@@ -6,7 +6,7 @@ import {
   GetAllUsersResponseDTO,
 } from '../../../domain/dto/userManagementDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IUserManagementController } from './IUserManagementController';
@@ -25,7 +25,7 @@ export class userManagementController implements IUserManagementController {
 
     const dto: GetAllUsersRequestDTO = { page, limit, search };
     const result = await this.getAllUserUseCase.execute(dto);
-    const response = ApiDTO.success<GetAllUsersResponseDTO>(result);
+    const response = ApiResponse.success<GetAllUsersResponseDTO>(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -33,7 +33,7 @@ export class userManagementController implements IUserManagementController {
     const { userId } = httpRequest.path as { userId: string };
 
     const result = await this.blockUserUseCase.execute(userId);
-    const response = ApiDTO.success<UserResponseDTO>(result);
+    const response = ApiResponse.success<UserResponseDTO>(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

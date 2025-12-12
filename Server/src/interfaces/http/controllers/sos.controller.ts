@@ -8,10 +8,10 @@ import {
   saveSosContactsSchema,
   triggerSosSchema,
 } from '../../validators/sosContactsValidator';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { ISosController } from './ISosController';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class SosController implements ISosController {
   constructor(
@@ -32,7 +32,7 @@ export class SosController implements ISosController {
       contact: parsed,
     });
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -41,7 +41,7 @@ export class SosController implements ISosController {
     if (!userId) throw new Unauthorized();
 
     const result = await this.getSosContactsUseCase.execute(userId);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -57,7 +57,7 @@ export class SosController implements ISosController {
       location: parsed.location,
     });
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -76,7 +76,7 @@ export class SosController implements ISosController {
       location,
     });
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

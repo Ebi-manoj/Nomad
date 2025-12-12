@@ -1,7 +1,6 @@
 import { HttpStatusCode } from 'axios';
 import { CreateRideDTO } from '../../../domain/dto/RideDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IRideController } from './IRideController';
@@ -18,6 +17,7 @@ import { IGetHikerMatchedUseCase } from '../../../application/usecases/User/Ride
 import { IEndRideUseCase } from '../../../application/usecases/User/Ride/IEndRideUseCase';
 import { IGetRideDetailsUseCase } from '../../../application/usecases/User/Ride/IGetRideDetailsUseCase';
 import { IGetAllRidesUseCase } from '../../../application/usecases/User/Ride/IGetAllRidesUseCase';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class RideController implements IRideController {
   constructor(
@@ -34,7 +34,7 @@ export class RideController implements IRideController {
   async createRide(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as CreateRideDTO;
     const result = await this.createRideUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -52,7 +52,7 @@ export class RideController implements IRideController {
       status,
     });
 
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -61,7 +61,7 @@ export class RideController implements IRideController {
   ): Promise<HttpResponse> {
     const { rideId } = httpRequest.path as { rideId: string };
     const result = await this.getPendingRequestUseCase.execute(rideId);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 
@@ -71,7 +71,7 @@ export class RideController implements IRideController {
     const dto: AcceptJoinRequestDTO = { ...data, riderId: riderId! };
 
     const result = await this.acceptJoinRequestUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
   async declineJoinRequests(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -80,7 +80,7 @@ export class RideController implements IRideController {
     const dto: DeclineJoinRequestDTO = { ...data, riderId: riderId! };
 
     const result = await this.declienJoinRequestUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
 
@@ -92,7 +92,7 @@ export class RideController implements IRideController {
       userId,
       rideId,
     });
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
   async endRide(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -101,7 +101,7 @@ export class RideController implements IRideController {
     if (!userId) throw new Unauthorized();
 
     const result = await this.endRideUseCase.execute({ rideId, userId });
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -111,7 +111,7 @@ export class RideController implements IRideController {
     if (!userId) throw new Unauthorized();
 
     const result = await this.getRideDetailsUseCase.execute({ userId, rideId });
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
   }

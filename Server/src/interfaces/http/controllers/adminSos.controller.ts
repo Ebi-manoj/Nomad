@@ -1,11 +1,11 @@
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import type { IGetSosLogsUseCase } from '../../../application/usecases/Admin/IGetSosLogsUseCase';
 import type { IResolveSosUseCase } from '../../../application/usecases/Admin/IResolveSosUseCase';
 import type { IAdminSosController } from './IAdminSosController';
 import { GetSosLogsQuery } from '../../../domain/dto/SosDTO';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class AdminSosController implements IAdminSosController {
   constructor(
@@ -21,7 +21,7 @@ export class AdminSosController implements IAdminSosController {
     const query: GetSosLogsQuery = { page, status };
 
     const result = await this.getSosLogsUseCase.execute(query);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
@@ -29,7 +29,7 @@ export class AdminSosController implements IAdminSosController {
     const { sosLogId } = httpRequest.path as { sosLogId: string };
 
     const result = await this.resolveSosUseCase.execute(sosLogId);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

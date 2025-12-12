@@ -1,7 +1,7 @@
 import { IPresignedUrlService } from '../../../application/services/IPresignedUrlService';
 import { FOLDER_NAMES } from '../../../domain/enums/Constants';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IGetPresignedURLController } from './IGetPresignedUrlController';
@@ -16,13 +16,13 @@ export class PresignedUrlController implements IGetPresignedURLController {
       type: FOLDER_NAMES;
     };
     const result = await this.presignedUrlService.getUploadUrl(data);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
   async getViewPresignedUrl(httpRequest: HttpRequest): Promise<HttpResponse> {
     const data = httpRequest.body as { fileURL: string };
     const result = await this.presignedUrlService.getViewUrl(data);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

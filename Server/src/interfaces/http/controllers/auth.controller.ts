@@ -24,7 +24,7 @@ import {
   signUpShema,
   verifyOTPSchema,
 } from '../../validators/authValidators';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
+import { ApiResponse } from '../helpers/implementation/apiResponse.js';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IauthController } from './IAuthcontroller';
@@ -44,7 +44,7 @@ export class AuthController implements IauthController {
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = signUpShema.parse(httpRequest.body);
     const user = await this.registerUserUseCase.execute(dto);
-    const response = ApiDTO.success<UserResponseDTO>(user);
+    const response = ApiResponse.success<UserResponseDTO>(user);
     return new HttpResponse(HttpStatus.CREATED, response);
   }
   async login(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -54,7 +54,7 @@ export class AuthController implements IauthController {
     const dto: LoginUserRequestDTO = result.data;
     const loginDetails = await this.loginUserUseCase.execute(dto);
 
-    const response = ApiDTO.success<LoginuserResponseDTO>(loginDetails);
+    const response = ApiResponse.success<LoginuserResponseDTO>(loginDetails);
 
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -62,42 +62,42 @@ export class AuthController implements IauthController {
   async sendSignupOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = emailSchema.parse(httpRequest.body);
     const message = await this.sendSignupOTPUseCase.execute(dto);
-    const response = ApiDTO.success<SentOTPResponseDTO>(message);
+    const response = ApiResponse.success<SentOTPResponseDTO>(message);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async sendResetOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = emailSchema.parse(httpRequest.body);
     const message = await this.sendResetOTPuseCase.execute(dto);
-    const response = ApiDTO.success<SentOTPResponseDTO>(message);
+    const response = ApiResponse.success<SentOTPResponseDTO>(message);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async verifyOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = verifyOTPSchema.parse(httpRequest.body);
     const result = await this.verifyOTPUseCase.execute(dto);
-    const response = ApiDTO.success<VerifyOTPResponseDTO>(result);
+    const response = ApiResponse.success<VerifyOTPResponseDTO>(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async resetPassword(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = resetPasswordSchema.parse(httpRequest.body);
     const result = await this.resetPasswordUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async refreshToken(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = refreshTokenSchema.parse(httpRequest.cookies);
     const result = await this.refreshTokenUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async googleSingup(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = googleCodeSchema.parse(httpRequest.body);
     const result = await this.googleSignupUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

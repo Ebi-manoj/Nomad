@@ -2,10 +2,10 @@ import { IReviewController } from './IReviewController';
 import { RateUserReqDTO } from '../../../domain/dto/Reviews';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { Unauthorized } from '../../../domain/errors/CustomError';
-import { ApiDTO } from '../helpers/implementation/apiDTO';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IRateUserUseCase } from '../../../application/usecases/User/Ratings/IRateUserUseCase';
+import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class ReviewController implements IReviewController {
   constructor(private readonly rateUserUseCase: IRateUserUseCase) {}
@@ -26,7 +26,7 @@ export class ReviewController implements IReviewController {
     };
 
     const result = await this.rateUserUseCase.execute(dto);
-    const response = ApiDTO.success(result);
+    const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
   }
