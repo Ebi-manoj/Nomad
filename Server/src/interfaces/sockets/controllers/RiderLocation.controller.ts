@@ -5,8 +5,8 @@ import { IRealtimeGateway } from '../../../application/providers/IRealtimeGatewa
 
 export class RiderLocationController implements IRiderLocationController {
   constructor(
-    private readonly updateLocationUseCase: IUpdateLocationUseCase,
-    private readonly realtimeGateway: IRealtimeGateway
+    private readonly _updateLocationUseCase: IUpdateLocationUseCase,
+    private readonly _realtimeGateway: IRealtimeGateway
   ) {}
 
   async handleLocationUpdate(
@@ -14,8 +14,8 @@ export class RiderLocationController implements IRiderLocationController {
     data: UpdateLocationDTO
   ): Promise<void> {
     try {
-      await this.updateLocationUseCase.execute(data);
-      await this.realtimeGateway.emitToSocket(
+      await this._updateLocationUseCase.execute(data);
+      await this._realtimeGateway.emitToSocket(
         socketId,
         'location:update:success',
         {
@@ -24,7 +24,7 @@ export class RiderLocationController implements IRiderLocationController {
       );
     } catch (error) {
       console.log(error);
-      await this.realtimeGateway.emitToSocket(
+      await this._realtimeGateway.emitToSocket(
         socketId,
         'location:update:error',
         {

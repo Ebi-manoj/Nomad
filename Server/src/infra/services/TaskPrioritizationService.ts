@@ -3,7 +3,7 @@ import { Task } from '../../domain/entities/Task';
 import { Data, IGoogleApi } from '../../application/providers/IGoogleApi';
 
 export class TaskPrioritizationService implements ITaskPrioritizationService {
-  constructor(private readonly googleApi: IGoogleApi) {}
+  constructor(private readonly _googleApi: IGoogleApi) {}
 
   async prioritizeTasks(
     tasks: Task[],
@@ -42,7 +42,7 @@ export class TaskPrioritizationService implements ITaskPrioritizationService {
     };
 
     // Calculate distance from current location to task location
-    const { distance } = await this.googleApi.getDistance(
+    const { distance } = await this._googleApi.getDistance(
       currentLocation,
       taskLocation
     );

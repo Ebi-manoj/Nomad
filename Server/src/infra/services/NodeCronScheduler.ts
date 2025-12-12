@@ -4,12 +4,12 @@ import cron from 'node-cron';
 
 export class NodeCronScheduler implements IScheduler {
   constructor(
-    private readonly cleanupSeatsReservation: ICleanupSeatsReservation
+    private readonly _cleanupSeatsReservation: ICleanupSeatsReservation
   ) {}
 
   start() {
     cron.schedule('* * * * *', async () => {
-      await this.cleanupSeatsReservation.execute();
+      await this._cleanupSeatsReservation.execute();
     });
   }
 }

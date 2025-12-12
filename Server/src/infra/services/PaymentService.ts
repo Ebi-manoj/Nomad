@@ -5,9 +5,9 @@ import { CustomError } from '../../domain/errors/CustomError';
 import { HttpStatus } from '../../domain/enums/HttpStatusCode';
 
 export class StripePaymentService implements IPaymentService {
-  private readonly stripe: Stripe;
+  private readonly _stripe: Stripe;
   constructor() {
-    this.stripe = new Stripe(env.STRIPE_SECRET_KEY, {
+    this._stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       apiVersion: '2025-10-29.clover',
     });
   }
@@ -18,7 +18,7 @@ export class StripePaymentService implements IPaymentService {
     metadata: Record<string, string>
   ): Promise<{ client_secret: string; id: string }> {
     try {
-      const paymentIntent = await this.stripe.paymentIntents.create({
+      const paymentIntent = await this._stripe.paymentIntents.create({
         amount: Math.round(amount * 100),
         currency,
         metadata,
@@ -41,7 +41,7 @@ export class StripePaymentService implements IPaymentService {
     paymentIntentId: string
   ): Promise<{ client_secret: string; id: string; status: string }> {
     try {
-      const paymentIntent = await this.stripe.paymentIntents.retrieve(
+      const paymentIntent = await this._stripe.paymentIntents.retrieve(
         paymentIntentId
       );
 
@@ -71,7 +71,7 @@ export class StripePaymentService implements IPaymentService {
     trialPeriodDays?: number;
   }): Promise<{ id: string; url: string }> {
     try {
-      const session = await this.stripe.checkout.sessions.create({
+      const session = await this._stripe.checkout.sessions.create({
         mode: 'subscription',
         line_items: [
           {
@@ -108,7 +108,7 @@ export class StripePaymentService implements IPaymentService {
   ): Promise<{ type: string; data: any }> {
     try {
       const secret = env.STRIPE_WEBHOOKSECERTKEY;
-      const event = this.stripe.webhooks.constructEvent(
+      const event = this._stripe.webhooks.constructEvent(
         payload,
         signature,
         secret
@@ -134,7 +134,7 @@ export class StripePaymentService implements IPaymentService {
       };
     }>;
   }> {
-    const sub = (await this.stripe.subscriptions.retrieve(subscriptionId, {
+    const sub = (await this._stripe.subscriptions.retrieve(subscriptionId, {
       expand: ['items.data.price'],
     })) as any;
 
@@ -164,7 +164,7 @@ export class StripePaymentService implements IPaymentService {
     id: string;
     email: string | null | undefined;
   }> {
-    const customer = (await this.stripe.customers.retrieve(customerId)) as any;
+    const customer = (await this._stripe.customers.retrieve(customerId)) as any;
     return { id: customer.id, email: customer.email };
   }
 }
