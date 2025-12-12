@@ -26,51 +26,51 @@ import { IConfirmHikerPayment } from './IConfirmHikerPayment';
 
 export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
   constructor(
-    private readonly paymentService: IPaymentService,
-    private readonly paymentRepository: IPaymentRepository,
-    private readonly rideRepository: IRideRepository,
-    private readonly joinRequestRepository: IJoinRequestRepository,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly ridebookingRepository: IRideBookingRepository,
-    private readonly transactionManager: ITransactionManager,
-    private readonly createTasksUseCase: ICreateTasksUseCase,
-    private readonly realtimeGateWay: IRealtimeGateway,
-    private readonly locationRepository: ILocationRepository
+    private readonly _paymentService: IPaymentService,
+    private readonly _paymentRepository: IPaymentRepository,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _joinRequestRepository: IJoinRequestRepository,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _ridebookingRepository: IRideBookingRepository,
+    private readonly _transactionManager: ITransactionManager,
+    private readonly _createTasksUseCase: ICreateTasksUseCase,
+    private readonly _realtimeGateWay: IRealtimeGateway,
+    private readonly _locationRepository: ILocationRepository
   ) {}
 
   async execute(paymentIntentId: string): Promise<ConfirmHikerPaymentDTO> {
     const { booking, shouldCreateTasks, ride } =
-      await this.transactionManager.runInTransaction(async () => {
-        const payment = await this.paymentRepository.findByStripeId(
+      await this._transactionManager.runInTransaction(async () => {
+        const payment = await this._paymentRepository.findByStripeId(
           paymentIntentId
         );
         if (!payment) throw new PaymentInfoNotFound();
 
-        const paymentIntent = await this.paymentService.retrievePaymentIntent(
+        const paymentIntent = await this._paymentService.retrievePaymentIntent(
           paymentIntentId
         );
         if (paymentIntent.status !== 'succeeded')
           throw new PaymentNotSuccessfull();
 
         payment.success();
-        await this.paymentRepository.update(payment.getId()!, payment);
+        await this._paymentRepository.update(payment.getId()!, payment);
 
         const [ride, hike, joinRequest] = await Promise.all([
-          this.rideRepository.findById(payment.getRideId()),
-          this.hikeRepository.findById(payment.getHikeId()),
-          this.joinRequestRepository.findById(payment.getJoinRequestId()),
+          this._rideRepository.findById(payment.getRideId()),
+          this._hikeRepository.findById(payment.getHikeId()),
+          this._joinRequestRepository.findById(payment.getJoinRequestId()),
         ]);
         if (!ride) throw new RideNotFound();
         if (!hike) throw new HikeNotFound();
         if (!joinRequest) throw new JoinRequestNotFound();
 
         const existingBooking =
-          await this.ridebookingRepository.findbyPaymentId(payment.getId()!);
+          await this._ridebookingRepository.findbyPaymentId(payment.getId()!);
         if (existingBooking) {
           return { booking: existingBooking, ride, shouldCreateTasks: false };
         }
 
-        const riderLocation = await this.locationRepository.getLocation(
+        const riderLocation = await this._locationRepository.getLocation(
           ride.getRideId()!
         );
         if (!riderLocation) throw new RideLocationNotFound();
@@ -100,7 +100,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
           status: RideBookingStatus.CONFIRMED,
         });
 
-        const savedBooking = await this.ridebookingRepository.create(
+        const savedBooking = await this._ridebookingRepository.create(
           rideBooking
         );
         joinRequest.confirm();
@@ -109,9 +109,9 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
         hike.toggleConfirmed();
 
         const [updatedRide] = await Promise.all([
-          this.rideRepository.update(ride.getRideId(), ride),
-          this.hikeRepository.update(hike.getHikeId(), hike),
-          this.joinRequestRepository.update(joinRequest.getId(), joinRequest),
+          this._rideRepository.update(ride.getRideId(), ride),
+          this._hikeRepository.update(hike.getHikeId(), hike),
+          this._joinRequestRepository.update(joinRequest.getId(), joinRequest),
         ]);
 
         if (!updatedRide) throw new UpdateFailed();
@@ -124,10 +124,10 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
       });
 
     if (shouldCreateTasks) {
-      await this.createTasksUseCase.execute(booking);
+      await this._createTasksUseCase.execute(booking);
     }
 
-    await this.realtimeGateWay.emitToRoom(
+    await this._realtimeGateWay.emitToRoom(
       'rider',
       booking.getRideId(),
       'hike:confirmed',
@@ -158,7 +158,7 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
     while (attempts < 5) {
       const random = Math.floor(100000 + Math.random() * 900000);
       const bookingNumber = `${prefix}-${random}`;
-      const existing = await this.ridebookingRepository.findByBookingNumber(
+      const existing = await this._ridebookingRepository.findByBookingNumber(
         bookingNumber
       );
       if (!existing) return bookingNumber;

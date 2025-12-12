@@ -8,15 +8,19 @@ import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IGetAllRidesUseCase } from './IGetAllRidesUseCase';
 
 export class GetAllRidesUseCase implements IGetAllRidesUseCase {
-  constructor(private readonly rideRepository: IRideRepository) {}
+  constructor(private readonly _rideRepository: IRideRepository) {}
 
   async execute(data: GetRidesReqDTO): Promise<GetRidesResDTO> {
     const limit = 10;
     const { page, userId, status } = data;
     const skip = (page - 1) * limit;
 
-    const rides = await this.rideRepository.findUserRides(userId, skip, status);
-    const totalCount = await this.rideRepository.findCountUserRides(
+    const rides = await this._rideRepository.findUserRides(
+      userId,
+      skip,
+      status
+    );
+    const totalCount = await this._rideRepository.findCountUserRides(
       userId,
       status
     );

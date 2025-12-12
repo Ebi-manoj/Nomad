@@ -12,17 +12,17 @@ export class ReqCancelRideBookingUseCase
   implements IReqCancelRideBookingUseCase
 {
   constructor(
-    private readonly bookingRepository: IRideBookingRepository,
-    private readonly refundService: IRefundService
+    private readonly _bookingRepository: IRideBookingRepository,
+    private readonly _refundService: IRefundService
   ) {}
   async execute(data: ReqCancelBookingReqDTO): Promise<ReqCancelBookingResDTO> {
-    const booking = await this.bookingRepository.findById(data.bookingId);
+    const booking = await this._bookingRepository.findById(data.bookingId);
     if (!booking) throw new RideBookingNotFound();
 
     if (booking.getHikerId() !== data.userId) throw new Forbidden();
 
     const { refundAmount, distance, duration, isRiderDelay } =
-      await this.refundService.execute(booking);
+      await this._refundService.execute(booking);
 
     return {
       bookingId: booking.getId()!,

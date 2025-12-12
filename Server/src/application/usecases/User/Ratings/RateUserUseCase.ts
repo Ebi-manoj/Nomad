@@ -15,12 +15,12 @@ import { IRateUserUseCase } from './IRateUserUseCase';
 
 export class RateUserUseCase implements IRateUserUseCase {
   constructor(
-    private readonly bookingRepository: IRideBookingRepository,
-    private readonly reviewRepository: IReviewRepository,
-    private readonly userRepository: IUserRepository
+    private readonly _bookingRepository: IRideBookingRepository,
+    private readonly _reviewRepository: IReviewRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
   async execute(data: RateUserReqDTO): Promise<ReviewResponseDTO> {
-    const booking = await this.bookingRepository.findById(data.bookingId);
+    const booking = await this._bookingRepository.findById(data.bookingId);
     if (!booking) throw new RideBookingNotFound();
     if (
       booking.getStatus() !== 'COMPLETED' &&
@@ -42,7 +42,7 @@ export class RateUserUseCase implements IRateUserUseCase {
         throw new Forbidden('Invalid HikerId for this booking');
     }
 
-    const isExisiting = await this.reviewRepository.findByReviewerAndBooking(
+    const isExisiting = await this._reviewRepository.findByReviewerAndBooking(
       data.userId,
       booking.getId()!
     );
@@ -53,14 +53,14 @@ export class RateUserUseCase implements IRateUserUseCase {
       reviewerId: data.userId,
     });
 
-    const savedReview = await this.reviewRepository.create(review);
+    const savedReview = await this._reviewRepository.create(review);
 
-    const user = await this.userRepository.findById(
+    const user = await this._userRepository.findById(
       savedReview.getReviewedUserId()
     );
     if (user) {
       user.updateRatings(savedReview.getRating());
-      await this.userRepository.update(user.getId(), user);
+      await this._userRepository.update(user.getId(), user);
     }
 
     return ReviewMapper(savedReview);

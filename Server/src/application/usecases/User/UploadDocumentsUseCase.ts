@@ -13,16 +13,16 @@ import { IUploadDocumentUseCase } from './IUploadDocUseCase';
 
 export class UploadDocumentUseCase implements IUploadDocumentUseCase {
   constructor(
-    private readonly documentRepository: IDocumentRepository,
-    private readonly userRepository: IUserRepository
+    private readonly _documentRepository: IDocumentRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
 
   async execute(data: uploadDocRequestDTO): Promise<DocResponseDTO> {
     const { fileURL, userId, type, doc_number } = data;
-    const user = await this.userRepository.findById(userId);
+    const user = await this._userRepository.findById(userId);
     if (!user) throw new UserNotFound();
 
-    const existingDoc = await this.documentRepository.findOne({
+    const existingDoc = await this._documentRepository.findOne({
       user_id: userId,
       document_type: type,
     });
@@ -36,13 +36,13 @@ export class UploadDocumentUseCase implements IUploadDocumentUseCase {
         fileUrl: fileURL,
         user_id: userId,
       });
-      newDoc = await this.documentRepository.create(document);
+      newDoc = await this._documentRepository.create(document);
     } else {
       existingDoc.setFileUrl(fileURL);
       existingDoc.setStatus(DocumentStatus.Pending);
       existingDoc.setDocumentNumber(doc_number);
       existingDoc.setCreatedAt(new Date());
-      const updated = await this.documentRepository.updateOne(existingDoc);
+      const updated = await this._documentRepository.updateOne(existingDoc);
       if (!updated) throw new DocumentNotFound();
       newDoc = updated;
     }

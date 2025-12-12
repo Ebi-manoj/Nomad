@@ -14,22 +14,22 @@ import { IGetHikerMatchedUseCase } from './IGetHikersMatched';
 
 export class GetHikersMatchedUseCase implements IGetHikerMatchedUseCase {
   constructor(
-    private readonly rideRepository: IRideRepository,
-    private readonly ridebookingRepository: IRideBookingRepository,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly subscriptionService: ISubscriptionService
+    private readonly _rideRepository: IRideRepository,
+    private readonly _ridebookingRepository: IRideBookingRepository,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _subscriptionService: ISubscriptionService
   ) {}
 
   async execute(
     data: GetHikersMatchedReqDTO
   ): Promise<GetHikersMatchedResponseDTO[]> {
-    const ride = await this.rideRepository.findById(data.rideId);
+    const ride = await this._rideRepository.findById(data.rideId);
     if (!ride) throw new RideNotFound();
 
     if (ride.getRiderId() !== data.userId) throw new Unauthorized();
 
-    const rideBookings = await this.ridebookingRepository.findByRideId(
+    const rideBookings = await this._ridebookingRepository.findByRideId(
       data.rideId
     );
 
@@ -37,11 +37,11 @@ export class GetHikersMatchedUseCase implements IGetHikerMatchedUseCase {
 
     for (const booking of rideBookings) {
       const [hike, user] = await Promise.all([
-        this.hikeRepository.findById(booking.getHikeId()),
-        this.userRepository.findById(booking.getHikerId()),
+        this._hikeRepository.findById(booking.getHikeId()),
+        this._userRepository.findById(booking.getHikerId()),
       ]);
       if (hike && user) {
-        const sub = await this.subscriptionService.getActiveSubscription(
+        const sub = await this._subscriptionService.getActiveSubscription(
           user.getId()!
         );
         const dto = hikersMatchedMapper(user, hike, booking, sub.tier);

@@ -10,13 +10,13 @@ import { ICreateHikeUseCase } from './ICreateHikeUseCase';
 
 export class CreateHikeUseCase implements ICreateHikeUseCase {
   constructor(
-    private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly googleApis: IGoogleApi
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _googleApis: IGoogleApi
   ) {}
 
   async execute(data: CreateHikeDTO): Promise<HikeResponseDTO> {
-    const user = await this.userRepository.findById(data.userId);
+    const user = await this._userRepository.findById(data.userId);
     if (!user) throw new UserNotFound();
 
     const pickup = {
@@ -28,7 +28,7 @@ export class CreateHikeUseCase implements ICreateHikeUseCase {
       lng: data.destination.coordinates[1],
     };
 
-    const { distance: totalDistance } = await this.googleApis.getDistance(
+    const { distance: totalDistance } = await this._googleApis.getDistance(
       pickup,
       destination
     );
@@ -38,7 +38,7 @@ export class CreateHikeUseCase implements ICreateHikeUseCase {
       status: HikeStatus.ACTIVE,
     });
 
-    const savedHike = await this.hikeRepository.create(hike);
+    const savedHike = await this._hikeRepository.create(hike);
     return hikeMapper(savedHike);
   }
 }

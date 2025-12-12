@@ -24,23 +24,23 @@ import { ISubscriptionUsageService } from '../../../services/ISubscriptionUsageS
 
 export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
   constructor(
-    private readonly joinRequestRepository: IJoinRequestRepository,
-    private readonly rideRepository: IRideRepository,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly fareCalculator: FareCalculator,
-    private readonly userRepository: IUserRepository,
-    private readonly realtimeGateway: IRealtimeGateway,
-    private readonly subscriptionValidator: ISubscriptionValidator,
-    private readonly usageService: ISubscriptionUsageService
+    private readonly _joinRequestRepository: IJoinRequestRepository,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _fareCalculator: FareCalculator,
+    private readonly _userRepository: IUserRepository,
+    private readonly _realtimeGateway: IRealtimeGateway,
+    private readonly _subscriptionValidator: ISubscriptionValidator,
+    private readonly _usageService: ISubscriptionUsageService
   ) {}
 
   async execute(data: CreateJoinRequestDTO): Promise<JoinRequestResponseDTO> {
-    const ride = await this.rideRepository.findById(data.rideId);
-    const hike = await this.hikeRepository.findById(data.hikeId);
+    const ride = await this._rideRepository.findById(data.rideId);
+    const hike = await this._hikeRepository.findById(data.hikeId);
     if (!ride) throw new RideNotFound();
     if (!hike) throw new HikeNotFound();
 
-    await this.subscriptionValidator.validateJoinRequest(
+    await this._subscriptionValidator.validateJoinRequest(
       data.hikeId,
       hike.getUserId()
     );
@@ -50,13 +50,13 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
       throw new SeatsNotAvailable();
 
     const hasPendingRequest =
-      await this.joinRequestRepository.checkPendingRequest(
+      await this._joinRequestRepository.checkPendingRequest(
         data.hikeId,
         data.rideId
       );
     if (hasPendingRequest) throw new HasPendingRequest();
 
-    const costSharing = this.fareCalculator.getFare(
+    const costSharing = this._fareCalculator.getFare(
       ride.getCostSharing(),
       hike.getTotalDistance()
     );
@@ -68,21 +68,21 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     });
 
     //Create Collection
-    const saved = await this.joinRequestRepository.create(joinRequest);
-    const user = await this.userRepository.findById(hike.getUserId());
+    const saved = await this._joinRequestRepository.create(joinRequest);
+    const user = await this._userRepository.findById(hike.getUserId());
     if (!user) throw new UserNotFound();
-    const sub = await this.subscriptionValidator.getActiveSubscription(
+    const sub = await this._subscriptionValidator.getActiveSubscription(
       hike.getUserId()
     );
     const response = joinRequestMapper(saved, hike, user, sub.tier);
 
-    await this.realtimeGateway.emitToRoom(
+    await this._realtimeGateway.emitToRoom(
       'rider',
       response.rideId,
       'join-request:new',
       response
     );
-    this.usageService.incrementJoinRequest(response.hiker.id);
+    this._usageService.incrementJoinRequest(response.hiker.id);
 
     return response;
   }

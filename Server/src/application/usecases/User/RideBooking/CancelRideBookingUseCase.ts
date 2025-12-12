@@ -8,9 +8,7 @@ import { TaskStatus } from '../../../../domain/enums/Task';
 import { Forbidden, UpdateFailed } from '../../../../domain/errors/CustomError';
 import { HikeNotFound } from '../../../../domain/errors/HikeErrors';
 import { RideBookingNotFound } from '../../../../domain/errors/RideBookingError';
-import {
-  RideNotFound,
-} from '../../../../domain/errors/RideErrors';
+import { RideNotFound } from '../../../../domain/errors/RideErrors';
 import { ITransactionManager } from '../../../providers/ITransactionManager';
 import { IHikeRepository } from '../../../repositories/IHikeRepository';
 import { IRideBookingRepository } from '../../../repositories/IRideBooking';
@@ -21,20 +19,20 @@ import { IRefundService } from '../../../services/IRefundService';
 
 export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
   constructor(
-    private readonly bookingRepository: IRideBookingRepository,
-    private readonly rideRepository: IRideRepository,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly taskRepository: ITaskRepository,
-    private readonly refundService: IRefundService,
-    private readonly transactionManager: ITransactionManager
+    private readonly _bookingRepository: IRideBookingRepository,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _taskRepository: ITaskRepository,
+    private readonly _refundService: IRefundService,
+    private readonly _transactionManager: ITransactionManager
   ) {}
 
   async execute(
     data: CancelRideBookingReqDTO
   ): Promise<CancelRideBookingResDTO> {
     const { booking, refundAmount, distance, duration } =
-      await this.transactionManager.runInTransaction(async () => {
-        const booking = await this.bookingRepository.findById(data.bookingId);
+      await this._transactionManager.runInTransaction(async () => {
+        const booking = await this._bookingRepository.findById(data.bookingId);
         if (!booking) throw new RideBookingNotFound();
 
         if (booking.getHikerId() !== data.userId) throw new Forbidden();
@@ -43,18 +41,18 @@ export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
           throw new Forbidden('Cannot cancel booking at this stage');
         }
 
-        const hike = await this.hikeRepository.findById(booking.getHikeId());
+        const hike = await this._hikeRepository.findById(booking.getHikeId());
         if (!hike) throw new HikeNotFound();
 
-        const ride = await this.rideRepository.findById(booking.getRideId());
+        const ride = await this._rideRepository.findById(booking.getRideId());
         if (!ride) throw new RideNotFound();
 
-        const tasks = await this.taskRepository.findByRideBookingId(
+        const tasks = await this._taskRepository.findByRideBookingId(
           booking.getId()!
         );
 
         const { refundAmount, distance, duration } =
-          await this.refundService.execute(booking);
+          await this._refundService.execute(booking);
 
         booking.cancel();
         booking.setRefundedAmount(refundAmount);
@@ -66,14 +64,14 @@ export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
         for (const task of tasks) {
           if (task.getStatus() === TaskStatus.PENDING) {
             task.cancel();
-            await this.taskRepository.update(task.getId()!, task);
+            await this._taskRepository.update(task.getId()!, task);
           }
         }
 
         const [updatedBooking, updatedHike, updatedRide] = await Promise.all([
-          this.bookingRepository.update(booking.getId()!, booking),
-          this.hikeRepository.update(hike.getHikeId(), hike),
-          this.rideRepository.update(ride.getRideId()!, ride),
+          this._bookingRepository.update(booking.getId()!, booking),
+          this._hikeRepository.update(hike.getHikeId(), hike),
+          this._rideRepository.update(ride.getRideId()!, ride),
         ]);
 
         if (!updatedBooking || !updatedHike || !updatedRide)

@@ -8,24 +8,23 @@ import { IGetPendingRequestUseCase } from './IGetPendingRequestUseCase';
 
 export class GetPendingRequestUseCase implements IGetPendingRequestUseCase {
   constructor(
-    private readonly joinRequestRepository: IJoinRequestRepository,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly subscriptionService: ISubscriptionService
+    private readonly _joinRequestRepository: IJoinRequestRepository,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _subscriptionService: ISubscriptionService
   ) {}
 
   async execute(rideId: string): Promise<JoinRequestResponseDTO[]> {
-    const joinRequests = await this.joinRequestRepository.findPendingOrAccepted(
-      rideId
-    );
+    const joinRequests =
+      await this._joinRequestRepository.findPendingOrAccepted(rideId);
 
     const requests = await Promise.all(
       joinRequests.map(async jr => {
-        const hike = await this.hikeRepository.findById(jr.getHikeId());
+        const hike = await this._hikeRepository.findById(jr.getHikeId());
         const user =
-          hike && (await this.userRepository.findById(hike?.getUserId()));
+          hike && (await this._userRepository.findById(hike?.getUserId()));
         if (user && hike) {
-          const sub = await this.subscriptionService.getActiveSubscription(
+          const sub = await this._subscriptionService.getActiveSubscription(
             hike.getUserId()
           );
           return joinRequestMapper(jr, hike, user, sub.tier);

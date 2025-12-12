@@ -9,8 +9,8 @@ import { ISendChatMessageUseCase } from './ISendChatMessageUseCase';
 
 export class SendChatMessageUseCase implements ISendChatMessageUseCase {
   constructor(
-    private readonly chatRepository: IChatMessageRepository,
-    private readonly realtimeGateway: IRealtimeGateway
+    private readonly _chatRepository: IChatMessageRepository,
+    private readonly _realtimeGateway: IRealtimeGateway
   ) {}
 
   async execute(data: SendChatMessageDTO): Promise<ChatMessageDTO> {
@@ -21,7 +21,7 @@ export class SendChatMessageUseCase implements ISendChatMessageUseCase {
       message: data.message,
     });
 
-    const saved = await this.chatRepository.create(message);
+    const saved = await this._chatRepository.create(message);
 
     const dto: ChatMessageDTO = {
       id: saved.getId()!,
@@ -32,14 +32,14 @@ export class SendChatMessageUseCase implements ISendChatMessageUseCase {
       createdAt: saved.getCreatedAt(),
     };
 
-    await this.realtimeGateway.emitToRoom(
+    await this._realtimeGateway.emitToRoom(
       'rider',
       dto.roomId,
       'chat:message',
       dto
     );
 
-    await this.realtimeGateway.emitToRoom(
+    await this._realtimeGateway.emitToRoom(
       'hiker',
       dto.roomId,
       'chat:message',

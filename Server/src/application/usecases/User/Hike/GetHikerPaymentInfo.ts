@@ -18,27 +18,27 @@ import { IGetHikerPaymentInfoUseCase } from './IGetHikerPaymentInfo';
 
 export class GetHikerPaymentInfoUseCase implements IGetHikerPaymentInfoUseCase {
   constructor(
-    private readonly paymentRepository: IPaymentRepository,
-    private readonly joinRequestRepository: IJoinRequestRepository,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly googleApi: IGoogleApi
+    private readonly _paymentRepository: IPaymentRepository,
+    private readonly _joinRequestRepository: IJoinRequestRepository,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _googleApi: IGoogleApi
   ) {}
 
   async execute(
     data: HikerPaymentInfoRequestDTO
   ): Promise<HikerPaymentInfoResponseDTO> {
-    const payment = await this.paymentRepository.findById(data.paymentId);
+    const payment = await this._paymentRepository.findById(data.paymentId);
     if (!payment) throw new PaymentInfoNotFound();
 
     if (payment.getHikerId() !== data.userId) throw new NotAuthorizedToAccept();
 
-    const joinRequest = await this.joinRequestRepository.findById(
+    const joinRequest = await this._joinRequestRepository.findById(
       payment.getJoinRequestId()
     );
     if (!joinRequest) throw new JoinRequestNotFound();
 
-    const hike = await this.hikeRepository.findById(joinRequest.getHikeId());
+    const hike = await this._hikeRepository.findById(joinRequest.getHikeId());
     if (!hike) throw new HikeNotFound();
     const pickup = {
       lat: hike.getPickup().coordinates[0],
@@ -61,12 +61,12 @@ export class GetHikerPaymentInfoUseCase implements IGetHikerPaymentInfoUseCase {
     };
 
     const { distance: distanceAwayfromPickup } =
-      await this.googleApi.getDistance(pickup, nearestPickup);
+      await this._googleApi.getDistance(pickup, nearestPickup);
 
     const { distance: distanceAwayfromDestination } =
-      await this.googleApi.getDistance(destination, nearestDestination);
+      await this._googleApi.getDistance(destination, nearestDestination);
 
-    const rider = await this.userRepository.findById(payment.getRiderId());
+    const rider = await this._userRepository.findById(payment.getRiderId());
     if (!rider) throw new UserNotFound();
     const amount = Number(
       (payment.getAmount() - payment.getPlatformFee()).toFixed(2)

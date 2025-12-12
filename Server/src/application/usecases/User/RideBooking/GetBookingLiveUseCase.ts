@@ -14,18 +14,18 @@ import { IGetBookingLiveUseCase } from './IGetBookingLive';
 
 export class GetBookingLiveUseCase implements IGetBookingLiveUseCase {
   constructor(
-    private readonly bookingRepository: IRideBookingRepository,
-    private readonly locationRepository: ILocationRepository,
-    private readonly googleApi: IGoogleApi
+    private readonly _bookingRepository: IRideBookingRepository,
+    private readonly _locationRepository: ILocationRepository,
+    private readonly _googleApi: IGoogleApi
   ) {}
 
   async execute(data: BookingLiveReqDTO): Promise<BookingLiveResDTO> {
-    const booking = await this.bookingRepository.findById(data.bookingId);
+    const booking = await this._bookingRepository.findById(data.bookingId);
     if (!booking) throw new RideBookingNotFound();
 
     if (booking.getHikerId() !== data.userId) throw new Forbidden();
 
-    const riderLocation = await this.locationRepository.getLocation(
+    const riderLocation = await this._locationRepository.getLocation(
       booking.getRideId()
     );
     if (!riderLocation) throw new FailToFetchLiveUpdates();
@@ -39,7 +39,7 @@ export class GetBookingLiveUseCase implements IGetBookingLiveUseCase {
       lng: booking.getPickupLocation().coordinates[0],
     };
 
-    const { distance, duration } = await this.googleApi.getDistance(
+    const { distance, duration } = await this._googleApi.getDistance(
       riderLocationCoord,
       hikerPickupCoord
     );

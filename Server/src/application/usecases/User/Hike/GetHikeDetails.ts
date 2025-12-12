@@ -15,17 +15,17 @@ import { IGetHikeDetailsUseCase } from './IGetHikeDetails';
 
 export class GetHikeDetailsUseCase implements IGetHikeDetailsUseCase {
   constructor(
-    private readonly hikeRepository: IHikeRepository,
-    private readonly bookingRepository: IRideBookingRepository,
-    private readonly paymentRepository: IPaymentRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly reviewRepository: IReviewRepository,
-    private readonly subscriptionService: ISubscriptionService
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _bookingRepository: IRideBookingRepository,
+    private readonly _paymentRepository: IPaymentRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _reviewRepository: IReviewRepository,
+    private readonly _subscriptionService: ISubscriptionService
   ) {}
   async execute(
     data: GetHikeDetailsReqDTO
   ): Promise<GetHikeDetailsResponseDTO> {
-    const hike = await this.hikeRepository.findById(data.hikeId);
+    const hike = await this._hikeRepository.findById(data.hikeId);
     if (!hike) throw new HikeNotFound();
 
     if (hike.getUserId() !== data.userId) throw new Forbidden();
@@ -33,26 +33,28 @@ export class GetHikeDetailsUseCase implements IGetHikeDetailsUseCase {
     let booking = null;
     const bookingId = hike.getBookingId();
     if (bookingId) {
-      booking = await this.bookingRepository.findById(bookingId);
+      booking = await this._bookingRepository.findById(bookingId);
     }
 
     let payment = null;
     if (booking) {
-      payment = await this.paymentRepository.findById(booking.getPaymentId());
+      payment = await this._paymentRepository.findById(booking.getPaymentId());
     }
 
     let rider = null;
     let subscriptionTier = undefined;
     const riderId = hike.getRiderId();
     if (riderId) {
-      rider = await this.userRepository.findById(riderId);
-      const sub = await this.subscriptionService.getActiveSubscription(riderId);
+      rider = await this._userRepository.findById(riderId);
+      const sub = await this._subscriptionService.getActiveSubscription(
+        riderId
+      );
       subscriptionTier = sub.tier;
     }
 
     let review = null;
     if (booking) {
-      review = await this.reviewRepository.findByReviewerAndBooking(
+      review = await this._reviewRepository.findByReviewerAndBooking(
         data.userId,
         booking.getId()!
       );

@@ -24,13 +24,13 @@ import { ICompleteTaskUseCase } from './ICompleteTaskUseCase';
 
 export class CompleteTaskUseCase implements ICompleteTaskUseCase {
   constructor(
-    private readonly taskRepository: ITaskRepository,
-    private readonly bookingRepository: IRideBookingRepository,
-    private readonly rideRepository: IRideRepository
+    private readonly _taskRepository: ITaskRepository,
+    private readonly _bookingRepository: IRideBookingRepository,
+    private readonly _rideRepository: IRideRepository
   ) {}
 
   async execute(data: CompleteTaskReqDTO): Promise<CompleteTaskResponseDTO> {
-    const task = await this.taskRepository.findById(data.taskId);
+    const task = await this._taskRepository.findById(data.taskId);
     if (!task) throw new TaskNotFound();
 
     if (task.getRiderId() !== data.userId) throw new Forbidden();
@@ -38,7 +38,7 @@ export class CompleteTaskUseCase implements ICompleteTaskUseCase {
     if (task.getStatus() !== TaskStatus.PENDING)
       throw new TaskAlreadyComplted();
 
-    const tasks = await this.taskRepository.findByRideId(task.getRideId());
+    const tasks = await this._taskRepository.findByRideId(task.getRideId());
     const pendingTask = tasks.find(t => t.getStatus() == TaskStatus.PENDING);
     if (!pendingTask || pendingTask.getId() !== data.taskId)
       throw new TaskNotInHighestPriority();
@@ -47,12 +47,12 @@ export class CompleteTaskUseCase implements ICompleteTaskUseCase {
       if (!data.otp || data.otp !== task.getOtp()) throw new InvalidOTP();
     }
 
-    const booking = await this.bookingRepository.findById(
+    const booking = await this._bookingRepository.findById(
       task.getRideBookingId()
     );
     if (!booking) throw new RideBookingNotFound();
 
-    const ride = await this.rideRepository.findById(booking.getRideId());
+    const ride = await this._rideRepository.findById(booking.getRideId());
     if (!ride) throw new RideNotFound();
 
     if (task.getTaskType() == TaskType.DROPOFF) {
@@ -70,9 +70,9 @@ export class CompleteTaskUseCase implements ICompleteTaskUseCase {
     task.complete();
 
     const [updatedBooking, updatedTask, updatedRide] = await Promise.all([
-      this.bookingRepository.update(booking.getId(), booking),
-      this.taskRepository.update(task.getId(), task),
-      this.rideRepository.update(ride.getRideId(), ride),
+      this._bookingRepository.update(booking.getId(), booking),
+      this._taskRepository.update(task.getId(), task),
+      this._rideRepository.update(ride.getRideId(), ride),
     ]);
     if (!updatedTask || !updatedRide) throw new UpdateFailed();
 

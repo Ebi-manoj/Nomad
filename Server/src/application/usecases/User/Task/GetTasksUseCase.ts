@@ -12,19 +12,19 @@ import { IGetTasksUseCase } from './IGetTasksUseCase';
 
 export class GetTasksUseCase implements IGetTasksUseCase {
   constructor(
-    private readonly taskRepository: ITaskRepository,
-    private readonly rideRepository: IRideRepository,
-    private readonly userRepository: IUserRepository
+    private readonly _taskRepository: ITaskRepository,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
   async execute(data: GetTasksReqDTO): Promise<GetTaskResponseDTO[]> {
-    const ride = await this.rideRepository.findById(data.rideId);
+    const ride = await this._rideRepository.findById(data.rideId);
     if (!ride) throw new RideNotFound();
 
     if (ride.getRiderId() !== data.userId) throw new Unauthorized();
-    const tasks = await this.taskRepository.findByRideId(data.rideId);
+    const tasks = await this._taskRepository.findByRideId(data.rideId);
     const response = await Promise.all(
       tasks.map(async t => {
-        const user = await this.userRepository.findById(t.getHikerId());
+        const user = await this._userRepository.findById(t.getHikerId());
         if (!user) return null;
         return GetTasksMapper(t, user);
       })

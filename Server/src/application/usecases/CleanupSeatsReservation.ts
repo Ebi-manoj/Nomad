@@ -7,34 +7,34 @@ import { ICleanupSeatsReservation } from './ICleanupSeatsReservation';
 
 export class CleanupSeatsReservation implements ICleanupSeatsReservation {
   constructor(
-    private readonly paymentRepository: IPaymentRepository,
-    private readonly rideRepository: IRideRepository,
-    private readonly joinRequestRepository: IJoinRequestRepository,
+    private readonly _paymentRepository: IPaymentRepository,
+    private readonly _rideRepository: IRideRepository,
+    private readonly _joinRequestRepository: IJoinRequestRepository,
     private readonly logger: ILogger
   ) {}
 
   async execute(): Promise<void> {
-    const pendingPayments = await this.paymentRepository.findExpiredPayments();
+    const pendingPayments = await this._paymentRepository.findExpiredPayments();
     for (const payment of pendingPayments) {
-      const ride = await this.rideRepository.findById(payment.getRideId());
-      const joinRequest = await this.joinRequestRepository.findById(
+      const ride = await this._rideRepository.findById(payment.getRideId());
+      const joinRequest = await this._joinRequestRepository.findById(
         payment.getJoinRequestId()
       );
 
       if (ride && joinRequest) {
-        await this.rideRepository.releaseSeats(
+        await this._rideRepository.releaseSeats(
           ride.getRideId()!,
           joinRequest.getSeatsRequested()
         );
         joinRequest.updateStatus(JoinRequestStatus.EXPIRED);
 
-        await this.joinRequestRepository.update(
+        await this._joinRequestRepository.update(
           joinRequest.getId()!,
           joinRequest
         );
       }
       payment.setExpired();
-      await this.paymentRepository.update(payment.getId()!, payment);
+      await this._paymentRepository.update(payment.getId()!, payment);
     }
   }
 }

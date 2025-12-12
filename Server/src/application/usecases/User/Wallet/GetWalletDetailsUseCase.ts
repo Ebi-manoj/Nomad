@@ -5,27 +5,27 @@ import { IWalletTransactionRepository } from '../../../repositories/IWalletTrans
 
 export class GetWalletDetailsUseCase {
   constructor(
-    private readonly walletRepository: IWalletRepository,
-    private readonly walletTransactionRepository: IWalletTransactionRepository
+    private readonly _walletRepository: IWalletRepository,
+    private readonly _walletTransactionRepository: IWalletTransactionRepository
   ) {}
 
   async execute(userId: string, page: number = 1): Promise<WalletDetailsDTO> {
     const LIMIT = 10;
-    let wallet = await this.walletRepository.findByUserId(userId);
+    let wallet = await this._walletRepository.findByUserId(userId);
     if (!wallet) {
       const walletEntity = new Wallet({ userId });
-      wallet = await this.walletRepository.create(walletEntity);
+      wallet = await this._walletRepository.create(walletEntity);
     }
 
     const skip = (page - 1) * LIMIT;
     const [transactions, total] = await Promise.all([
-      this.walletTransactionRepository.findByUserId(userId, skip, LIMIT),
-      this.walletTransactionRepository.countByUserId(userId),
+      this._walletTransactionRepository.findByUserId(userId, skip, LIMIT),
+      this._walletTransactionRepository.countByUserId(userId),
     ]);
 
     const [totalCredits, totalDebits] = await Promise.all([
-      this.walletTransactionRepository.findTotalCredits(userId),
-      this.walletTransactionRepository.findTotalDebits(userId),
+      this._walletTransactionRepository.findTotalCredits(userId),
+      this._walletTransactionRepository.findTotalDebits(userId),
     ]);
 
     return {

@@ -10,16 +10,16 @@ import { IFindMatchRideUseCase } from './IFindMatchRideUseCase';
 
 export class FindMatchRideUseCase implements IFindMatchRideUseCase {
   constructor(
-    private readonly rideRepository: IRideRepository,
-    private readonly rideMatchService: IRideMatchService,
-    private readonly geoService: IGeoService,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly joinRequestRepository: IJoinRequestRepository,
-    private readonly paymentRepository: IPaymentRepository
+    private readonly _rideRepository: IRideRepository,
+    private readonly _rideMatchService: IRideMatchService,
+    private readonly _geoService: IGeoService,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _joinRequestRepository: IJoinRequestRepository,
+    private readonly _paymentRepository: IPaymentRepository
   ) {}
 
   async execute(hikeId: string): Promise<RideMatchResponseDTO[]> {
-    const hikelog = await this.hikeRepository.findById(hikeId);
+    const hikelog = await this._hikeRepository.findById(hikeId);
     if (!hikelog) return [];
 
     const pickup = hikelog.getPickup();
@@ -27,7 +27,7 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
     const seatRequested = hikelog.getSeatsRequested();
     const hasHelmet = hikelog.getHasHelmet();
 
-    const activeRiders = await this.rideRepository.findActiveNearbyRiders(
+    const activeRiders = await this._rideRepository.findActiveNearbyRiders(
       pickup
     );
 
@@ -44,13 +44,13 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
       filteredRidersMap.set(ride.getRideId()!, ride);
     }
 
-    const JoinRequests = await this.joinRequestRepository.findByHikeId(hikeId);
-    const payments = await this.paymentRepository.findPendingPaymentsByHikeId(
+    const JoinRequests = await this._joinRequestRepository.findByHikeId(hikeId);
+    const payments = await this._paymentRepository.findPendingPaymentsByHikeId(
       hikeId
     );
 
     for (const p of payments) {
-      const ride = await this.rideRepository.findById(p.getRideId());
+      const ride = await this._rideRepository.findById(p.getRideId());
       if (ride) filteredRidersMap.set(ride.getRideId()!, ride);
     }
 
@@ -58,10 +58,10 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
 
     const matchedRiders = [];
     for (const ride of filteredRiders) {
-      const match = await this.rideMatchService.evaluate(
+      const match = await this._rideMatchService.evaluate(
         ride,
         { pickup, destination },
-        this.geoService
+        this._geoService
       );
       if (match) {
         const request = JoinRequests.find(

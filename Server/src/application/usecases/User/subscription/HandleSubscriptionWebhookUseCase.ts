@@ -15,10 +15,10 @@ export class HandleSubscriptionWebhookUseCase
   implements IHandleSubscriptionWebhookUseCase
 {
   constructor(
-    private readonly paymentService: IPaymentService,
-    private readonly subscriptions: ISubscriptionRepository,
-    private readonly users: IUserRepository,
-    private readonly checkoutSessions: ICheckoutSessionRepository
+    private readonly _paymentService: IPaymentService,
+    private readonly _subscriptions: ISubscriptionRepository,
+    private readonly _users: IUserRepository,
+    private readonly _checkoutSessions: ICheckoutSessionRepository
   ) {}
 
   async execute(payload: Buffer | string, signature?: string): Promise<void> {
@@ -58,7 +58,7 @@ export class HandleSubscriptionWebhookUseCase
     // Try Stripe verification first
     if (signature) {
       try {
-        const evt = await this.paymentService.constructWebhookEvent(
+        const evt = await this._paymentService.constructWebhookEvent(
           payload,
           signature
         );
@@ -93,25 +93,25 @@ export class HandleSubscriptionWebhookUseCase
     const stripeSubscriptionId: string | undefined = session.subscription;
     const stripeCustomerId: string | undefined = session.customer;
     const metadata: Record<string, string> | undefined = session.metadata;
-    await this.checkoutSessions.updateStatus(session.id, 'completed');
+    await this._checkoutSessions.updateStatus(session.id, 'completed');
 
     if (!stripeSubscriptionId) return;
 
     // Determine user
     let userId: string | undefined = metadata?.userId;
     if (!userId && stripeCustomerId) {
-      const customer = await this.paymentService.retrieveCustomer(
+      const customer = await this._paymentService.retrieveCustomer(
         stripeCustomerId
       );
       if (customer?.email) {
-        const user = await this.users.findByEmail(customer.email);
+        const user = await this._users.findByEmail(customer.email);
         userId = user?.getId();
       }
     }
     if (!userId) return;
 
     // Get subscription details from Stripe
-    const sub = await this.paymentService.retrieveSubscription(
+    const sub = await this._paymentService.retrieveSubscription(
       stripeSubscriptionId
     );
     const firstItem = sub.items[0];
@@ -130,7 +130,7 @@ export class HandleSubscriptionWebhookUseCase
     const currency = firstItem?.price?.currency?.toUpperCase?.() || 'INR';
 
     // Idempotency
-    const existing = await this.subscriptions.findByStripeSubscriptionId(
+    const existing = await this._subscriptions.findByStripeSubscriptionId(
       sub.id
     );
     if (existing) return;
@@ -148,16 +148,16 @@ export class HandleSubscriptionWebhookUseCase
       stripeCustomerId: sub.customer || undefined,
       stripePriceId: priceId,
     });
-    await this.subscriptions.create(subscription);
+    await this._subscriptions.create(subscription);
   }
   private async handleUpdateSubscription(data: Record<string, unknown>) {
     const obj = (data as any)?.object;
     const stripeSubscriptionId: string | undefined = obj?.id;
     if (!stripeSubscriptionId) return;
-    const sub = await this.paymentService.retrieveSubscription(
+    const sub = await this._paymentService.retrieveSubscription(
       stripeSubscriptionId
     );
-    const existing = await this.subscriptions.findByStripeSubscriptionId(
+    const existing = await this._subscriptions.findByStripeSubscriptionId(
       stripeSubscriptionId
     );
     if (!existing) return;
@@ -192,14 +192,14 @@ export class HandleSubscriptionWebhookUseCase
       cancelledAt:
         status === SubscriptionStatus.CANCELLED ? new Date() : undefined,
     });
-    await this.subscriptions.update(existing.getId(), updated);
+    await this._subscriptions.update(existing.getId(), updated);
   }
 
   private async handleDeleteSubscription(data: Record<string, unknown>) {
     const obj = (data as any)?.object;
     const stripeSubscriptionId: string | undefined = obj?.id;
     if (!stripeSubscriptionId) return;
-    const existing = await this.subscriptions.findByStripeSubscriptionId(
+    const existing = await this._subscriptions.findByStripeSubscriptionId(
       stripeSubscriptionId
     );
     if (!existing) return;
@@ -221,6 +221,6 @@ export class HandleSubscriptionWebhookUseCase
       updatedAt: new Date(),
       cancelledAt: new Date(),
     });
-    await this.subscriptions.update(existing.getId(), updated);
+    await this._subscriptions.update(existing.getId(), updated);
   }
 }

@@ -11,21 +11,21 @@ import { IVerifySubscriptionUseCase } from './IVerifySubscriptionUseCase';
 
 export class VerifySubscriptionUseCase implements IVerifySubscriptionUseCase {
   constructor(
-    private readonly checkoutSession: ICheckoutSessionRepository,
-    private readonly subscriptionRepository: ISubscriptionRepository
+    private readonly _checkoutSession: ICheckoutSessionRepository,
+    private readonly _subscriptionRepository: ISubscriptionRepository
   ) {}
 
   async execute(
     data: VerifySubscripitonReqDTO
   ): Promise<VerifySubscriptionResDTO> {
-    const checkoutSession = await this.checkoutSession.getByStripeSessionId(
+    const checkoutSession = await this._checkoutSession.getByStripeSessionId(
       data.sessionId
     );
     if (!checkoutSession) throw new SubscriptionSessionNotFound();
 
     if (checkoutSession.userId !== data.userId) throw new Forbidden();
 
-    const subscription = await this.subscriptionRepository.findActiveByUserId(
+    const subscription = await this._subscriptionRepository.findActiveByUserId(
       data.userId
     );
     if (subscription) {

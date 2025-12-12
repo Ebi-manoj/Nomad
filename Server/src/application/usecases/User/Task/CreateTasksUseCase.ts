@@ -12,27 +12,27 @@ import { ICreateTasksUseCase } from './ICreateTaskUseCase';
 
 export class CreateTasksUseCase implements ICreateTasksUseCase {
   constructor(
-    private readonly rideRepository: IRideRepository,
-    private readonly locationRepository: ILocationRepository,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly pickupOTPService: IPickupOTPService,
-    private readonly taskPrioritizationService: ITaskPrioritizationService,
-    private readonly taskRepository: ITaskRepository,
-    private readonly realtimeGateway: IRealtimeGateway
+    private readonly _rideRepository: IRideRepository,
+    private readonly _locationRepository: ILocationRepository,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _pickupOTPService: IPickupOTPService,
+    private readonly _taskPrioritizationService: ITaskPrioritizationService,
+    private readonly _taskRepository: ITaskRepository,
+    private readonly _realtimeGateway: IRealtimeGateway
   ) {}
 
   async execute(booking: RideBooking): Promise<void> {
-    const isExist = await this.taskRepository.findByRideBookingId(
+    const isExist = await this._taskRepository.findByRideBookingId(
       booking.getId()!
     );
 
     if (isExist.length > 0) return;
 
-    const ride = await this.rideRepository.findById(booking.getRideId());
+    const ride = await this._rideRepository.findById(booking.getRideId());
     if (!ride) return;
 
     // Get current rider location
-    const riderLocation = await this.locationRepository.getLocation(
+    const riderLocation = await this._locationRepository.getLocation(
       ride.getRideId()!
     );
     const currentLocation = riderLocation
@@ -43,10 +43,10 @@ export class CreateTasksUseCase implements ICreateTasksUseCase {
         };
 
     // Generate OTP for pickup
-    const pickupOTP = this.pickupOTPService.generateOTP();
+    const pickupOTP = this._pickupOTPService.generateOTP();
 
     // Get hike for addresses
-    const hike = await this.hikeRepository.findById(booking.getHikeId());
+    const hike = await this._hikeRepository.findById(booking.getHikeId());
     if (!hike) return;
 
     // Create pickup task
@@ -77,14 +77,14 @@ export class CreateTasksUseCase implements ICreateTasksUseCase {
     });
 
     // Get all existing tasks for this ride to prioritize together
-    const existingTasks = await this.taskRepository.findByRideId(
+    const existingTasks = await this._taskRepository.findByRideId(
       booking.getRideId()
     );
     const allTasks = [...existingTasks, pickupTask, dropoffTask];
 
     // Prioritize all tasks based on route
     const prioritizedTasks =
-      await this.taskPrioritizationService.prioritizeTasks(
+      await this._taskPrioritizationService.prioritizeTasks(
         allTasks,
         currentLocation,
         ride.getRoute()
@@ -102,16 +102,16 @@ export class CreateTasksUseCase implements ICreateTasksUseCase {
           t => t.getId() === task.getId()
         );
         if (existingTask && existingTask.getPriority() !== task.getPriority()) {
-          await this.taskRepository.update(task.getId()!, task);
+          await this._taskRepository.update(task.getId()!, task);
         }
       }
     }
 
     for (const task of tasksToSave) {
-      await this.taskRepository.create(task);
+      await this._taskRepository.create(task);
     }
 
-    await this.realtimeGateway.emitToRoom(
+    await this._realtimeGateway.emitToRoom(
       'rider',
       booking.getRideId(),
       'ride:booking:confirmed',

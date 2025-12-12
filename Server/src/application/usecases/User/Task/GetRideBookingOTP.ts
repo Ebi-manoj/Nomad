@@ -9,9 +9,9 @@ import { ITaskRepository } from '../../../repositories/ITaskRepository';
 import { IGetRideBookingOTPUseCase } from './IGetRideBookingOTP';
 
 export class GetRideBookingOTPUseCase implements IGetRideBookingOTPUseCase {
-  constructor(private readonly taskRepository: ITaskRepository) {}
+  constructor(private readonly _taskRepository: ITaskRepository) {}
   async execute(data: RideBookingOTPReqDTO): Promise<{ otp: string }> {
-    const tasks = await this.taskRepository.findByRideBookingId(
+    const tasks = await this._taskRepository.findByRideBookingId(
       data.rideBookingId
     );
     const pickupTask = tasks.find(t => t.getTaskType() == TaskType.PICKUP);
