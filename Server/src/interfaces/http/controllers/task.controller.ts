@@ -11,9 +11,9 @@ import { ITaskController } from './ITaskController';
 
 export class TaskController implements ITaskController {
   constructor(
-    private readonly getTasksUseCase: IGetTasksUseCase,
-    private readonly getRideBookingOTPUseCase: IGetRideBookingOTPUseCase,
-    private readonly completeTaskUseCase: ICompleteTaskUseCase
+    private readonly _getTasksUseCase: IGetTasksUseCase,
+    private readonly _getRideBookingOTPUseCase: IGetRideBookingOTPUseCase,
+    private readonly _completeTaskUseCase: ICompleteTaskUseCase
   ) {}
 
   async getTasks(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -21,7 +21,7 @@ export class TaskController implements ITaskController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
     const dto = { userId, rideId };
-    const result = await this.getTasksUseCase.execute(dto);
+    const result = await this._getTasksUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -31,7 +31,7 @@ export class TaskController implements ITaskController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
     const dto: RideBookingOTPReqDTO = { userId, rideBookingId };
-    const result = await this.getRideBookingOTPUseCase.execute(dto);
+    const result = await this._getRideBookingOTPUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -42,7 +42,7 @@ export class TaskController implements ITaskController {
     const { otp } = httpRequest.body as { otp?: string };
     const dto = { taskId, userId, otp };
 
-    const result = await this.completeTaskUseCase.execute(dto);
+    const result = await this._completeTaskUseCase.execute(dto);
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);

@@ -13,8 +13,8 @@ import { IUserManagementController } from './IUserManagementController';
 
 export class userManagementController implements IUserManagementController {
   constructor(
-    private readonly getAllUserUseCase: IGetAllUsersUseCase,
-    private readonly blockUserUseCase: IBlockUserUseCase
+    private readonly _getAllUserUseCase: IGetAllUsersUseCase,
+    private readonly _blockUserUseCase: IBlockUserUseCase
   ) {}
 
   async getAllUsers(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -24,7 +24,7 @@ export class userManagementController implements IUserManagementController {
     const search = parsed.search as string | undefined;
 
     const dto: GetAllUsersRequestDTO = { page, limit, search };
-    const result = await this.getAllUserUseCase.execute(dto);
+    const result = await this._getAllUserUseCase.execute(dto);
     const response = ApiResponse.success<GetAllUsersResponseDTO>(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -32,7 +32,7 @@ export class userManagementController implements IUserManagementController {
   async blockUser(httpRequest: HttpRequest): Promise<HttpResponse> {
     const { userId } = httpRequest.path as { userId: string };
 
-    const result = await this.blockUserUseCase.execute(userId);
+    const result = await this._blockUserUseCase.execute(userId);
     const response = ApiResponse.success<UserResponseDTO>(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

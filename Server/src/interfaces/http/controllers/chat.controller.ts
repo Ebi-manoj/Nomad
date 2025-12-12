@@ -9,8 +9,8 @@ import type { IChatController } from './IChatController';
 
 export class ChatController implements IChatController {
   constructor(
-    private readonly getChatMessagesUseCase: IGetChatMessagesUseCase,
-    private readonly sendChatMessageUseCase: ISendChatMessageUseCase
+    private readonly _getChatMessagesUseCase: IGetChatMessagesUseCase,
+    private readonly _sendChatMessageUseCase: ISendChatMessageUseCase
   ) {}
 
   async getMessages(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -18,7 +18,7 @@ export class ChatController implements IChatController {
     if (!userId) throw new Unauthorized();
     const { roomId } = httpRequest.path as { roomId: string };
 
-    const result = await this.getChatMessagesUseCase.execute({
+    const result = await this._getChatMessagesUseCase.execute({
       roomId,
       userId,
     });
@@ -37,7 +37,7 @@ export class ChatController implements IChatController {
       message: string;
     };
 
-    const result = await this.sendChatMessageUseCase.execute({
+    const result = await this._sendChatMessageUseCase.execute({
       roomId,
       senderRole,
       message,

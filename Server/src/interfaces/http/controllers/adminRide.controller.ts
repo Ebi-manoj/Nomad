@@ -8,8 +8,8 @@ import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class AdminRideController implements IAdminRideController {
   constructor(
-    private readonly getAllRideUseCase: IGetAllRideUseCase,
-    private readonly getRideDetailsUseCase: IAdminRideDetailsUseCase
+    private readonly _getAllRideUseCase: IGetAllRideUseCase,
+    private readonly _getRideDetailsUseCase: IAdminRideDetailsUseCase
   ) {}
 
   async getAllRides(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -18,14 +18,14 @@ export class AdminRideController implements IAdminRideController {
     const page = Number(query.page) || 1;
     const status = (query.status as string) || undefined;
 
-    const result = await this.getAllRideUseCase.execute(page, status);
+    const result = await this._getAllRideUseCase.execute(page, status);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async getRideDetails(httpRequest: HttpRequest): Promise<HttpResponse> {
     const { rideId } = httpRequest.path as { rideId: string };
-    const result = await this.getRideDetailsUseCase.execute(rideId);
+    const result = await this._getRideDetailsUseCase.execute(rideId);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

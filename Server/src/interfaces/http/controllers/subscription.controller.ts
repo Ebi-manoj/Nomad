@@ -15,10 +15,10 @@ import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class SubscriptionController implements ISubscriptionController {
   constructor(
-    private readonly createCheckoutSessionUseCase: ICreateSubscriptionCheckoutSessionUseCase,
-    private readonly handleWebhookUseCase: IHandleSubscriptionWebhookUseCase,
-    private readonly verifySubscriptionUseCase: IVerifySubscriptionUseCase,
-    private readonly getSubscriptionUseCase: IGetSubscriptionDetailsUseCase
+    private readonly _createCheckoutSessionUseCase: ICreateSubscriptionCheckoutSessionUseCase,
+    private readonly _handleWebhookUseCase: IHandleSubscriptionWebhookUseCase,
+    private readonly _verifySubscriptionUseCase: IVerifySubscriptionUseCase,
+    private readonly _getSubscriptionUseCase: IGetSubscriptionDetailsUseCase
   ) {}
 
   async createCheckoutSession(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -33,7 +33,7 @@ export class SubscriptionController implements ISubscriptionController {
         metadata?: Record<string, string>;
       };
 
-    const result = await this.createCheckoutSessionUseCase.execute({
+    const result = await this._createCheckoutSessionUseCase.execute({
       userId,
       tier,
       billingCycle,
@@ -53,7 +53,7 @@ export class SubscriptionController implements ISubscriptionController {
 
     const payload = httpRequest.body as Buffer;
 
-    await this.handleWebhookUseCase.execute(payload, signature as string);
+    await this._handleWebhookUseCase.execute(payload, signature as string);
 
     const response = ApiResponse.success({ received: true });
     return new HttpResponse(HttpStatusCode.Ok, response);
@@ -65,7 +65,7 @@ export class SubscriptionController implements ISubscriptionController {
     const query = httpRequest.query as { session_id: string };
     const sessionId = query.session_id || '';
 
-    const result = await this.verifySubscriptionUseCase.execute({
+    const result = await this._verifySubscriptionUseCase.execute({
       userId,
       sessionId,
     });
@@ -76,7 +76,7 @@ export class SubscriptionController implements ISubscriptionController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
 
-    const result = await this.getSubscriptionUseCase.execute(userId);
+    const result = await this._getSubscriptionUseCase.execute(userId);
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatusCode.Ok, response);

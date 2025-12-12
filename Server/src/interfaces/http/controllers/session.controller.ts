@@ -8,7 +8,7 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { ISessionController } from './ISessionController';
 
 export class SessionController implements ISessionController {
-  constructor(private readonly activeSessionUseCase: IActiveSessionsUseCase) {}
+  constructor(private readonly _activeSessionUseCase: IActiveSessionsUseCase) {}
   async getActiveUserSession(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;
     if (!userId)
@@ -17,7 +17,7 @@ export class SessionController implements ISessionController {
         ErrorMessages.UNAUTHORIZED
       );
 
-    const result = await this.activeSessionUseCase.execute(userId);
+    const result = await this._activeSessionUseCase.execute(userId);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

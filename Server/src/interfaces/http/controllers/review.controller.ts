@@ -8,7 +8,7 @@ import { IRateUserUseCase } from '../../../application/usecases/User/Ratings/IRa
 import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class ReviewController implements IReviewController {
-  constructor(private readonly rateUserUseCase: IRateUserUseCase) {}
+  constructor(private readonly _rateUserUseCase: IRateUserUseCase) {}
 
   async rateUser(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;
@@ -25,7 +25,7 @@ export class ReviewController implements IReviewController {
       type: body.type,
     };
 
-    const result = await this.rateUserUseCase.execute(dto);
+    const result = await this._rateUserUseCase.execute(dto);
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);

@@ -11,9 +11,9 @@ import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class PaymentController implements IPaymentController {
   constructor(
-    private readonly getHikerPaymentInfoUseCase: IGetHikerPaymentInfoUseCase,
-    private readonly createPaymentIntentUseCase: ICreatePaymentIntentUseCase,
-    private readonly confirmHikerPaymentUseCase: IConfirmHikerPayment
+    private readonly _getHikerPaymentInfoUseCase: IGetHikerPaymentInfoUseCase,
+    private readonly _createPaymentIntentUseCase: ICreatePaymentIntentUseCase,
+    private readonly _confirmHikerPaymentUseCase: IConfirmHikerPayment
   ) {}
   async getPaymentInfo(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;
@@ -21,7 +21,7 @@ export class PaymentController implements IPaymentController {
     if (!userId) throw new Unauthorized();
     const dto = { paymentId, userId };
 
-    const result = await this.getHikerPaymentInfoUseCase.execute(dto);
+    const result = await this._getHikerPaymentInfoUseCase.execute(dto);
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatusCode.Ok, response);
@@ -29,7 +29,7 @@ export class PaymentController implements IPaymentController {
 
   async createPaymentIntent(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as paymentIntentRequestDTO;
-    const result = await this.createPaymentIntentUseCase.execute(dto);
+    const result = await this._createPaymentIntentUseCase.execute(dto);
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatusCode.Ok, response);
@@ -37,7 +37,7 @@ export class PaymentController implements IPaymentController {
 
   async confirmPayment(httpRequest: HttpRequest): Promise<HttpResponse> {
     const { paymentIntentId } = httpRequest.path as { paymentIntentId: string };
-    const result = await this.confirmHikerPaymentUseCase.execute(
+    const result = await this._confirmHikerPaymentUseCase.execute(
       paymentIntentId
     );
     const response = ApiResponse.success(result);

@@ -17,11 +17,11 @@ import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class RideBookingController implements IRideBookingController {
   constructor(
-    private readonly getRideBookingUseCase: IGetRideBookingUseCase,
-    private readonly markDroppOffUseCase: IMarkDropOffUseCase,
-    private readonly getBookingLiveUseCase: IGetBookingLiveUseCase,
-    private readonly cancelRideBookingUseCase: ICancelRideBookingUseCase,
-    private readonly reqCancelRideBookingUseCase: IReqCancelRideBookingUseCase
+    private readonly _getRideBookingUseCase: IGetRideBookingUseCase,
+    private readonly _markDroppOffUseCase: IMarkDropOffUseCase,
+    private readonly _getBookingLiveUseCase: IGetBookingLiveUseCase,
+    private readonly _cancelRideBookingUseCase: ICancelRideBookingUseCase,
+    private readonly _reqCancelRideBookingUseCase: IReqCancelRideBookingUseCase
   ) {}
 
   async getRideBooking(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -29,7 +29,7 @@ export class RideBookingController implements IRideBookingController {
     if (!userId) throw new Unauthorized();
     const { bookingId } = httpRequest.path as { bookingId: string };
     const dto = { bookingId, userId };
-    const result = await this.getRideBookingUseCase.execute(dto);
+    const result = await this._getRideBookingUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -40,7 +40,7 @@ export class RideBookingController implements IRideBookingController {
     if (!userId) throw new Unauthorized();
     const dto: MarkDroppOffReqDTO = { bookingId, userId };
 
-    const result = await this.markDroppOffUseCase.execute(dto);
+    const result = await this._markDroppOffUseCase.execute(dto);
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
@@ -50,7 +50,7 @@ export class RideBookingController implements IRideBookingController {
     const { bookingId } = httpRequest.path as { bookingId: string };
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
-    const result = await this.getBookingLiveUseCase.execute({
+    const result = await this._getBookingLiveUseCase.execute({
       bookingId,
       userId,
     });
@@ -63,7 +63,7 @@ export class RideBookingController implements IRideBookingController {
     if (!userId) throw new Unauthorized();
     const { bookingId } = httpRequest.path as { bookingId: string };
     const dto: CancelRideBookingReqDTO = { bookingId, userId };
-    const result = await this.cancelRideBookingUseCase.execute(dto);
+    const result = await this._cancelRideBookingUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -74,7 +74,7 @@ export class RideBookingController implements IRideBookingController {
     const { bookingId } = httpRequest.path as { bookingId: string };
     const dto: ReqCancelBookingReqDTO = { bookingId, userId };
 
-    const result = await this.reqCancelRideBookingUseCase.execute(dto);
+    const result = await this._reqCancelRideBookingUseCase.execute(dto);
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);

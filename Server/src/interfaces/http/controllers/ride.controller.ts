@@ -21,19 +21,19 @@ import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class RideController implements IRideController {
   constructor(
-    private readonly createRideUseCase: ICreateRideUseCase,
-    private readonly getPendingRequestUseCase: IGetPendingRequestUseCase,
-    private readonly acceptJoinRequestUseCase: IAcceptJoinRequestUseCase,
-    private readonly declienJoinRequestUseCase: IDeclineJoinRequestUseCase,
-    private readonly getHikerMatchedUseCase: IGetHikerMatchedUseCase,
-    private readonly endRideUseCase: IEndRideUseCase,
-    private readonly getRideDetailsUseCase: IGetRideDetailsUseCase,
-    private readonly getAllRidesUseCase: IGetAllRidesUseCase
+    private readonly _createRideUseCase: ICreateRideUseCase,
+    private readonly _getPendingRequestUseCase: IGetPendingRequestUseCase,
+    private readonly _acceptJoinRequestUseCase: IAcceptJoinRequestUseCase,
+    private readonly _declienJoinRequestUseCase: IDeclineJoinRequestUseCase,
+    private readonly _getHikerMatchedUseCase: IGetHikerMatchedUseCase,
+    private readonly _endRideUseCase: IEndRideUseCase,
+    private readonly _getRideDetailsUseCase: IGetRideDetailsUseCase,
+    private readonly _getAllRidesUseCase: IGetAllRidesUseCase
   ) {}
 
   async createRide(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.body as CreateRideDTO;
-    const result = await this.createRideUseCase.execute(dto);
+    const result = await this._createRideUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -46,7 +46,7 @@ export class RideController implements IRideController {
     const page = Number(parsed.page) || 1;
     const status = parsed.status as string | undefined;
 
-    const result = await this.getAllRidesUseCase.execute({
+    const result = await this._getAllRidesUseCase.execute({
       userId,
       page,
       status,
@@ -60,7 +60,7 @@ export class RideController implements IRideController {
     httpRequest: HttpRequest
   ): Promise<HttpResponse> {
     const { rideId } = httpRequest.path as { rideId: string };
-    const result = await this.getPendingRequestUseCase.execute(rideId);
+    const result = await this._getPendingRequestUseCase.execute(rideId);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
@@ -70,7 +70,7 @@ export class RideController implements IRideController {
     const riderId = httpRequest.user?.id;
     const dto: AcceptJoinRequestDTO = { ...data, riderId: riderId! };
 
-    const result = await this.acceptJoinRequestUseCase.execute(dto);
+    const result = await this._acceptJoinRequestUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -79,7 +79,7 @@ export class RideController implements IRideController {
     const riderId = httpRequest.user?.id;
     const dto: DeclineJoinRequestDTO = { ...data, riderId: riderId! };
 
-    const result = await this.declienJoinRequestUseCase.execute(dto);
+    const result = await this._declienJoinRequestUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatusCode.Ok, response);
   }
@@ -88,7 +88,7 @@ export class RideController implements IRideController {
     const { rideId } = httpRequest.path as { rideId: string };
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
-    const result = await this.getHikerMatchedUseCase.execute({
+    const result = await this._getHikerMatchedUseCase.execute({
       userId,
       rideId,
     });
@@ -100,7 +100,7 @@ export class RideController implements IRideController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
 
-    const result = await this.endRideUseCase.execute({ rideId, userId });
+    const result = await this._endRideUseCase.execute({ rideId, userId });
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);
@@ -110,7 +110,10 @@ export class RideController implements IRideController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
 
-    const result = await this.getRideDetailsUseCase.execute({ userId, rideId });
+    const result = await this._getRideDetailsUseCase.execute({
+      userId,
+      rideId,
+    });
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatus.OK, response);

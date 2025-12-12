@@ -14,14 +14,14 @@ import { IDocumentController } from './IDocumentController';
 
 export class DocumentController implements IDocumentController {
   constructor(
-    private readonly uploadDocumentUseCase: IUploadDocumentUseCase,
-    private readonly fetchUserDocsUseCase: IFetchUserDocsUseCase,
-    private readonly fetchAllDocsUseCase: IFetchAllDocsUseCase,
-    private readonly verifyDocumentUseCase: IVerifyDocumentUseCase
+    private readonly _uploadDocumentUseCase: IUploadDocumentUseCase,
+    private readonly _fetchUserDocsUseCase: IFetchUserDocsUseCase,
+    private readonly _fetchAllDocsUseCase: IFetchAllDocsUseCase,
+    private readonly _verifyDocumentUseCase: IVerifyDocumentUseCase
   ) {}
   async uploadDocument(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = uploadDocSchema.parse(httpRequest.body);
-    const result = await this.uploadDocumentUseCase.execute(dto);
+    const result = await this._uploadDocumentUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -30,7 +30,7 @@ export class DocumentController implements IDocumentController {
     const dto = httpRequest.user?.id;
     if (!dto) throw new Unauthorized();
     console.log(dto);
-    const result = await this.fetchUserDocsUseCase.execute(dto);
+    const result = await this._fetchUserDocsUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -44,7 +44,7 @@ export class DocumentController implements IDocumentController {
     const type = parsed.type as string | undefined;
 
     const dto = { page, limit, search, status, type };
-    const result = await this.fetchAllDocsUseCase.execute(dto);
+    const result = await this._fetchAllDocsUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -54,7 +54,7 @@ export class DocumentController implements IDocumentController {
       document_id: string;
       status: DocumentStatus.Verified | DocumentStatus.Rejected;
     };
-    const result = await this.verifyDocumentUseCase.execute(dto);
+    const result = await this._verifyDocumentUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

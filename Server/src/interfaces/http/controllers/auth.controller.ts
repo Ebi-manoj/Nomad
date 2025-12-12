@@ -31,19 +31,19 @@ import { IauthController } from './IAuthcontroller';
 
 export class AuthController implements IauthController {
   constructor(
-    private readonly registerUserUseCase: IRegisterUserUseCase,
-    private readonly loginUserUseCase: ILoginUserUsecase,
-    private readonly sendSignupOTPUseCase: ISendSignupOTPUseCase,
-    private readonly sendResetOTPuseCase: ISendResetOTPUseCase,
-    private readonly verifyOTPUseCase: IVerifyOTPUseCase,
-    private readonly resetPasswordUseCase: IResetPasswordUseCase,
-    private readonly refreshTokenUseCase: IRefreshTokenUseCase,
-    private readonly googleSignupUseCase: IGoogleSignupUseCase
+    private readonly _registerUserUseCase: IRegisterUserUseCase,
+    private readonly _loginUserUseCase: ILoginUserUsecase,
+    private readonly _sendSignupOTPUseCase: ISendSignupOTPUseCase,
+    private readonly _sendResetOTPuseCase: ISendResetOTPUseCase,
+    private readonly _verifyOTPUseCase: IVerifyOTPUseCase,
+    private readonly _resetPasswordUseCase: IResetPasswordUseCase,
+    private readonly _refreshTokenUseCase: IRefreshTokenUseCase,
+    private readonly _googleSignupUseCase: IGoogleSignupUseCase
   ) {}
 
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = signUpShema.parse(httpRequest.body);
-    const user = await this.registerUserUseCase.execute(dto);
+    const user = await this._registerUserUseCase.execute(dto);
     const response = ApiResponse.success<UserResponseDTO>(user);
     return new HttpResponse(HttpStatus.CREATED, response);
   }
@@ -52,7 +52,7 @@ export class AuthController implements IauthController {
     if (!result.success) throw new InvalidCredindatials();
 
     const dto: LoginUserRequestDTO = result.data;
-    const loginDetails = await this.loginUserUseCase.execute(dto);
+    const loginDetails = await this._loginUserUseCase.execute(dto);
 
     const response = ApiResponse.success<LoginuserResponseDTO>(loginDetails);
 
@@ -61,42 +61,42 @@ export class AuthController implements IauthController {
 
   async sendSignupOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = emailSchema.parse(httpRequest.body);
-    const message = await this.sendSignupOTPUseCase.execute(dto);
+    const message = await this._sendSignupOTPUseCase.execute(dto);
     const response = ApiResponse.success<SentOTPResponseDTO>(message);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async sendResetOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = emailSchema.parse(httpRequest.body);
-    const message = await this.sendResetOTPuseCase.execute(dto);
+    const message = await this._sendResetOTPuseCase.execute(dto);
     const response = ApiResponse.success<SentOTPResponseDTO>(message);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async verifyOTP(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = verifyOTPSchema.parse(httpRequest.body);
-    const result = await this.verifyOTPUseCase.execute(dto);
+    const result = await this._verifyOTPUseCase.execute(dto);
     const response = ApiResponse.success<VerifyOTPResponseDTO>(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async resetPassword(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = resetPasswordSchema.parse(httpRequest.body);
-    const result = await this.resetPasswordUseCase.execute(dto);
+    const result = await this._resetPasswordUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async refreshToken(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = refreshTokenSchema.parse(httpRequest.cookies);
-    const result = await this.refreshTokenUseCase.execute(dto);
+    const result = await this._refreshTokenUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 
   async googleSingup(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = googleCodeSchema.parse(httpRequest.body);
-    const result = await this.googleSignupUseCase.execute(dto);
+    const result = await this._googleSignupUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

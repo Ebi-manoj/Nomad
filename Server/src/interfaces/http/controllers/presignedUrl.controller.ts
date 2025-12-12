@@ -7,7 +7,7 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { IGetPresignedURLController } from './IGetPresignedUrlController';
 
 export class PresignedUrlController implements IGetPresignedURLController {
-  constructor(private readonly presignedUrlService: IPresignedUrlService) {}
+  constructor(private readonly _presignedUrlService: IPresignedUrlService) {}
 
   async getPresignedUrl(httpRequest: HttpRequest): Promise<HttpResponse> {
     const data = httpRequest.body as {
@@ -15,13 +15,13 @@ export class PresignedUrlController implements IGetPresignedURLController {
       fileType: string;
       type: FOLDER_NAMES;
     };
-    const result = await this.presignedUrlService.getUploadUrl(data);
+    const result = await this._presignedUrlService.getUploadUrl(data);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
   async getViewPresignedUrl(httpRequest: HttpRequest): Promise<HttpResponse> {
     const data = httpRequest.body as { fileURL: string };
-    const result = await this.presignedUrlService.getViewUrl(data);
+    const result = await this._presignedUrlService.getViewUrl(data);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

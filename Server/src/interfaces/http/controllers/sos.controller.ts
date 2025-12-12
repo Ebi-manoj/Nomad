@@ -18,12 +18,12 @@ import { IDeleteSosContactUseCase } from '../../../application/usecases/User/Sos
 
 export class SosController implements ISosController {
   constructor(
-    private readonly saveSosContactsUseCase: ISaveSosContactsUseCase,
-    private readonly getSosContactsUseCase: IGetSosContactsUseCase,
-    private readonly editSosContactUseCase: IEditSosContactUseCase,
-    private readonly deleteSosConatctUseCase: IDeleteSosContactUseCase,
-    private readonly triggerSosUseCase: ITriggerSosUseCase,
-    private readonly triggerRideSosUseCase: ITriggerRideSosUseCase
+    private readonly _saveSosContactsUseCase: ISaveSosContactsUseCase,
+    private readonly _getSosContactsUseCase: IGetSosContactsUseCase,
+    private readonly _editSosContactUseCase: IEditSosContactUseCase,
+    private readonly _deleteSosConatctUseCase: IDeleteSosContactUseCase,
+    private readonly _triggerSosUseCase: ITriggerSosUseCase,
+    private readonly _triggerRideSosUseCase: ITriggerRideSosUseCase
   ) {}
 
   async saveContacts(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -32,7 +32,7 @@ export class SosController implements ISosController {
 
     const parsed = saveSosContactsSchema.parse(httpRequest.body);
 
-    const result = await this.saveSosContactsUseCase.execute({
+    const result = await this._saveSosContactsUseCase.execute({
       userId,
       contact: parsed,
     });
@@ -45,7 +45,7 @@ export class SosController implements ISosController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
 
-    const result = await this.getSosContactsUseCase.execute(userId);
+    const result = await this._getSosContactsUseCase.execute(userId);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -56,7 +56,7 @@ export class SosController implements ISosController {
 
     const parsed = triggerSosSchema.parse(httpRequest.body);
 
-    const result = await this.triggerSosUseCase.execute({
+    const result = await this._triggerSosUseCase.execute({
       userId,
       bookingId: parsed.bookingId,
       location: parsed.location,
@@ -76,7 +76,7 @@ export class SosController implements ISosController {
       id: params.contactId,
       contact: parsed,
     };
-    const result = await this.editSosContactUseCase.execute(dto);
+    const result = await this._editSosContactUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
@@ -86,7 +86,7 @@ export class SosController implements ISosController {
     if (!userId) throw new Unauthorized();
 
     const params = httpRequest.path as { contactId: string };
-    const result = await this.deleteSosConatctUseCase.execute({
+    const result = await this._deleteSosConatctUseCase.execute({
       id: params.contactId,
       userId,
     });
@@ -104,7 +104,7 @@ export class SosController implements ISosController {
       location?: { lat: number; lng: number };
     };
 
-    const result = await this.triggerRideSosUseCase.execute({
+    const result = await this._triggerRideSosUseCase.execute({
       userId,
       rideId: rideId.trim(),
       location,

@@ -8,7 +8,7 @@ import { ApiResponse } from '../helpers/implementation/apiResponse';
 
 export class WalletController implements IWalletController {
   constructor(
-    private readonly getWalletDetailsUseCase: IGetWalletDetailsUseCase
+    private readonly _getWalletDetailsUseCase: IGetWalletDetailsUseCase
   ) {}
 
   async getWallet(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -17,7 +17,7 @@ export class WalletController implements IWalletController {
 
     const query = httpRequest.query as Record<string, unknown>;
     const page = Number(query.page) || 1;
-    const result = await this.getWalletDetailsUseCase.execute(userId, page);
+    const result = await this._getWalletDetailsUseCase.execute(userId, page);
 
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);

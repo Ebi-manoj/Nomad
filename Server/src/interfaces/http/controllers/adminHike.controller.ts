@@ -8,8 +8,8 @@ import { IAdminHikeController } from './IAdminHikeController';
 
 export class AdminHikeController implements IAdminHikeController {
   constructor(
-    private readonly getAllHikeUseCase: IGetAllHikesUseCase,
-    private readonly getHikeDetailsUseCase: IAdminGetHikeDetailsUseCase
+    private readonly _getAllHikeUseCase: IGetAllHikesUseCase,
+    private readonly _getHikeDetailsUseCase: IAdminGetHikeDetailsUseCase
   ) {}
   async getAllHikes(httpRequest: HttpRequest): Promise<HttpResponse> {
     const query = httpRequest.query as Record<string, unknown>;
@@ -17,13 +17,13 @@ export class AdminHikeController implements IAdminHikeController {
     const page = Number(query.page) || 1;
     const status = (query.status as string) || undefined;
 
-    const result = await this.getAllHikeUseCase.execute(page, status);
+    const result = await this._getAllHikeUseCase.execute(page, status);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
   async getHikeDetails(httpRequest: HttpRequest): Promise<HttpResponse> {
     const { hikeId } = httpRequest.path as { hikeId: string };
-    const result = await this.getHikeDetailsUseCase.execute(hikeId);
+    const result = await this._getHikeDetailsUseCase.execute(hikeId);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
