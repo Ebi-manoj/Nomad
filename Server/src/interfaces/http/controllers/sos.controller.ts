@@ -14,12 +14,14 @@ import { ISosController } from './ISosController';
 import { ApiResponse } from '../helpers/implementation/apiResponse';
 import { EditSosContactReqDTO } from '../../../domain/dto/SosDTO';
 import { IEditSosContactUseCase } from '../../../application/usecases/User/Sos/IEditSosContact';
+import { IDeleteSosContactUseCase } from '../../../application/usecases/User/Sos/IDeleteSosContact';
 
 export class SosController implements ISosController {
   constructor(
     private readonly saveSosContactsUseCase: ISaveSosContactsUseCase,
     private readonly getSosContactsUseCase: IGetSosContactsUseCase,
     private readonly editSosContactUseCase: IEditSosContactUseCase,
+    private readonly deleteSosConatctUseCase: IDeleteSosContactUseCase,
     private readonly triggerSosUseCase: ITriggerSosUseCase,
     private readonly triggerRideSosUseCase: ITriggerRideSosUseCase
   ) {}
@@ -64,7 +66,7 @@ export class SosController implements ISosController {
     return new HttpResponse(HttpStatus.OK, response);
   }
 
-  async editContacts(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async editContact(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
     const params = httpRequest.path as { contactId: string };
@@ -76,6 +78,20 @@ export class SosController implements ISosController {
     };
     const result = await this.editSosContactUseCase.execute(dto);
     const response = ApiResponse.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async deleteContact(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+
+    const params = httpRequest.path as { contactId: string };
+    const result = await this.deleteSosConatctUseCase.execute({
+      id: params.contactId,
+      userId,
+    });
+    const response = ApiResponse.success(result);
+
     return new HttpResponse(HttpStatus.OK, response);
   }
 

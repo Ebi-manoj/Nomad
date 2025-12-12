@@ -26,6 +26,15 @@ export interface EditSosContactReqDTO {
   contact: Omit<SosContactDTO, 'id'>;
 }
 
+export interface DeleteSosContactReqDTO {
+  id: string;
+  userId: string;
+}
+export interface DeleteSosContactResDTO {
+  id: string;
+  message: string;
+}
+
 export interface TriggerSosReqDTO {
   userId: string;
   bookingId: string;

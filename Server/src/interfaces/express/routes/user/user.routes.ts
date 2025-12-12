@@ -48,7 +48,17 @@ router.put(
   authMiddleware,
   async (req: Request, res: Response) => {
     const adapter = await expressAdapter(req, httpReq =>
-      sosComposer().editContacts(httpReq)
+      sosComposer().editContact(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+router.delete(
+  '/sos/:contactId',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      sosComposer().deleteContact(httpReq)
     );
     return res.status(adapter.statusCode).json(adapter.body);
   }

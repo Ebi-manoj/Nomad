@@ -14,6 +14,7 @@ import { LocationRepository } from '../../../repositories/LocationRepository';
 import { RideRepository } from '../../../repositories/RideRepository';
 import { NodemailerTransporter } from '../../../providers/emailTransporter';
 import { EditSosContactUseCase } from '../../../../application/usecases/User/Sos/EditSosContact';
+import { DeleteSosContactUseCase } from '../../../../application/usecases/User/Sos/DeleteSosContact';
 
 export function sosComposer(): ISosController {
   const sosRepository = new SosContactRepository();
@@ -31,6 +32,7 @@ export function sosComposer(): ISosController {
   const sosNotifier = new SosEmailNotifier(sosRepository, emailTransporter);
 
   const editSosContactUseCase = new EditSosContactUseCase(sosRepository);
+  const deleteSosContactUseCase = new DeleteSosContactUseCase(sosRepository);
 
   const triggerSosUseCase = new TriggerSosUseCase(
     rideBookingRepository,
@@ -48,6 +50,7 @@ export function sosComposer(): ISosController {
     saveSosContactsUseCase,
     getSosContactsUseCase,
     editSosContactUseCase,
+    deleteSosContactUseCase,
     triggerSosUseCase,
     triggerRideSosUseCase
   );

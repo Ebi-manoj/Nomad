@@ -3,4 +3,5 @@ export const SuccessMessages = {
   VERIFIED_SUCCESS: 'Verified Successfully',
   UPDATED_SUCCESS: 'Updated Succefully',
   PASSWORD_RESET: 'Password reseted successfully',
+  CONTACT_DELETED: 'Contact deleted successfully',
 } as const;
