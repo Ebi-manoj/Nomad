@@ -10,17 +10,17 @@ import { IGetAllHikesUseCase } from './IGetAllHikeUseCase';
 
 export class GetAllHikeUseCase implements IGetAllHikesUseCase {
   constructor(
-    private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
   async execute(page: number, status?: string): Promise<GetAllHikesResDTO> {
     const LIMIT = 5;
     const skip = (page - 1) * LIMIT;
 
-    const hikes = await this.hikeRepository.findAllHikes(LIMIT, skip, status);
+    const hikes = await this._hikeRepository.findAllHikes(LIMIT, skip, status);
     const result = await Promise.all(
       hikes.map(async h => {
-        const user = await this.userRepository.findById(h.getUserId());
+        const user = await this._userRepository.findById(h.getUserId());
         if (user) {
           const response: adminHikeResponseDTO = {
             ...hikeMapper(h),
@@ -33,8 +33,8 @@ export class GetAllHikeUseCase implements IGetAllHikesUseCase {
     const response: adminHikeResponseDTO[] = result.filter(
       (r): r is adminHikeResponseDTO => r !== undefined
     );
-    const countHikes = await this.hikeRepository.countHikes(status);
-    const hikeMetrics = await this.hikeRepository.getStatusCounts();
+    const countHikes = await this._hikeRepository.countHikes(status);
+    const hikeMetrics = await this._hikeRepository.getStatusCounts();
 
     return {
       hikes: response,

@@ -14,24 +14,27 @@ import { ISendSignupOTPUseCase } from './ISendOTPSignupUseCase';
 
 export class SendSignupOTPUseCase implements ISendSignupOTPUseCase {
   constructor(
-    private readonly emailTransporter: IEmailTransporter,
-    private readonly otpRepository: IOTPRepository,
-    private readonly useRepository: IUserRepository
+    private readonly _emailTransporter: IEmailTransporter,
+    private readonly _otpRepository: IOTPRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
 
   async execute(data: SentOTPRequestDTO): Promise<SentOTPResponseDTO> {
     const emailVO = new Email(data.email);
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpVO = new OTP(otp);
-    const isExist = await this.useRepository.findByEmail(emailVO.getValue());
+    const isExist = await this._userRepository.findByEmail(emailVO.getValue());
     if (isExist) throw new UserAlreadyExist();
 
-    await this.otpRepository.saveOTP(
+    await this._otpRepository.saveOTP(
       emailVO.getValue(),
       otpVO.getValue(),
       OTP_EXPIRY
     );
-    await this.emailTransporter.sendEmail(emailVO.getValue(), otpVO.getValue());
+    await this._emailTransporter.sendEmail(
+      emailVO.getValue(),
+      otpVO.getValue()
+    );
     console.log(otp);
     return {
       email: emailVO.getValue(),

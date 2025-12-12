@@ -14,39 +14,39 @@ import { ISubscriptionService } from '../../services/ISubscriptionService';
 
 export class AdminRideDetailsUseCase implements IAdminRideDetailsUseCase {
   constructor(
-    private readonly rideRepository: IRideRepository,
-    private readonly bookingRepository: IRideBookingRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly hikeRepository: IHikeRepository,
-    private readonly reviewRepository: IReviewRepository,
-    private readonly subscriptionService: ISubscriptionService
+    private readonly _rideRepository: IRideRepository,
+    private readonly _bookingRepository: IRideBookingRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _reviewRepository: IReviewRepository,
+    private readonly _subscriptionService: ISubscriptionService
   ) {}
 
   async execute(rideId: string): Promise<AdminGetRideDetailsResDTO> {
-    const ride = await this.rideRepository.findById(rideId);
+    const ride = await this._rideRepository.findById(rideId);
     if (!ride) throw new RideNotFound();
 
-    const rider = await this.userRepository.findById(ride.getRiderId());
+    const rider = await this._userRepository.findById(ride.getRiderId());
     if (!rider) throw new UserNotFound();
 
     const totalEarning = ride.getTotalEarning();
     const platformFeeTotal = ride.getPlatformFeeTotal();
 
-    const bookings = await this.bookingRepository.findByRideId(rideId);
+    const bookings = await this._bookingRepository.findByRideId(rideId);
 
     const hikersMatched = await Promise.all(
       bookings.map(async b => {
         const [hiker, hike, review] = await Promise.all([
-          this.userRepository.findById(b.getHikerId()),
-          this.hikeRepository.findById(b.getHikeId()),
-          this.reviewRepository.findByReviewerAndBooking(
+          this._userRepository.findById(b.getHikerId()),
+          this._hikeRepository.findById(b.getHikeId()),
+          this._reviewRepository.findByReviewerAndBooking(
             b.getRiderId(),
             b.getId()!
           ),
         ]);
         if (!hiker || !hike) return null;
 
-        const sub = await this.subscriptionService.getActiveSubscription(
+        const sub = await this._subscriptionService.getActiveSubscription(
           hiker.getId()!
         );
 

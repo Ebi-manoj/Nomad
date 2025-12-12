@@ -22,25 +22,25 @@ import { IAdminGetHikeDetailsUseCase } from './IAdminHikeDetailsUseCase';
 
 export class AdminHikeDetailsUseCase implements IAdminGetHikeDetailsUseCase {
   constructor(
-    private readonly hikeRepository: IHikeRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly rideBookingRepository: IRideBookingRepository,
-    private readonly paymentRepository: IPaymentRepository,
-    private readonly rideRepository: IRideRepository
+    private readonly _hikeRepository: IHikeRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _rideBookingRepository: IRideBookingRepository,
+    private readonly _paymentRepository: IPaymentRepository,
+    private readonly _rideRepository: IRideRepository
   ) {}
 
   async execute(hikeId: string): Promise<AdminGetHikeDetailsResDTO> {
-    const hike = await this.hikeRepository.findById(hikeId);
+    const hike = await this._hikeRepository.findById(hikeId);
     if (!hike) throw new HikeNotFound();
 
     const hikerId = hike.getUserId();
     const riderId = hike.getRiderId();
 
     const [hiker, rider, booking] = await Promise.all([
-      this.userRepository.findById(hikerId),
-      riderId ? this.userRepository.findById(riderId) : Promise.resolve(null),
+      this._userRepository.findById(hikerId),
+      riderId ? this._userRepository.findById(riderId) : Promise.resolve(null),
       hike.getBookingId()
-        ? this.rideBookingRepository.findById(hike.getBookingId()!)
+        ? this._rideBookingRepository.findById(hike.getBookingId()!)
         : Promise.resolve(null),
     ]);
     if (!hiker) throw new UserNotFound();
@@ -49,18 +49,18 @@ export class AdminHikeDetailsUseCase implements IAdminGetHikeDetailsUseCase {
     if (booking) {
       [rideLog, payment] = await Promise.all([
         booking.getRideId()
-          ? this.rideRepository.findById(booking.getRideId()!)
+          ? this._rideRepository.findById(booking.getRideId()!)
           : Promise.resolve(null),
         booking.getPaymentId()
-          ? this.paymentRepository.findById(booking.getPaymentId()!)
+          ? this._paymentRepository.findById(booking.getPaymentId()!)
           : Promise.resolve(null),
       ]);
     }
 
-    return this.buildResponse(hike, hiker, rider, booking, rideLog, payment);
+    return this._buildResponse(hike, hiker, rider, booking, rideLog, payment);
   }
 
-  private buildResponse(
+  private _buildResponse(
     hike: HikeLog,
     hiker: User,
     rider: User | null,
@@ -71,13 +71,13 @@ export class AdminHikeDetailsUseCase implements IAdminGetHikeDetailsUseCase {
     return {
       ...hikeMapper(hike),
       user: userMapper(hiker),
-      rider: this.buildRiderResponse(rider, rideLog),
+      rider: this._buildRiderResponse(rider, rideLog),
       booking: booking ? RideBookingMapper(booking) : undefined,
       payment: payment ? PaymentMapper.toResponseDTO(payment) : undefined,
     };
   }
 
-  private buildRiderResponse(
+  private _buildRiderResponse(
     rider: User | null,
     rideLog?: RideLog | null
   ): RiderResponseDTO | undefined {

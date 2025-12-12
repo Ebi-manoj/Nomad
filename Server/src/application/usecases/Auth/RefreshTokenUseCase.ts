@@ -11,21 +11,21 @@ import { IRefreshTokenUseCase } from './IRefreshTokenUseCase';
 
 export class RefreshTokenUseCase implements IRefreshTokenUseCase {
   constructor(
-    private tokenGenerator: ITOkenGenerator,
-    private readonly userRepostiory: IUserRepository
+    private _tokenGenerator: ITOkenGenerator,
+    private readonly _userRepostiory: IUserRepository
   ) {}
 
   async execute(
     data: RefreshTokenRequestDTO
   ): Promise<RefreshTokenResponseDTO> {
-    const payload = this.tokenGenerator.verifyToken<{ userId: string }>(
+    const payload = this._tokenGenerator.verifyToken<{ userId: string }>(
       data.refreshToken
     );
     if (!payload) throw new InvalidToken();
-    const user = await this.userRepostiory.findById(payload.userId);
+    const user = await this._userRepostiory.findById(payload.userId);
     if (!user) throw new InvalidToken();
 
-    const accessToken = this.tokenGenerator.generateToken(
+    const accessToken = this._tokenGenerator.generateToken(
       { userId: user.getId(), role: user.getRole() },
       ACCESS_TOKEN_EXPIRY
     );

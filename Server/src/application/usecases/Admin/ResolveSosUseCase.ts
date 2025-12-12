@@ -6,14 +6,14 @@ import { ISosLogRepository } from '../../repositories/ISosLogRepository';
 import { IResolveSosUseCase } from './IResolveSosUseCase';
 
 export class ResolveSosUseCase implements IResolveSosUseCase {
-  constructor(private readonly sosLogRepository: ISosLogRepository) {}
+  constructor(private readonly _sosLogRepository: ISosLogRepository) {}
   async execute(sosLogId: string): Promise<SosLogResDTO> {
-    const log = await this.sosLogRepository.findById(sosLogId);
+    const log = await this._sosLogRepository.findById(sosLogId);
     if (!log) throw new SosLogNotFound();
 
     log.resolve();
 
-    const updatedLog = await this.sosLogRepository.update(log.getId()!, log);
+    const updatedLog = await this._sosLogRepository.update(log.getId()!, log);
     if (!updatedLog) throw new UpdateFailed();
     return sosLogMapper(updatedLog);
   }

@@ -7,14 +7,14 @@ import { IUserRepository } from '../../repositories/IUserRepository';
 import { IGetAllUsersUseCase } from './IGetAllUsersUseCase';
 
 export class GetAllUsersUseCase implements IGetAllUsersUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly _userRepository: IUserRepository) {}
 
   async execute(data: GetAllUsersRequestDTO): Promise<GetAllUsersResponseDTO> {
     const { page, limit, search } = data;
     const skip = (page - 1) * limit;
-    const users = await this.userRepository.fetchUsers(limit, skip, search);
+    const users = await this._userRepository.fetchUsers(limit, skip, search);
     const mappedUsers = users.map(userDoc => userMapper(userDoc));
-    const totalCount = await this.userRepository.countUsers(search);
+    const totalCount = await this._userRepository.countUsers(search);
     return {
       users: mappedUsers,
       totalCount,

@@ -8,18 +8,18 @@ import { IResetPasswordUseCase } from './IResetPassword';
 
 export class ResetPasswordUseCase implements IResetPasswordUseCase {
   constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly passwordHasher: PasswordHasher
+    private readonly _userRepository: IUserRepository,
+    private readonly _passwordHasher: PasswordHasher
   ) {}
 
   async execute(data: ResetPasswordRequestDTO): Promise<{ message: string }> {
     const emailVO = new Email(data.email);
-    const user = await this.userRepository.findByEmail(emailVO.getValue());
+    const user = await this._userRepository.findByEmail(emailVO.getValue());
     if (!user) throw new UserNotFound();
 
-    const hashedPassword = await this.passwordHasher.hash(data.password);
+    const hashedPassword = await this._passwordHasher.hash(data.password);
     user.setPassword(hashedPassword);
-    await this.userRepository.update(user.getId(), user);
+    await this._userRepository.update(user.getId(), user);
     return {
       message: SuccessMessages.PASSWORD_RESET,
     };

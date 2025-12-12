@@ -10,20 +10,20 @@ import { IGetAllRideUseCase } from './IGetAllRideUseCase';
 
 export class GetAllRideUseCase implements IGetAllRideUseCase {
   constructor(
-    private readonly rideRepository: IRideRepository,
-    private readonly userRepository: IUserRepository
+    private readonly _rideRepository: IRideRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
 
   async execute(page: number, status?: string): Promise<GetAdminRidesResDTO> {
     const LIMIT = 5;
     const skip = (page - 1) * LIMIT;
 
-    const rides = await this.rideRepository.findAllRides(LIMIT, skip, status);
-    const total = await this.rideRepository.countRides(status);
+    const rides = await this._rideRepository.findAllRides(LIMIT, skip, status);
+    const total = await this._rideRepository.countRides(status);
 
     const result = await Promise.all(
       rides.map(async r => {
-        const user = await this.userRepository.findById(r.getRiderId());
+        const user = await this._userRepository.findById(r.getRiderId());
         if (user) {
           return {
             ...rideMapper(r),
@@ -37,7 +37,7 @@ export class GetAllRideUseCase implements IGetAllRideUseCase {
       (r): r is AdminRideResDTO => r !== undefined
     );
 
-    const rideMetrics = await this.rideRepository.getRideMetrics();
+    const rideMetrics = await this._rideRepository.getRideMetrics();
 
     return {
       total,

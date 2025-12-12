@@ -20,29 +20,29 @@ import { ILoginUserUsecase } from './ILoginUserUseCase';
 
 export class LoginUserUsecase implements ILoginUserUsecase {
   constructor(
-    private readonly logger: ILogger,
-    private readonly userRepository: IUserRepository,
-    private readonly passwordHasher: PasswordHasher,
-    private readonly tokenGenerator: ITOkenGenerator
+    private readonly _logger: ILogger,
+    private readonly _userRepository: IUserRepository,
+    private readonly _passwordHasher: PasswordHasher,
+    private readonly _tokenGenerator: ITOkenGenerator
   ) {}
 
   async execute(data: LoginUserRequestDTO): Promise<LoginuserResponseDTO> {
-    this.logger.info('Login UseCase executing with', data);
+    this._logger.info('Login UseCase executing with', data);
     const email = new Email(data.email);
-    const user = await this.userRepository.findByEmail(email.getValue());
+    const user = await this._userRepository.findByEmail(email.getValue());
     if (!user) throw new InvalidCredindatials();
     if (user.getIsBlocked()) throw new SuspendedAccount();
     const password = user.getPassword();
     if (!password) throw new InvalidCredindatials();
 
-    const isMatch = await this.passwordHasher.compare(data.password, password);
+    const isMatch = await this._passwordHasher.compare(data.password, password);
     if (!isMatch) throw new InvalidCredindatials();
 
-    const accessToken = this.tokenGenerator.generateToken(
+    const accessToken = this._tokenGenerator.generateToken(
       { userId: user.getId(), role: user.getRole() },
       ACCESS_TOKEN_EXPIRY
     );
-    const refreshToken = this.tokenGenerator.generateToken(
+    const refreshToken = this._tokenGenerator.generateToken(
       { userId: user.getId(), role: user.getRole() },
       REFRESH_TOKEN_EXPIRY
     );

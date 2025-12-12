@@ -20,17 +20,17 @@ import { IGoogleSignupUseCase } from './IGoogleSignupUseCase';
 
 export class GoogleSignupUseCase implements IGoogleSignupUseCase {
   constructor(
-    private readonly authClient: IGoogleClient,
-    private readonly userRepository: IUserRepository,
-    private readonly tokenGenerator: ITOkenGenerator
+    private readonly _authClient: IGoogleClient,
+    private readonly _userRepository: IUserRepository,
+    private readonly _tokenGenerator: ITOkenGenerator
   ) {}
 
   async execute(data: { code: string }): Promise<LoginuserResponseDTO> {
-    const payload = await this.authClient.getAuthDetails(data.code);
+    const payload = await this._authClient.getAuthDetails(data.code);
     if (!payload) throw new InvalidToken();
 
     const email = new Email(payload.email);
-    const isExist = await this.userRepository.findByEmail(email.getValue());
+    const isExist = await this._userRepository.findByEmail(email.getValue());
     let savedUser: User;
     if (isExist) {
       if (isExist.getIsBlocked()) throw new SuspendedAccount();
@@ -44,15 +44,15 @@ export class GoogleSignupUseCase implements IGoogleSignupUseCase {
         aadhaarVerified: false,
         licenceVerified: false,
       });
-      savedUser = await this.userRepository.create(user);
+      savedUser = await this._userRepository.create(user);
     }
 
-    const accessToken = this.tokenGenerator.generateToken(
+    const accessToken = this._tokenGenerator.generateToken(
       { userId: savedUser.getId(), role: savedUser.getRole() },
       ACCESS_TOKEN_EXPIRY
     );
 
-    const refreshToken = this.tokenGenerator.generateToken(
+    const refreshToken = this._tokenGenerator.generateToken(
       { userId: savedUser.getId(), role: savedUser.getRole() },
       REFRESH_TOKEN_EXPIRY
     );

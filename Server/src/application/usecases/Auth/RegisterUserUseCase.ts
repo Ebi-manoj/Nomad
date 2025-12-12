@@ -14,25 +14,25 @@ import { IRegisterUserUseCase } from './IRegisterUserUseCase';
 
 export class RegisterUserUseCase implements IRegisterUserUseCase {
   constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly passwordHasher: PasswordHasher
+    private readonly _userRepository: IUserRepository,
+    private readonly _passwordHasher: PasswordHasher
   ) {}
 
   async execute(data: RegisterUserRequestDTO): Promise<UserResponseDTO> {
     const email = new Email(data.email);
     const mobile = new Mobile(data.mobile);
 
-    const existingByEmail = await this.userRepository.findByEmail(
+    const existingByEmail = await this._userRepository.findByEmail(
       email.getValue()
     );
     if (existingByEmail) throw new UserAlreadyExist();
 
-    const existingByMobile = await this.userRepository.findByMobile(
+    const existingByMobile = await this._userRepository.findByMobile(
       mobile.getValue()
     );
     if (existingByMobile) throw new UserAlreadyExist();
 
-    const hashedPassword = await this.passwordHasher.hash(data.password);
+    const hashedPassword = await this._passwordHasher.hash(data.password);
 
     const user = new User({
       fullName: data.fullName,
@@ -45,7 +45,7 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
       licenceVerified: false,
     });
 
-    const savedUser = await this.userRepository.create(user);
+    const savedUser = await this._userRepository.create(user);
     return userMapper(savedUser);
   }
 }

@@ -13,16 +13,16 @@ import { IVerifyOTPUseCase } from './IVerifOTPUseCase';
 
 export class VerifyOTPUseCase implements IVerifyOTPUseCase {
   constructor(
-    private readonly otpRepository: IOTPRepository,
-    private readonly tokenGenerator: ITOkenGenerator
+    private readonly _otpRepository: IOTPRepository,
+    private readonly _tokenGenerator: ITOkenGenerator
   ) {}
 
   async execute(data: VerifyOTPRequestDTO): Promise<VerifyOTPResponseDTO> {
     const emailVO = new Email(data.email);
     const otpVO = new OTP(data.otp);
-    const storedOtp = await this.otpRepository.getOTP(emailVO.getValue());
+    const storedOtp = await this._otpRepository.getOTP(emailVO.getValue());
     if (!storedOtp || storedOtp !== otpVO.getValue()) throw new InvalidOTP();
-    const verificationToken = this.tokenGenerator.generateToken(
+    const verificationToken = this._tokenGenerator.generateToken(
       { email: emailVO.getValue() },
       ACCESS_TOKEN_EXPIRY
     );

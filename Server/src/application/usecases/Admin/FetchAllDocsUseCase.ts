@@ -7,14 +7,14 @@ import { IDocumentRepository } from '../../repositories/IDocumentRepository';
 import { IFetchAllDocsUseCase } from './IFetchAllDocsUseCase';
 
 export class FetchAllDocsUseCase implements IFetchAllDocsUseCase {
-  constructor(private readonly documentsRepository: IDocumentRepository) {}
+  constructor(private readonly _documentsRepository: IDocumentRepository) {}
 
   async execute(
     query: Partial<FetchDocsQuery> & { page: number }
   ): Promise<DocumentsWithUserDTO[] | []> {
     const { status, search, page, type, limit = 10 } = query;
     const skip = (page - 1) * limit;
-    const documents = await this.documentsRepository.findDocs({
+    const documents = await this._documentsRepository.findDocs({
       status,
       search,
       limit,
