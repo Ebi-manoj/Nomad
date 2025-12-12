@@ -18,119 +18,119 @@ export interface TaskProps {
 }
 
 export class Task {
-  private id?: string;
-  private rideId: string;
-  private rideBookingId: string;
-  private riderId: string;
-  private hikerId: string;
-  private taskType: TaskType;
-  private location: GeoJSON.Point;
-  private address: string;
-  private priority: number;
-  private otp?: string;
-  private status: TaskStatus;
-  private completedAt?: Date;
-  private createdAt: Date;
-  private updatedAt: Date;
+  private _id?: string;
+  private _rideId: string;
+  private _rideBookingId: string;
+  private _riderId: string;
+  private _hikerId: string;
+  private _taskType: TaskType;
+  private _location: GeoJSON.Point;
+  private _address: string;
+  private _priority: number;
+  private _otp?: string;
+  private _status: TaskStatus;
+  private _completedAt?: Date;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: TaskProps) {
-    this.id = props.id;
-    this.rideId = props.rideId;
-    this.rideBookingId = props.rideBookingId;
-    this.riderId = props.riderId;
-    this.hikerId = props.hikerId;
-    this.taskType = props.taskType;
-    this.location = props.location;
-    this.address = props.address;
-    this.priority = props.priority;
-    this.otp = props.otp;
-    this.status = props.status;
-    this.completedAt = props.completedAt;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
+    this._id = props.id;
+    this._rideId = props.rideId;
+    this._rideBookingId = props.rideBookingId;
+    this._riderId = props.riderId;
+    this._hikerId = props.hikerId;
+    this._taskType = props.taskType;
+    this._location = props.location;
+    this._address = props.address;
+    this._priority = props.priority;
+    this._otp = props.otp;
+    this._status = props.status;
+    this._completedAt = props.completedAt;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
   }
 
   // Getters
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getRideId(): string {
-    return this.rideId;
+    return this._rideId;
   }
 
   getRideBookingId(): string {
-    return this.rideBookingId;
+    return this._rideBookingId;
   }
 
   getRiderId(): string {
-    return this.riderId;
+    return this._riderId;
   }
 
   getHikerId(): string {
-    return this.hikerId;
+    return this._hikerId;
   }
 
   getTaskType(): TaskType {
-    return this.taskType;
+    return this._taskType;
   }
 
   getLocation(): GeoJSON.Point {
-    return this.location;
+    return this._location;
   }
 
   getAddress(): string {
-    return this.address;
+    return this._address;
   }
 
   getPriority(): number {
-    return this.priority;
+    return this._priority;
   }
 
   getOtp(): string | undefined {
-    return this.otp;
+    return this._otp;
   }
 
   getStatus(): TaskStatus {
-    return this.status;
+    return this._status;
   }
 
   getCompletedAt(): Date | undefined {
-    return this.completedAt;
+    return this._completedAt;
   }
 
   getCreatedAt(): Date {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt(): Date {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 
   // Setters
   setOtp(otp: string) {
-    this.otp = otp;
-    this.updatedAt = new Date();
+    this._otp = otp;
+    this._updatedAt = new Date();
   }
 
   start() {
-    this.status = TaskStatus.IN_PROGRESS;
-    this.updatedAt = new Date();
+    this._status = TaskStatus.IN_PROGRESS;
+    this._updatedAt = new Date();
   }
 
   complete() {
-    this.status = TaskStatus.COMPLETED;
-    this.completedAt = new Date();
-    this.updatedAt = new Date();
+    this._status = TaskStatus.COMPLETED;
+    this._completedAt = new Date();
+    this._updatedAt = new Date();
   }
 
   cancel() {
-    this.status = TaskStatus.CANCELLED;
-    this.updatedAt = new Date();
+    this._status = TaskStatus.CANCELLED;
+    this._updatedAt = new Date();
   }
 
   setPriority(priority: number) {
-    this.priority = priority;
-    this.updatedAt = new Date();
+    this._priority = priority;
+    this._updatedAt = new Date();
   }
 }

@@ -26,152 +26,152 @@ export interface RideProps {
 }
 
 export class RideLog {
-  private readonly id?: string;
-  private userId: string;
-  private pickup: GeoJSON.Point;
-  private destination: GeoJSON.Point;
-  private pickupAddress: string;
-  private destinationAddress: string;
-  private totalDistance: number;
-  private vehicleType: VehicleType;
-  private vehicleModel: string;
-  private vehicleNumber: string;
-  private hasHelmet: boolean;
-  private seatsAvailable: number;
-  private costSharing: number;
-  private hikersMatched: string[];
-  private status: RideStatus;
-  private readonly createdAt: Date;
-  private updatedAt: Date;
-  private completedAt?: Date;
-  private route: GeoJSON.LineString;
-  private totalEarning?: number;
-  private platformFee?: number;
+  private readonly _id?: string;
+  private _userId: string;
+  private _pickup: GeoJSON.Point;
+  private _destination: GeoJSON.Point;
+  private _pickupAddress: string;
+  private _destinationAddress: string;
+  private _totalDistance: number;
+  private _vehicleType: VehicleType;
+  private _vehicleModel: string;
+  private _vehicleNumber: string;
+  private _hasHelmet: boolean;
+  private _seatsAvailable: number;
+  private _costSharing: number;
+  private _hikersMatched: string[];
+  private _status: RideStatus;
+  private readonly _createdAt: Date;
+  private _updatedAt: Date;
+  private _completedAt?: Date;
+  private _route: GeoJSON.LineString;
+  private _totalEarning?: number;
+  private _platformFee?: number;
 
   constructor(props: RideProps) {
-    this.id = props.id;
-    this.userId = props.userId;
-    this.pickup = props.pickup;
-    this.destination = props.destination;
-    this.pickupAddress = props.pickupAddress;
-    this.destinationAddress = props.destinationAddress;
-    this.totalDistance = props.totalDistance;
-    this.vehicleType = props.vehicleType;
-    this.vehicleModel = props.vehicleModel;
-    this.vehicleNumber = props.vehicleNumber;
-    this.hasHelmet = props.hasHelmet;
-    this.seatsAvailable = props.seatsAvailable;
-    this.costSharing = props.costSharing;
-    this.hikersMatched = props.hikersMatched || [];
-    this.status = props.status || 'ACTIVE';
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
-    this.completedAt = props.completedAt;
-    this.route = props.route;
-    this.totalEarning = props.totalEarning;
-    this.platformFee = props.platformFee;
+    this._id = props.id;
+    this._userId = props.userId;
+    this._pickup = props.pickup;
+    this._destination = props.destination;
+    this._pickupAddress = props.pickupAddress;
+    this._destinationAddress = props.destinationAddress;
+    this._totalDistance = props.totalDistance;
+    this._vehicleType = props.vehicleType;
+    this._vehicleModel = props.vehicleModel;
+    this._vehicleNumber = props.vehicleNumber;
+    this._hasHelmet = props.hasHelmet;
+    this._seatsAvailable = props.seatsAvailable;
+    this._costSharing = props.costSharing;
+    this._hikersMatched = props.hikersMatched || [];
+    this._status = props.status || 'ACTIVE';
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
+    this._completedAt = props.completedAt;
+    this._route = props.route;
+    this._totalEarning = props.totalEarning;
+    this._platformFee = props.platformFee;
   }
 
   getRideId() {
-    return this.id;
+    return this._id;
   }
   getRiderId() {
-    return this.userId;
+    return this._userId;
   }
   getPickup() {
-    return this.pickup;
+    return this._pickup;
   }
   getDestination() {
-    return this.destination;
+    return this._destination;
   }
   getPickupAddress() {
-    return this.pickupAddress;
+    return this._pickupAddress;
   }
   getDestinationAddress() {
-    return this.destinationAddress;
+    return this._destinationAddress;
   }
   getVehicleType() {
-    return this.vehicleType;
+    return this._vehicleType;
   }
   getVehicleModel() {
-    return this.vehicleModel;
+    return this._vehicleModel;
   }
   getVehicleNumber() {
-    return this.vehicleNumber;
+    return this._vehicleNumber;
   }
   getHasHelmet() {
-    return this.hasHelmet;
+    return this._hasHelmet;
   }
   getSeatsAvailable() {
-    return this.seatsAvailable;
+    return this._seatsAvailable;
   }
   getCostSharing() {
-    return this.costSharing;
+    return this._costSharing;
   }
   getTotalDistance() {
-    return this.totalDistance;
+    return this._totalDistance;
   }
   getStatus() {
-    return this.status;
+    return this._status;
   }
   getHikersMatched() {
-    return this.hikersMatched;
+    return this._hikersMatched;
   }
   getCreatedAt() {
-    return this.createdAt;
+    return this._createdAt;
   }
   getCompletedAt() {
-    return this.completedAt;
+    return this._completedAt;
   }
   getTotalEarning() {
-    return this.totalEarning ?? 0;
+    return this._totalEarning ?? 0;
   }
   getPlatformFeeTotal() {
-    return this.platformFee ?? 0;
+    return this._platformFee ?? 0;
   }
   updateStatus(newStatus: RideStatus) {
-    this.status = newStatus;
-    this.updatedAt = new Date();
+    this._status = newStatus;
+    this._updatedAt = new Date();
   }
 
   addMatchedHiker(hikeId: string) {
-    if (!this.hikersMatched.includes(hikeId)) {
-      this.hikersMatched.push(hikeId);
+    if (!this._hikersMatched.includes(hikeId)) {
+      this._hikersMatched.push(hikeId);
     }
   }
 
   updateDistance(newDistance: number) {
-    this.totalDistance = newDistance;
-    this.updatedAt = new Date();
+    this._totalDistance = newDistance;
+    this._updatedAt = new Date();
   }
 
   updateSeats(count: number) {
-    this.seatsAvailable = count;
-    this.updatedAt = new Date();
+    this._seatsAvailable = count;
+    this._updatedAt = new Date();
   }
   getRoute() {
-    return this.route;
+    return this._route;
   }
 
   setRoute(route: GeoJSON.LineString) {
-    this.route = route;
-    this.updatedAt = new Date();
+    this._route = route;
+    this._updatedAt = new Date();
   }
   reserveSeats(count: number) {
-    if (this.seatsAvailable < count) throw new SeatsNotAvailable();
-    this.seatsAvailable -= count;
+    if (this._seatsAvailable < count) throw new SeatsNotAvailable();
+    this._seatsAvailable -= count;
   }
   releaseSeats(count: number) {
-    this.seatsAvailable += count;
+    this._seatsAvailable += count;
   }
   setEarnings(totalEarning: number, platformFee: number) {
-    this.totalEarning = Number(totalEarning.toFixed(2));
-    this.platformFee = Number(platformFee.toFixed(2));
-    this.updatedAt = new Date();
+    this._totalEarning = Number(totalEarning.toFixed(2));
+    this._platformFee = Number(platformFee.toFixed(2));
+    this._updatedAt = new Date();
   }
   complete() {
-    this.status = RideStatus.COMPLETED;
-    this.updatedAt = new Date();
-    this.completedAt = new Date();
+    this._status = RideStatus.COMPLETED;
+    this._updatedAt = new Date();
+    this._completedAt = new Date();
   }
 }

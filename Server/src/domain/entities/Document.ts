@@ -13,78 +13,78 @@ export interface DocumentProps {
 }
 
 export class Document {
-  private readonly id?: string;
-  private readonly user_id: string;
-  private readonly document_type: Documents.Aadhaar | Documents.Licence;
-  private document_number: string;
-  private verified: boolean;
-  private fileUrl: string;
-  private status: DocumentStatus;
-  private createdAt: Date;
-  private updatedAt: Date;
+  private readonly _id?: string;
+  private readonly _user_id: string;
+  private readonly _document_type: Documents.Aadhaar | Documents.Licence;
+  private _document_number: string;
+  private _verified: boolean;
+  private _fileUrl: string;
+  private _status: DocumentStatus;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: DocumentProps) {
-    this.id = props.id;
-    this.user_id = props.user_id;
-    this.document_type = props.document_type;
-    this.document_number = props.document_number;
-    this.fileUrl = props.fileUrl;
-    this.status = props.status || DocumentStatus.Pending;
-    this.verified = props.verified ?? false;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
+    this._id = props.id;
+    this._user_id = props.user_id;
+    this._document_type = props.document_type;
+    this._document_number = props.document_number;
+    this._fileUrl = props.fileUrl;
+    this._status = props.status || DocumentStatus.Pending;
+    this._verified = props.verified ?? false;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
   }
   getId() {
-    return this.id;
+    return this._id;
   }
 
   getUserId() {
-    return this.user_id;
+    return this._user_id;
   }
 
   getDocumentType() {
-    return this.document_type;
+    return this._document_type;
   }
 
   getDocumentNumber() {
-    return this.document_number;
+    return this._document_number;
   }
 
   getFileUrl() {
-    return this.fileUrl;
+    return this._fileUrl;
   }
 
   getStatus() {
-    return this.status;
+    return this._status;
   }
 
   isVerified() {
-    return this.verified;
+    return this._verified;
   }
 
   getCreatedAt() {
-    return this.createdAt;
+    return this._createdAt;
   }
   getVerifed() {
-    return this.verified;
+    return this._verified;
   }
 
   getUpdatedAt() {
-    return this.updatedAt;
+    return this._updatedAt;
   }
   setStatus(status: DocumentStatus) {
-    this.status = status;
+    this._status = status;
   }
   setVerified(data: boolean) {
-    this.verified = data;
+    this._verified = data;
   }
   setFileUrl(url: string) {
-    this.fileUrl = url;
+    this._fileUrl = url;
   }
   setDocumentNumber(num: string) {
-    this.document_number = num;
+    this._document_number = num;
   }
   setCreatedAt(date: Date) {
-    this.createdAt = date;
+    this._createdAt = date;
   }
 }

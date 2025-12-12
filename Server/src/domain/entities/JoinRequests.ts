@@ -14,108 +14,108 @@ export interface JoinRequestProps {
 }
 
 export class JoinRequest {
-  private readonly id?: string;
-  private readonly rideId: string;
-  private readonly hikeId: string;
-  private status: JoinRequestStatus;
-  private pickupLocation: GeoJSON.Point;
-  private dropoffLocation: GeoJSON.Point;
-  private seatsRequested: number;
-  private costSharing: number;
-  private createdAt: Date;
-  private updatedAt: Date;
+  private readonly _id?: string;
+  private readonly _rideId: string;
+  private readonly _hikeId: string;
+  private _status: JoinRequestStatus;
+  private _pickupLocation: GeoJSON.Point;
+  private _dropoffLocation: GeoJSON.Point;
+  private _seatsRequested: number;
+  private _costSharing: number;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: JoinRequestProps) {
-    this.id = props.id;
-    this.rideId = props.rideId;
-    this.hikeId = props.hikeId;
-    this.status = props.status || JoinRequestStatus.PENDING;
-    this.pickupLocation = props.pickupLocation;
-    this.dropoffLocation = props.dropoffLocation;
-    this.seatsRequested = props.seatsRequested;
-    this.costSharing = props.costSharing;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
+    this._id = props.id;
+    this._rideId = props.rideId;
+    this._hikeId = props.hikeId;
+    this._status = props.status || JoinRequestStatus.PENDING;
+    this._pickupLocation = props.pickupLocation;
+    this._dropoffLocation = props.dropoffLocation;
+    this._seatsRequested = props.seatsRequested;
+    this._costSharing = props.costSharing;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
   }
 
   // --- Getters ---
   getId() {
-    return this.id;
+    return this._id;
   }
 
   getRideId() {
-    return this.rideId;
+    return this._rideId;
   }
 
   getHikeId() {
-    return this.hikeId;
+    return this._hikeId;
   }
 
   getStatus() {
-    return this.status;
+    return this._status;
   }
 
   getPickupLocation() {
-    return this.pickupLocation;
+    return this._pickupLocation;
   }
 
   getDropoffLocation() {
-    return this.dropoffLocation;
+    return this._dropoffLocation;
   }
 
   getCostSharing() {
-    return this.costSharing;
+    return this._costSharing;
   }
 
   getCreatedAt() {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt() {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 
   getSeatsRequested() {
-    return this.seatsRequested;
+    return this._seatsRequested;
   }
 
   accept() {
-    this.status = JoinRequestStatus.ACCEPTED;
+    this._status = JoinRequestStatus.ACCEPTED;
   }
   confirm() {
-    this.status = JoinRequestStatus.CONFIRMED;
+    this._status = JoinRequestStatus.CONFIRMED;
   }
   updateStatus(status: JoinRequestStatus) {
-    this.status = status;
-    this.updatedAt = new Date();
+    this._status = status;
+    this._updatedAt = new Date();
   }
 
   updatePickupLocation(location: GeoJSON.Point) {
-    this.pickupLocation = location;
-    this.updatedAt = new Date();
+    this._pickupLocation = location;
+    this._updatedAt = new Date();
   }
 
   updateDropoffLocation(location: GeoJSON.Point) {
-    this.dropoffLocation = location;
-    this.updatedAt = new Date();
+    this._dropoffLocation = location;
+    this._updatedAt = new Date();
   }
 
   updateCostSharing(cost: number) {
-    this.costSharing = cost;
-    this.updatedAt = new Date();
+    this._costSharing = cost;
+    this._updatedAt = new Date();
   }
 
   toJSON() {
     return {
-      id: this.id,
-      rideId: this.rideId,
-      hikeId: this.hikeId,
-      status: this.status,
-      pickupLocation: this.pickupLocation,
-      dropoffLocation: this.dropoffLocation,
-      costSharing: this.costSharing,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      id: this._id,
+      rideId: this._rideId,
+      hikeId: this._hikeId,
+      status: this._status,
+      pickupLocation: this._pickupLocation,
+      dropoffLocation: this._dropoffLocation,
+      costSharing: this._costSharing,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
     };
   }
 }

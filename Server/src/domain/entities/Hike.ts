@@ -19,105 +19,105 @@ export interface HikeProps {
 }
 
 export class HikeLog {
-  private readonly id?: string;
-  private userId: string;
-  private pickup: GeoJSON.Point;
-  private destination: GeoJSON.Point;
-  private pickupAddress: string;
-  private destinationAddress: string;
-  private totalDistance: number;
-  private hasHelmet: boolean;
-  private seatsRequested: number;
-  private riderId: string | null;
-  private bookingId: string | null;
-  private status: HikeStatus;
-  private confirmed: boolean;
-  private readonly createdAt: Date;
+  private readonly _id?: string;
+  private _userId: string;
+  private _pickup: GeoJSON.Point;
+  private _destination: GeoJSON.Point;
+  private _pickupAddress: string;
+  private _destinationAddress: string;
+  private _totalDistance: number;
+  private _hasHelmet: boolean;
+  private _seatsRequested: number;
+  private _riderId: string | null;
+  private _bookingId: string | null;
+  private _status: HikeStatus;
+  private _confirmed: boolean;
+  private readonly _createdAt: Date;
 
   constructor(props: HikeProps) {
-    this.id = props.id;
-    this.userId = props.userId;
-    this.pickup = props.pickup;
-    this.destination = props.destination;
-    this.pickupAddress = props.pickupAddress;
-    this.destinationAddress = props.destinationAddress;
-    this.totalDistance = props.totalDistance;
-    this.hasHelmet = props.hasHelmet;
-    this.seatsRequested = props.seatsRequested;
-    this.riderId = props.riderId || null;
-    this.bookingId = props.bookingId || null;
-    this.status = props.status;
-    this.confirmed = props.confirmed || false;
-    this.createdAt = props.createdAt || new Date();
+    this._id = props.id;
+    this._userId = props.userId;
+    this._pickup = props.pickup;
+    this._destination = props.destination;
+    this._pickupAddress = props.pickupAddress;
+    this._destinationAddress = props.destinationAddress;
+    this._totalDistance = props.totalDistance;
+    this._hasHelmet = props.hasHelmet;
+    this._seatsRequested = props.seatsRequested;
+    this._riderId = props.riderId || null;
+    this._bookingId = props.bookingId || null;
+    this._status = props.status;
+    this._confirmed = props.confirmed || false;
+    this._createdAt = props.createdAt || new Date();
   }
 
   // Getters
   getHikeId() {
-    return this.id;
+    return this._id;
   }
   getUserId() {
-    return this.userId;
+    return this._userId;
   }
   getPickup() {
-    return this.pickup;
+    return this._pickup;
   }
   getDestination() {
-    return this.destination;
+    return this._destination;
   }
   getTotalDistance() {
-    return this.totalDistance;
+    return this._totalDistance;
   }
   getHasHelmet() {
-    return this.hasHelmet;
+    return this._hasHelmet;
   }
   getSeatsRequested() {
-    return this.seatsRequested;
+    return this._seatsRequested;
   }
   getRiderId() {
-    return this.riderId;
+    return this._riderId;
   }
   getStatus() {
-    return this.status;
+    return this._status;
   }
   getConfirmed() {
-    return this.confirmed;
+    return this._confirmed;
   }
   getCreatedAt() {
-    return this.createdAt;
+    return this._createdAt;
   }
   getDestinationAddress() {
-    return this.destinationAddress;
+    return this._destinationAddress;
   }
   getPickupAddress() {
-    return this.pickupAddress;
+    return this._pickupAddress;
   }
   getBookingId() {
-    return this.bookingId;
+    return this._bookingId;
   }
   setBookingId(bookingId: string) {
-    this.bookingId = bookingId;
+    this._bookingId = bookingId;
   }
 
   toggleConfirmed() {
-    this.confirmed = !this.confirmed;
+    this._confirmed = !this._confirmed;
   }
 
   assignRider(riderId: string) {
-    this.riderId = riderId;
+    this._riderId = riderId;
   }
 
   updateStatus(newStatus: HikeStatus) {
-    this.status = newStatus;
+    this._status = newStatus;
   }
 
   updateDistance(newDistance: number) {
-    this.totalDistance = newDistance;
+    this._totalDistance = newDistance;
   }
   getEstimatedPrice(): number {
-    return +(this.totalDistance * COST_SHARING_LIMIT).toFixed(2);
+    return +(this._totalDistance * COST_SHARING_LIMIT).toFixed(2);
   }
 
   complete() {
-    this.status = HikeStatus.COMPLETED;
+    this._status = HikeStatus.COMPLETED;
   }
 }

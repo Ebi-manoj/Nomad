@@ -13,56 +13,56 @@ export interface ReviewProps {
 }
 
 export class Review {
-  private readonly id?: string;
-  private readonly reviewerId: string;
-  private readonly reviewedUserId: string;
-  private readonly bookingId: string;
-  private readonly rating: number;
-  private readonly reviewText: string;
-  private readonly type: ReviewType;
-  private readonly createdAt: Date;
-  private updatedAt: Date;
+  private readonly _id?: string;
+  private readonly _reviewerId: string;
+  private readonly _reviewedUserId: string;
+  private readonly _bookingId: string;
+  private readonly _rating: number;
+  private readonly _reviewText: string;
+  private readonly _type: ReviewType;
+  private readonly _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: ReviewProps) {
-    this.id = props.id;
-    this.reviewerId = props.reviewerId;
-    this.reviewedUserId = props.reviewedUserId;
-    this.bookingId = props.bookingId;
-    this.rating = props.rating;
-    this.reviewText = props.reviewText;
-    this.type = props.type;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
+    this._id = props.id;
+    this._reviewerId = props.reviewerId;
+    this._reviewedUserId = props.reviewedUserId;
+    this._bookingId = props.bookingId;
+    this._rating = props.rating;
+    this._reviewText = props.reviewText;
+    this._type = props.type;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
   }
 
   getId() {
-    return this.id;
+    return this._id;
   }
 
   getReviewerId() {
-    return this.reviewerId;
+    return this._reviewerId;
   }
 
   getReviewedUserId() {
-    return this.reviewedUserId;
+    return this._reviewedUserId;
   }
   getBookingId() {
-    return this.bookingId;
+    return this._bookingId;
   }
 
   getRating() {
-    return this.rating;
+    return this._rating;
   }
   getReviewText() {
-    return this.reviewText;
+    return this._reviewText;
   }
   getType() {
-    return this.type;
+    return this._type;
   }
   getCreatedAt() {
-    return this.createdAt;
+    return this._createdAt;
   }
   getUpdatedAt() {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 }

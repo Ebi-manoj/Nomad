@@ -13,81 +13,81 @@ export interface RouteDeviationProps {
 }
 
 export class RouteDeviation {
-  private readonly id?: string;
-  private readonly rideId: string;
-  private readonly hikeId: string;
-  private readonly hikerId: string;
-  private readonly riderId: string;
-  private currentLocation: GeoJSON.Point;
-  private deviationDistance: number;
-  private acknowledged: boolean;
-  private detectedAt: Date;
-  private acknowledgedAt?: Date;
-  private sosTriggeredAt?: Date;
+  private readonly _id?: string;
+  private readonly _rideId: string;
+  private readonly _hikeId: string;
+  private readonly _hikerId: string;
+  private readonly _riderId: string;
+  private _currentLocation: GeoJSON.Point;
+  private _deviationDistance: number;
+  private _acknowledged: boolean;
+  private _detectedAt: Date;
+  private _acknowledgedAt?: Date;
+  private _sosTriggeredAt?: Date;
 
   constructor(props: RouteDeviationProps) {
-    this.id = props.id;
-    this.rideId = props.rideId;
-    this.hikeId = props.hikeId;
-    this.hikerId = props.hikerId;
-    this.riderId = props.riderId;
-    this.currentLocation = props.currentLocation;
-    this.deviationDistance = props.deviationDistance;
-    this.acknowledged = props.acknowledged;
-    this.detectedAt = props.detectedAt;
-    this.acknowledgedAt = props.acknowledgedAt;
-    this.sosTriggeredAt = props.sosTriggeredAt;
+    this._id = props.id;
+    this._rideId = props.rideId;
+    this._hikeId = props.hikeId;
+    this._hikerId = props.hikerId;
+    this._riderId = props.riderId;
+    this._currentLocation = props.currentLocation;
+    this._deviationDistance = props.deviationDistance;
+    this._acknowledged = props.acknowledged;
+    this._detectedAt = props.detectedAt;
+    this._acknowledgedAt = props.acknowledgedAt;
+    this._sosTriggeredAt = props.sosTriggeredAt;
   }
 
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getRideId(): string {
-    return this.rideId;
+    return this._rideId;
   }
 
   getHikeId(): string {
-    return this.hikeId;
+    return this._hikeId;
   }
 
   getHikerId(): string {
-    return this.hikerId;
+    return this._hikerId;
   }
   getRiderId(): string {
-    return this.riderId;
+    return this._riderId;
   }
 
   getCurrentLocation(): GeoJSON.Point {
-    return this.currentLocation;
+    return this._currentLocation;
   }
 
   getDeviationDistance(): number {
-    return this.deviationDistance;
+    return this._deviationDistance;
   }
 
   getAcknowledged(): boolean {
-    return this.acknowledged;
+    return this._acknowledged;
   }
 
   getDetectedAt(): Date {
-    return this.detectedAt;
+    return this._detectedAt;
   }
 
   getAcknowledgedAt(): Date | undefined {
-    return this.acknowledgedAt;
+    return this._acknowledgedAt;
   }
 
   getSosTriggeredAt(): Date | undefined {
-    return this.sosTriggeredAt;
+    return this._sosTriggeredAt;
   }
 
   acknowledge(deviationTime: Date) {
-    this.acknowledged = true;
-    this.acknowledgedAt = deviationTime;
+    this._acknowledged = true;
+    this._acknowledgedAt = deviationTime;
   }
 
   triggerSOS(time: Date) {
-    this.sosTriggeredAt = time;
+    this._sosTriggeredAt = time;
   }
 }

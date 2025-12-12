@@ -25,167 +25,167 @@ export interface RideBookingProps {
 }
 
 export class RideBooking {
-  private id?: string;
-  private rideId: string;
-  private hikerId: string;
-  private riderId: string;
-  private hikeId: string;
-  private joinRequestId: string;
-  private paymentId: string;
-  private bookingNumber: string;
-  private totalDistance: number;
-  private seatsBooked: number;
-  private amount: number;
-  private platformFee: number;
-  private riderInitialLocation: GeoJSON.Point;
-  private pickupLocation: GeoJSON.Point;
-  private dropoffLocation: GeoJSON.Point;
-  private status: RideBookingStatus;
-  private completedAt?: Date;
-  private createdAt: Date;
-  private updatedAt: Date;
-  private refundedAmount: number;
-  private cancelledAt?: Date;
+  private _id?: string;
+  private _rideId: string;
+  private _hikerId: string;
+  private _riderId: string;
+  private _hikeId: string;
+  private _joinRequestId: string;
+  private _paymentId: string;
+  private _bookingNumber: string;
+  private _totalDistance: number;
+  private _seatsBooked: number;
+  private _amount: number;
+  private _platformFee: number;
+  private _riderInitialLocation: GeoJSON.Point;
+  private _pickupLocation: GeoJSON.Point;
+  private _dropoffLocation: GeoJSON.Point;
+  private _status: RideBookingStatus;
+  private _completedAt?: Date;
+  private _createdAt: Date;
+  private _updatedAt: Date;
+  private _refundedAmount: number;
+  private _cancelledAt?: Date;
 
   constructor(props: RideBookingProps) {
-    this.id = props.id;
-    this.rideId = props.rideId;
-    this.hikerId = props.hikerId;
-    this.riderId = props.riderId;
-    this.hikeId = props.hikeId;
-    this.joinRequestId = props.joinRequestId;
-    this.paymentId = props.paymentId;
-    this.bookingNumber = props.bookingNumber;
-    this.seatsBooked = props.seatsBooked;
-    this.amount = props.amount;
-    this.totalDistance = props.totalDistance;
-    this.platformFee = props.platformFee;
-    this.riderInitialLocation = props.riderInitialLocation;
-    this.pickupLocation = props.pickupLocation;
-    this.dropoffLocation = props.dropoffLocation;
-    this.status = props.status;
-    this.completedAt = props.completedAt;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
-    this.refundedAmount = props.refundedAmount || 0;
-    this.cancelledAt = props.cancelledAt;
+    this._id = props.id;
+    this._rideId = props.rideId;
+    this._hikerId = props.hikerId;
+    this._riderId = props.riderId;
+    this._hikeId = props.hikeId;
+    this._joinRequestId = props.joinRequestId;
+    this._paymentId = props.paymentId;
+    this._bookingNumber = props.bookingNumber;
+    this._seatsBooked = props.seatsBooked;
+    this._amount = props.amount;
+    this._totalDistance = props.totalDistance;
+    this._platformFee = props.platformFee;
+    this._riderInitialLocation = props.riderInitialLocation;
+    this._pickupLocation = props.pickupLocation;
+    this._dropoffLocation = props.dropoffLocation;
+    this._status = props.status;
+    this._completedAt = props.completedAt;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
+    this._refundedAmount = props.refundedAmount || 0;
+    this._cancelledAt = props.cancelledAt;
   }
 
   //Getters
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getRideId(): string {
-    return this.rideId;
+    return this._rideId;
   }
 
   getHikerId(): string {
-    return this.hikerId;
+    return this._hikerId;
   }
 
   getRiderId(): string {
-    return this.riderId;
+    return this._riderId;
   }
 
   getHikeId(): string {
-    return this.hikeId;
+    return this._hikeId;
   }
 
   getJoinRequestId(): string {
-    return this.joinRequestId;
+    return this._joinRequestId;
   }
 
   getPaymentId(): string {
-    return this.paymentId;
+    return this._paymentId;
   }
 
   getBookingNumber(): string {
-    return this.bookingNumber;
+    return this._bookingNumber;
   }
 
   getSeatsBooked(): number {
-    return this.seatsBooked;
+    return this._seatsBooked;
   }
 
   getAmount(): number {
-    return this.amount;
+    return this._amount;
   }
 
   getPlatformFee(): number {
-    return this.platformFee;
+    return this._platformFee;
   }
 
   getRiderInitialLocation() {
-    return this.riderInitialLocation;
+    return this._riderInitialLocation;
   }
 
   getPickupLocation() {
-    return this.pickupLocation;
+    return this._pickupLocation;
   }
 
   getDropoffLocation() {
-    return this.dropoffLocation;
+    return this._dropoffLocation;
   }
 
   getStatus(): RideBookingStatus {
-    return this.status;
+    return this._status;
   }
 
   getCompletedAt(): Date | undefined {
-    return this.completedAt;
+    return this._completedAt;
   }
   getCreatedAt(): Date {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt(): Date {
-    return this.updatedAt;
+    return this._updatedAt;
   }
   getRefundedAmount(): number {
-    return this.refundedAmount;
+    return this._refundedAmount;
   }
   getCancelledAt(): Date | undefined {
-    return this.cancelledAt;
+    return this._cancelledAt;
   }
   getCostShared() {
-    return this.amount - this.platformFee;
+    return this._amount - this._platformFee;
   }
   getTotalDistance() {
-    return this.totalDistance;
+    return this._totalDistance;
   }
 
   getRiderEarning() {
-    return this.amount - this.refundedAmount - this.platformFee;
+    return this._amount - this._refundedAmount - this._platformFee;
   }
 
   confirm() {
-    this.status = RideBookingStatus.CONFIRMED;
-    this.updatedAt = new Date();
+    this._status = RideBookingStatus.CONFIRMED;
+    this._updatedAt = new Date();
   }
 
   cancel() {
-    this.status = RideBookingStatus.CANCELLED;
-    this.cancelledAt = new Date();
-    this.updatedAt = new Date();
+    this._status = RideBookingStatus.CANCELLED;
+    this._cancelledAt = new Date();
+    this._updatedAt = new Date();
   }
 
   complete() {
-    this.status = RideBookingStatus.COMPLETED;
-    this.updatedAt = new Date();
+    this._status = RideBookingStatus.COMPLETED;
+    this._updatedAt = new Date();
   }
   setStatus(status: RideBookingStatus) {
-    this.status = status;
-    this.updatedAt = new Date();
+    this._status = status;
+    this._updatedAt = new Date();
   }
   markDroppedOff() {
-    this.status = RideBookingStatus.DROPPEDOFF;
-    this.updatedAt = new Date();
-    this.completedAt = new Date();
+    this._status = RideBookingStatus.DROPPEDOFF;
+    this._updatedAt = new Date();
+    this._completedAt = new Date();
   }
 
   setRefundedAmount(amount: number) {
-    this.refundedAmount = amount;
-    this.updatedAt = new Date();
+    this._refundedAmount = amount;
+    this._updatedAt = new Date();
   }
 }

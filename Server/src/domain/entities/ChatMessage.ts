@@ -11,49 +11,49 @@ export interface ChatMessageProps {
 }
 
 export class ChatMessage {
-  private id?: string;
-  private roomId: string;
-  private senderId: string;
-  private senderRole: ChatSenderRole;
-  private message: string;
-  private createdAt: Date;
-  private updatedAt: Date;
+  private _id?: string;
+  private _roomId: string;
+  private _senderId: string;
+  private _senderRole: ChatSenderRole;
+  private _message: string;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: ChatMessageProps) {
-    this.id = props.id;
-    this.roomId = props.roomId;
-    this.senderId = props.senderId;
-    this.senderRole = props.senderRole;
-    this.message = props.message;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
+    this._id = props.id;
+    this._roomId = props.roomId;
+    this._senderId = props.senderId;
+    this._senderRole = props.senderRole;
+    this._message = props.message;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
   }
 
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getRoomId(): string {
-    return this.roomId;
+    return this._roomId;
   }
 
   getSenderId(): string {
-    return this.senderId;
+    return this._senderId;
   }
 
   getSenderRole(): ChatSenderRole {
-    return this.senderRole;
+    return this._senderRole;
   }
 
   getMessage(): string {
-    return this.message;
+    return this._message;
   }
 
   getCreatedAt(): Date {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt(): Date {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 }

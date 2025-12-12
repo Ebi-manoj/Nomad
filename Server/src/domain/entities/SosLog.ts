@@ -14,68 +14,68 @@ export interface SosLogProps {
 }
 
 export class SosLog {
-  private readonly id?: string;
-  private readonly userId: string;
-  private readonly bookingId?: string;
-  private readonly rideId?: string;
-  private readonly location: GeoJSON.Point;
-  private readonly initiatedBy: SosInitiator;
-  private status: SosLogStatus;
-  private readonly createdAt: Date;
-  private readonly updatedAt: Date;
+  private readonly _id?: string;
+  private readonly _userId: string;
+  private readonly _bookingId?: string;
+  private readonly _rideId?: string;
+  private readonly _location: GeoJSON.Point;
+  private readonly _initiatedBy: SosInitiator;
+  private _status: SosLogStatus;
+  private readonly _createdAt: Date;
+  private readonly _updatedAt: Date;
 
   constructor(props: SosLogProps) {
-    this.id = props.id;
-    this.userId = props.userId;
-    this.bookingId = props.bookingId;
-    this.rideId = props.rideId;
-    this.location = props.location;
-    this.initiatedBy = props.initiatedBy;
-    this.status = props.status ?? SosLogStatus.OPEN;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
+    this._id = props.id;
+    this._userId = props.userId;
+    this._bookingId = props.bookingId;
+    this._rideId = props.rideId;
+    this._location = props.location;
+    this._initiatedBy = props.initiatedBy;
+    this._status = props.status ?? SosLogStatus.OPEN;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
   }
 
   getId() {
-    return this.id;
+    return this._id;
   }
 
   getUserId() {
-    return this.userId;
+    return this._userId;
   }
 
   getBookingId() {
-    return this.bookingId;
+    return this._bookingId;
   }
 
   getRideId() {
-    return this.rideId;
+    return this._rideId;
   }
 
   getLocation() {
-    return this.location;
+    return this._location;
   }
 
   getInitiatedBy() {
-    return this.initiatedBy;
+    return this._initiatedBy;
   }
 
   getStatus() {
-    return this.status;
+    return this._status;
   }
 
   setStatus(status: SosLogStatus) {
-    this.status = status;
+    this._status = status;
   }
 
   getCreatedAt() {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt() {
-    return this.updatedAt;
+    return this._updatedAt;
   }
   resolve() {
-    this.status = SosLogStatus.RESOLVED;
+    this._status = SosLogStatus.RESOLVED;
   }
 }

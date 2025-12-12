@@ -13,36 +13,36 @@ import {
 
 export class SubscriptionFeatures {
   constructor(
-    private readonly maxJoinRequestsPerRide: number | null,
-    private readonly maxRideAcceptancesPerMonth: number | null,
-    private readonly platformFeePercentage: number,
-    private readonly verificationBadge: boolean,
-    private readonly priorityInList: boolean,
-    private readonly customCostSharing: boolean
+    private readonly _maxJoinRequestsPerRide: number | null,
+    private readonly _maxRideAcceptancesPerMonth: number | null,
+    private readonly _platformFeePercentage: number,
+    private readonly _verificationBadge: boolean,
+    private readonly _priorityInList: boolean,
+    private readonly _customCostSharing: boolean
   ) {}
 
   getMaxJoinRequestsPerRide(): number | null {
-    return this.maxJoinRequestsPerRide;
+    return this._maxJoinRequestsPerRide;
   }
 
   getMaxRideAcceptancesPerMonth(): number | null {
-    return this.maxRideAcceptancesPerMonth;
+    return this._maxRideAcceptancesPerMonth;
   }
 
   getPlatformFeePercentage(): number {
-    return this.platformFeePercentage;
+    return this._platformFeePercentage;
   }
 
   hasVerificationBadge(): boolean {
-    return this.verificationBadge;
+    return this._verificationBadge;
   }
 
   hasPriorityInList(): boolean {
-    return this.priorityInList;
+    return this._priorityInList;
   }
 
   hasCustomCostSharing(): boolean {
-    return this.customCostSharing;
+    return this._customCostSharing;
   }
 }
 
@@ -66,46 +66,46 @@ export interface SubscriptionProps {
 }
 
 export class Subscription {
-  private id?: string;
-  private userId: string;
-  private tier: SubscriptionTier;
-  private billingCycle: BillingCycle;
-  private status: SubscriptionStatus;
-  private startDate: Date;
-  private endDate: Date;
-  private autoRenew: boolean;
-  private price: number;
-  private currency: string;
-  private stripeSubscriptionId?: string;
-  private stripeCustomerId?: string;
-  private stripePriceId?: string;
-  private createdAt: Date;
-  private updatedAt: Date;
-  private cancelledAt?: Date;
-  private features: SubscriptionFeatures;
+  private _id?: string;
+  private _userId: string;
+  private _tier: SubscriptionTier;
+  private _billingCycle: BillingCycle;
+  private _status: SubscriptionStatus;
+  private _startDate: Date;
+  private _endDate: Date;
+  private _autoRenew: boolean;
+  private _price: number;
+  private _currency: string;
+  private _stripeSubscriptionId?: string;
+  private _stripeCustomerId?: string;
+  private _stripePriceId?: string;
+  private _createdAt: Date;
+  private _updatedAt: Date;
+  private _cancelledAt?: Date;
+  private _features: SubscriptionFeatures;
 
   constructor(props: SubscriptionProps) {
-    this.id = props.id;
-    this.userId = props.userId;
-    this.tier = props.tier;
-    this.billingCycle = props.billingCycle;
-    this.status = props.status;
-    this.startDate = props.startDate || new Date();
-    this.endDate = props.endDate || this.setEndDate();
-    this.autoRenew = props.autoRenew ?? true;
-    this.price = props.price;
-    this.currency = props.currency || 'INR';
-    this.stripeSubscriptionId = props.stripeSubscriptionId;
-    this.stripeCustomerId = props.stripeCustomerId;
-    this.stripePriceId = props.stripePriceId;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
-    this.cancelledAt = props.cancelledAt;
-    this.features = this.initializeFeatures();
+    this._id = props.id;
+    this._userId = props.userId;
+    this._tier = props.tier;
+    this._billingCycle = props.billingCycle;
+    this._status = props.status;
+    this._startDate = props.startDate || new Date();
+    this._endDate = props.endDate || this.setEndDate();
+    this._autoRenew = props.autoRenew ?? true;
+    this._price = props.price;
+    this._currency = props.currency || 'INR';
+    this._stripeSubscriptionId = props.stripeSubscriptionId;
+    this._stripeCustomerId = props.stripeCustomerId;
+    this._stripePriceId = props.stripePriceId;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
+    this._cancelledAt = props.cancelledAt;
+    this._features = this.initializeFeatures();
   }
 
   private initializeFeatures(): SubscriptionFeatures {
-    switch (this.tier) {
+    switch (this._tier) {
       case SubscriptionTier.FREE:
         return new SubscriptionFeatures(
           MAX_JOIN_REQUEST,
@@ -155,17 +155,17 @@ export class Subscription {
   }
 
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getUserId(): string {
-    return this.userId;
+    return this._userId;
   }
 
   private setEndDate(): Date {
-    const startDate = this.startDate.getTime();
+    const startDate = this._startDate.getTime();
     const duration =
-      this.billingCycle === 'MONTHLY'
+      this._billingCycle === 'MONTHLY'
         ? 30 * 24 * 60 * 60 * 1000
         : 365 * 24 * 60 * 60 * 1000;
 
@@ -173,91 +173,91 @@ export class Subscription {
   }
 
   getTier(): SubscriptionTier {
-    return this.tier;
+    return this._tier;
   }
 
   getBillingCycle(): BillingCycle {
-    return this.billingCycle;
+    return this._billingCycle;
   }
 
   getStatus(): SubscriptionStatus {
-    return this.status;
+    return this._status;
   }
 
   getStartDate(): Date {
-    return this.startDate;
+    return this._startDate;
   }
 
   getEndDate(): Date {
-    return this.endDate;
+    return this._endDate;
   }
 
   isAutoRenew(): boolean {
-    return this.autoRenew;
+    return this._autoRenew;
   }
 
   getPrice(): number {
-    return this.price;
+    return this._price;
   }
 
   getCurrency(): string {
-    return this.currency;
+    return this._currency;
   }
 
   getStripeSubscriptionId(): string | undefined {
-    return this.stripeSubscriptionId;
+    return this._stripeSubscriptionId;
   }
   getStripeCustomerId(): string | undefined {
-    return this.stripeCustomerId;
+    return this._stripeCustomerId;
   }
   getStripePriceId(): string | undefined {
-    return this.stripePriceId;
+    return this._stripePriceId;
   }
 
   getFeatures(): SubscriptionFeatures {
-    return this.features;
+    return this._features;
   }
 
   getCreatedAt(): Date {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt(): Date {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 
   getCancelledAt(): Date | undefined {
-    return this.cancelledAt;
+    return this._cancelledAt;
   }
 
   isActive(): boolean {
     return (
-      this.status === SubscriptionStatus.ACTIVE && new Date() < this.endDate
+      this._status === SubscriptionStatus.ACTIVE && new Date() < this._endDate
     );
   }
 
   isExpired(): boolean {
-    return new Date() >= this.endDate;
+    return new Date() >= this._endDate;
   }
 
   cancel(): void {
-    if (this.status === SubscriptionStatus.CANCELLED) {
+    if (this._status === SubscriptionStatus.CANCELLED) {
       throw new Error('Subscription is already cancelled');
     }
-    this.status = SubscriptionStatus.CANCELLED;
-    this.autoRenew = false;
-    this.cancelledAt = new Date();
-    this.updatedAt = new Date();
+    this._status = SubscriptionStatus.CANCELLED;
+    this._autoRenew = false;
+    this._cancelledAt = new Date();
+    this._updatedAt = new Date();
   }
 
   renew(newEndDate: Date, price: number): void {
-    if (this.status === SubscriptionStatus.CANCELLED) {
+    if (this._status === SubscriptionStatus.CANCELLED) {
       throw new Error('Cannot renew a cancelled subscription');
     }
-    this.startDate = this.endDate;
-    this.endDate = newEndDate;
-    this.price = price;
-    this.status = SubscriptionStatus.ACTIVE;
-    this.updatedAt = new Date();
+    this._startDate = this._endDate;
+    this._endDate = newEndDate;
+    this._price = price;
+    this._status = SubscriptionStatus.ACTIVE;
+    this._updatedAt = new Date();
   }
 }

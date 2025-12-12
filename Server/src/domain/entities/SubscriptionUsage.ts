@@ -9,69 +9,69 @@ export interface SubscriptionUsageProps {
 }
 
 export class SubscriptionUsage {
-  private id?: string;
-  private userId: string;
-  private month: string;
-  private joinRequestsCount: number;
-  private rideAcceptancesCount: number;
-  private createdAt: Date;
-  private updatedAt: Date;
+  private _id?: string;
+  private _userId: string;
+  private _month: string;
+  private _joinRequestsCount: number;
+  private _rideAcceptancesCount: number;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: SubscriptionUsageProps) {
-    this.id = props.id;
-    this.userId = props.userId;
-    this.month = props.month;
-    this.joinRequestsCount = props.joinRequestsCount ?? 0;
-    this.rideAcceptancesCount = props.rideAcceptancesCount ?? 0;
-    this.createdAt = props.createdAt ?? new Date();
-    this.updatedAt = props.updatedAt ?? new Date();
+    this._id = props.id;
+    this._userId = props.userId;
+    this._month = props.month;
+    this._joinRequestsCount = props.joinRequestsCount ?? 0;
+    this._rideAcceptancesCount = props.rideAcceptancesCount ?? 0;
+    this._createdAt = props.createdAt ?? new Date();
+    this._updatedAt = props.updatedAt ?? new Date();
   }
 
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getUserId(): string {
-    return this.userId;
+    return this._userId;
   }
 
   getMonth(): string {
-    return this.month;
+    return this._month;
   }
 
   getJoinRequestsCount(): number {
-    return this.joinRequestsCount;
+    return this._joinRequestsCount;
   }
 
   getRideAcceptancesCount(): number {
-    return this.rideAcceptancesCount;
+    return this._rideAcceptancesCount;
   }
 
   getCreatedAt(): Date {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt(): Date {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 
   incrementJoinRequests(): void {
-    this.joinRequestsCount++;
-    this.updatedAt = new Date();
+    this._joinRequestsCount++;
+    this._updatedAt = new Date();
   }
 
   incrementRideAcceptances(): void {
-    this.rideAcceptancesCount++;
-    this.updatedAt = new Date();
+    this._rideAcceptancesCount++;
+    this._updatedAt = new Date();
   }
 
   canCreateJoinRequest(maxLimit: number | null): boolean {
     if (maxLimit === null) return true;
-    return this.joinRequestsCount < maxLimit;
+    return this._joinRequestsCount < maxLimit;
   }
 
   canAcceptRide(maxLimit: number | null): boolean {
     if (maxLimit === null) return true;
-    return this.rideAcceptancesCount < maxLimit;
+    return this._rideAcceptancesCount < maxLimit;
   }
 }

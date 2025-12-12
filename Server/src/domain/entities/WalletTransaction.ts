@@ -17,66 +17,66 @@ export interface WalletTransactionProps {
 }
 
 export class WalletTransaction {
-  private id?: string;
-  private userId: string;
-  private referenceType: TransactionReferenceType;
-  private referenceId: string;
-  private amount: number;
-  private type: WalletTransactionType;
-  private description: string;
-  private metadata?: Record<string, unknown>;
-  private createdAt: Date;
-  private updatedAt: Date;
+  private _id?: string;
+  private _userId: string;
+  private _referenceType: TransactionReferenceType;
+  private _referenceId: string;
+  private _amount: number;
+  private _type: WalletTransactionType;
+  private _description: string;
+  private _metadata?: Record<string, unknown>;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: WalletTransactionProps) {
-    this.id = props.id;
-    this.userId = props.userId;
-    this.referenceType = props.referenceType;
-    this.referenceId = props.referenceId;
-    this.amount = props.amount;
-    this.type = props.type;
-    this.description = props.description;
-    this.metadata = props.metadata;
-    this.createdAt = props.createdAt ?? new Date();
-    this.updatedAt = props.updatedAt ?? new Date();
+    this._id = props.id;
+    this._userId = props.userId;
+    this._referenceType = props.referenceType;
+    this._referenceId = props.referenceId;
+    this._amount = props.amount;
+    this._type = props.type;
+    this._description = props.description;
+    this._metadata = props.metadata;
+    this._createdAt = props.createdAt ?? new Date();
+    this._updatedAt = props.updatedAt ?? new Date();
   }
 
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getUserId(): string {
-    return this.userId;
+    return this._userId;
   }
   getReferenceType(): TransactionReferenceType {
-    return this.referenceType;
+    return this._referenceType;
   }
 
   getReferenceId(): string {
-    return this.referenceId;
+    return this._referenceId;
   }
 
   getAmount(): number {
-    return this.amount;
+    return this._amount;
   }
 
   getType(): WalletTransactionType {
-    return this.type;
+    return this._type;
   }
 
   getDescription(): string {
-    return this.description;
+    return this._description;
   }
 
   getMetadata(): Record<string, unknown> | undefined {
-    return this.metadata;
+    return this._metadata;
   }
 
   getCreatedAt(): Date {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt(): Date {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 }

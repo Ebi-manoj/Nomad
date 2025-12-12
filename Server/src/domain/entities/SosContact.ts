@@ -10,55 +10,55 @@ export interface SosContactProps {
 }
 
 export class SosContact {
-  private readonly id?: string;
-  private readonly userId: string;
-  private readonly name: string;
-  private readonly phone: string;
-  private readonly email?: string;
-  private readonly relation?: string;
-  private readonly createdAt: Date;
-  private updatedAt: Date;
+  private readonly _id?: string;
+  private readonly _userId: string;
+  private readonly _name: string;
+  private readonly _phone: string;
+  private readonly _email?: string;
+  private readonly _relation?: string;
+  private readonly _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: SosContactProps) {
-    this.id = props.id;
-    this.userId = props.userId;
-    this.name = props.name;
-    this.phone = props.phone;
-    this.email = props.email;
-    this.relation = props.relation;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
+    this._id = props.id;
+    this._userId = props.userId;
+    this._name = props.name;
+    this._phone = props.phone;
+    this._email = props.email;
+    this._relation = props.relation;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
   }
 
   getId() {
-    return this.id;
+    return this._id;
   }
 
   getUserId() {
-    return this.userId;
+    return this._userId;
   }
 
   getName() {
-    return this.name;
+    return this._name;
   }
 
   getPhone() {
-    return this.phone;
+    return this._phone;
   }
 
   getEmail() {
-    return this.email;
+    return this._email;
   }
 
   getRelation() {
-    return this.relation;
+    return this._relation;
   }
 
   getCreatedAt() {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt() {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 }

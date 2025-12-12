@@ -8,58 +8,58 @@ export interface WalletProps {
 }
 
 export class Wallet {
-  private id?: string;
-  private userId: string;
-  private balance: number;
-  private currency: string;
-  private createdAt: Date;
-  private updatedAt: Date;
+  private _id?: string;
+  private _userId: string;
+  private _balance: number;
+  private _currency: string;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: WalletProps) {
-    this.id = props.id;
-    this.userId = props.userId;
-    this.balance = props.balance ?? 0;
-    this.currency = props.currency ?? 'INR';
-    this.createdAt = props.createdAt ?? new Date();
-    this.updatedAt = props.updatedAt ?? new Date();
+    this._id = props.id;
+    this._userId = props.userId;
+    this._balance = props.balance ?? 0;
+    this._currency = props.currency ?? 'INR';
+    this._createdAt = props.createdAt ?? new Date();
+    this._updatedAt = props.updatedAt ?? new Date();
   }
 
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getUserId(): string {
-    return this.userId;
+    return this._userId;
   }
 
   getBalance(): number {
-    return this.balance;
+    return this._balance;
   }
 
   getCurrency(): string {
-    return this.currency;
+    return this._currency;
   }
 
   getCreatedAt(): Date {
-    return this.createdAt;
+    return this._createdAt;
   }
 
   getUpdatedAt(): Date {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 
   credit(amount: number): void {
     if (amount <= 0) return;
-    this.balance = Number((this.balance + amount).toFixed(2));
-    this.updatedAt = new Date();
+    this._balance = Number((this._balance + amount).toFixed(2));
+    this._updatedAt = new Date();
   }
 
   debit(amount: number): void {
     if (amount <= 0) return;
-    if (amount > this.balance) {
+    if (amount > this._balance) {
       throw new Error('Insufficient wallet balance');
     }
-    this.balance = Number((this.balance - amount).toFixed(2));
-    this.updatedAt = new Date();
+    this._balance = Number((this._balance - amount).toFixed(2));
+    this._updatedAt = new Date();
   }
 }

@@ -18,99 +18,99 @@ export interface PaymentProps {
 }
 
 export class Payment {
-  private id?: string;
-  private joinRequestId: string;
-  private hikerId: string;
-  private riderId: string;
-  private hikeId: string;
-  private rideId: string;
-  private amount: number;
-  private platformFee: number;
-  private status: PaymentStatus;
-  private paymentMethod?: string;
-  private stripePaymentId?: string;
-  private expiresAt: Date;
-  private createdAt: Date;
-  private updatedAt: Date;
+  private _id?: string;
+  private _joinRequestId: string;
+  private _hikerId: string;
+  private _riderId: string;
+  private _hikeId: string;
+  private _rideId: string;
+  private _amount: number;
+  private _platformFee: number;
+  private _status: PaymentStatus;
+  private _paymentMethod?: string;
+  private _stripePaymentId?: string;
+  private _expiresAt: Date;
+  private _createdAt: Date;
+  private _updatedAt: Date;
 
   constructor(props: PaymentProps) {
-    this.id = props.id;
-    this.joinRequestId = props.joinRequestId;
-    this.hikerId = props.hikerId;
-    this.riderId = props.riderId;
-    this.hikeId = props.hikeId;
-    this.rideId = props.rideId;
-    this.amount = props.amount;
-    this.platformFee = props.platformFee;
-    this.status = props.status;
-    this.paymentMethod = props.paymentMethod;
-    this.stripePaymentId = props.stripePaymentId;
-    this.expiresAt = props.expiresAt;
-    this.createdAt = props.createdAt || new Date();
-    this.updatedAt = props.updatedAt || new Date();
+    this._id = props.id;
+    this._joinRequestId = props.joinRequestId;
+    this._hikerId = props.hikerId;
+    this._riderId = props.riderId;
+    this._hikeId = props.hikeId;
+    this._rideId = props.rideId;
+    this._amount = props.amount;
+    this._platformFee = props.platformFee;
+    this._status = props.status;
+    this._paymentMethod = props.paymentMethod;
+    this._stripePaymentId = props.stripePaymentId;
+    this._expiresAt = props.expiresAt;
+    this._createdAt = props.createdAt || new Date();
+    this._updatedAt = props.updatedAt || new Date();
   }
 
   getId(): string | undefined {
-    return this.id;
+    return this._id;
   }
 
   getJoinRequestId(): string {
-    return this.joinRequestId;
+    return this._joinRequestId;
   }
 
   getHikerId(): string {
-    return this.hikerId;
+    return this._hikerId;
   }
 
   getRiderId(): string {
-    return this.riderId;
+    return this._riderId;
   }
   getHikeId(): string {
-    return this.hikeId;
+    return this._hikeId;
   }
 
   getRideId(): string {
-    return this.rideId;
+    return this._rideId;
   }
 
   getAmount(): number {
-    return this.amount;
+    return this._amount;
   }
 
   getPlatformFee(): number {
-    return this.platformFee;
+    return this._platformFee;
   }
 
   getStatus(): PaymentStatus {
-    return this.status;
+    return this._status;
   }
 
   getPaymentMethod(): string | undefined {
-    return this.paymentMethod;
+    return this._paymentMethod;
   }
 
   getStripPaymentId(): string | undefined {
-    return this.stripePaymentId;
+    return this._stripePaymentId;
   }
 
   getCreatedAt(): Date {
-    return this.createdAt;
+    return this._createdAt;
   }
   getExpiresAt(): Date {
-    return this.expiresAt;
+    return this._expiresAt;
   }
   getUpdatedAt(): Date {
-    return this.updatedAt;
+    return this._updatedAt;
   }
 
   setStripePaymentId(id: string) {
-    this.stripePaymentId = id;
+    this._stripePaymentId = id;
   }
 
   setExpired() {
-    this.status = PaymentStatus.EXPIRED;
+    this._status = PaymentStatus.EXPIRED;
   }
   success() {
-    this.status = PaymentStatus.SUCCESS;
+    this._status = PaymentStatus.SUCCESS;
   }
 }
