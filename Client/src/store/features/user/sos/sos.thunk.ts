@@ -43,7 +43,7 @@ export const addSosContact = createAsyncThunk<
 export const editSosContact = createAsyncThunk<
   SosContactDTO,
   EditContactPayload
->('sos/addSosContact', async ({ id, contact }, { rejectWithValue }) => {
+>('sos/editSosContact', async ({ id, contact }, { rejectWithValue }) => {
   try {
     return await editSosContactApi(id, contact);
   } catch (err: unknown) {
@@ -58,7 +58,7 @@ export const editSosContact = createAsyncThunk<
 export const deleteSosContact = createAsyncThunk<
   DeleteSosContactResDTO,
   string
->('sos/addSosContact', async (id, { rejectWithValue }) => {
+>('sos/deleteSosContact', async (id, { rejectWithValue }) => {
   try {
     return await deleteSosContactApi(id);
   } catch (err: unknown) {

@@ -26,7 +26,7 @@ export async function editSosContactApi(
   id: string,
   contact: Omit<SosContactDTO, 'id'>
 ) {
-  const res = await axiosInstance.patch<ApiResponse<SosContactDTO>>(
+  const res = await axiosInstance.put<ApiResponse<SosContactDTO>>(
     EDIT_SOS_API(id),
     contact
   );

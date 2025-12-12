@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle, UserPlus, Shield } from 'lucide-react';
+import { AlertCircle, UserPlus, Shield, Pencil } from 'lucide-react';
 import ContactCard from './ContactCard';
 import {
   Dialog,
@@ -21,14 +21,17 @@ import type { RootState } from '@/store/store';
 import {
   fetchSosContacts,
   addSosContact,
+  editSosContact,
 } from '@/store/features/user/sos/sos.thunk';
 import type { AppDispatch } from '@/store/store';
 import { toast } from 'sonner';
+import type { SosContactDTO } from '@/types/sos';
 
 export const SosManagementPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { contacts, loading } = useSelector((state: RootState) => state.sos);
   const [open, setOpen] = useState(false);
+  const [editContact, setEditContact] = useState<SosContactDTO | null>(null);
 
   const {
     register,
@@ -49,25 +52,58 @@ export const SosManagementPage = () => {
     dispatch(fetchSosContacts());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (editContact) {
+      reset({
+        name: editContact.name,
+        email: editContact.email,
+        relation: editContact.relation,
+        phone: editContact.phone,
+      });
+    } else {
+      reset({
+        name: '',
+        email: '',
+        relation: '',
+        phone: '',
+      });
+    }
+  }, [open, editContact, reset]);
+
   const onSubmit = async (data: SosContactFormData) => {
-    await dispatch(
-      addSosContact({
-        name: data.name.trim(),
-        phone: data.phone.trim(),
-        email: data.email?.trim() || undefined,
-        relation: data.relation?.trim() || undefined,
-      })
-    );
-    toast.success('SOS contact added');
+    const dto = {
+      name: data.name.trim(),
+      phone: data.phone.trim(),
+      email: data.email?.trim() || undefined,
+      relation: data.relation?.trim() || undefined,
+    };
+    if (!editContact) {
+      await dispatch(addSosContact(dto));
+      toast.success('SOS contact added');
+    } else {
+      await dispatch(editSosContact({ id: editContact.id, contact: dto }));
+      toast.success('Contact edited successfully');
+    }
     reset();
     setOpen(false);
+    setEditContact(null);
+  };
+
+  const handleEdit = (contact: SosContactDTO) => {
+    setEditContact(contact);
+    setOpen(true);
+  };
+  const handleAddClick = () => {
+    setEditContact(null);
+    setOpen(true);
   };
 
   const emergencyContacts = contacts.map(c => ({
+    id: c.id,
     name: c.name,
     phone: c.phone,
     email: c.email,
-    relationship: c.relation || 'Emergency Contact',
+    relation: c.relation || 'Emergency Contact',
   }));
 
   return (
@@ -90,7 +126,7 @@ export const SosManagementPage = () => {
             <Button
               className="gap-2 cursor-pointer"
               disabled={contacts.length >= 3}
-              onClick={() => setOpen(true)}
+              onClick={handleAddClick}
             >
               <UserPlus className="h-5 w-5" />
               Add Contact
@@ -127,8 +163,12 @@ export const SosManagementPage = () => {
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {emergencyContacts.map((contact, index) => (
-                <ContactCard key={index} {...contact} />
+              {emergencyContacts.map(contact => (
+                <ContactCard
+                  key={contact.id}
+                  {...contact}
+                  handleEdit={() => handleEdit(contact)}
+                />
               ))}
             </div>
           )}
@@ -138,7 +178,13 @@ export const SosManagementPage = () => {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add SOS contact</DialogTitle>
+              {!editContact && <DialogTitle>Add SOS contact</DialogTitle>}
+              {editContact && (
+                <DialogTitle className="flex gap-1 items-center">
+                  <Pencil size={20} />
+                  Edit SOS contact
+                </DialogTitle>
+              )}
             </DialogHeader>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
               <div>
@@ -175,7 +221,7 @@ export const SosManagementPage = () => {
 
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Email (optional)
+                  Email
                 </label>
                 <Input
                   type="email"

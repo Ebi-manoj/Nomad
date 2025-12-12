@@ -4,17 +4,20 @@ import { Phone, Mail, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ContactCardProps {
+  id: string;
   name: string;
   phone: string;
   email?: string;
-  relationship: string;
+  relation: string;
+  handleEdit: () => void;
 }
 
 const ContactCard = ({
   name,
   phone,
   email,
-  relationship,
+  relation,
+  handleEdit,
 }: ContactCardProps) => {
   const initials = name
     .split(' ')
@@ -26,7 +29,10 @@ const ContactCard = ({
   return (
     <Card className="p-6 border-2 hover:border-foreground transition-all duration-200 relative group">
       <div className="flex justify-center items-center absolute top-2 right-5 gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <button className="cursor-pointer rounded-full hover:bg-gray-100 p-2">
+        <button
+          className="cursor-pointer rounded-full hover:bg-gray-100 p-2"
+          onClick={handleEdit}
+        >
           <Pencil size={16} className="text-blue-400" />
         </button>
         <button className="cursor-pointer rounded-full hover:bg-gray-100 p-2">
@@ -42,7 +48,7 @@ const ContactCard = ({
 
         <div className="space-y-1">
           <h3 className="font-semibold text-lg text-foreground">{name}</h3>
-          <p className="text-sm text-muted-foreground">{relationship}</p>
+          <p className="text-sm text-muted-foreground">{relation}</p>
         </div>
 
         <div className="w-full space-y-2">
