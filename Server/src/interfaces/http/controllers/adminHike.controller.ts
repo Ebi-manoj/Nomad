@@ -12,10 +12,10 @@ export class AdminHikeController implements IAdminHikeController {
     private readonly getHikeDetailsUseCase: IAdminGetHikeDetailsUseCase
   ) {}
   async getAllHikes(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const q = httpRequest.query as Record<string, unknown>;
+    const query = httpRequest.query as Record<string, unknown>;
 
-    const page = Number(q.page) || 1;
-    const status = (q.status as string) || undefined;
+    const page = Number(query.page) || 1;
+    const status = (query.status as string) || undefined;
 
     const result = await this.getAllHikeUseCase.execute(page, status);
     const response = ApiResponse.success(result);

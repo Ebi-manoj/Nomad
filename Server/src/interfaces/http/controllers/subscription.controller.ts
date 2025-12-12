@@ -62,8 +62,8 @@ export class SubscriptionController implements ISubscriptionController {
   async verifySubscription(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
-    const q = httpRequest.query as { session_id: string };
-    const sessionId = q.session_id || '';
+    const query = httpRequest.query as { session_id: string };
+    const sessionId = query.session_id || '';
 
     const result = await this.verifySubscriptionUseCase.execute({
       userId,

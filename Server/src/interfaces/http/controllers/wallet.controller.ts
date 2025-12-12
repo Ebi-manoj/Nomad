@@ -15,8 +15,8 @@ export class WalletController implements IWalletController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
 
-    const q = httpRequest.query as Record<string, unknown>;
-    const page = Number(q.page) || 1;
+    const query = httpRequest.query as Record<string, unknown>;
+    const page = Number(query.page) || 1;
     const result = await this.getWalletDetailsUseCase.execute(userId, page);
 
     const response = ApiResponse.success(result);
