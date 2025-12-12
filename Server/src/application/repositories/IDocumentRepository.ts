@@ -12,6 +12,6 @@ export interface IDocumentRepository {
   findDocs(data: FetchDocsQuery): Promise<DocumentsWithUserDTO[] | []>;
   updateOne(data: Document): Promise<Document | void>;
   findOne(
-    query: Partial<Record<keyof IDocumentModel, any>>
+    query: Partial<Record<keyof IDocumentModel, unknown>>
   ): Promise<Document | null>;
 }

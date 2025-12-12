@@ -1,7 +1,4 @@
-import {
-  DocumentsWithUserDTO,
-  DocResponseDTO,
-} from '../../domain/dto/DocumentsDTO';
+import { DocResponseDTO } from '../../domain/dto/DocumentsDTO';
 import { Document } from '../../domain/entities/Document';
 
 export function documentMapper(document: Document): DocResponseDTO {

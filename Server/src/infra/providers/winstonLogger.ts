@@ -49,16 +49,16 @@ export class WinstonLogger implements ILogger {
     this.logger = createWinstonInstance();
   }
 
-  info(message: string, meta?: Record<string, any>) {
+  info(message: string, meta?: Record<string, unknown>) {
     this.logger.info(message, meta);
   }
-  warn(message: string, meta?: Record<string, any>) {
+  warn(message: string, meta?: Record<string, unknown>) {
     this.logger.warn(message, meta);
   }
-  error(message: string, meta?: Record<string, any>) {
+  error(message: string, meta?: Record<string, unknown>) {
     this.logger.error(message, meta);
   }
-  debug(message: string, meta?: Record<string, any>) {
+  debug(message: string, meta?: Record<string, unknown>) {
     this.logger.debug(message, meta);
   }
 }

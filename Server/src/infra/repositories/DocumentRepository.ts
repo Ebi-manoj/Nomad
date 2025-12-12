@@ -45,7 +45,7 @@ export class DocumentRepository implements IDocumentRepository {
   }
 
   async findOne(
-    query: Partial<Record<keyof IDocumentModel, any>>
+    query: Partial<Record<keyof IDocumentModel, unknown>>
   ): Promise<Document | null> {
     const found = await DocumentModel.findOne(query);
     if (!found) return null;
