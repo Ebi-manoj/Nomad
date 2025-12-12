@@ -12,10 +12,10 @@ export interface SosContactProps {
 export class SosContact {
   private readonly _id?: string;
   private readonly _userId: string;
-  private readonly _name: string;
-  private readonly _phone: string;
-  private readonly _email?: string;
-  private readonly _relation?: string;
+  private _name: string;
+  private _phone: string;
+  private _email?: string;
+  private _relation?: string;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
 
@@ -60,5 +60,26 @@ export class SosContact {
 
   getUpdatedAt() {
     return this._updatedAt;
+  }
+  setEmail(email: string | undefined) {
+    this._email = email;
+  }
+  setPhone(phone: string) {
+    this._phone = phone;
+  }
+  setName(name: string) {
+    this._name = name;
+  }
+  setRelation(relation: string | undefined) {
+    this._relation = relation;
+  }
+  toJson() {
+    return {
+      id: this._id as string,
+      name: this._name,
+      phone: this._phone,
+      email: this._email,
+      relation: this._relation,
+    };
   }
 }

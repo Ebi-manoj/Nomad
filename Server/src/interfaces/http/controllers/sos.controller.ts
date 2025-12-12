@@ -12,11 +12,14 @@ import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
 import { ISosController } from './ISosController';
 import { ApiResponse } from '../helpers/implementation/apiResponse';
+import { EditSosContactReqDTO } from '../../../domain/dto/SosDTO';
+import { IEditSosContactUseCase } from '../../../application/usecases/User/Sos/IEditSosContact';
 
 export class SosController implements ISosController {
   constructor(
     private readonly saveSosContactsUseCase: ISaveSosContactsUseCase,
     private readonly getSosContactsUseCase: IGetSosContactsUseCase,
+    private readonly editSosContactUseCase: IEditSosContactUseCase,
     private readonly triggerSosUseCase: ITriggerSosUseCase,
     private readonly triggerRideSosUseCase: ITriggerRideSosUseCase
   ) {}
@@ -57,6 +60,21 @@ export class SosController implements ISosController {
       location: parsed.location,
     });
 
+    const response = ApiResponse.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async editContacts(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+    const params = httpRequest.path as { contactId: string };
+    const parsed = saveSosContactsSchema.parse(httpRequest.body);
+    const dto: EditSosContactReqDTO = {
+      userId,
+      id: params.contactId,
+      contact: parsed,
+    };
+    const result = await this.editSosContactUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

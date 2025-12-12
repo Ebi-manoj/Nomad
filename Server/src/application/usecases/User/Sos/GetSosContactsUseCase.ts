@@ -12,6 +12,7 @@ export class GetSosContactsUseCase implements IGetSosContactsUseCase {
     const existing = await this._sosRepository.findByUserId(userId);
 
     const contacts: SosContactDTO[] = existing.map(c => ({
+      id: c.getId()!,
       name: c.getName(),
       phone: c.getPhone(),
       email: c.getEmail(),

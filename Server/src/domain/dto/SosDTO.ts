@@ -3,6 +3,7 @@ import { SosInitiator } from '../enums/SosInitiator';
 import { UserResponseDTO } from './authDTO';
 
 export interface SosContactDTO {
+  id: string;
   name: string;
   phone: string;
   email?: string;
@@ -11,12 +12,18 @@ export interface SosContactDTO {
 
 export interface SaveSosContactsReqDTO {
   userId: string;
-  contact: SosContactDTO;
+  contact: Omit<SosContactDTO, 'id'>;
 }
 
 export interface SaveSosContactsResDTO {
   userId: string;
   contacts: SosContactDTO[];
+}
+
+export interface EditSosContactReqDTO {
+  userId: string;
+  id: string;
+  contact: Omit<SosContactDTO, 'id'>;
 }
 
 export interface TriggerSosReqDTO {

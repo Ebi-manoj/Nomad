@@ -43,6 +43,16 @@ router.post('/sos', authMiddleware, async (req: Request, res: Response) => {
   );
   return res.status(adapter.statusCode).json(adapter.body);
 });
+router.put(
+  '/sos/:contactId',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      sosComposer().editContacts(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 router.post(
   '/sos/trigger',

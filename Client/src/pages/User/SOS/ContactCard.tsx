@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ContactCardProps {
@@ -10,7 +10,12 @@ interface ContactCardProps {
   relationship: string;
 }
 
-const ContactCard = ({ name, phone, email, relationship }: ContactCardProps) => {
+const ContactCard = ({
+  name,
+  phone,
+  email,
+  relationship,
+}: ContactCardProps) => {
   const initials = name
     .split(' ')
     .map(n => n[0])
@@ -19,7 +24,15 @@ const ContactCard = ({ name, phone, email, relationship }: ContactCardProps) => 
     .slice(0, 2);
 
   return (
-    <Card className="p-6 border-2 hover:border-foreground transition-all duration-200">
+    <Card className="p-6 border-2 hover:border-foreground transition-all duration-200 relative group">
+      <div className="flex justify-center items-center absolute top-2 right-5 gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <button className="cursor-pointer rounded-full hover:bg-gray-100 p-2">
+          <Pencil size={16} className="text-blue-400" />
+        </button>
+        <button className="cursor-pointer rounded-full hover:bg-gray-100 p-2">
+          <Trash2 size={16} className="text-red-500 cursor-pointer" />
+        </button>
+      </div>
       <div className="flex flex-col items-center text-center space-y-4">
         <Avatar className="h-20 w-20 border-2 border-foreground">
           <AvatarFallback className="bg-secondary text-foreground text-lg font-semibold">

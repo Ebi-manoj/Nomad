@@ -10,7 +10,7 @@ export async function fetchSosContactsApi(): Promise<SosContactDTO[]> {
 }
 
 export async function addSosContactApi(
-  contact: SosContactDTO
+  contact: Omit<SosContactDTO, 'id'>
 ): Promise<SosContactDTO[]> {
   const res = await axiosInstance.post<ApiResponse<SosContactsResDTO>>(
     SOS_API,

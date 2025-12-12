@@ -34,6 +34,7 @@ export class SaveSosContactsUseCase implements ISaveSosContactsUseCase {
     const allContacts = [...existing, created];
 
     const contacts: SosContactDTO[] = allContacts.map(c => ({
+      id: c.getId()!,
       name: c.getName(),
       phone: c.getPhone(),
       email: c.getEmail(),
