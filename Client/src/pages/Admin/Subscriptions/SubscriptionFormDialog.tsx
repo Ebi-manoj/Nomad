@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldErrors } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-
+import { Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -36,13 +36,23 @@ export function SubscriptionFormDialog({
   const {
     register,
     handleSubmit,
-    reset,
-    watch,
-    setValue,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<SubscriptionPlanFormData>({
     resolver: zodResolver(subscriptionPlanSchema),
+    defaultValues: {
+      isPopular: false,
+      isActive: false,
+      features: {
+        verificationBadge: false,
+        customCostSharing: false,
+        priorityInList: false,
+      },
+    },
   });
+  const onError = (errors: FieldErrors<SubscriptionPlanFormData>) => {
+    console.log('Form validation errors:', errors);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -56,7 +66,10 @@ export function SubscriptionFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-4">
+        <form
+          onSubmit={handleSubmit(onSubmit, onError)}
+          className="space-y-6 mt-4"
+        >
           {/* Section 1: Basic Info */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -69,10 +82,15 @@ export function SubscriptionFormDialog({
 
             <div className="flex items-end gap-4 pb-2">
               <div className="flex items-center space-x-2 border p-2 rounded-md w-full">
-                <Checkbox
-                  id="isPopular"
-                  checked={watch('isPopular')}
-                  onCheckedChange={c => setValue('isPopular', c as boolean)}
+                <Controller
+                  name="isPopular"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
                 />
                 <label
                   htmlFor="isPopular"
@@ -82,11 +100,18 @@ export function SubscriptionFormDialog({
                 </label>
               </div>
               <div className="flex items-center space-x-2 border p-2 rounded-md w-full">
-                <Switch
-                  id="isActive"
-                  checked={watch('isActive')}
-                  onCheckedChange={c => setValue('isActive', c)}
+                <Controller
+                  name="isActive"
+                  control={control}
+                  render={({ field }) => (
+                    <Switch
+                      id="isActive"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
                 />
+
                 <label
                   htmlFor="isActive"
                   className="text-sm font-medium leading-none cursor-pointer"
@@ -113,14 +138,17 @@ export function SubscriptionFormDialog({
           {/* Section 2: Pricing */}
           <div className="space-y-4 border rounded-md p-4 bg-muted/20">
             <h3 className="font-semibold text-sm flex items-center gap-2">
-              <Crown size={16} /> Pricing & Stripe IDs
+              <Crown size={16} /> Pricing
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-xs text-muted-foreground">
                   Monthly Price (₹)
                 </label>
-                <Input type="number" {...register('price.monthly')} />
+                <Input
+                  type="number"
+                  {...register('price.monthly', { valueAsNumber: true })}
+                />
                 {errors.price?.monthly && (
                   <p className="text-xs text-red-500">
                     {errors.price.monthly.message}
@@ -129,40 +157,15 @@ export function SubscriptionFormDialog({
               </div>
               <div className="space-y-2">
                 <label className="text-xs text-muted-foreground">
-                  Monthly Stripe ID
-                </label>
-                <Input
-                  placeholder="price_..."
-                  {...register('stripeId.monthly')}
-                />
-                {errors.stripeId?.monthly && (
-                  <p className="text-xs text-red-500">
-                    {errors.stripeId.monthly.message}
-                  </p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs text-muted-foreground">
                   Yearly Price (₹)
                 </label>
-                <Input type="number" {...register('price.yearly')} />
+                <Input
+                  type="number"
+                  {...register('price.yearly', { valueAsNumber: true })}
+                />
                 {errors.price?.yearly && (
                   <p className="text-xs text-red-500">
                     {errors.price.yearly.message}
-                  </p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs text-muted-foreground">
-                  Yearly Stripe ID
-                </label>
-                <Input
-                  placeholder="price_..."
-                  {...register('stripeId.yearly')}
-                />
-                {errors.stripeId?.yearly && (
-                  <p className="text-xs text-red-500">
-                    {errors.stripeId.yearly.message}
                   </p>
                 )}
               </div>
@@ -182,8 +185,15 @@ export function SubscriptionFormDialog({
                 </label>
                 <Input
                   type="number"
-                  {...register('features.maxJoinRequestsPerRide')}
+                  {...register('features.maxJoinRequestsPerRide', {
+                    valueAsNumber: true,
+                  })}
                 />
+                {errors.features?.maxJoinRequestsPerRide && (
+                  <p className="text-xs text-red-500">
+                    {errors.features?.maxJoinRequestsPerRide.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-xs text-muted-foreground">
@@ -191,8 +201,15 @@ export function SubscriptionFormDialog({
                 </label>
                 <Input
                   type="number"
-                  {...register('features.maxRideAcceptancesPerMonth')}
+                  {...register('features.maxRideAcceptancesPerMonth', {
+                    valueAsNumber: true,
+                  })}
                 />
+                {errors.features?.maxRideAcceptancesPerMonth && (
+                  <p className="text-xs text-red-500">
+                    {errors.features.maxRideAcceptancesPerMonth.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-xs text-muted-foreground">
@@ -200,43 +217,62 @@ export function SubscriptionFormDialog({
                 </label>
                 <Input
                   type="number"
-                  {...register('features.platformFeePercentage')}
+                  {...register('features.platformFeePercentage', {
+                    valueAsNumber: true,
+                  })}
                 />
+                {errors.features?.platformFeePercentage && (
+                  <p className="text-xs text-red-500">
+                    {errors.features.platformFeePercentage.message}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="verificationBadge"
-                  checked={watch('features.verificationBadge')}
-                  onCheckedChange={c =>
-                    setValue('features.verificationBadge', c as boolean)
-                  }
+                <Controller
+                  name="features.verificationBadge"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="verificationBadge"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
                 />
                 <label htmlFor="verificationBadge" className="text-sm">
                   Verification Badge
                 </label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="priorityInList"
-                  checked={watch('features.priorityInList')}
-                  onCheckedChange={c =>
-                    setValue('features.priorityInList', c as boolean)
-                  }
+                <Controller
+                  name="features.priorityInList"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="priorityInList"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
                 />
                 <label htmlFor="priorityInList" className="text-sm">
                   Priority Listing
                 </label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="customCostSharing"
-                  checked={watch('features.customCostSharing')}
-                  onCheckedChange={c =>
-                    setValue('features.customCostSharing', c as boolean)
-                  }
+                <Controller
+                  name="features.customCostSharing"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id="customCostSharing"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
                 />
                 <label htmlFor="customCostSharing" className="text-sm">
                   Custom Cost Sharing
@@ -253,7 +289,11 @@ export function SubscriptionFormDialog({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="cursor-pointer"
+            >
               {isSubmitting ? (
                 <Loader2 className="animate-spin h-4 w-4 mr-2" />
               ) : null}
