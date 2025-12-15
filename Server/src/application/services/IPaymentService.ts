@@ -1,3 +1,10 @@
+import {
+  CreateStripePriceDTO,
+  CreateStripeProductDTO,
+  StripePriceResponse,
+  StripeProductResponse,
+} from '../../domain/dto/adminSubscription';
+
 export interface IPaymentService {
   createPaymentIntent(
     amount: number,
@@ -35,4 +42,6 @@ export interface IPaymentService {
     id: string;
     email: string | null | undefined;
   }>;
+  createProduct(data: CreateStripeProductDTO): Promise<StripeProductResponse>;
+  createPrice(data: CreateStripePriceDTO): Promise<StripePriceResponse>;
 }

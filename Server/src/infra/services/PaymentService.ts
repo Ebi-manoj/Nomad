@@ -3,6 +3,12 @@ import Stripe from 'stripe';
 import { env } from '../utils/env';
 import { CustomError } from '../../domain/errors/CustomError';
 import { HttpStatus } from '../../domain/enums/HttpStatusCode';
+import {
+  CreateStripePriceDTO,
+  CreateStripeProductDTO,
+  StripePriceResponse,
+  StripeProductResponse,
+} from '../../domain/dto/adminSubscription';
 
 export class StripePaymentService implements IPaymentService {
   private readonly _stripe: Stripe;
@@ -166,5 +172,60 @@ export class StripePaymentService implements IPaymentService {
   }> {
     const customer = (await this._stripe.customers.retrieve(customerId)) as any;
     return { id: customer.id, email: customer.email };
+  }
+
+  async createProduct(
+    data: CreateStripeProductDTO
+  ): Promise<StripeProductResponse> {
+    try {
+      const product = await this._stripe.products.create({
+        name: data.name,
+        description: data.description,
+        images: data.images || [],
+        metadata: data.metadata || {},
+        active: true,
+      });
+
+      return {
+        id: product.id,
+        name: product.name,
+        description: product.description || undefined,
+        images: product.images || [],
+        metadata: product.metadata || {},
+      };
+    } catch (error) {
+      console.error('Stripe createProduct error:', error);
+      throw new Error('Failed to create Stripe product');
+    }
+  }
+
+  async createPrice(data: CreateStripePriceDTO): Promise<StripePriceResponse> {
+    try {
+      const price = await this._stripe.prices.create({
+        product: data.productId,
+        unit_amount: data.unitAmount,
+        currency: 'inr',
+        recurring: {
+          interval: data.recurring.interval,
+          interval_count: data.recurring.intervalCount || 1,
+        },
+        metadata: data.metadata || {},
+      });
+
+      return {
+        id: price.id,
+        productId:
+          typeof price.product === 'string' ? price.product : price.product.id,
+        unitAmount: price.unit_amount || 0,
+        currency: price.currency,
+        recurring: {
+          interval: price.recurring?.interval || 'month',
+          intervalCount: price.recurring?.interval_count || 1,
+        },
+      };
+    } catch (error) {
+      console.error('Stripe createPrice error:', error);
+      throw new Error('Failed to create Stripe price');
+    }
   }
 }
