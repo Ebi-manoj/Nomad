@@ -26,7 +26,6 @@ export class AdminSubscriptionPlanController
     const dto: CreateSubscriptionPlanDTO = {
       tier: parsed.tier,
       description: parsed.description,
-      imageUrl: parsed.imageUrl,
       isPopular: parsed.isPopular ?? false,
       price: parsed.price,
       features: parsed.features,

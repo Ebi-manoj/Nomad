@@ -48,7 +48,6 @@ export interface CreateSubscriptionPlanDTO {
     priorityInList: boolean;
     customCostSharing: boolean;
   };
-  imageUrl?: string;
   price: Pricing;
   isPopular: boolean;
 }

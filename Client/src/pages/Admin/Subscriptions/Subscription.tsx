@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Loader2, Search, List, Zap, Crown } from 'lucide-react';
-
 import { type SubscriptionPlanFormData } from '@/validation/adminSubscription';
 import type { AdminSubscriptionPlanDTO } from '@/types/adminSubscription';
 import { SubscriptionFormDialog } from './SubscriptionFormDialog';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { fetchAdminSubscriptionPlans } from '@/store/features/admin/subscriptionPlans/adminSubscriptionPlans.thunk';
+import {
+  createSubscriptionPlan,
+  fetchAdminSubscriptionPlans,
+} from '@/store/features/admin/subscriptionPlans/adminSubscriptionPlans.thunk';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
 import { PlanCard } from './PlanCard';
+import { StatsCard } from './StatusCard';
+import { toast } from 'sonner';
 
 export const AdminSubscriptionPage = () => {
   const { plans, loading } = useSelector(
@@ -39,7 +42,14 @@ export const AdminSubscriptionPage = () => {
   };
 
   const handleFormSubmit = async (data: SubscriptionPlanFormData) => {
-    console.log(data);
+    try {
+      if (!editingPlan) {
+        await dispatch(createSubscriptionPlan(data)).unwrap();
+        toast.success('Subscription plan created successfully');
+      }
+    } catch (error) {
+      toast.error(error as string);
+    }
   };
   return (
     <div className="min-h-screen bg-white p-6 md:p-2 space-y-8">
@@ -126,24 +136,3 @@ export const AdminSubscriptionPage = () => {
     </div>
   );
 };
-const StatsCard = ({
-  label,
-  value,
-  icon,
-}: {
-  label: string;
-  value: string;
-  icon: React.ReactNode;
-}) => (
-  <Card>
-    <CardContent className="p-6 flex items-center gap-4">
-      <div className="h-10 w-10 rounded-full bg-muted/50 flex items-center justify-center">
-        {icon}
-      </div>
-      <div>
-        <p className="text-sm text-muted-foreground font-medium">{label}</p>
-        <h3 className="text-2xl font-bold">{value}</h3>
-      </div>
-    </CardContent>
-  </Card>
-);

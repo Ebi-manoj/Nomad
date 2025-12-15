@@ -34,7 +34,6 @@ export const PlanCard = ({
   onDelete,
 }: PlanCardProps) => {
   const formatFeatureName = (key: string) => {
-    // Removes underscore, splits camelCase, capitalizes
     return key
       .replace(/^_/, '')
       .replace(/([A-Z])/g, ' $1')
@@ -45,7 +44,7 @@ export const PlanCard = ({
       className={cn(
         'relative flex flex-col transition-all duration-200 hover:shadow-lg border-2',
         plan.isPopular
-          ? 'border-primary/50 bg-primary/5'
+          ? 'border-amber-400 bg-white'
           : 'border-transparent bg-card'
       )}
     >
@@ -59,12 +58,12 @@ export const PlanCard = ({
 
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-muted-foreground" />
+              <ShieldCheck className="w-5 h-5 text-green-400" />
               <h3 className="font-bold text-xl">{plan.tier}</h3>
             </div>
-            <p className="text-sm text-muted-foreground line-clamp-2 h-10">
+            <p className="text-sm text-muted-foreground line-clamp-2 h-10 break-words overflow-hidden">
               {plan.description}
             </p>
           </div>

@@ -1,8 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAdminSubscriptionPlansApi } from '@/api/adminSubscriptionPlan';
+import {
+  createSubscriptionPlanApi,
+  getAdminSubscriptionPlansApi,
+} from '@/api/adminSubscriptionPlan';
 import { useHandleThunkError } from '@/hooks/useHandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
-import type { AdminSubscriptionPlanDTO } from '@/types/adminSubscription';
+import type {
+  AdminSubscriptionPlanDTO,
+  CreateSubscriptionPlanDTO,
+} from '@/types/adminSubscription';
 
 export const fetchAdminSubscriptionPlans = createAsyncThunk<
   AdminSubscriptionPlanDTO[],
@@ -11,6 +17,21 @@ export const fetchAdminSubscriptionPlans = createAsyncThunk<
   try {
     const res = await getAdminSubscriptionPlansApi();
     return res;
+  } catch (error) {
+    return useHandleThunkError(
+      error,
+      rejectWithValue,
+      ErrorMessage.SOMETHING_WENT_WRONG
+    );
+  }
+});
+
+export const createSubscriptionPlan = createAsyncThunk<
+  AdminSubscriptionPlanDTO,
+  CreateSubscriptionPlanDTO
+>('adminSubscriptionPlas/create', async (data, { rejectWithValue }) => {
+  try {
+    return await createSubscriptionPlanApi(data);
   } catch (error) {
     return useHandleThunkError(
       error,

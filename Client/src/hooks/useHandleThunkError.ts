@@ -4,11 +4,10 @@ import { isAxiosError } from 'axios';
 export function useHandleThunkError(
   error: unknown,
   rejectWithValue: any,
-  defaultMsge: string
+  defaultMsge = ErrorMessage.SOMETHING_WENT_WRONG
 ) {
   console.log('error object', error);
   if (isAxiosError(error)) {
-    console.log('axios');
     return rejectWithValue(error.response?.data?.error?.message || defaultMsge);
   }
   return rejectWithValue(ErrorMessage.SERVER_ERROR);

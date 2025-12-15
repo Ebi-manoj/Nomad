@@ -12,7 +12,6 @@ const featuresSchema = z.object({
 export const createPlanSchema = z.object({
   tier: z.string().trim().min(1, { message: 'tier is required' }),
   description: z.string().trim().min(1, { message: 'description is required' }),
-  imageUrl: z.string().url({ message: 'imageUrl must be a valid URL' }),
   isPopular: z.boolean().optional().default(false),
   price: z.object({
     monthly: z.number().positive(),
