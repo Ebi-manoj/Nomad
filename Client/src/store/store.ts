@@ -12,6 +12,7 @@ import matchedHikersReducer from './features/user/matchedHikers/matchedHikersSli
 import sosReducer from './features/user/sos/sosSlice';
 import walletReducer from './features/user/wallet/walletSlice';
 import subscriptionReducer from './features/user/subscription/subscriptionSlice';
+import adminSubscriptionPlansReducer from './features/admin/subscriptionPlans/adminSubscriptionPlans.slice';
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     adminSos: adminSosReducer,
     wallet: walletReducer,
     subscription: subscriptionReducer,
+    adminSubscriptionPlans: adminSubscriptionPlansReducer,
   },
 });
 

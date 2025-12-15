@@ -7,7 +7,7 @@ export class SubscriptionPlanMapper {
       id: sub.getId() as string,
       tier: sub.getTier(),
       description: sub.getDescription(),
-      features: sub.getFeatures(),
+      features: sub.getFeatures().toJson(),
       price: sub.getPrice(),
       stripeId: sub.getStripeId(),
       isActive: sub.getIsActive(),

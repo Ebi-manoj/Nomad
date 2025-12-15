@@ -57,7 +57,14 @@ export interface SubscriptionPlanDTO {
   id: string;
   tier: string;
   description: string;
-  features: SubscriptionFeatures;
+  features: {
+    maxJoinRequestsPerRide: number | null;
+    maxRideAcceptancesPerMonth: number | null;
+    platformFeePercentage: number;
+    verificationBadge: boolean;
+    priorityInList: boolean;
+    customCostSharing: boolean;
+  };
   price: Pricing;
   stripeId: StripeIds;
   isActive: boolean;

@@ -44,6 +44,16 @@ export class SubscriptionFeatures {
   hasCustomCostSharing(): boolean {
     return this._customCostSharing;
   }
+  toJson() {
+    return {
+      maxJoinRequestsPerRide: this._maxJoinRequestsPerRide,
+      maxRideAcceptancesPerMonth: this._maxRideAcceptancesPerMonth,
+      platformFeePercentage: this._platformFeePercentage,
+      verificationBadge: this._verificationBadge,
+      priorityInList: this._priorityInList,
+      customCostSharing: this._customCostSharing,
+    };
+  }
 }
 
 export interface SubscriptionProps {
