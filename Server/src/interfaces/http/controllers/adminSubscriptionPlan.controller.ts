@@ -8,12 +8,14 @@ import { ICreateSubscriptionPlanUseCase } from '../../../application/usecases/Ad
 import { IAdminSubscriptionPlanController } from './IAdminSubscriptionPlanController';
 import { z } from 'zod';
 import { createPlanSchema } from '../../validators/subscriptionPlan';
+import { IGetSubscriptionPlanUseCase } from '../../../application/usecases/Admin/IGetSubscriptionPlans';
 
 export class AdminSubscriptionPlanController
   implements IAdminSubscriptionPlanController
 {
   constructor(
-    private readonly _createPlanUseCase: ICreateSubscriptionPlanUseCase
+    private readonly _createPlanUseCase: ICreateSubscriptionPlanUseCase,
+    private readonly _getPlanUseCase: IGetSubscriptionPlanUseCase
   ) {}
 
   async createSubscriptionPlan(
@@ -33,5 +35,10 @@ export class AdminSubscriptionPlanController
     const result = await this._createPlanUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.CREATED, response);
+  }
+  async getSubscriptionPlans(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const result = await this._getPlanUseCase.execute();
+    const response = ApiResponse.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
   }
 }

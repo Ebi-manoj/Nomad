@@ -32,7 +32,7 @@ export class CreateSubscriptionPlanUseCase
     const stripeProduct = await this._paymentService.createProduct({
       name: normalizedTier,
       description: data.description,
-      images: [data.imageUrl],
+      images: data.imageUrl ? [data.imageUrl] : [],
     });
 
     const monthlyPrice = await this._paymentService.createPrice({

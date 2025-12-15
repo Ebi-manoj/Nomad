@@ -6,11 +6,27 @@ import { subscriptionPlanAdminComposer } from '../../../../infra/services/compos
 
 const router = express.Router();
 
-router.post('/', authMiddleware, isAdmin, async (req: Request, res: Response) => {
-  const adapter = await expressAdapter(req, httpReq =>
-    subscriptionPlanAdminComposer().createSubscriptionPlan(httpReq)
-  );
-  return res.status(adapter.statusCode).json(adapter.body);
-});
+router.get(
+  '/',
+  authMiddleware,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      subscriptionPlanAdminComposer().getSubscriptionPlans(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+router.post(
+  '/',
+  authMiddleware,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      subscriptionPlanAdminComposer().createSubscriptionPlan(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

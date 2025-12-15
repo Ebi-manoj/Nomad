@@ -1,4 +1,5 @@
 export interface IBaseRepository<TDomain, TSession = unknown> {
+  findAll(): Promise<TDomain[]>;
   create(data: TDomain): Promise<TDomain>;
   findById(id: string): Promise<TDomain | null>;
   update(

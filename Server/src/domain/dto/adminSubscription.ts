@@ -1,6 +1,5 @@
 import { SubscriptionFeatures } from '../entities/Subscription';
 import { Pricing, StripeIds } from '../entities/SubscriptionPlan';
-import { BillingCycle } from '../enums/subscription';
 
 export interface CreateStripeProductDTO {
   name: string;
@@ -49,7 +48,7 @@ export interface CreateSubscriptionPlanDTO {
     priorityInList: boolean;
     customCostSharing: boolean;
   };
-  imageUrl: string;
+  imageUrl?: string;
   price: Pricing;
   isPopular: boolean;
 }

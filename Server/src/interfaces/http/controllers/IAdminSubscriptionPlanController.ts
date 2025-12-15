@@ -3,4 +3,5 @@ import { HttpResponse } from '../helpers/implementation/httpResponse';
 
 export interface IAdminSubscriptionPlanController {
   createSubscriptionPlan(httpRequest: HttpRequest): Promise<HttpResponse>;
+  getSubscriptionPlans(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

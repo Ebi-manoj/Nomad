@@ -7,6 +7,7 @@ import {
   Mountain,
   FileText,
   BarChart3,
+  Crown,
 } from 'lucide-react';
 import { IoDocumentLockSharp } from 'react-icons/io5';
 import { RiAdminFill } from 'react-icons/ri';
@@ -19,6 +20,7 @@ const navItems = [
   { name: 'Rides', href: '/admin/rides', icon: Bike },
   { name: 'Hikes', href: '/admin/hikes', icon: Mountain },
   { name: 'SOS Logs', href: '/admin/sos-logs', icon: FileText },
+  { name: 'Subscriptions', href: '/admin/subscriptions', icon: Crown },
   { name: 'Sales report', href: '/admin/sales-report', icon: BarChart3 },
 ];
 
