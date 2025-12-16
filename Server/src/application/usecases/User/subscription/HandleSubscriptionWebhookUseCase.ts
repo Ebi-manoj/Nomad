@@ -82,6 +82,7 @@ export class HandleSubscriptionWebhookUseCase
       stripePriceId: data.metadata.stripePriceId,
       stripeCustomerId: data.customerId,
       stripeSubscriptionId: data.subscriptionId,
+      stripeSessionId: data.id,
     };
     await this._createSubscriptionUseCase.execute(dto);
   }

@@ -6,7 +6,7 @@ export interface SubscriptionResDTO {
   id: string;
   userId: string;
   billingCycle: BillingCycle;
-  tier: SubscriptionTier;
+  tier: string;
   stripeSubscriptionId: string | undefined;
   stripeCustomerId: string | undefined;
   startDate: Date;
@@ -58,4 +58,5 @@ export interface CreateSubscriptionReqDTO {
   stripeSubscriptionId: string;
   stripeCustomerId?: string;
   stripePriceId: string;
+  stripeSessionId: string;
 }

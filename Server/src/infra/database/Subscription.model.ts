@@ -8,7 +8,8 @@ import {
 export interface ISubscriptionDocument extends Document {
   _id: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
-  tier: SubscriptionTier;
+  planId: mongoose.Types.ObjectId;
+  tier: string;
   billingCycle: BillingCycle;
   status: SubscriptionStatus;
   startDate: Date;
@@ -40,9 +41,14 @@ const SubscriptionSchema = new Schema<ISubscriptionDocument>(
       required: true,
       index: true,
     },
+    planId: {
+      type: Schema.Types.ObjectId,
+      ref: 'SubscriptionPlan',
+      required: true,
+      index: true,
+    },
     tier: {
       type: String,
-      enum: Object.values(SubscriptionTier),
       required: true,
     },
     billingCycle: {

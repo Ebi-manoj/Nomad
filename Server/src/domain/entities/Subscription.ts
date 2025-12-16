@@ -1,11 +1,4 @@
 import {
-  FREE_PLATFORM_FEE,
-  MAX_JOIN_REQUEST,
-  MAX_RIDE_ACCEPTANCE,
-  PREMIUM_PLATFORM_FEE,
-  PRO_PLATFORM_FEE,
-} from '../enums/Constants';
-import {
   BillingCycle,
   SubscriptionStatus,
   SubscriptionTier,
@@ -59,7 +52,8 @@ export class SubscriptionFeatures {
 export interface SubscriptionProps {
   id?: string;
   userId: string;
-  tier: SubscriptionTier;
+  planId: string;
+  tier: string;
   billingCycle: BillingCycle;
   status: SubscriptionStatus;
   startDate?: Date;
@@ -79,7 +73,8 @@ export interface SubscriptionProps {
 export class Subscription {
   private _id?: string;
   private _userId: string;
-  private _tier: SubscriptionTier;
+  private _planId: string;
+  private _tier: string;
   private _billingCycle: BillingCycle;
   private _status: SubscriptionStatus;
   private _startDate: Date;
@@ -99,6 +94,7 @@ export class Subscription {
     this._id = props.id;
     this._userId = props.userId;
     this._tier = props.tier;
+    this._planId = props.planId;
     this._billingCycle = props.billingCycle;
     this._status = props.status;
     this._startDate = props.startDate || new Date();
@@ -112,10 +108,8 @@ export class Subscription {
     this._createdAt = props.createdAt || new Date();
     this._updatedAt = props.updatedAt || new Date();
     this._cancelledAt = props.cancelledAt;
-    this._features = props.features 
+    this._features = props.features;
   }
-
-  
 
   getId(): string | undefined {
     return this._id;
@@ -135,7 +129,7 @@ export class Subscription {
     return new Date(startDate + duration);
   }
 
-  getTier(): SubscriptionTier {
+  getTier(): string {
     return this._tier;
   }
 
@@ -157,6 +151,10 @@ export class Subscription {
 
   isAutoRenew(): boolean {
     return this._autoRenew;
+  }
+
+  getPlanId() {
+    return this._planId;
   }
 
   getPrice(): number {
