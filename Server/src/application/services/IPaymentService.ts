@@ -4,6 +4,7 @@ import {
   StripePriceResponse,
   StripeProductResponse,
 } from '../../domain/dto/adminSubscription';
+import { TypedWebhookEvent } from '../../domain/dto/PaymentWebhookDTO';
 
 export interface IPaymentService {
   createPaymentIntent(
@@ -26,7 +27,7 @@ export interface IPaymentService {
   constructWebhookEvent(
     payload: Buffer | string,
     signature: string
-  ): Promise<{ type: string; data: unknown }>;
+  ): Promise<TypedWebhookEvent>;
 
   retrieveSubscription(subscriptionId: string): Promise<{
     id: string;

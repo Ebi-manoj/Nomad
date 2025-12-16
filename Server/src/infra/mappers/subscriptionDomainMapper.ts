@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { Subscription } from '../../domain/entities/Subscription';
+import { Subscription, SubscriptionFeatures } from '../../domain/entities/Subscription';
 import { ISubscriptionDocument } from '../database/Subscription.model';
 import { IMapper } from './IMapper';
 
@@ -19,6 +19,15 @@ export const subscriptionMapper: IMapper<Subscription, ISubscriptionDocument> = 
       stripeSubscriptionId: persistence.stripeSubscriptionId || undefined,
       stripeCustomerId: persistence.stripeCustomerId || undefined,
       stripePriceId: persistence.stripePriceId || undefined,
+      features:new SubscriptionFeatures(
+            persistence.features.maxJoinRequestsPerRide ?? null,
+            persistence.features.maxRideAcceptancesPerMonth ?? null,
+            persistence.features.platformFeePercentage ?? 0,
+            !!persistence.features.verificationBadge,
+            !!persistence.features.priorityInList,
+            !!persistence.features.customCostSharing
+          )
+        ,
       createdAt: persistence.createdAt,
       updatedAt: persistence.updatedAt,
       cancelledAt: persistence.cancelledAt || undefined,
@@ -39,6 +48,7 @@ export const subscriptionMapper: IMapper<Subscription, ISubscriptionDocument> = 
       stripeSubscriptionId: domain.getStripeSubscriptionId() || null,
       stripeCustomerId: domain.getStripeCustomerId() || null,
       stripePriceId: domain.getStripePriceId() || null,
+      features: domain.getFeatures()?.toJson(),
       cancelledAt: domain.getCancelledAt() || null,
     };
   },

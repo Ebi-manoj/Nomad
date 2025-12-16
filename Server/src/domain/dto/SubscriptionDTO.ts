@@ -46,3 +46,16 @@ export interface SubscriptionServiceResDTO {
   features: SubscriptionFeatures;
   subscription: Subscription | null;
 }
+
+export interface CreateSubscriptionReqDTO {
+  userId: string;
+  planId: string;
+  tier: string;
+  billingCycle: BillingCycle;
+  startDate: Date;
+  price: number;
+  currency: string;
+  stripeSubscriptionId: string;
+  stripeCustomerId?: string;
+  stripePriceId: string;
+}

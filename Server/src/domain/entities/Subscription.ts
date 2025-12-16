@@ -73,6 +73,7 @@ export interface SubscriptionProps {
   createdAt?: Date;
   updatedAt?: Date;
   cancelledAt?: Date;
+  features: SubscriptionFeatures;
 }
 
 export class Subscription {
@@ -111,58 +112,10 @@ export class Subscription {
     this._createdAt = props.createdAt || new Date();
     this._updatedAt = props.updatedAt || new Date();
     this._cancelledAt = props.cancelledAt;
-    this._features = this.initializeFeatures();
+    this._features = props.features 
   }
 
-  private initializeFeatures(): SubscriptionFeatures {
-    switch (this._tier) {
-      case SubscriptionTier.FREE:
-        return new SubscriptionFeatures(
-          MAX_JOIN_REQUEST,
-          MAX_RIDE_ACCEPTANCE,
-          FREE_PLATFORM_FEE,
-          false,
-          false,
-          false
-        );
-      case SubscriptionTier.HIKER_PRO:
-        return new SubscriptionFeatures(
-          null,
-          null,
-          PRO_PLATFORM_FEE,
-          true,
-          true,
-          false
-        );
-      case SubscriptionTier.RIDER_PRO:
-        return new SubscriptionFeatures(
-          null,
-          null,
-          PRO_PLATFORM_FEE,
-          true,
-          true,
-          true
-        );
-      case SubscriptionTier.PREMIUM_PLUS:
-        return new SubscriptionFeatures(
-          null,
-          null,
-          PREMIUM_PLATFORM_FEE,
-          true,
-          true,
-          true
-        );
-      default:
-        return new SubscriptionFeatures(
-          MAX_JOIN_REQUEST,
-          MAX_RIDE_ACCEPTANCE,
-          FREE_PLATFORM_FEE,
-          false,
-          false,
-          false
-        );
-    }
-  }
+  
 
   getId(): string | undefined {
     return this._id;

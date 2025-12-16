@@ -16,6 +16,14 @@ export interface ISubscriptionDocument extends Document {
   autoRenew: boolean;
   price: number;
   currency: string;
+  features: {
+    maxJoinRequestsPerRide: number | null;
+    maxRideAcceptancesPerMonth: number | null;
+    platformFeePercentage: number;
+    verificationBadge: boolean;
+    priorityInList: boolean;
+    customCostSharing: boolean;
+  };
   stripeSubscriptionId?: string | null;
   stripeCustomerId?: string | null;
   stripePriceId?: string | null;
@@ -47,6 +55,14 @@ const SubscriptionSchema = new Schema<ISubscriptionDocument>(
       enum: Object.values(SubscriptionStatus),
       required: true,
       index: true,
+    },
+    features: {
+      maxJoinRequestsPerRide: { type: Number, default: null },
+      maxRideAcceptancesPerMonth: { type: Number, default: null },
+      platformFeePercentage: { type: Number, default: 0 },
+      verificationBadge: { type: Boolean, default: false },
+      priorityInList: { type: Boolean, default: false },
+      customCostSharing: { type: Boolean, default: false },
     },
     stripeSubscriptionId: {
       type: String,

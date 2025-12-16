@@ -9,6 +9,8 @@ import {
   StripePriceResponse,
   StripeProductResponse,
 } from '../../domain/dto/adminSubscription';
+import { TypedWebhookEvent } from '../../domain/dto/PaymentWebhookDTO';
+import { StripeWebhookMapper } from '../mappers/StripeWebhookMapper';
 
 export class StripePaymentService implements IPaymentService {
   private readonly _stripe: Stripe;
@@ -111,7 +113,7 @@ export class StripePaymentService implements IPaymentService {
   async constructWebhookEvent(
     payload: Buffer | string,
     signature: string
-  ): Promise<{ type: string; data: unknown }> {
+  ): Promise<TypedWebhookEvent> {
     try {
       const secret = env.STRIPE_WEBHOOKSECERTKEY;
       const event = this._stripe.webhooks.constructEvent(
@@ -119,7 +121,7 @@ export class StripePaymentService implements IPaymentService {
         signature,
         secret
       );
-      return { type: event.type, data: event.data };
+      return StripeWebhookMapper.mapEvent(event);
     } catch (error) {
       console.error('Stripe constructWebhookEvent error:', error);
       throw new Error('Invalid Stripe webhook signature');

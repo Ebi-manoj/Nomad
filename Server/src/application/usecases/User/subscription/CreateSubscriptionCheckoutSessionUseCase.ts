@@ -37,6 +37,7 @@ export class CreateSubscriptionCheckoutSessionUseCase
     data: CreateSubscriptionCheckoutSessionDTO
   ): Promise<{ id: string; url: string }> {
     const plan = await this._subscriptionPlans.findById(data.planId);
+    console.log(data);
     if (!plan) throw new SubscriptionPlanNotFound();
 
     const user = await this._users.findById(data.userId);
@@ -80,7 +81,7 @@ export class CreateSubscriptionCheckoutSessionUseCase
     const session = await this._payments.createSubscriptionCheckoutSession({
       priceId,
       customerEmail: user.getEmail(),
-      metadata: { ...data, ...data.metadata },
+      metadata: { ...data, ...data.metadata, stripePriceId: priceId },
       trialPeriodDays: data.trialPeriodDays,
     });
 
