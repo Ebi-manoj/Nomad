@@ -31,7 +31,7 @@ export class SubscriptionService implements ISubscriptionService {
 
     return {
       tier,
-      features: subscription.getFeatures(),
+      features: subscription.getFeatures().toJson(),
       subscription: tier !== SubscriptionTier.FREE ? subscription : null,
     };
   }

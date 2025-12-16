@@ -2,6 +2,25 @@ import { Subscription, SubscriptionFeatures } from '../entities/Subscription';
 import { SubscriptionUsage } from '../entities/SubscriptionUsage';
 import { BillingCycle, SubscriptionTier } from '../enums/subscription';
 
+export interface SubscriptionFeaturesResDTO {
+  maxJoinRequestsPerRide: number | null;
+  maxRideAcceptancesPerMonth: number | null;
+  platformFeePercentage: number;
+  verificationBadge: boolean;
+  priorityInList: boolean;
+  customCostSharing: boolean;
+}
+
+export interface SubscriptionUsageDTO {
+  id: string;
+  userId: string;
+  month: string;
+  joinRequestsCount: number;
+  rideAcceptancesCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface SubscriptionResDTO {
   id: string;
   userId: string;
@@ -16,7 +35,7 @@ export interface SubscriptionResDTO {
   currency: string;
   cancelledAt: undefined | Date;
   createdAt: Date;
-  features: SubscriptionFeatures;
+  features: SubscriptionFeaturesResDTO;
 }
 
 export interface HandleWebHookReqDTO {
@@ -35,15 +54,15 @@ export interface VerifySubscriptionResDTO {
 }
 
 export interface GetSubscriptionDetailsResDTO {
-  tier: SubscriptionTier;
-  features: SubscriptionFeatures;
+  tier: string;
+  features: SubscriptionFeaturesResDTO;
   subscription?: SubscriptionResDTO | null;
-  subscriptionUsage: SubscriptionUsage;
+  subscriptionUsage: SubscriptionUsageDTO;
 }
 
 export interface SubscriptionServiceResDTO {
-  tier: SubscriptionTier;
-  features: SubscriptionFeatures;
+  tier: string;
+  features: SubscriptionFeaturesResDTO;
   subscription: Subscription | null;
 }
 

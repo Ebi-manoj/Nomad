@@ -74,4 +74,16 @@ export class SubscriptionUsage {
     if (maxLimit === null) return true;
     return this._rideAcceptancesCount < maxLimit;
   }
+
+  toJson() {
+    return {
+      id: this._id as string,
+      userId: this._userId,
+      month: this._month,
+      joinRequestsCount: this._joinRequestsCount,
+      rideAcceptancesCount: this._rideAcceptancesCount,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+    };
+  }
 }
