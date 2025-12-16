@@ -35,6 +35,7 @@ export interface SubscriptionPlanDTO {
 }
 
 export interface CreateSubscriptionCheckoutSessionDTO {
+  planId: string;
   tier: SubscriptionTierType;
   billingCycle: BillingCycle;
   trialPeriodDays?: number;

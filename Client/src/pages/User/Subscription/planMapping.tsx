@@ -9,6 +9,7 @@ import type {
 export type PlanFeature = { included: boolean; text: string; subtext?: string };
 
 export type MappedPlan = {
+  id: string;
   code: SubscriptionTierType;
   title: string;
   description: string;
@@ -23,9 +24,12 @@ export type MappedPlan = {
 
 export const getIconForTier = (tier: string): React.ReactNode => {
   const t = tier.toUpperCase();
-  if (t.includes('PREMIUM')) return <Crown className="w-6 h-6 text-amber-500" />;
-  if (t.includes('HIKER')) return <Mountain className="w-6 h-6 text-emerald-500" />;
-  if (t.includes('RIDER')) return <CarFront className="w-6 h-6 text-blue-500" />;
+  if (t.includes('PREMIUM'))
+    return <Crown className="w-6 h-6 text-amber-500" />;
+  if (t.includes('HIKER'))
+    return <Mountain className="w-6 h-6 text-emerald-500" />;
+  if (t.includes('RIDER'))
+    return <CarFront className="w-6 h-6 text-blue-500" />;
   if (t.includes('FREE')) return <User className="w-6 h-6 text-slate-600" />;
   return <Shield className="w-6 h-6 text-slate-600" />;
 };
@@ -50,6 +54,7 @@ export const mapSubscriptionPlans = (
       const maxJoin = p.features.maxJoinRequestsPerRide;
       const maxAccept = p.features.maxRideAcceptancesPerMonth;
       return {
+        id: p.id,
         code: t as SubscriptionTierType,
         title: t,
         description: p.description,

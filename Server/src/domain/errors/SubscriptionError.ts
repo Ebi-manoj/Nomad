@@ -13,6 +13,11 @@ export class AlreadySubscribed extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class SubscriptionPlanNotFound extends CustomError {
+  constructor(message = 'Subscription plan not found') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
 
 export class InvalidPlanTierOrBilling extends CustomError {
   constructor(message = 'Invalid plan tier or billing cycle') {

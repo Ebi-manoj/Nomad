@@ -22,6 +22,7 @@ export function subscriptionComposer(): ISubscriptionController {
   const checkoutSessions = new RedisCheckoutSessionRepository();
   const usageRepository = new SubscriptionUsageRepository();
   const subscriptionPlanRepo = new SubscriptionPlanRepository();
+  const subscriptionPlan = new SubscriptionPlanRepository();
 
   const usageService = new SubscriptionUsageService(usageRepository);
   const subService = new SubscriptionService(subscriptions);
@@ -31,7 +32,8 @@ export function subscriptionComposer(): ISubscriptionController {
     payments,
     stripePriceConfig,
     checkoutSessions,
-    subscriptions
+    subscriptions,
+    subscriptionPlan
   );
   const handleWebhook = new HandleSubscriptionWebhookUseCase(
     payments,

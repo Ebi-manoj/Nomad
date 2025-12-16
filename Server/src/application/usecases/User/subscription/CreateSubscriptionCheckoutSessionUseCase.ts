@@ -14,10 +14,12 @@ import {
   AlreadySubscribed,
   FreeTierNotRequiredPayment,
   InvalidPlanTierOrBilling,
+  SubscriptionPlanNotFound,
 } from '../../../../domain/errors/SubscriptionError';
 import { ICheckoutSessionRepository } from '../../../repositories/ICheckoutSessionRepository';
 import { CHECKOUT_SESSION_TTL } from '../../../../domain/enums/Constants';
 import { ISubscriptionRepository } from '../../../repositories/ISubscriptionRepository';
+import { ISubscriptionPlanRepository } from '../../../repositories/ISubscriptionPlanRepository';
 
 export class CreateSubscriptionCheckoutSessionUseCase
   implements ICreateSubscriptionCheckoutSessionUseCase
@@ -27,16 +29,20 @@ export class CreateSubscriptionCheckoutSessionUseCase
     private readonly _payments: IPaymentService,
     private _priceConfig: PriceIdMapping,
     private readonly _checkoutSessions: ICheckoutSessionRepository,
-    private readonly _subscriptionRepository: ISubscriptionRepository
+    private readonly _subscriptionRepository: ISubscriptionRepository,
+    private readonly _subscriptionPlans: ISubscriptionPlanRepository
   ) {}
 
   async execute(
     data: CreateSubscriptionCheckoutSessionDTO
   ): Promise<{ id: string; url: string }> {
+    const plan = await this._subscriptionPlans.findById(data.planId);
+    if (!plan) throw new SubscriptionPlanNotFound();
+
     const user = await this._users.findById(data.userId);
     if (!user) throw new UserNotFound();
 
-    if (data.tier === SubscriptionTier.FREE) {
+    if (plan.getTier() === SubscriptionTier.FREE) {
       throw new FreeTierNotRequiredPayment();
     }
 
@@ -66,8 +72,9 @@ export class CreateSubscriptionCheckoutSessionUseCase
         };
       }
     }
-
-    const priceId = this._priceConfig[data.tier]?.[data.billingCycle];
+    const stripeId = plan.getStripeId();
+    const priceId =
+      data.billingCycle == 'MONTHLY' ? stripeId.monthly : stripeId.yearly;
     if (!priceId) throw new InvalidPlanTierOrBilling();
 
     const session = await this._payments.createSubscriptionCheckoutSession({
@@ -91,7 +98,11 @@ export class CreateSubscriptionCheckoutSessionUseCase
         url: session.url,
         idempotencyKey,
         expiresAt,
-        metadata: { tier: data.tier, billingCycle: data.billingCycle },
+        metadata: {
+          planId: plan.getId(),
+          tier: data.tier,
+          billingCycle: data.billingCycle,
+        },
         createdAt: new Date().toISOString(),
       },
       CHECKOUT_SESSION_TTL

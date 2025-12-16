@@ -38,8 +38,12 @@ export const SubscriptionListing = ({
     fetchPlans();
   }, []);
 
-  const handleSubscription = async (code: SubscriptionTierType) => {
+  const handleSubscription = async (
+    code: SubscriptionTierType,
+    planId: string
+  ) => {
     const dto: CreateSubscriptionCheckoutSessionDTO = {
+      planId,
       tier: code,
       billingCycle,
     };
@@ -221,7 +225,7 @@ export const SubscriptionListing = ({
                     : 'bg-slate-900 hover:bg-slate-800 text-white'
                 }
               `}
-                onClick={() => handleSubscription(plan.code)}
+                onClick={() => handleSubscription(plan.code, plan.id)}
               >
                 {plan.cta}
               </button>

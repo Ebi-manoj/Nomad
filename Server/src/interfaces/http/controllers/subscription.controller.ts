@@ -34,8 +34,9 @@ export class SubscriptionController implements ISubscriptionController {
     const userId = httpRequest.user?.id;
     if (!userId) throw new Unauthorized();
 
-    const { tier, billingCycle, trialPeriodDays, metadata } =
+    const { planId, tier, billingCycle, trialPeriodDays, metadata } =
       (httpRequest.body || {}) as {
+        planId: string;
         tier: SubscriptionTier;
         billingCycle: BillingCycle;
         trialPeriodDays?: number;
@@ -43,6 +44,7 @@ export class SubscriptionController implements ISubscriptionController {
       };
 
     const result = await this._createCheckoutSessionUseCase.execute({
+      planId,
       userId,
       tier,
       billingCycle,

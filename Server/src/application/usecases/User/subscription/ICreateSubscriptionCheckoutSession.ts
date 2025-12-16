@@ -1,6 +1,10 @@
-import { BillingCycle, SubscriptionTier } from '../../../../domain/enums/subscription';
+import {
+  BillingCycle,
+  SubscriptionTier,
+} from '../../../../domain/enums/subscription';
 
 export interface CreateSubscriptionCheckoutSessionDTO {
+  planId: string;
   userId: string;
   tier: SubscriptionTier;
   billingCycle: BillingCycle;
