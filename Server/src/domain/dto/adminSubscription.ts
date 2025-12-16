@@ -65,7 +65,6 @@ export interface SubscriptionPlanDTO {
     customCostSharing: boolean;
   };
   price: Pricing;
-  stripeId: StripeIds;
   isActive: boolean;
   isPopular: boolean;
   createdAt: Date;

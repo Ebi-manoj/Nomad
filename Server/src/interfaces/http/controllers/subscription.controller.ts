@@ -12,14 +12,23 @@ import { IHandleSubscriptionWebhookUseCase } from '../../../application/usecases
 import { IVerifySubscriptionUseCase } from '../../../application/usecases/User/subscription/IVerifySubscriptionUseCase';
 import { IGetSubscriptionDetailsUseCase } from '../../../application/usecases/User/subscription/IGetSubscriptionDetails';
 import { ApiResponse } from '../helpers/implementation/apiResponse';
+import { IGetActivePlansUseCase } from '../../../application/usecases/User/subscription/IGetActivePlans';
+import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 
 export class SubscriptionController implements ISubscriptionController {
   constructor(
     private readonly _createCheckoutSessionUseCase: ICreateSubscriptionCheckoutSessionUseCase,
     private readonly _handleWebhookUseCase: IHandleSubscriptionWebhookUseCase,
     private readonly _verifySubscriptionUseCase: IVerifySubscriptionUseCase,
-    private readonly _getSubscriptionUseCase: IGetSubscriptionDetailsUseCase
+    private readonly _getSubscriptionUseCase: IGetSubscriptionDetailsUseCase,
+    private readonly _getActivePlansUseCase: IGetActivePlansUseCase
   ) {}
+
+  async getActivePlans(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const result = await this._getActivePlansUseCase.execute();
+    const response = ApiResponse.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
 
   async createCheckoutSession(httpRequest: HttpRequest): Promise<HttpResponse> {
     const userId = httpRequest.user?.id;

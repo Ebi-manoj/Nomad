@@ -12,6 +12,8 @@ import { GetSubscriptionDetailUseCase } from '../../../../application/usecases/U
 import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
 import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionUsageRepository';
 import { SubscriptionService } from '../../../../application/services/SubscriptionService';
+import { GetActivePlansUseCase } from '../../../../application/usecases/User/subscription/GetActivePlans';
+import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
 
 export function subscriptionComposer(): ISubscriptionController {
   const users = new MongoUserRepository();
@@ -19,6 +21,7 @@ export function subscriptionComposer(): ISubscriptionController {
   const subscriptions = new SubscriptionRepository();
   const checkoutSessions = new RedisCheckoutSessionRepository();
   const usageRepository = new SubscriptionUsageRepository();
+  const subscriptionPlanRepo = new SubscriptionPlanRepository();
 
   const usageService = new SubscriptionUsageService(usageRepository);
   const subService = new SubscriptionService(subscriptions);
@@ -46,10 +49,13 @@ export function subscriptionComposer(): ISubscriptionController {
     subService
   );
 
+  const getActiveplanUseCase = new GetActivePlansUseCase(subscriptionPlanRepo);
+
   return new SubscriptionController(
     createSession,
     handleWebhook,
     verifySubscriptionUseCase,
-    getSubscriptionUseCase
+    getSubscriptionUseCase,
+    getActiveplanUseCase
   );
 }
