@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, X, Zap, Crown, ArrowLeft } from 'lucide-react';
 import { plans } from '@/utils/Plan';
 import {
   type BillingCycle,
   type CreateSubscriptionCheckoutSessionDTO,
+  type SubscriptionPlanDTO,
   type SubscriptionTierType,
 } from '@/types/subscription';
-import { getSubscriptionCheckout } from '@/api/subscription';
+import {
+  getSubscriptionCheckout,
+  getSubscriptionPlansApi,
+} from '@/api/subscription';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { toast } from 'sonner';
 
 export const SubscriptionListing = ({
   handleBack,
@@ -15,6 +20,18 @@ export const SubscriptionListing = ({
   handleBack: () => void;
 }) => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('MONTHLY');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      setLoading(true);
+      try {
+        const data = await getSubscriptionPlansApi();
+      } catch (error) {
+        toast.error(typeof error == 'string' ? error : 'Failed to fetch plans');
+      }
+    };
+  }, []);
 
   const handleSubscription = async (code: SubscriptionTierType) => {
     const dto: CreateSubscriptionCheckoutSessionDTO = {

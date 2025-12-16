@@ -3,12 +3,14 @@ import type {
   CreateSubscriptionCheckoutSessionDTO,
   VerifySubscriptionResponse,
   GetSubscriptionDetailsResDTO,
+  SubscriptionPlanDTO,
 } from '@/types/subscription';
 import axiosInstance from '@/utils/axiosInstance';
 
 export const SUBSCRIPTION_CHECKOUT_API = '/subscriptions/checkout';
 export const VERIFY_SUBSCRIPTION_API = '/subscriptions/verify';
 export const SUBSCRIPTION_DETAILS_API = '/subscriptions';
+export const SUBSCRIPTION_PLANS_API = '/subscriptions/plans';
 
 export const getSubscriptionCheckout = async (
   data: CreateSubscriptionCheckoutSessionDTO
@@ -33,5 +35,11 @@ export const getSubscriptionDetailsApi = async () => {
   const res = await axiosInstance.get<
     ApiResponse<GetSubscriptionDetailsResDTO>
   >(SUBSCRIPTION_DETAILS_API);
+  return res.data.data;
+};
+export const getSubscriptionPlansApi = async () => {
+  const res = await axiosInstance.get<ApiResponse<SubscriptionPlanDTO>>(
+    SUBSCRIPTION_PLANS_API
+  );
   return res.data.data;
 };

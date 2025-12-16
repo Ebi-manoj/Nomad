@@ -10,6 +10,30 @@ export type SubscriptionTierType =
 
 export type BillingCycle = 'MONTHLY' | 'YEARLY';
 
+export type Pricing = {
+  monthly: number;
+  yearly: number;
+};
+
+export interface SubscriptionPlanDTO {
+  id: string;
+  tier: string;
+  description: string;
+  features: {
+    maxJoinRequestsPerRide: number | null;
+    maxRideAcceptancesPerMonth: number | null;
+    platformFeePercentage: number;
+    verificationBadge: boolean;
+    priorityInList: boolean;
+    customCostSharing: boolean;
+  };
+  price: Pricing;
+  isActive: boolean;
+  isPopular: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface CreateSubscriptionCheckoutSessionDTO {
   tier: SubscriptionTierType;
   billingCycle: BillingCycle;
