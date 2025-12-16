@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Check, X, Zap, Crown, ArrowLeft } from 'lucide-react';
-import { plans } from '@/utils/Plan';
 import {
   type BillingCycle,
   type CreateSubscriptionCheckoutSessionDTO,
-  type SubscriptionPlanDTO,
   type SubscriptionTierType,
 } from '@/types/subscription';
 import {
   getSubscriptionCheckout,
   getSubscriptionPlansApi,
 } from '@/api/subscription';
+import { mapSubscriptionPlans, type MappedPlan } from './planMapping';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
 import { toast } from 'sonner';
 
@@ -21,16 +20,22 @@ export const SubscriptionListing = ({
 }) => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('MONTHLY');
   const [loading, setLoading] = useState(false);
+  const [plans, setPlans] = useState<MappedPlan[]>([]);
 
   useEffect(() => {
     const fetchPlans = async () => {
       setLoading(true);
       try {
         const data = await getSubscriptionPlansApi();
+        const mapped = mapSubscriptionPlans(data);
+        setPlans(mapped);
       } catch (error) {
         toast.error(typeof error == 'string' ? error : 'Failed to fetch plans');
+      } finally {
+        setLoading(false);
       }
     };
+    fetchPlans();
   }, []);
 
   const handleSubscription = async (code: SubscriptionTierType) => {

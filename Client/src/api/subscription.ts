@@ -38,7 +38,7 @@ export const getSubscriptionDetailsApi = async () => {
   return res.data.data;
 };
 export const getSubscriptionPlansApi = async () => {
-  const res = await axiosInstance.get<ApiResponse<SubscriptionPlanDTO>>(
+  const res = await axiosInstance.get<ApiResponse<SubscriptionPlanDTO[]>>(
     SUBSCRIPTION_PLANS_API
   );
   return res.data.data;
