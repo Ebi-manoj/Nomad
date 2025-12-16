@@ -70,15 +70,24 @@ export const PlanCard = ({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="-mr-2 h-8 w-8">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="-mr-2 h-8 w-8 cursor-pointer"
+              >
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={onEdit}>Edit Details</DropdownMenuItem>
+              <DropdownMenuItem onClick={onEdit} className="cursor-pointer">
+                Edit Details
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={onDelete} className="text-red-600">
+              <DropdownMenuItem
+                onClick={onDelete}
+                className="text-red-600 cursor-pointer"
+              >
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>

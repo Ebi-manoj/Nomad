@@ -1,4 +1,4 @@
-import { useForm, type FieldErrors } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
@@ -19,12 +19,13 @@ import {
   type SubscriptionPlanFormData,
 } from '@/validation/adminSubscription';
 import type { AdminSubscriptionPlanDTO } from '@/types/adminSubscription';
+import { useEffect } from 'react';
 
 interface SubscriptionFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   editingPlan: AdminSubscriptionPlanDTO | null;
-  onSubmit: (data: SubscriptionPlanFormData) => Promise<void>;
+  onSubmit: (data: SubscriptionPlanFormData) => Promise<boolean>;
 }
 
 export function SubscriptionFormDialog({
@@ -36,6 +37,7 @@ export function SubscriptionFormDialog({
   const {
     register,
     handleSubmit,
+    reset,
     control,
     formState: { errors, isSubmitting },
   } = useForm<SubscriptionPlanFormData>({
@@ -50,8 +52,59 @@ export function SubscriptionFormDialog({
       },
     },
   });
-  const onError = (errors: FieldErrors<SubscriptionPlanFormData>) => {
-    console.log('Form validation errors:', errors);
+  useEffect(() => {
+    if (!open) return;
+
+    if (editingPlan) {
+      reset({
+        tier: editingPlan.tier,
+        description: editingPlan.description,
+        isPopular: editingPlan.isPopular,
+        isActive: editingPlan.isActive,
+        price: {
+          monthly: editingPlan.price.monthly,
+          yearly: editingPlan.price.yearly,
+        },
+        features: {
+          maxJoinRequestsPerRide:
+            editingPlan.features.maxJoinRequestsPerRide ?? undefined,
+          maxRideAcceptancesPerMonth:
+            editingPlan.features.maxRideAcceptancesPerMonth ?? undefined,
+          platformFeePercentage: editingPlan.features.platformFeePercentage,
+          verificationBadge: editingPlan.features.verificationBadge,
+          priorityInList: editingPlan.features.priorityInList,
+          customCostSharing: editingPlan.features.customCostSharing,
+        },
+      });
+    } else {
+      // Create mode → reset to defaults
+      reset({
+        tier: '',
+        description: '',
+        isPopular: false,
+        isActive: false,
+        price: {
+          monthly: 0,
+          yearly: 0,
+        },
+        features: {
+          maxJoinRequestsPerRide: 0,
+          maxRideAcceptancesPerMonth: 0,
+          platformFeePercentage: 0,
+          verificationBadge: false,
+          priorityInList: false,
+          customCostSharing: false,
+        },
+      });
+    }
+  }, [open, editingPlan, reset]);
+
+  const handleSubmitForm = async (data: SubscriptionPlanFormData) => {
+    const success = await onSubmit(data);
+    if (success) {
+      reset();
+      onOpenChange(false);
+    }
   };
 
   return (
@@ -67,7 +120,7 @@ export function SubscriptionFormDialog({
         </DialogHeader>
 
         <form
-          onSubmit={handleSubmit(onSubmit, onError)}
+          onSubmit={handleSubmit(handleSubmitForm)}
           className="space-y-6 mt-4"
         >
           {/* Section 1: Basic Info */}
@@ -286,6 +339,7 @@ export function SubscriptionFormDialog({
               variant="outline"
               type="button"
               onClick={() => onOpenChange(false)}
+              className="cursor-pointer"
             >
               Cancel
             </Button>

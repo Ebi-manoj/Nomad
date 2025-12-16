@@ -41,14 +41,18 @@ export const AdminSubscriptionPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleFormSubmit = async (data: SubscriptionPlanFormData) => {
+  const handleFormSubmit = async (
+    data: SubscriptionPlanFormData
+  ): Promise<boolean> => {
     try {
       if (!editingPlan) {
         await dispatch(createSubscriptionPlan(data)).unwrap();
         toast.success('Subscription plan created successfully');
       }
+      return true;
     } catch (error) {
       toast.error(error as string);
+      return false;
     }
   };
   return (

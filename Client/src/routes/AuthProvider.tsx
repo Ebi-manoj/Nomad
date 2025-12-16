@@ -12,16 +12,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const checkAuth = async function () {
-      if (!token) {
-        try {
+      try {
+        if (!token) {
           await dispatch(refreshToken()).unwrap();
-          await dispatch(fetchSubscriptionDetails()).unwrap();
-        } catch (error) {}
-      }
+        }
+      } catch (error) {}
+
       setIschecking(false);
     };
     checkAuth();
-  }, [token]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchSubscription = async () => {
+      try {
+        await dispatch(fetchSubscriptionDetails()).unwrap();
+      } catch (error) {
+      } finally {
+        setIschecking(false);
+      }
+    };
+
+    fetchSubscription();
+  }, [token, dispatch]);
+
   if (isChecking || loading) {
     return <HomeSkeleton />;
   }
