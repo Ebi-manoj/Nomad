@@ -3,7 +3,6 @@ import { Check, X, Zap, Crown, ArrowLeft } from 'lucide-react';
 import {
   type BillingCycle,
   type CreateSubscriptionCheckoutSessionDTO,
-  type SubscriptionTierType,
 } from '@/types/subscription';
 import {
   getSubscriptionCheckout,
@@ -38,10 +37,7 @@ export const SubscriptionListing = ({
     fetchPlans();
   }, []);
 
-  const handleSubscription = async (
-    code: SubscriptionTierType,
-    planId: string
-  ) => {
+  const handleSubscription = async (code: string, planId: string) => {
     const dto: CreateSubscriptionCheckoutSessionDTO = {
       planId,
       tier: code,

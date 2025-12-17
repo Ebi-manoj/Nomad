@@ -1,6 +1,5 @@
 import { Subscription, SubscriptionFeatures } from '../entities/Subscription';
-import { SubscriptionUsage } from '../entities/SubscriptionUsage';
-import { BillingCycle, SubscriptionTier } from '../enums/subscription';
+import { BillingCycle } from '../enums/subscription';
 
 export interface SubscriptionFeaturesResDTO {
   maxJoinRequestsPerRide: number | null;
@@ -26,6 +25,7 @@ export interface SubscriptionResDTO {
   userId: string;
   billingCycle: BillingCycle;
   tier: string;
+  badgeColor: string;
   stripeSubscriptionId: string | undefined;
   stripeCustomerId: string | undefined;
   startDate: Date;
@@ -56,14 +56,14 @@ export interface VerifySubscriptionResDTO {
 export interface GetSubscriptionDetailsResDTO {
   tier: string;
   features: SubscriptionFeaturesResDTO;
-  subscription?: SubscriptionResDTO | null;
+  subscription?: SubscriptionResDTO;
   subscriptionUsage: SubscriptionUsageDTO;
 }
 
 export interface SubscriptionServiceResDTO {
   tier: string;
   features: SubscriptionFeatures;
-  subscription: Subscription | null;
+  subscription: Subscription;
 }
 
 export interface CreateSubscriptionReqDTO {

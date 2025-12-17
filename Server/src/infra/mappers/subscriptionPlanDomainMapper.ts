@@ -20,6 +20,7 @@ export const subscriptionPlanMapper: IMapper<
       id: doc._id.toString(),
       tier: doc.tier,
       description: doc.description,
+      badgeColor: doc.badgeColor ?? '#16a34a',
       features,
       price: doc.price,
       stripeId: doc.stripeId,
@@ -36,6 +37,7 @@ export const subscriptionPlanMapper: IMapper<
     return {
       tier: domain.getTier(),
       description: domain.getDescription(),
+      badgeColor: domain.getBadgeColor(),
       features: {
         maxJoinRequestsPerRide: f.getMaxJoinRequestsPerRide(),
         maxRideAcceptancesPerMonth: f.getMaxRideAcceptancesPerMonth(),

@@ -52,6 +52,7 @@ export interface SubscriptionProps {
   tier: string;
   billingCycle: BillingCycle;
   status: SubscriptionStatus;
+  badgeColor: string;
   startDate?: Date;
   endDate?: Date;
   autoRenew?: boolean;
@@ -75,6 +76,7 @@ export class Subscription {
   private _billingCycle: BillingCycle;
   private _status: SubscriptionStatus;
   private _startDate: Date;
+  private _badgeColor: string;
   private _endDate: Date;
   private _autoRenew: boolean;
   private _price: number;
@@ -92,6 +94,7 @@ export class Subscription {
     this._userId = props.userId;
     this._tier = props.tier;
     this._planId = props.planId;
+    this._badgeColor = props.badgeColor;
     this._billingCycle = props.billingCycle;
     this._status = props.status;
     this._startDate = props.startDate || new Date();
@@ -128,6 +131,10 @@ export class Subscription {
 
   getTier(): string {
     return this._tier;
+  }
+
+  getBadgeColor() {
+    return this._badgeColor;
   }
 
   getBillingCycle(): BillingCycle {

@@ -1,16 +1,12 @@
 import type React from 'react';
 import { Crown, Mountain, CarFront, User, Shield } from 'lucide-react';
-import type {
-  Pricing,
-  SubscriptionTierType,
-  SubscriptionPlanDTO,
-} from '@/types/subscription';
+import type { Pricing, SubscriptionPlanDTO } from '@/types/subscription';
 
 export type PlanFeature = { included: boolean; text: string; subtext?: string };
 
 export type MappedPlan = {
   id: string;
-  code: SubscriptionTierType;
+  code: string;
   title: string;
   description: string;
   popular: boolean;
@@ -55,7 +51,7 @@ export const mapSubscriptionPlans = (
       const maxAccept = p.features.maxRideAcceptancesPerMonth;
       return {
         id: p.id,
-        code: t as SubscriptionTierType,
+        code: t,
         title: t,
         description: p.description,
         popular: p.isPopular,

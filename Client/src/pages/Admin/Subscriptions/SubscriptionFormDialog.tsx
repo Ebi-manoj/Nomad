@@ -13,6 +13,13 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, CheckCircle2, Crown } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 import {
   subscriptionPlanSchema,
@@ -39,10 +46,12 @@ export function SubscriptionFormDialog({
     handleSubmit,
     reset,
     control,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<SubscriptionPlanFormData>({
     resolver: zodResolver(subscriptionPlanSchema),
     defaultValues: {
+      badgeColor: '#16a34a',
       isPopular: false,
       isActive: false,
       features: {
@@ -59,6 +68,7 @@ export function SubscriptionFormDialog({
       reset({
         tier: editingPlan.tier,
         description: editingPlan.description,
+        badgeColor: editingPlan.badgeColor,
         isPopular: editingPlan.isPopular,
         isActive: editingPlan.isActive,
         price: {
@@ -81,6 +91,7 @@ export function SubscriptionFormDialog({
       reset({
         tier: '',
         description: '',
+        badgeColor: '#16a34a',
         isPopular: false,
         isActive: false,
         price: {
@@ -117,9 +128,11 @@ export function SubscriptionFormDialog({
           <DialogDescription>
             Configure the pricing, features, and limits for this tier.
           </DialogDescription>
-          <p className="text-xs text-amber-500 ">
-            Note: Editing is limited for the system default plan.
-          </p>
+          {editingPlan && editingPlan.isDefault && (
+            <p className="text-xs text-amber-500 ">
+              Note: Editing is limited for the system default plan.
+            </p>
+          )}
         </DialogHeader>
 
         <form
@@ -190,6 +203,39 @@ export function SubscriptionFormDialog({
               <p className="text-xs text-red-500">
                 {errors.description.message}
               </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Badge Color</label>
+            <div className="flex items-center gap-3">
+              <Controller
+                name="badgeColor"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="Select color" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="#16a34a">Green</SelectItem>
+                      <SelectItem value="#2563eb">Blue</SelectItem>
+                      <SelectItem value="#d97706">Amber</SelectItem>
+                      <SelectItem value="#dc2626">Red</SelectItem>
+                      <SelectItem value="#7c3aed">Purple</SelectItem>
+                      <SelectItem value="#0891b2">Cyan</SelectItem>
+                      <SelectItem value="#6b7280">Gray</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              <div
+                className="h-6 w-6 rounded-full border"
+                style={{ backgroundColor: watch('badgeColor') }}
+              />
+            </div>
+            {errors.badgeColor && (
+              <p className="text-xs text-red-500">{errors.badgeColor.message}</p>
             )}
           </div>
 

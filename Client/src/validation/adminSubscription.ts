@@ -3,6 +3,9 @@ import { z } from 'zod';
 export const subscriptionPlanSchema = z.object({
   tier: z.string().min(1, 'Tier name is required'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
+  badgeColor: z
+    .string()
+    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Invalid color'),
 
   features: z.object({
     maxJoinRequestsPerRide: z.number().min(1, 'Must be at least 1'),

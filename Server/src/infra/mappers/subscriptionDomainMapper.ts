@@ -12,6 +12,7 @@ export const subscriptionMapper: IMapper<Subscription, ISubscriptionDocument> =
       return new Subscription({
         id: persistence._id.toString(),
         userId: persistence.userId.toString(),
+        badgeColor: persistence.badgeColor,
         planId: persistence.planId.toString(),
         tier: persistence.tier,
         billingCycle: persistence.billingCycle,
@@ -43,6 +44,7 @@ export const subscriptionMapper: IMapper<Subscription, ISubscriptionDocument> =
         userId: new Types.ObjectId(domain.getUserId()),
         planId: new Types.ObjectId(domain.getPlanId()),
         tier: domain.getTier(),
+        badgeColor: domain.getBadgeColor(),
         billingCycle: domain.getBillingCycle(),
         status: domain.getStatus(),
         startDate: domain.getStartDate(),

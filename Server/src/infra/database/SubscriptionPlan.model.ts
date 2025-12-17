@@ -4,6 +4,7 @@ export interface ISubscriptionPlanDocument extends Document {
   _id: mongoose.Types.ObjectId;
   tier: string;
   description: string;
+  badgeColor: string;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;
@@ -37,6 +38,7 @@ const SubscriptionPlanSchema = new Schema<ISubscriptionPlanDocument>(
       index: true,
     },
     description: { type: String, required: true, trim: true },
+    badgeColor: { type: String, default: '' },
     features: {
       maxJoinRequestsPerRide: { type: Number, default: null },
       maxRideAcceptancesPerMonth: { type: Number, default: null },

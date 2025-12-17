@@ -7,6 +7,7 @@ export class SubscriptionPlanMapper {
       id: sub.getId() as string,
       tier: sub.getTier(),
       description: sub.getDescription(),
+      badgeColor: sub.getBadgeColor(),
       features: sub.getFeatures().toJson(),
       price: sub.getPrice(),
       isActive: sub.getIsActive(),

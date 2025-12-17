@@ -33,6 +33,7 @@ export class SubscriptionService implements ISubscriptionService {
       userId,
       planId: freePlan.getId() as string,
       billingCycle: BillingCycle.NONE,
+      badgeColor: freePlan.getBadgeColor(),
       status: SubscriptionStatus.ACTIVE,
       tier: freePlan.getTier(),
       features: freePlan.getFeatures(),

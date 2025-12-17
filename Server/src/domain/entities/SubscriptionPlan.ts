@@ -14,6 +14,7 @@ export interface SubscriptionPlanProps {
   id?: string;
   tier: string;
   description: string;
+  badgeColor: string;
   features: SubscriptionFeatures;
   price: Pricing;
   stripeId: StripeIds;
@@ -27,6 +28,7 @@ export class SubscriptionPlan {
   private _id?: string;
   private _tier: string;
   private _description: string;
+  private _badgeColor: string;
   private _features: SubscriptionFeatures;
   private _price: Pricing;
   private _stripeId: StripeIds;
@@ -40,6 +42,7 @@ export class SubscriptionPlan {
     this._id = props.id;
     this._tier = this.initializeTier(props.tier);
     this._description = props.description;
+    this._badgeColor = props.badgeColor;
     this._features = props.features;
     this._price = props.price;
     this._stripeId = props.stripeId;
@@ -61,6 +64,9 @@ export class SubscriptionPlan {
   }
   getDescription() {
     return this._description;
+  }
+  getBadgeColor() {
+    return this._badgeColor;
   }
   getFeatures() {
     return this._features;
@@ -91,6 +97,9 @@ export class SubscriptionPlan {
   }
   setDescription(description: string) {
     this._description = description;
+  }
+  setBadgeColor(color: string) {
+    this._badgeColor = color;
   }
   setMonthlyPricing(price: number) {
     this._price.monthly = price;

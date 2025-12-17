@@ -21,6 +21,7 @@ export class CreateSubscriptionUseCase implements ICreateSubscriptionUseCase {
       userId: data.userId,
       planId: data.planId,
       tier: data.tier,
+      badgeColor: subscriptionPlan.getBadgeColor(),
       billingCycle: data.billingCycle,
       status: SubscriptionStatus.ACTIVE,
       startDate: data.startDate,

@@ -2,6 +2,7 @@ export interface AdminSubscriptionPlanDTO {
   id: string;
   tier: string;
   description: string;
+  badgeColor: string;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;
@@ -26,6 +27,7 @@ export type Pricing = {
 export interface CreateSubscriptionPlanDTO {
   tier: string;
   description: string;
+  badgeColor: string;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;

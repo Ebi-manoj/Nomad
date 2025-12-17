@@ -10,6 +10,7 @@ export interface ISubscriptionDocument extends Document {
   planId: mongoose.Types.ObjectId;
   tier: string;
   billingCycle: BillingCycle;
+  badgeColor: string;
   status: SubscriptionStatus;
   startDate: Date;
   endDate: Date;
@@ -47,6 +48,10 @@ const SubscriptionSchema = new Schema<ISubscriptionDocument>(
       index: true,
     },
     tier: {
+      type: String,
+      required: true,
+    },
+    badgeColor: {
       type: String,
       required: true,
     },

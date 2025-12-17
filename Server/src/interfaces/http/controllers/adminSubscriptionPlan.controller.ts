@@ -29,6 +29,7 @@ export class AdminSubscriptionPlanController
     const dto: CreateSubscriptionPlanDTO = {
       tier: parsed.tier,
       description: parsed.description,
+      badgeColor: parsed.badgeColor,
       isPopular: parsed.isPopular ?? false,
       price: parsed.price,
       features: parsed.features,
@@ -45,6 +46,7 @@ export class AdminSubscriptionPlanController
       id: planId,
       tier: parsed.tier,
       description: parsed.description,
+      badgeColor: parsed.badgeColor,
       isPopular: parsed.isPopular,
       price: parsed.price,
       features: parsed.features,

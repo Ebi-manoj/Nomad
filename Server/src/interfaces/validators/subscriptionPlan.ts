@@ -12,6 +12,10 @@ const featuresSchema = z.object({
 export const subscriptionPlanSchema = z.object({
   tier: z.string().trim().min(1, { message: 'tier is required' }),
   description: z.string().trim().min(1, { message: 'description is required' }),
+  badgeColor: z
+    .string()
+    .trim()
+    .regex(/^#([0-9a-fA-F]{3}){1,2}$/i, { message: 'invalid color' }),
   isPopular: z.boolean().optional().default(false),
   price: z.object({
     monthly: z.number().positive(),
@@ -22,6 +26,10 @@ export const subscriptionPlanSchema = z.object({
 export const editPlanSchema = z.object({
   tier: z.string().trim().min(1, { message: 'tier is required' }),
   description: z.string().trim().min(1, { message: 'description is required' }),
+  badgeColor: z
+    .string()
+    .trim()
+    .regex(/^#([0-9a-fA-F]{3}){1,2}$/i, { message: 'invalid color' }),
   isPopular: z.boolean().optional().default(false),
   price: z.object({
     monthly: z.number().positive(),

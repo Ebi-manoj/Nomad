@@ -64,6 +64,7 @@ export class CreateSubscriptionPlanUseCase
     const subscriptionPlan = new SubscriptionPlan({
       tier: normalizedTier,
       description: data.description,
+      badgeColor: data.badgeColor,
       features,
       price: data.price,
       stripeId: {

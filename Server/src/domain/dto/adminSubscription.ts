@@ -39,6 +39,7 @@ export interface StripePriceResponse {
 export interface CreateSubscriptionPlanDTO {
   tier: string;
   description: string;
+  badgeColor: string;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;
@@ -55,6 +56,7 @@ export interface SubscriptionPlanDTO {
   id: string;
   tier: string;
   description: string;
+  badgeColor: string;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;
@@ -75,6 +77,7 @@ export interface EditSubscriptionPlanDTO {
   id: string;
   tier: string;
   description: string;
+  badgeColor: string;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;
