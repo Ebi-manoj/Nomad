@@ -16,6 +16,7 @@ import { ReqCancelRideBookingUseCase } from '../../../../application/usecases/Us
 import { RefundService } from '../../../../application/services/RefundService';
 import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
 import { SubscriptionService } from '../../../../application/services/SubscriptionService';
+import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
 
 export function ridebookingComposer(): IRideBookingController {
   const rideBookinRepository = new RideBookingRepository();
@@ -27,8 +28,12 @@ export function ridebookingComposer(): IRideBookingController {
   const taskRepository = new TaskRepository();
   const refundService = new RefundService(locationRepository, googleApi);
   const subscripitonRepository = new SubscriptionRepository();
+  const subscriptionPlans = new SubscriptionPlanRepository();
 
-  const subscriptionService = new SubscriptionService(subscripitonRepository);
+  const subscriptionService = new SubscriptionService(
+    subscripitonRepository,
+    subscriptionPlans
+  );
 
   const getRideBookingUseCase = new GetRideBookingUseCase(
     rideBookinRepository,

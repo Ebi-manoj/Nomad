@@ -20,6 +20,7 @@ export interface SubscriptionPlanProps {
   stripeId: StripeIds;
   isActive?: boolean;
   isPopular?: boolean;
+  isDefault?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -32,6 +33,7 @@ export class SubscriptionPlan {
   private _stripeId: StripeIds;
   private _isActive: boolean;
   private _isPopular: boolean;
+  private readonly _isDefault: boolean;
   private _createdAt: Date;
   private _updatedAt: Date;
 
@@ -45,6 +47,7 @@ export class SubscriptionPlan {
     this._isActive = props.isActive ?? true;
     this._isPopular = props.isPopular ?? false;
     this._createdAt = props.createdAt || new Date();
+    this._isDefault = props.isDefault || false;
     this._updatedAt = props.updatedAt || new Date();
   }
   initializeTier(tier: string) {
@@ -80,5 +83,8 @@ export class SubscriptionPlan {
   }
   getUpdatedAt() {
     return this._updatedAt;
+  }
+  getIsDefault() {
+    return this._isDefault;
   }
 }

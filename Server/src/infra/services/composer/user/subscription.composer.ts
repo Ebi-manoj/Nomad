@@ -23,9 +23,10 @@ export function subscriptionComposer(): ISubscriptionController {
   const checkoutSessions = new RedisCheckoutSessionRepository();
   const usageRepository = new SubscriptionUsageRepository();
   const subscriptionPlanRepo = new SubscriptionPlanRepository();
+  const subscriptionPlans = new SubscriptionPlanRepository();
 
   const usageService = new SubscriptionUsageService(usageRepository);
-  const subService = new SubscriptionService(subscriptions);
+  const subService = new SubscriptionService(subscriptions, subscriptionPlans);
 
   const createSession = new CreateSubscriptionCheckoutSessionUseCase(
     users,

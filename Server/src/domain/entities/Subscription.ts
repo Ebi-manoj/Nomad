@@ -1,8 +1,4 @@
-import {
-  BillingCycle,
-  SubscriptionStatus,
-  SubscriptionTier,
-} from '../enums/subscription';
+import { BillingCycle, SubscriptionStatus } from '../enums/subscription';
 
 export class SubscriptionFeatures {
   constructor(
@@ -66,6 +62,7 @@ export interface SubscriptionProps {
   stripePriceId?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  isDefault?: boolean;
   cancelledAt?: Date;
   features: SubscriptionFeatures;
 }
@@ -196,7 +193,6 @@ export class Subscription {
       this._status === SubscriptionStatus.ACTIVE && new Date() < this._endDate
     );
   }
-
   isExpired(): boolean {
     return new Date() >= this._endDate;
   }

@@ -3,14 +3,16 @@ import { Subscription } from '../../domain/entities/Subscription';
 import {
   BillingCycle,
   SubscriptionStatus,
-  SubscriptionTier,
 } from '../../domain/enums/subscription';
+import { SubscriptionPlanNotFound } from '../../domain/errors/SubscriptionError';
+import { ISubscriptionPlanRepository } from '../repositories/ISubscriptionPlanRepository';
 import { ISubscriptionRepository } from '../repositories/ISubscriptionRepository';
 import { ISubscriptionService } from './ISubscriptionService';
 
 export class SubscriptionService implements ISubscriptionService {
   constructor(
-    private readonly _subscriptionRepository: ISubscriptionRepository
+    private readonly _subscriptionRepository: ISubscriptionRepository,
+    private readonly _subscriptionPlans: ISubscriptionPlanRepository
   ) {}
   async getActiveSubscription(
     userId: string
@@ -18,21 +20,20 @@ export class SubscriptionService implements ISubscriptionService {
     let subscription = await this._subscriptionRepository.findActiveByUserId(
       userId
     );
-    if (!subscription) {
-      subscription = new Subscription({
-        userId,
-        tier: SubscriptionTier.FREE,
-        billingCycle: BillingCycle.YEARLY,
-        status: SubscriptionStatus.ACTIVE,
-        price: 0,
-      });
+    if (subscription) {
+      return {
+        tier: subscription.getTier(),
+        features: subscription.getFeatures(),
+        subscription,
+      };
     }
-    const tier = subscription.getTier();
+    const freePlan = await this._subscriptionPlans.findByTier('FREE');
+    if (!freePlan) throw new SubscriptionPlanNotFound();
 
     return {
-      tier,
-      features: subscription.getFeatures().toJson(),
-      subscription: tier !== SubscriptionTier.FREE ? subscription : null,
+      tier: freePlan.getTier(),
+      features: freePlan.getFeatures(),
+      subscription: null,
     };
   }
 }

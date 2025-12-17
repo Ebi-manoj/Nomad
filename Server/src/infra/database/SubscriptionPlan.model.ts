@@ -21,6 +21,7 @@ export interface ISubscriptionPlanDocument extends Document {
     yearly: string;
   };
   isActive: boolean;
+  isDefault: boolean;
   isPopular: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -28,7 +29,13 @@ export interface ISubscriptionPlanDocument extends Document {
 
 const SubscriptionPlanSchema = new Schema<ISubscriptionPlanDocument>(
   {
-    tier: { type: String, required: true, trim: true, uppercase: true, index: true },
+    tier: {
+      type: String,
+      required: true,
+      trim: true,
+      uppercase: true,
+      index: true,
+    },
     description: { type: String, required: true, trim: true },
     features: {
       maxJoinRequestsPerRide: { type: Number, default: null },
@@ -48,6 +55,7 @@ const SubscriptionPlanSchema = new Schema<ISubscriptionPlanDocument>(
     },
     isActive: { type: Boolean, default: true, index: true },
     isPopular: { type: Boolean, default: false },
+    isDefault: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

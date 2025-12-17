@@ -29,6 +29,7 @@ import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionU
 import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
 import { SubscriptionValidator } from '../../../../application/services/SubscriptionValidator';
 import { SubscriptionService } from '../../../../application/services/SubscriptionService';
+import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -46,6 +47,7 @@ export function rideComposer(): IRideController {
   const walletTransactionRepository = new WalletTransactionRepository();
   const walletService = new FindOrCreateWalletService(walletRepository);
   const reviewRepository = new ReviewRepository();
+  const subscriptionPlans = new SubscriptionPlanRepository();
   const subscriptionRepository = new SubscriptionRepository();
   const subscriptionUsage = new SubscriptionUsageRepository();
   const transactionManager = new MongoTransactionManager([
@@ -61,7 +63,10 @@ export function rideComposer(): IRideController {
     joinRequestRepository,
     usageService
   );
-  const subscriptionService = new SubscriptionService(subscriptionRepository);
+  const subscriptionService = new SubscriptionService(
+    subscriptionRepository,
+    subscriptionPlans
+  );
 
   const createRideUseCase = new CreateRideUseCase(
     userRepository,

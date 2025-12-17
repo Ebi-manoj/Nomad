@@ -2,7 +2,6 @@ import mongoose, { Schema, Document } from 'mongoose';
 import {
   BillingCycle,
   SubscriptionStatus,
-  SubscriptionTier,
 } from '../../domain/enums/subscription';
 
 export interface ISubscriptionDocument extends Document {

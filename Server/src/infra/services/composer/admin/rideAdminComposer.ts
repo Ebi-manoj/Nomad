@@ -9,6 +9,7 @@ import { RideRepository } from '../../../repositories/RideRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
 import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
 import { SubscriptionService } from '../../../../application/services/SubscriptionService';
+import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
 
 export function rideAdminComposer(): IAdminRideController {
   const rideRepository = new RideRepository();
@@ -16,12 +17,16 @@ export function rideAdminComposer(): IAdminRideController {
   const hikeRepository = new HikeRepository();
   const bookingRepository = new RideBookingRepository();
   const subscriptionRepository = new SubscriptionRepository();
-  const subscriptionService = new SubscriptionService(subscriptionRepository);
+  const subscriptionPlans = new SubscriptionPlanRepository();
+  const subscriptionService = new SubscriptionService(
+    subscriptionRepository,
+    subscriptionPlans
+  );
   const getAllRideUseCase = new GetAllRideUseCase(
     rideRepository,
     userRepository
   );
-  const reveiewRepository=new ReviewRepository()
+  const reveiewRepository = new ReviewRepository();
 
   const getRideDetailsUseCase = new AdminRideDetailsUseCase(
     rideRepository,

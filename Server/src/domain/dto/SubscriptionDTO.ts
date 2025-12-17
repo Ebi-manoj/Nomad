@@ -62,7 +62,7 @@ export interface GetSubscriptionDetailsResDTO {
 
 export interface SubscriptionServiceResDTO {
   tier: string;
-  features: SubscriptionFeaturesResDTO;
+  features: SubscriptionFeatures;
   subscription: Subscription | null;
 }
 

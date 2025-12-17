@@ -6,3 +6,9 @@ export class SubscriptionPlanExist extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+
+export class SubscriptionPlanNotFound extends CustomError {
+  constructor(message = 'Subscription Plan not Found') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
