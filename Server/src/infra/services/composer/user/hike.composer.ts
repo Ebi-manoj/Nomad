@@ -53,6 +53,7 @@ export function hikeComposer(): IHikeController {
   const usageService = new SubscriptionUsageService(subscriptionUsage);
   const subscriptionValidator = new SubscriptionValidator(
     subscriptionRepo,
+    subscriptionPlans,
     joinRequestRepository,
     usageService
   );

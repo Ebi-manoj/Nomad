@@ -13,6 +13,7 @@ export interface AdminSubscriptionPlanDTO {
   price: { monthly: number; yearly: number };
   stripeId: { monthly: string; yearly: string };
   isActive: boolean;
+  isDefault: boolean;
   isPopular: boolean;
   createdAt: string;
   updatedAt: string;

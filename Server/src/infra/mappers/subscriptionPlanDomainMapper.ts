@@ -3,7 +3,10 @@ import { ISubscriptionPlanDocument } from '../database/SubscriptionPlan.model';
 import { IMapper } from './IMapper';
 import { SubscriptionFeatures } from '../../domain/entities/Subscription';
 
-export const subscriptionPlanMapper: IMapper<SubscriptionPlan, ISubscriptionPlanDocument> = {
+export const subscriptionPlanMapper: IMapper<
+  SubscriptionPlan,
+  ISubscriptionPlanDocument
+> = {
   toDomain(doc: ISubscriptionPlanDocument): SubscriptionPlan {
     const features = new SubscriptionFeatures(
       doc.features.maxJoinRequestsPerRide,
@@ -21,6 +24,7 @@ export const subscriptionPlanMapper: IMapper<SubscriptionPlan, ISubscriptionPlan
       price: doc.price,
       stripeId: doc.stripeId,
       isActive: doc.isActive,
+      isDefault: doc.isDefault,
       isPopular: doc.isPopular,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,

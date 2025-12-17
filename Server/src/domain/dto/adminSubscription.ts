@@ -66,6 +66,7 @@ export interface SubscriptionPlanDTO {
   };
   price: Pricing;
   isActive: boolean;
+  isDefault: boolean;
   isPopular: boolean;
   createdAt: Date;
   updatedAt: Date;

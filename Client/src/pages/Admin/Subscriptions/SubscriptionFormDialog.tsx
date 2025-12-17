@@ -117,6 +117,9 @@ export function SubscriptionFormDialog({
           <DialogDescription>
             Configure the pricing, features, and limits for this tier.
           </DialogDescription>
+          <p className="text-xs text-amber-500 ">
+            Note: Editing is limited for the system default plan.
+          </p>
         </DialogHeader>
 
         <form
@@ -140,6 +143,7 @@ export function SubscriptionFormDialog({
                   control={control}
                   render={({ field }) => (
                     <Checkbox
+                      disabled={editingPlan?.isDefault}
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
@@ -159,6 +163,7 @@ export function SubscriptionFormDialog({
                   render={({ field }) => (
                     <Switch
                       id="isActive"
+                      disabled={editingPlan?.isDefault}
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
@@ -200,6 +205,7 @@ export function SubscriptionFormDialog({
                 </label>
                 <Input
                   type="number"
+                  disabled={editingPlan?.isDefault}
                   {...register('price.monthly', { valueAsNumber: true })}
                 />
                 {errors.price?.monthly && (
@@ -213,6 +219,7 @@ export function SubscriptionFormDialog({
                   Yearly Price (₹)
                 </label>
                 <Input
+                  disabled={editingPlan?.isDefault}
                   type="number"
                   {...register('price.yearly', { valueAsNumber: true })}
                 />

@@ -60,6 +60,7 @@ export function rideComposer(): IRideController {
   const usageService = new SubscriptionUsageService(subscriptionUsage);
   const subscriptionValidator = new SubscriptionValidator(
     subscriptionRepository,
+    subscriptionPlans,
     joinRequestRepository,
     usageService
   );

@@ -5,6 +5,7 @@ import {
   RideAcceptanceLimitExceeded,
 } from '../../domain/errors/SubscriptionError';
 import { IJoinRequestRepository } from '../repositories/IJoinRequestsRepository';
+import { ISubscriptionPlanRepository } from '../repositories/ISubscriptionPlanRepository';
 import { ISubscriptionRepository } from '../repositories/ISubscriptionRepository';
 import { ISubscriptionUsageService } from './ISubscriptionUsageService';
 import { ISubscriptionValidator } from './ISubscriptionValidator';
@@ -16,10 +17,11 @@ export class SubscriptionValidator
 {
   constructor(
     subscriptionRepo: ISubscriptionRepository,
+    subscriptionPlans: ISubscriptionPlanRepository,
     private readonly _joinRequestRepo: IJoinRequestRepository,
     private readonly _usageService: ISubscriptionUsageService
   ) {
-    super(subscriptionRepo);
+    super(subscriptionRepo, subscriptionPlans);
   }
 
   async validateJoinRequest(hikeId: string, userId: string): Promise<void> {

@@ -10,6 +10,7 @@ export class SubscriptionPlanMapper {
       features: sub.getFeatures().toJson(),
       price: sub.getPrice(),
       isActive: sub.getIsActive(),
+      isDefault: sub.getIsDefault(),
       isPopular: sub.getIsPopular(),
       createdAt: sub.getCreatedAt(),
       updatedAt: sub.getUpdatedAt(),

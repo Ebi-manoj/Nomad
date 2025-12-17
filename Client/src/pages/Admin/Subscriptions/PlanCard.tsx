@@ -80,16 +80,18 @@ export const PlanCard = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={onEdit} className="cursor-pointer">
                 Edit Details
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={onDelete}
-                className="text-red-600 cursor-pointer"
-              >
-                Delete
-              </DropdownMenuItem>
+              {!plan.isDefault && (
+                <DropdownMenuItem
+                  onClick={onDelete}
+                  className="text-red-600 cursor-pointer"
+                >
+                  Delete
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -168,14 +170,15 @@ export const PlanCard = ({
             {plan.isActive ? 'Active' : 'Inactive'}
           </Badge>
         </div>
-
-        <div className="flex items-center gap-2">
-          <Switch
-            checked={true}
-            onCheckedChange={onToggleActive}
-            className="scale-75 data-[state=checked]:bg-green-600"
-          />
-        </div>
+        {!plan.isDefault && (
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={true}
+              onCheckedChange={onToggleActive}
+              className="scale-75 data-[state=checked]:bg-green-600"
+            />
+          </div>
+        )}
       </CardFooter>
     </Card>
   );
