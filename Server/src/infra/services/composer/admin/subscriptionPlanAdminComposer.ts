@@ -1,4 +1,5 @@
 import { CreateSubscriptionPlanUseCase } from '../../../../application/usecases/Admin/CreateSubscriptionPlan';
+import { EditSubscriptionPlanUseCase } from '../../../../application/usecases/Admin/EditSubscriptionPlan';
 import { GetSubscriptionPlanUseCase } from '../../../../application/usecases/Admin/GetSubscriptionPlan';
 import { IAdminSubscriptionPlanController } from '../../../../interfaces/http/controllers/IAdminSubscriptionPlanController';
 import { AdminSubscriptionPlanController } from '../../../../interfaces/http/controllers/adminSubscriptionPlan.controller';
@@ -13,6 +14,12 @@ export function subscriptionPlanAdminComposer(): IAdminSubscriptionPlanControlle
     paymentService
   );
 
+  const editPlanusecase = new EditSubscriptionPlanUseCase(planRepo);
+
   const getPlanUseCase = new GetSubscriptionPlanUseCase(planRepo);
-  return new AdminSubscriptionPlanController(createUseCase, getPlanUseCase);
+  return new AdminSubscriptionPlanController(
+    createUseCase,
+    getPlanUseCase,
+    editPlanusecase
+  );
 }

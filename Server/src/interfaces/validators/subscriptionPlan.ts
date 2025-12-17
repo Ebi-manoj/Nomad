@@ -9,7 +9,17 @@ const featuresSchema = z.object({
   customCostSharing: z.boolean(),
 });
 
-export const createPlanSchema = z.object({
+export const subscriptionPlanSchema = z.object({
+  tier: z.string().trim().min(1, { message: 'tier is required' }),
+  description: z.string().trim().min(1, { message: 'description is required' }),
+  isPopular: z.boolean().optional().default(false),
+  price: z.object({
+    monthly: z.number().positive(),
+    yearly: z.number().positive(),
+  }),
+  features: featuresSchema,
+});
+export const editPlanSchema = z.object({
   tier: z.string().trim().min(1, { message: 'tier is required' }),
   description: z.string().trim().min(1, { message: 'description is required' }),
   isPopular: z.boolean().optional().default(false),

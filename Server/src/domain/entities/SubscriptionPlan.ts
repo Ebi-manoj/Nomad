@@ -1,4 +1,3 @@
-import { BillingCycle } from '../enums/subscription';
 import { SubscriptionFeatures } from './Subscription';
 
 export type Pricing = {
@@ -86,5 +85,27 @@ export class SubscriptionPlan {
   }
   getIsDefault() {
     return this._isDefault;
+  }
+  setTier(tier: string) {
+    this._tier = tier;
+  }
+  setDescription(description: string) {
+    this._description = description;
+  }
+  setMonthlyPricing(price: number) {
+    this._price.monthly = price;
+  }
+  setYearlyPricing(price: number) {
+    this._price.yearly = price;
+  }
+  setPricing(price: Pricing) {
+    this._price = price;
+  }
+  setPopular(popular: boolean) {
+    this._isPopular = popular;
+  }
+
+  setFeatures(features: SubscriptionFeatures) {
+    this._features = features;
   }
 }

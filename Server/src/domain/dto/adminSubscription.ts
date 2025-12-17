@@ -1,5 +1,4 @@
-import { SubscriptionFeatures } from '../entities/Subscription';
-import { Pricing, StripeIds } from '../entities/SubscriptionPlan';
+import { Pricing } from '../entities/SubscriptionPlan';
 
 export interface CreateStripeProductDTO {
   name: string;
@@ -70,4 +69,20 @@ export interface SubscriptionPlanDTO {
   isPopular: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface EditSubscriptionPlanDTO {
+  id: string;
+  tier: string;
+  description: string;
+  features: {
+    maxJoinRequestsPerRide: number | null;
+    maxRideAcceptancesPerMonth: number | null;
+    platformFeePercentage: number;
+    verificationBadge: boolean;
+    priorityInList: boolean;
+    customCostSharing: boolean;
+  };
+  price: Pricing;
+  isPopular: boolean;
 }
