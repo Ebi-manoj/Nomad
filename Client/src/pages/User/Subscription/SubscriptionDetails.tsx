@@ -20,13 +20,6 @@ const tierColors: Record<SubscriptionTierType, string> = {
   PREMIUM_PLUS: 'bg-amber-500',
 };
 
-const tierNames: Record<SubscriptionTierType, string> = {
-  FREE: 'Free Plan',
-  HIKER_PRO: 'Hiker Pro',
-  RIDER_PRO: 'Rider Pro',
-  PREMIUM_PLUS: 'Premium Plus',
-};
-
 export const SubscriptionDetailsPage = ({
   data,
   handleManage,
@@ -69,7 +62,7 @@ export const SubscriptionDetailsPage = ({
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <h2 className="text-2xl font-bold text-slate-900">
-                        {tierNames[tier]}
+                        {tier}
                       </h2>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-bold text-white tracking-wide ${tierColors[tier]}`}

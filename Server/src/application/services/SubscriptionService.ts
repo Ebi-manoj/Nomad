@@ -27,13 +27,22 @@ export class SubscriptionService implements ISubscriptionService {
         subscription,
       };
     }
-    const freePlan = await this._subscriptionPlans.findByTier('FREE');
+    const freePlan = await this._subscriptionPlans.findDefaultPlan();
     if (!freePlan) throw new SubscriptionPlanNotFound();
+    subscription = new Subscription({
+      userId,
+      planId: freePlan.getId() as string,
+      billingCycle: BillingCycle.NONE,
+      status: SubscriptionStatus.ACTIVE,
+      tier: freePlan.getTier(),
+      features: freePlan.getFeatures(),
+      price: 0,
+    });
 
     return {
       tier: freePlan.getTier(),
       features: freePlan.getFeatures(),
-      subscription: null,
+      subscription,
     };
   }
 }
