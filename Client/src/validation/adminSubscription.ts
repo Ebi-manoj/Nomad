@@ -8,8 +8,8 @@ export const subscriptionPlanSchema = z.object({
     .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Invalid color'),
 
   features: z.object({
-    maxJoinRequestsPerRide: z.number().min(1, 'Must be at least 1'),
-    maxRideAcceptancesPerMonth: z.number().min(1, 'Must be at least 1'),
+    maxJoinRequestsPerRide: z.number().int().positive().nullable(),
+    maxRideAcceptancesPerMonth: z.number().int().positive().nullable(),
     platformFeePercentage: z
       .number()
       .min(0)

@@ -26,7 +26,7 @@ import {
   type SubscriptionPlanFormData,
 } from '@/validation/adminSubscription';
 import type { AdminSubscriptionPlanDTO } from '@/types/adminSubscription';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface SubscriptionFormDialogProps {
   open: boolean;
@@ -47,6 +47,7 @@ export function SubscriptionFormDialog({
     reset,
     control,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<SubscriptionPlanFormData>({
     resolver: zodResolver(subscriptionPlanSchema),
@@ -61,6 +62,10 @@ export function SubscriptionFormDialog({
       },
     },
   });
+  const [unlimitedJoin, setUnlimitedJoin] = useState<boolean>(true);
+  const [unlimitedAccept, setUnlimitedAccept] = useState<boolean>(true);
+  const prevJoinRef = useRef<number | null>(null);
+  const prevAcceptRef = useRef<number | null>(null);
   useEffect(() => {
     if (!open) return;
 
@@ -76,16 +81,29 @@ export function SubscriptionFormDialog({
           yearly: editingPlan.price.yearly,
         },
         features: {
-          maxJoinRequestsPerRide:
-            editingPlan.features.maxJoinRequestsPerRide ?? undefined,
+          maxJoinRequestsPerRide: editingPlan.features.maxJoinRequestsPerRide,
           maxRideAcceptancesPerMonth:
-            editingPlan.features.maxRideAcceptancesPerMonth ?? undefined,
+            editingPlan.features.maxRideAcceptancesPerMonth,
           platformFeePercentage: editingPlan.features.platformFeePercentage,
           verificationBadge: editingPlan.features.verificationBadge,
           priorityInList: editingPlan.features.priorityInList,
           customCostSharing: editingPlan.features.customCostSharing,
         },
       });
+      const isJoinUnlimited =
+        editingPlan.features.maxJoinRequestsPerRide === null;
+      const isAcceptUnlimited =
+        editingPlan.features.maxRideAcceptancesPerMonth === null;
+      setUnlimitedJoin(isJoinUnlimited);
+      setUnlimitedAccept(isAcceptUnlimited);
+      if (isJoinUnlimited)
+        setValue('features.maxJoinRequestsPerRide', null, {
+          shouldValidate: true,
+        });
+      if (isAcceptUnlimited)
+        setValue('features.maxRideAcceptancesPerMonth', null, {
+          shouldValidate: true,
+        });
     } else {
       // Create mode → reset to defaults
       reset({
@@ -99,16 +117,54 @@ export function SubscriptionFormDialog({
           yearly: 0,
         },
         features: {
-          maxJoinRequestsPerRide: 0,
-          maxRideAcceptancesPerMonth: 0,
+          maxJoinRequestsPerRide: null,
+          maxRideAcceptancesPerMonth: null,
           platformFeePercentage: 0,
           verificationBadge: false,
           priorityInList: false,
           customCostSharing: false,
         },
       });
+      setUnlimitedJoin(true);
+      setUnlimitedAccept(true);
     }
   }, [open, editingPlan, reset]);
+
+  const handleToggleUnlimitedJoin = (checked: boolean) => {
+    if (checked) {
+      const current = watch('features.maxJoinRequestsPerRide');
+      if (typeof current === 'number' && !isNaN(current)) {
+        prevJoinRef.current = current;
+      }
+      setValue('features.maxJoinRequestsPerRide', null, {
+        shouldValidate: true,
+      });
+    } else {
+      const restore = prevJoinRef.current ?? 1;
+      setValue('features.maxJoinRequestsPerRide', restore, {
+        shouldValidate: true,
+      });
+    }
+    setUnlimitedJoin(checked);
+  };
+
+  const handleToggleUnlimitedAccept = (checked: boolean) => {
+    if (checked) {
+      const current = watch('features.maxRideAcceptancesPerMonth');
+      if (typeof current === 'number' && !isNaN(current)) {
+        prevAcceptRef.current = current;
+      }
+      setValue('features.maxRideAcceptancesPerMonth', null, {
+        shouldValidate: true,
+      });
+    } else {
+      const restore = prevAcceptRef.current ?? 1;
+      setValue('features.maxRideAcceptancesPerMonth', restore, {
+        shouldValidate: true,
+      });
+    }
+    setUnlimitedAccept(checked);
+  };
 
   const handleSubmitForm = async (data: SubscriptionPlanFormData) => {
     const success = await onSubmit(data);
@@ -235,7 +291,9 @@ export function SubscriptionFormDialog({
               />
             </div>
             {errors.badgeColor && (
-              <p className="text-xs text-red-500">{errors.badgeColor.message}</p>
+              <p className="text-xs text-red-500">
+                {errors.badgeColor.message}
+              </p>
             )}
           </div>
 
@@ -286,11 +344,23 @@ export function SubscriptionFormDialog({
 
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <label className="text-xs text-muted-foreground">
-                  Max Join Requests
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs text-muted-foreground">
+                    Max Join Requests
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs">Unlimited</span>
+                    <Switch
+                      checked={unlimitedJoin}
+                      onCheckedChange={handleToggleUnlimitedJoin}
+                      className="scale-75 data-[state=checked]:bg-green-600"
+                    />
+                  </div>
+                </div>
                 <Input
                   type="number"
+                  disabled={unlimitedJoin}
+                  placeholder={unlimitedJoin ? 'Unlimited' : undefined}
                   {...register('features.maxJoinRequestsPerRide', {
                     valueAsNumber: true,
                   })}
@@ -302,11 +372,23 @@ export function SubscriptionFormDialog({
                 )}
               </div>
               <div className="space-y-2">
-                <label className="text-xs text-muted-foreground">
-                  Max Acceptances/Mo
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs text-muted-foreground">
+                    Max Acceptances/Mo
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs">Unlimited</span>
+                    <Switch
+                      checked={unlimitedAccept}
+                      onCheckedChange={handleToggleUnlimitedAccept}
+                      className="scale-75 data-[state=checked]:bg-green-600"
+                    />
+                  </div>
+                </div>
                 <Input
                   type="number"
+                  disabled={unlimitedAccept}
+                  placeholder={unlimitedAccept ? 'Unlimited' : undefined}
                   {...register('features.maxRideAcceptancesPerMonth', {
                     valueAsNumber: true,
                   })}

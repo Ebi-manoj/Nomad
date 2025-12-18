@@ -53,9 +53,9 @@ export class CreateSubscriptionPlanUseCase
     });
 
     const features = new SubscriptionFeatures(
-      data.features.maxJoinRequestsPerRide ?? MAX_JOIN_REQUEST,
-      data.features.maxRideAcceptancesPerMonth ?? MAX_RIDE_ACCEPTANCE,
-      data.features.platformFeePercentage ?? FREE_PLATFORM_FEE,
+      data.features.maxJoinRequestsPerRide,
+      data.features.maxRideAcceptancesPerMonth,
+      data.features.platformFeePercentage,
       data.features.verificationBadge ?? false,
       data.features.priorityInList ?? false,
       data.features.customCostSharing ?? false

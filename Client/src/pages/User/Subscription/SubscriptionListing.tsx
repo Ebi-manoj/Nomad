@@ -143,7 +143,7 @@ export const SubscriptionListing = ({
                 <h3 className="text-xl font-bold text-slate-900 mb-2">
                   {plan.title}
                 </h3>
-                <p className="text-sm text-slate-600 h-10">
+                <p className="text-sm text-slate-600  line-clamp-3 h-15">
                   {plan.description}
                 </p>
               </div>

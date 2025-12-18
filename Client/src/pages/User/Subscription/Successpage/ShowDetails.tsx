@@ -1,6 +1,5 @@
 import type { SubscriptionDTO } from '@/types/subscription';
 import { formatDateWithYear } from '@/utils/dateFormater';
-import { plans } from '@/utils/Plan';
 import {
   ArrowRight,
   Calendar,

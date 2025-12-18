@@ -39,6 +39,13 @@ export const PlanCard = ({
       .replace(/([A-Z])/g, ' $1')
       .replace(/^./, str => str.toUpperCase());
   };
+  const formatFeatureValue = (value: boolean | number | null) => {
+    if (typeof value === 'boolean') return null;
+    if (value === null) return ':Unlimited';
+    if (value === 0) return ':Not available';
+    return value;
+  };
+
   return (
     <Card
       className={cn(
@@ -146,9 +153,10 @@ export const PlanCard = ({
                 >
                   {/* Smart Text Formatting */}
                   {formatFeatureName(key)}
-                  {typeof value === 'number' && (
-                    <span className="font-semibold ml-1">: {value}</span>
-                  )}
+
+                  <span className="font-semibold ml-1">
+                    {formatFeatureValue(value)}
+                  </span>
                 </span>
               </li>
             ))}
