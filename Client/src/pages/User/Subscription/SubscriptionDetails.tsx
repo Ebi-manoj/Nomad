@@ -57,7 +57,7 @@ export const SubscriptionDetailsPage = ({
                       <span
                         style={{
                           background: !subscription?.badgeColor
-                            ? 'green'
+                            ? 'gray'
                             : subscription.badgeColor,
                         }}
                         className={`px-3 py-1 rounded-full text-xs font-bold text-white tracking-wide`}

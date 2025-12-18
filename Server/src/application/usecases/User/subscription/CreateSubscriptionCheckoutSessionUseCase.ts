@@ -37,13 +37,12 @@ export class CreateSubscriptionCheckoutSessionUseCase
     data: CreateSubscriptionCheckoutSessionDTO
   ): Promise<{ id: string; url: string }> {
     const plan = await this._subscriptionPlans.findById(data.planId);
-    console.log(data);
     if (!plan) throw new SubscriptionPlanNotFound();
 
     const user = await this._users.findById(data.userId);
     if (!user) throw new UserNotFound();
 
-    if (plan.getTier() === SubscriptionTier.FREE) {
+    if (plan.getIsDefault()) {
       throw new FreeTierNotRequiredPayment();
     }
 
