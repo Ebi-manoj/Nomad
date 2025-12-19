@@ -47,3 +47,8 @@ export class CustomCostSharingNotEligible extends CustomError {
     super(HttpStatus.NOT_FOUND, message);
   }
 }
+export class NoActiveSubscription extends CustomError {
+  constructor(message = 'No active subscription found') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

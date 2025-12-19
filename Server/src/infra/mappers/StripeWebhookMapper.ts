@@ -36,6 +36,12 @@ export class StripeWebhookMapper {
           ),
         };
 
+      case 'subscription_schedule.created':
+        return {
+          type: eventType,
+          data: event.data.object as unknown,
+        };
+
       default:
         return {
           type: 'unknown',
@@ -49,6 +55,7 @@ export class StripeWebhookMapper {
       'checkout.session.completed': 'checkout.session.completed',
       'customer.subscription.updated': 'customer.subscription.updated',
       'customer.subscription.deleted': 'customer.subscription.deleted',
+      'subscription_schedule.created': 'subscription_schedule.created',
     };
 
     return typeMap[stripeEventType] || 'unknown';
@@ -92,14 +99,15 @@ export class StripeWebhookMapper {
   private static mapSubscriptionUpdated(
     subscription: Stripe.Subscription
   ): SubscriptionUpdatedData {
+    const sub: any = subscription as any;
     return {
-      id: subscription.id,
-      customerId: subscription.customer as string,
-      status: subscription.status,
-      currentPeriodStart: subscription.billing_cycle_anchor,
-      currentPeriodEnd: subscription.current_period_end,
-      cancelAtPeriodEnd: subscription.cancel_at_period_end,
-      items: subscription.items.data.map(item => ({
+      id: sub.id,
+      customerId: sub.customer as string,
+      status: sub.status,
+      currentPeriodStart: sub.billing_cycle_anchor,
+      currentPeriodEnd: sub.current_period_end,
+      cancelAtPeriodEnd: sub.cancel_at_period_end,
+      items: sub.items.data.map((item: any) => ({
         priceId: item.price.id,
         quantity: item.quantity || 1,
       })),

@@ -14,6 +14,7 @@ import { IGetSubscriptionDetailsUseCase } from '../../../application/usecases/Us
 import { ApiResponse } from '../helpers/implementation/apiResponse';
 import { IGetActivePlansUseCase } from '../../../application/usecases/User/subscription/IGetActivePlans';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
+import { IChangeSubscriptionPlanUseCase } from '../../../application/usecases/User/subscription/IChangeSubscriptionPlanUseCase';
 
 export class SubscriptionController implements ISubscriptionController {
   constructor(
@@ -21,7 +22,8 @@ export class SubscriptionController implements ISubscriptionController {
     private readonly _handleWebhookUseCase: IHandleSubscriptionWebhookUseCase,
     private readonly _verifySubscriptionUseCase: IVerifySubscriptionUseCase,
     private readonly _getSubscriptionUseCase: IGetSubscriptionDetailsUseCase,
-    private readonly _getActivePlansUseCase: IGetActivePlansUseCase
+    private readonly _getActivePlansUseCase: IGetActivePlansUseCase,
+    private readonly _changePlanUseCase: IChangeSubscriptionPlanUseCase
   ) {}
 
   async getActivePlans(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -91,5 +93,24 @@ export class SubscriptionController implements ISubscriptionController {
     const response = ApiResponse.success(result);
 
     return new HttpResponse(HttpStatusCode.Ok, response);
+  }
+
+  async changePlan(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+
+    const { newPlanId, billingCycle } = (httpRequest.body || {}) as {
+      newPlanId: string;
+      billingCycle: BillingCycle;
+    };
+
+    const result = await this._changePlanUseCase.execute({
+      userId,
+      newPlanId,
+      billingCycle,
+    });
+
+    const response = ApiResponse.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
   }
 }

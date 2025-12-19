@@ -51,6 +51,9 @@ export class CreateSubscriptionCheckoutSessionUseCase
     );
     if (isSubscribed) throw new AlreadySubscribed();
 
+    // Expire any pending checkout sessions for this user to prevent duplicates
+    await this._checkoutSessions.expirePendingSessionsForUser(data.userId);
+
     const idempotencyKey = this._generateIdempotencyKey(
       data.userId,
       data.tier,
@@ -80,7 +83,13 @@ export class CreateSubscriptionCheckoutSessionUseCase
     const session = await this._payments.createSubscriptionCheckoutSession({
       priceId,
       customerEmail: user.getEmail(),
-      metadata: { ...data, ...data.metadata, stripePriceId: priceId },
+      metadata: {
+        userId: data.userId,
+        planId: plan.getId() as string,
+        tier: data.tier,
+        billingCycle: data.billingCycle,
+        stripePriceId: priceId,
+      },
       trialPeriodDays: data.trialPeriodDays,
     });
 

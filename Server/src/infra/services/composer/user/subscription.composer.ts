@@ -15,6 +15,7 @@ import { SubscriptionService } from '../../../../application/services/Subscripti
 import { GetActivePlansUseCase } from '../../../../application/usecases/User/subscription/GetActivePlans';
 import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
 import { CreateSubscriptionUseCase } from '../../../../application/usecases/User/subscription/CreateSubscriptionUseCase';
+import { ChangeSubscriptionPlanUseCase } from '../../../../application/usecases/User/subscription/ChangeSubscriptionPlanUseCase';
 
 export function subscriptionComposer(): ISubscriptionController {
   const users = new MongoUserRepository();
@@ -45,7 +46,9 @@ export function subscriptionComposer(): ISubscriptionController {
 
   const handleWebhook = new HandleSubscriptionWebhookUseCase(
     payments,
-    createSubscriptionUseCase
+    createSubscriptionUseCase,
+    subscriptions,
+    subscriptionPlanRepo
   );
   const verifySubscriptionUseCase = new VerifySubscriptionUseCase(
     checkoutSessions,
@@ -59,11 +62,19 @@ export function subscriptionComposer(): ISubscriptionController {
 
   const getActiveplanUseCase = new GetActivePlansUseCase(subscriptionPlanRepo);
 
+  const changePlanUseCase = new ChangeSubscriptionPlanUseCase(
+    users,
+    payments,
+    subscriptions,
+    subscriptionPlanRepo
+  );
+
   return new SubscriptionController(
     createSession,
     handleWebhook,
     verifySubscriptionUseCase,
     getSubscriptionUseCase,
-    getActiveplanUseCase
+    getActiveplanUseCase,
+    changePlanUseCase
   );
 }

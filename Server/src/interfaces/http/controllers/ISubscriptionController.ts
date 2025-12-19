@@ -7,4 +7,5 @@ export interface ISubscriptionController {
   handleWebhook(httpRequest: HttpRequest): Promise<HttpResponse>;
   verifySubscription(httpRequest: HttpRequest): Promise<HttpResponse>;
   getSubscription(httpRequest: HttpRequest): Promise<HttpResponse>;
+  changePlan(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

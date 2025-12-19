@@ -75,11 +75,11 @@ export class StripePaymentService implements IPaymentService {
     priceId: string;
     customerEmail?: string;
     customerId?: string;
-    metadata?: Record<string, string>;
+    metadata?: Record<string, string | number | null>;
     trialPeriodDays?: number;
   }): Promise<{ id: string; url: string }> {
     try {
-      const session = await this._stripe.checkout.sessions.create({
+      const sessionParams: Stripe.Checkout.SessionCreateParams = {
         mode: 'subscription',
         line_items: [
           {
@@ -93,11 +93,13 @@ export class StripePaymentService implements IPaymentService {
         cancel_url: `${env.CLIENT_URL}/subscriptions`,
         customer_email: params.customerId ? undefined : params.customerEmail,
         customer: params.customerId,
-        metadata: params.metadata,
+        metadata: params.metadata as Stripe.MetadataParam,
         subscription_data: params.trialPeriodDays
           ? { trial_period_days: params.trialPeriodDays }
           : undefined,
-      });
+      };
+
+      const session = await this._stripe.checkout.sessions.create(sessionParams);
 
       if (!session.url || !session.id) {
         throw new Error('Failed to create Stripe Checkout Session');
@@ -229,5 +231,71 @@ export class StripePaymentService implements IPaymentService {
       console.error('Stripe createPrice error:', error);
       throw new Error('Failed to create Stripe price');
     }
+  }
+
+  async getSubscription(
+    stripeSubscriptionId: string
+  ): Promise<{
+    id: string;
+    items: Array<{ id: string; priceId: string; quantity: number }>;
+  }> {
+    const sub = await this._stripe.subscriptions.retrieve(
+      stripeSubscriptionId,
+      { expand: ['items.data.price'] }
+    );
+    const subscription = sub as Stripe.Subscription;
+    const items = (subscription.items?.data || []).map(it => ({
+      id: it.id,
+      priceId: (it.price as Stripe.Price).id,
+      quantity: it.quantity ?? 1,
+    }));
+    return { id: subscription.id, items };
+  }
+
+  async updateSubscription(
+    stripeSubscriptionId: string,
+    params: {
+      items: Array<{ id: string; price: string }>;
+      proration_behavior: 'always_invoice' | 'create_prorations' | 'none';
+      billing_cycle_anchor?: 'unchanged' | 'now' | number;
+    }
+  ): Promise<void> {
+    await this._stripe.subscriptions.update(stripeSubscriptionId, {
+      items: params.items,
+      proration_behavior: params.proration_behavior as any,
+      billing_cycle_anchor: params.billing_cycle_anchor as any,
+    });
+  }
+
+  async createSubscriptionSchedule(params: {
+    from_subscription: string;
+  }): Promise<{
+    id: string;
+    phases: Array<{ items: Array<{ price: string; quantity: number }> }>;
+  }> {
+    const schedule = await this._stripe.subscriptionSchedules.create({
+      from_subscription: params.from_subscription,
+    });
+    return {
+      id: schedule.id,
+      phases: (schedule.phases || []).map(ph => ({
+        items: (ph.items || []).map(i => ({ price: i.price as string, quantity: i.quantity || 1 })),
+      })),
+    };
+  }
+
+  async updateSubscriptionSchedule(
+    scheduleId: string,
+    params: {
+      phases: Array<{
+        items: Array<{ price: string; quantity: number }>;
+        proration_behavior?: 'none' | 'create_prorations' | 'always_invoice';
+        iterations?: number;
+      }>;
+    }
+  ): Promise<void> {
+    await this._stripe.subscriptionSchedules.update(scheduleId, {
+      phases: params.phases,
+    });
   }
 }

@@ -36,4 +36,15 @@ router.get('/verify', authMiddleware, async (req: Request, res: Response) => {
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
+router.post(
+  '/change-plan',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      subscriptionComposer().changePlan(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;

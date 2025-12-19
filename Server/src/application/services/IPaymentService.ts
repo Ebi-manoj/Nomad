@@ -20,7 +20,7 @@ export interface IPaymentService {
     priceId: string;
     customerEmail?: string;
     customerId?: string;
-    metadata?: Record<string, unknown>;
+    metadata?: Record<string, string | number | null>;
     trialPeriodDays?: number;
   }): Promise<{ id: string; url: string }>;
 
@@ -45,4 +45,38 @@ export interface IPaymentService {
   }>;
   createProduct(data: CreateStripeProductDTO): Promise<StripeProductResponse>;
   createPrice(data: CreateStripePriceDTO): Promise<StripePriceResponse>;
+
+  getSubscription(
+    stripeSubscriptionId: string
+  ): Promise<{
+    id: string;
+    items: Array<{ id: string; priceId: string; quantity: number }>;
+  }>;
+
+  updateSubscription(
+    stripeSubscriptionId: string,
+    params: {
+      items: Array<{ id: string; price: string }>;
+      proration_behavior: 'always_invoice' | 'create_prorations' | 'none';
+      billing_cycle_anchor?: 'unchanged' | 'now' | number;
+    }
+  ): Promise<void>;
+
+  createSubscriptionSchedule(params: {
+    from_subscription: string;
+  }): Promise<{
+    id: string;
+    phases: Array<{ items: Array<{ price: string; quantity: number }> }>;
+  }>;
+
+  updateSubscriptionSchedule(
+    scheduleId: string,
+    params: {
+      phases: Array<{
+        items: Array<{ price: string; quantity: number }>;
+        proration_behavior?: 'none' | 'create_prorations' | 'always_invoice';
+        iterations?: number;
+      }>;
+    }
+  ): Promise<void>;
 }

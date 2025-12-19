@@ -4,6 +4,7 @@ export type WebhookEventType =
   | 'checkout.session.completed'
   | 'customer.subscription.updated'
   | 'customer.subscription.deleted'
+  | 'subscription_schedule.created'
   | 'unknown';
 
 export interface BaseWebhookEvent {

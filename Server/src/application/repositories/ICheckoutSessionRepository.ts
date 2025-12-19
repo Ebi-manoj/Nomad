@@ -15,4 +15,5 @@ export interface ICheckoutSessionRepository {
     stripeSessionId: string,
     status: CheckoutSessionStatus
   ): Promise<void>;
+  expirePendingSessionsForUser(userId: string): Promise<void>;
 }
