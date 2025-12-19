@@ -6,6 +6,7 @@ export const subscriptionPlanSchema = z.object({
   badgeColor: z
     .string()
     .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Invalid color'),
+  displayOrder: z.number().int().min(1, 'Display order must be at least 1'),
 
   features: z.object({
     maxJoinRequestsPerRide: z.number().int().positive().nullable(),

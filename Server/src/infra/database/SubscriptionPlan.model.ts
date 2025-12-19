@@ -5,6 +5,7 @@ export interface ISubscriptionPlanDocument extends Document {
   tier: string;
   description: string;
   badgeColor: string;
+  displayOrder: number;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;
@@ -39,6 +40,7 @@ const SubscriptionPlanSchema = new Schema<ISubscriptionPlanDocument>(
     },
     description: { type: String, required: true, trim: true },
     badgeColor: { type: String, default: '' },
+    displayOrder: { type: Number, required: true, index: true, default: 1 },
     features: {
       maxJoinRequestsPerRide: { type: Number, default: null },
       maxRideAcceptancesPerMonth: { type: Number, default: null },

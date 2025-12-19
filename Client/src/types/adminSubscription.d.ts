@@ -3,6 +3,7 @@ export interface AdminSubscriptionPlanDTO {
   tier: string;
   description: string;
   badgeColor: string;
+  displayOrder: number;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;
@@ -28,6 +29,7 @@ export interface CreateSubscriptionPlanDTO {
   tier: string;
   description: string;
   badgeColor: string;
+  displayOrder: number;
   features: {
     maxJoinRequestsPerRide: number | null;
     maxRideAcceptancesPerMonth: number | null;

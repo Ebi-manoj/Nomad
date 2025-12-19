@@ -16,6 +16,7 @@ export const subscriptionPlanSchema = z.object({
     .string()
     .trim()
     .regex(/^#([0-9a-fA-F]{3}){1,2}$/i, { message: 'invalid color' }),
+  displayOrder: z.number().int().min(1, { message: 'displayOrder must be at least 1' }),
   isPopular: z.boolean().optional().default(false),
   price: z.object({
     monthly: z.number().positive(),
@@ -30,6 +31,7 @@ export const editPlanSchema = z.object({
     .string()
     .trim()
     .regex(/^#([0-9a-fA-F]{3}){1,2}$/i, { message: 'invalid color' }),
+  displayOrder: z.number().int().min(1, { message: 'displayOrder must be at least 1' }),
   isPopular: z.boolean().optional().default(false),
   price: z.object({
     monthly: z.number().positive(),

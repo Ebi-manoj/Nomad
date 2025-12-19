@@ -65,6 +65,7 @@ export class CreateSubscriptionPlanUseCase
       tier: normalizedTier,
       description: data.description,
       badgeColor: data.badgeColor,
+      displayOrder: data.displayOrder,
       features,
       price: data.price,
       stripeId: {

@@ -53,6 +53,7 @@ export function SubscriptionFormDialog({
     resolver: zodResolver(subscriptionPlanSchema),
     defaultValues: {
       badgeColor: '#16a34a',
+      displayOrder: 1,
       isPopular: false,
       isActive: false,
       features: {
@@ -74,6 +75,7 @@ export function SubscriptionFormDialog({
         tier: editingPlan.tier,
         description: editingPlan.description,
         badgeColor: editingPlan.badgeColor,
+        displayOrder: editingPlan.displayOrder,
         isPopular: editingPlan.isPopular,
         isActive: editingPlan.isActive,
         price: {
@@ -110,6 +112,7 @@ export function SubscriptionFormDialog({
         tier: '',
         description: '',
         badgeColor: '#16a34a',
+        displayOrder: 1,
         isPopular: false,
         isActive: false,
         price: {
@@ -246,6 +249,21 @@ export function SubscriptionFormDialog({
                   Active Status
                 </label>
               </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Display Order</label>
+              <Input
+                type="number"
+                {...register('displayOrder', { valueAsNumber: true })}
+              />
+              {errors.displayOrder && (
+                <p className="text-xs text-red-500">
+                  {errors.displayOrder.message}
+                </p>
+              )}
             </div>
           </div>
 

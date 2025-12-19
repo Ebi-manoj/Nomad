@@ -32,6 +32,7 @@ export class EditSubscriptionPlanUseCase
     plan.setTier(data.tier);
     plan.setDescription(data.description);
     plan.setBadgeColor(data.badgeColor);
+    plan.setDisplayOrder(data.displayOrder);
     plan.setFeatures(features);
     if (!plan.getIsDefault()) {
       plan.setPricing(data.price);
