@@ -18,7 +18,9 @@ export interface SubscriptionPlanDTO {
     customCostSharing: boolean;
   };
   price: Pricing;
+  displayOrder: number;
   isActive: boolean;
+  isDefault: boolean;
   isPopular: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -27,7 +27,6 @@ export class CreateSubscriptionCheckoutSessionUseCase
   constructor(
     private readonly _users: IUserRepository,
     private readonly _payments: IPaymentService,
-    private _priceConfig: PriceIdMapping,
     private readonly _checkoutSessions: ICheckoutSessionRepository,
     private readonly _subscriptionRepository: ISubscriptionRepository,
     private readonly _subscriptionPlans: ISubscriptionPlanRepository
@@ -36,6 +35,7 @@ export class CreateSubscriptionCheckoutSessionUseCase
   async execute(
     data: CreateSubscriptionCheckoutSessionDTO
   ): Promise<{ id: string; url: string }> {
+    console.log(data);
     const plan = await this._subscriptionPlans.findById(data.planId);
     if (!plan) throw new SubscriptionPlanNotFound();
 
@@ -51,7 +51,6 @@ export class CreateSubscriptionCheckoutSessionUseCase
     );
     if (isSubscribed) throw new AlreadySubscribed();
 
-    // Expire any pending checkout sessions for this user to prevent duplicates
     await this._checkoutSessions.expirePendingSessionsForUser(data.userId);
 
     const idempotencyKey = this._generateIdempotencyKey(

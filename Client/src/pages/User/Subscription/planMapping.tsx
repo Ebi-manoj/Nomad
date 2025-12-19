@@ -28,6 +28,7 @@ export type MappedPlan = {
   features: PlanFeature[];
   icon: React.ReactNode;
   color: 'amber' | 'emerald' | 'blue' | 'slate';
+  isDefault: boolean;
   cta: string;
 };
 
@@ -167,20 +168,49 @@ export const formatSubscriptionFeatures = (
 
 // Map plans for comparison view
 export const mapSubscriptionPlans = (
-  data: SubscriptionPlanDTO[]
-): MappedPlan[] =>
-  data
+  data: SubscriptionPlanDTO[],
+  currentTier: string
+): MappedPlan[] => {
+  const currentOrder = currentPlanOrder(currentTier, data);
+
+  return data
     .filter(p => p.isActive)
-    .map(p => ({
-      id: p.id,
-      code: p.tier,
-      title: p.tier,
-      description: p.description,
-      popular: p.isPopular,
-      price: p.price,
-      platformFee: `${p.features.platformFeePercentage}%`,
-      features: formatPlanFeatures(p.features),
-      icon: getIconForTier(p.tier),
-      color: getColorForTier(p.tier),
-      cta: 'Choose Plan',
-    }));
+    .sort((a, b) => a.displayOrder - b.displayOrder)
+    .map(p => {
+      const cta = getCTA(currentTier, currentOrder, p);
+
+      return {
+        id: p.id,
+        code: p.tier,
+        title: p.tier,
+        description: p.description,
+        popular: p.isPopular,
+        price: p.price,
+        isDefault: p.isDefault,
+        platformFee: `${p.features.platformFeePercentage}%`,
+        features: formatPlanFeatures(p.features),
+        icon: getIconForTier(p.tier),
+        color: getColorForTier(p.tier),
+        cta,
+      };
+    });
+};
+
+export const getCTA = (
+  currentTier: string,
+  currentOrder: number,
+  plan: SubscriptionPlanDTO
+) => {
+  if (currentTier === plan.tier) return 'Current plan';
+  if (currentOrder > plan.displayOrder) return 'Downgrade';
+  else return 'Upgrade';
+};
+
+export const currentPlanOrder = (
+  tier: string,
+  subscriptionPlans: SubscriptionPlanDTO[]
+): number => {
+  const plan = subscriptionPlans.filter(s => s.tier == tier);
+  if (plan.length > 0) return plan[0].displayOrder;
+  return 1;
+};

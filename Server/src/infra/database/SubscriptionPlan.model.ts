@@ -36,7 +36,6 @@ const SubscriptionPlanSchema = new Schema<ISubscriptionPlanDocument>(
       required: true,
       trim: true,
       uppercase: true,
-      index: true,
     },
     description: { type: String, required: true, trim: true },
     badgeColor: { type: String, default: '' },

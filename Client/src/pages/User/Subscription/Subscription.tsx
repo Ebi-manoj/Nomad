@@ -13,15 +13,17 @@ export const SubscriptionPage = () => {
 
   const handleManage = () => setPage('list');
   const handleBack = () => setPage('details');
-  if (loading) {
-    <div className="flex items-center w-full h-full justify-center">
-      <Loader2 className="bg-gray-400 animate-spin" />
-    </div>;
+  if (loading || !data) {
+    return (
+      <div className="flex items-center w-full h-full justify-center">
+        <Loader2 className="bg-gray-400 animate-spin" />
+      </div>
+    );
   }
   return (
     <>
-      {page === 'list' || !data ? (
-        <SubscriptionListing handleBack={handleBack} />
+      {page === 'list' ? (
+        <SubscriptionListing handleBack={handleBack} tier={data.tier} />
       ) : (
         <SubscriptionDetailsPage data={data} handleManage={handleManage} />
       )}
