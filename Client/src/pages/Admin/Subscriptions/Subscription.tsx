@@ -2,11 +2,15 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Loader2, Search, List, Zap, Crown } from 'lucide-react';
 import { type SubscriptionPlanFormData } from '@/validation/adminSubscription';
-import type { AdminSubscriptionPlanDTO } from '@/types/adminSubscription';
+import type {
+  AdminSubscriptionPlanDTO,
+  EditSubscriptionPlanDTO,
+} from '@/types/adminSubscription';
 import { SubscriptionFormDialog } from './SubscriptionFormDialog';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import {
   createSubscriptionPlan,
+  editSubscriptionPlan,
   fetchAdminSubscriptionPlans,
 } from '@/store/features/admin/subscriptionPlans/adminSubscriptionPlans.thunk';
 import { useSelector } from 'react-redux';
@@ -47,6 +51,14 @@ export const AdminSubscriptionPage = () => {
     try {
       if (!editingPlan) {
         await dispatch(createSubscriptionPlan(data)).unwrap();
+        toast.success('Subscription plan created successfully');
+      } else {
+        const dto: EditSubscriptionPlanDTO = {
+          id: editingPlan.id,
+          isDefault: editingPlan.isDefault,
+          ...data,
+        };
+        await dispatch(editSubscriptionPlan(dto)).unwrap();
         toast.success('Subscription plan created successfully');
       }
       return true;

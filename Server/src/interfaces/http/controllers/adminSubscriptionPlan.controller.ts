@@ -42,6 +42,7 @@ export class AdminSubscriptionPlanController
   }
   async editSubscriptionPlan(httpRequest: HttpRequest): Promise<HttpResponse> {
     const { planId } = httpRequest.path as { planId: string };
+    console.log(httpRequest.body);
     const parsed = subscriptionPlanSchema.parse(httpRequest.body);
     const dto: EditSubscriptionPlanDTO = {
       id: planId,

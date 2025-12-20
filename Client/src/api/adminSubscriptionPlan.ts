@@ -3,6 +3,7 @@ import type { ApiResponse } from '@/types/ApiResponse';
 import type {
   AdminSubscriptionPlanDTO,
   CreateSubscriptionPlanDTO,
+  EditSubscriptionPlanDTO,
 } from '@/types/adminSubscription';
 
 export const ADMIN_SUBSCRIPTION_PLANS_API = '/admin/subscription-plans';
@@ -19,6 +20,15 @@ export const createSubscriptionPlanApi = async (
 ) => {
   const res = await axiosInstance.post<ApiResponse<AdminSubscriptionPlanDTO>>(
     ADMIN_SUBSCRIPTION_PLANS_API,
+    data
+  );
+  return res.data.data;
+};
+export const editSubscriptionPlanApi = async (
+  data: EditSubscriptionPlanDTO
+) => {
+  const res = await axiosInstance.put<ApiResponse<AdminSubscriptionPlanDTO>>(
+    `${ADMIN_SUBSCRIPTION_PLANS_API}/${data.id}`,
     data
   );
   return res.data.data;

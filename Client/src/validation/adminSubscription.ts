@@ -21,8 +21,14 @@ export const subscriptionPlanSchema = z.object({
   }),
 
   price: z.object({
-    monthly: z.number().min(0, 'Monthly price must be positive'),
-    yearly: z.number().min(0, 'Yearly price must be positive'),
+    monthly: z
+      .number()
+      .min(0, 'Monthly price must be positive')
+      .max(100000, 'Monthly price cannot exceed ₹1,00,000'),
+    yearly: z
+      .number()
+      .min(0, 'Yearly price must be positive')
+      .max(1000000, 'Yearly price cannot exceed ₹10,00,000'),
   }),
   isActive: z.boolean(),
   isPopular: z.boolean(),

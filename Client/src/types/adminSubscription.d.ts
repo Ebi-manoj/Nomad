@@ -41,3 +41,7 @@ export interface CreateSubscriptionPlanDTO {
   price: Pricing;
   isPopular: boolean;
 }
+export interface EditSubscriptionPlanDTO extends CreateSubscriptionPlanDTO {
+  id: string;
+  isDefault: boolean;
+}

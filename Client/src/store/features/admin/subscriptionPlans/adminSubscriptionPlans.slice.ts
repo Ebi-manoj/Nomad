@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { AdminSubscriptionPlansState } from './adminSubscriptionPlans.d';
 import {
   createSubscriptionPlan,
+  editSubscriptionPlan,
   fetchAdminSubscriptionPlans,
 } from './adminSubscriptionPlans.thunk';
 
@@ -35,9 +36,18 @@ const adminSubscriptionPlansSlice = createSlice({
       })
       .addCase(createSubscriptionPlan.rejected, (state, action) => {
         state.loading = false;
-        console.log(action.payload);
-        console.log(action.error);
         state.error = (action.payload as string) ?? 'Failed to fetch plans';
+      });
+
+    builder
+      .addCase(editSubscriptionPlan.fulfilled, (state, action) => {
+        state.plans = state.plans.map(p => {
+          return p.id === action.payload.id ? action.payload : p;
+        });
+      })
+      .addCase(editSubscriptionPlan.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) ?? 'Failed to update plan';
       });
   },
 });
