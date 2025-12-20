@@ -126,4 +126,7 @@ export class SubscriptionPlan {
   setFeatures(features: SubscriptionFeatures) {
     this._features = features;
   }
+  toggleIsActive() {
+    this._isActive = !this._isActive;
+  }
 }

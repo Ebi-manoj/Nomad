@@ -11,6 +11,7 @@ import { IAdminSubscriptionPlanController } from './IAdminSubscriptionPlanContro
 import { subscriptionPlanSchema } from '../../validators/subscriptionPlan';
 import { IGetSubscriptionPlanUseCase } from '../../../application/usecases/Admin/IGetSubscriptionPlans';
 import { IEditSubscriptionPlanUseCase } from '../../../application/usecases/Admin/IEditSubscriptionPlan';
+import { IToggleSubscriptionStatusUseCase } from '../../../application/usecases/Admin/IToggleSubscriptionStatus';
 
 export class AdminSubscriptionPlanController
   implements IAdminSubscriptionPlanController
@@ -18,7 +19,8 @@ export class AdminSubscriptionPlanController
   constructor(
     private readonly _createPlanUseCase: ICreateSubscriptionPlanUseCase,
     private readonly _getPlanUseCase: IGetSubscriptionPlanUseCase,
-    private readonly _editPlanUseCase: IEditSubscriptionPlanUseCase
+    private readonly _editPlanUseCase: IEditSubscriptionPlanUseCase,
+    private readonly _togglePlanStatusUseCase: IToggleSubscriptionStatusUseCase
   ) {}
 
   async createSubscriptionPlan(
@@ -62,6 +64,12 @@ export class AdminSubscriptionPlanController
   }
   async getSubscriptionPlans(httpRequest: HttpRequest): Promise<HttpResponse> {
     const result = await this._getPlanUseCase.execute();
+    const response = ApiResponse.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+  async toggleActive(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { planId } = httpRequest.path as { planId: string };
+    const result = await this._togglePlanStatusUseCase.execute(planId);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

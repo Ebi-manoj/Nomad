@@ -39,5 +39,16 @@ router.put(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+router.patch(
+  '/:planId',
+  authMiddleware,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      subscriptionPlanAdminComposer().toggleActive(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;
