@@ -3,6 +3,7 @@ import {
   createSubscriptionPlanApi,
   editSubscriptionPlanApi,
   getAdminSubscriptionPlansApi,
+  toggleSubscriptionPlanStatusApi,
 } from '@/api/adminSubscriptionPlan';
 import { useHandleThunkError } from '@/hooks/useHandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
@@ -49,6 +50,21 @@ export const editSubscriptionPlan = createAsyncThunk<
 >('adminSubscriptionPlas/edit', async (data, { rejectWithValue }) => {
   try {
     return await editSubscriptionPlanApi(data);
+  } catch (error) {
+    return useHandleThunkError(
+      error,
+      rejectWithValue,
+      ErrorMessage.SOMETHING_WENT_WRONG
+    );
+  }
+});
+
+export const toggleSubscriptionPlanStatus = createAsyncThunk<
+  { planId: string; isActive: boolean },
+  string
+>('adminSubscriptionPlas/toggle', async (data, { rejectWithValue }) => {
+  try {
+    return await toggleSubscriptionPlanStatusApi(data);
   } catch (error) {
     return useHandleThunkError(
       error,

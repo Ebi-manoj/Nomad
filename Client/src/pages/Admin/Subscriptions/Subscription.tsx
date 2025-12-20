@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Loader2, Search, List, Zap, Crown } from 'lucide-react';
+import {
+  Plus,
+  Loader2,
+  Search,
+  List,
+  Zap,
+  Crown,
+  ShieldAlert,
+} from 'lucide-react';
 import { type SubscriptionPlanFormData } from '@/validation/adminSubscription';
 import type {
   AdminSubscriptionPlanDTO,
@@ -12,6 +20,7 @@ import {
   createSubscriptionPlan,
   editSubscriptionPlan,
   fetchAdminSubscriptionPlans,
+  toggleSubscriptionPlanStatus,
 } from '@/store/features/admin/subscriptionPlans/adminSubscriptionPlans.thunk';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
@@ -19,6 +28,7 @@ import { Input } from '@/components/ui/input';
 import { PlanCard } from './PlanCard';
 import { StatsCard } from './StatusCard';
 import { toast } from 'sonner';
+import { GenericModal } from '@/components/GenericModel';
 
 export const AdminSubscriptionPage = () => {
   const { plans, loading } = useSelector(
@@ -28,6 +38,9 @@ export const AdminSubscriptionPage = () => {
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] =
+    useState<AdminSubscriptionPlanDTO | null>(null);
   const [editingPlan, setEditingPlan] =
     useState<AdminSubscriptionPlanDTO | null>(null);
 
@@ -67,6 +80,24 @@ export const AdminSubscriptionPage = () => {
       return false;
     }
   };
+
+  const toggleConfirmationReq = (plan: AdminSubscriptionPlanDTO) => {
+    setSelectedPlan(plan);
+    setConfirmModal(true);
+  };
+
+  const onToggleActive = async () => {
+    if (!selectedPlan) return;
+    try {
+      await dispatch(toggleSubscriptionPlanStatus(selectedPlan.id)).unwrap();
+      toast.success('Updated plan satus successfully');
+    } catch (error) {
+      toast.error(error as string);
+    } finally {
+      setConfirmModal(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white p-6 md:p-2 space-y-8">
       {/* 1. Modern Header Section */}
@@ -136,7 +167,7 @@ export const AdminSubscriptionPage = () => {
               plan={plan}
               onEdit={() => handleEdit(plan)}
               onDelete={() => {}}
-              onToggleActive={() => {}}
+              onToggleActive={() => toggleConfirmationReq(plan)}
             />
           ))}
         </div>
@@ -149,6 +180,41 @@ export const AdminSubscriptionPage = () => {
         editingPlan={editingPlan}
         onSubmit={handleFormSubmit}
       />
+
+      <GenericModal
+        isOpen={confirmModal}
+        onClose={() => {
+          setConfirmModal(false);
+          setSelectedPlan(null);
+        }}
+        title={
+          selectedPlan?.isActive
+            ? 'Deactivate Subscription Plan'
+            : 'Activate Subscription Plan'
+        }
+        titleIcon={<ShieldAlert />}
+        subtitle={`Are you sure you want to ${
+          selectedPlan?.isActive ? 'deactivate' : 'activate'
+        } this plan?`}
+        primaryAction={{
+          label: selectedPlan?.isActive ? 'Deactivate' : 'Activate',
+          className: selectedPlan?.isActive
+            ? 'bg-red-500 hover:bg-red-600'
+            : 'bg-emerald-400 hover:bg-emerald-300',
+          onClick: onToggleActive,
+        }}
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => {
+            setConfirmModal(false);
+            setSelectedPlan(null);
+          },
+        }}
+      >
+        <p className="text-sm text-gray-600">
+          This action will immediately hidden from users.
+        </p>
+      </GenericModal>
     </div>
   );
 };

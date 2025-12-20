@@ -4,6 +4,7 @@ import {
   createSubscriptionPlan,
   editSubscriptionPlan,
   fetchAdminSubscriptionPlans,
+  toggleSubscriptionPlanStatus,
 } from './adminSubscriptionPlans.thunk';
 
 const initialState: AdminSubscriptionPlansState = {
@@ -48,6 +49,18 @@ const adminSubscriptionPlansSlice = createSlice({
       .addCase(editSubscriptionPlan.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) ?? 'Failed to update plan';
+      });
+    builder
+      .addCase(toggleSubscriptionPlanStatus.fulfilled, (state, action) => {
+        state.plans = state.plans.map(p =>
+          p.id == action.payload.planId
+            ? { ...p, isActive: action.payload.isActive }
+            : p
+        );
+      })
+      .addCase(toggleSubscriptionPlanStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) ?? 'Failed to update Status';
       });
   },
 });

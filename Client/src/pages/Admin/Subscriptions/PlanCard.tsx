@@ -181,7 +181,7 @@ export const PlanCard = ({
         {!plan.isDefault && (
           <div className="flex items-center gap-2">
             <Switch
-              checked={true}
+              checked={plan.isActive}
               onCheckedChange={onToggleActive}
               className="scale-75 data-[state=checked]:bg-green-600"
             />

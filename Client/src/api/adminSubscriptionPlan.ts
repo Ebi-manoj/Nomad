@@ -33,3 +33,10 @@ export const editSubscriptionPlanApi = async (
   );
   return res.data.data;
 };
+
+export const toggleSubscriptionPlanStatusApi = async (planId: string) => {
+  const res = await axiosInstance.patch<
+    ApiResponse<{ planId: string; isActive: boolean }>
+  >(`${ADMIN_SUBSCRIPTION_PLANS_API}/${planId}`);
+  return res.data.data;
+};
