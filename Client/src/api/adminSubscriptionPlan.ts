@@ -40,3 +40,11 @@ export const toggleSubscriptionPlanStatusApi = async (planId: string) => {
   >(`${ADMIN_SUBSCRIPTION_PLANS_API}/${planId}`);
   return res.data.data;
 };
+
+export const deleteSubscriptionPlanApi = async (planId: string) => {
+  const res = await axiosInstance.patch<
+    ApiResponse<{ planId: string; success: boolean }>
+  >(`${ADMIN_SUBSCRIPTION_PLANS_API}/${planId}/delete`);
+  console.log(res);
+  return res.data.data;
+};

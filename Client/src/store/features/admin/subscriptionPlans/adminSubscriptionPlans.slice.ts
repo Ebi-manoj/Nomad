@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { AdminSubscriptionPlansState } from './adminSubscriptionPlans.d';
 import {
   createSubscriptionPlan,
+  deleteSubscriptionPlan,
   editSubscriptionPlan,
   fetchAdminSubscriptionPlans,
   toggleSubscriptionPlanStatus,
@@ -61,6 +62,15 @@ const adminSubscriptionPlansSlice = createSlice({
       .addCase(toggleSubscriptionPlanStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) ?? 'Failed to update Status';
+      });
+
+    builder
+      .addCase(deleteSubscriptionPlan.fulfilled, (state, action) => {
+        state.plans = state.plans.filter(p => p.id !== action.payload.planId);
+      })
+      .addCase(deleteSubscriptionPlan.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) ?? 'Failed to delete plan';
       });
   },
 });

@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   createSubscriptionPlanApi,
+  deleteSubscriptionPlanApi,
   editSubscriptionPlanApi,
   getAdminSubscriptionPlansApi,
   toggleSubscriptionPlanStatusApi,
@@ -32,7 +33,7 @@ export const fetchAdminSubscriptionPlans = createAsyncThunk<
 export const createSubscriptionPlan = createAsyncThunk<
   AdminSubscriptionPlanDTO,
   CreateSubscriptionPlanDTO
->('adminSubscriptionPlas/create', async (data, { rejectWithValue }) => {
+>('adminSubscriptionPlans/create', async (data, { rejectWithValue }) => {
   try {
     return await createSubscriptionPlanApi(data);
   } catch (error) {
@@ -47,7 +48,7 @@ export const createSubscriptionPlan = createAsyncThunk<
 export const editSubscriptionPlan = createAsyncThunk<
   AdminSubscriptionPlanDTO,
   EditSubscriptionPlanDTO
->('adminSubscriptionPlas/edit', async (data, { rejectWithValue }) => {
+>('adminSubscriptionPlans/edit', async (data, { rejectWithValue }) => {
   try {
     return await editSubscriptionPlanApi(data);
   } catch (error) {
@@ -62,9 +63,23 @@ export const editSubscriptionPlan = createAsyncThunk<
 export const toggleSubscriptionPlanStatus = createAsyncThunk<
   { planId: string; isActive: boolean },
   string
->('adminSubscriptionPlas/toggle', async (data, { rejectWithValue }) => {
+>('adminSubscriptionPlans/toggle', async (data, { rejectWithValue }) => {
   try {
     return await toggleSubscriptionPlanStatusApi(data);
+  } catch (error) {
+    return useHandleThunkError(
+      error,
+      rejectWithValue,
+      ErrorMessage.SOMETHING_WENT_WRONG
+    );
+  }
+});
+export const deleteSubscriptionPlan = createAsyncThunk<
+  { planId: string; success: boolean },
+  string
+>('adminSubscriptionPlans/delete', async (data, { rejectWithValue }) => {
+  try {
+    return await deleteSubscriptionPlanApi(data);
   } catch (error) {
     return useHandleThunkError(
       error,

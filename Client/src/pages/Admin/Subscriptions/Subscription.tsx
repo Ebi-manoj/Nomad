@@ -18,6 +18,7 @@ import { SubscriptionFormDialog } from './SubscriptionFormDialog';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import {
   createSubscriptionPlan,
+  deleteSubscriptionPlan,
   editSubscriptionPlan,
   fetchAdminSubscriptionPlans,
   toggleSubscriptionPlanStatus,
@@ -30,6 +31,12 @@ import { StatsCard } from './StatusCard';
 import { toast } from 'sonner';
 import { GenericModal } from '@/components/GenericModel';
 
+interface ConfirmationModalType {
+  title: string;
+  subtitle: string;
+  onClick: () => void;
+}
+
 export const AdminSubscriptionPage = () => {
   const { plans, loading } = useSelector(
     (state: RootState) => state.adminSubscriptionPlans
@@ -39,14 +46,44 @@ export const AdminSubscriptionPage = () => {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
+  const [isDeleted, setIsDeleted] = useState<AdminSubscriptionPlanDTO | null>(
+    null
+  );
   const [selectedPlan, setSelectedPlan] =
     useState<AdminSubscriptionPlanDTO | null>(null);
   const [editingPlan, setEditingPlan] =
     useState<AdminSubscriptionPlanDTO | null>(null);
+  const [confirmModalContent, setConfirmModalContent] =
+    useState<ConfirmationModalType>({
+      title: '',
+      subtitle: '',
+      onClick: () => {},
+    });
 
   useEffect(() => {
     dispatch(fetchAdminSubscriptionPlans());
   }, []);
+
+  useEffect(() => {
+    let title = '';
+    let subtitle = '';
+    let onClick = () => {};
+    if (isDeleted) {
+      title = 'Delete Subscription Plan';
+      subtitle = 'Are you sure want to Delete this plan';
+      onClick = onDelete;
+    }
+    if (selectedPlan) {
+      title = selectedPlan.isActive
+        ? 'Deactivate Subscription Plan'
+        : 'Activate Subscription Plan';
+      subtitle = `Are you sure you want to ${
+        selectedPlan?.isActive ? 'deactivate' : 'activate'
+      } this plan?`;
+      onClick = onToggleActive;
+    }
+    setConfirmModalContent({ title, subtitle, onClick });
+  }, [isDeleted, selectedPlan]);
 
   const handleEdit = (plan: AdminSubscriptionPlanDTO) => {
     setEditingPlan(plan);
@@ -85,17 +122,40 @@ export const AdminSubscriptionPage = () => {
     setSelectedPlan(plan);
     setConfirmModal(true);
   };
+  const deleteConfirmationReq = (plan: AdminSubscriptionPlanDTO) => {
+    setIsDeleted(plan);
+    setConfirmModal(true);
+  };
 
   const onToggleActive = async () => {
     if (!selectedPlan) return;
     try {
       await dispatch(toggleSubscriptionPlanStatus(selectedPlan.id)).unwrap();
-      toast.success('Updated plan satus successfully');
+      toast.success('Updated plan status successfully');
     } catch (error) {
       toast.error(error as string);
     } finally {
+      setSelectedPlan(null);
       setConfirmModal(false);
     }
+  };
+
+  const onDelete = async () => {
+    if (!isDeleted) return;
+    try {
+      await dispatch(deleteSubscriptionPlan(isDeleted.id)).unwrap();
+      toast.success('Deleted plan  successfully');
+    } catch (error) {
+      toast.error(error as string);
+    } finally {
+      setIsDeleted(null);
+      setConfirmModal(false);
+    }
+  };
+  const onCloseModal = () => {
+    setConfirmModal(false);
+    setSelectedPlan(null);
+    setIsDeleted(null);
   };
 
   return (
@@ -166,7 +226,7 @@ export const AdminSubscriptionPage = () => {
               key={plan.id}
               plan={plan}
               onEdit={() => handleEdit(plan)}
-              onDelete={() => {}}
+              onDelete={() => deleteConfirmationReq(plan)}
               onToggleActive={() => toggleConfirmationReq(plan)}
             />
           ))}
@@ -183,36 +243,25 @@ export const AdminSubscriptionPage = () => {
 
       <GenericModal
         isOpen={confirmModal}
-        onClose={() => {
-          setConfirmModal(false);
-          setSelectedPlan(null);
-        }}
-        title={
-          selectedPlan?.isActive
-            ? 'Deactivate Subscription Plan'
-            : 'Activate Subscription Plan'
-        }
+        onClose={onCloseModal}
+        title={confirmModalContent.title}
         titleIcon={<ShieldAlert />}
-        subtitle={`Are you sure you want to ${
-          selectedPlan?.isActive ? 'deactivate' : 'activate'
-        } this plan?`}
+        subtitle={confirmModalContent.subtitle}
         primaryAction={{
-          label: selectedPlan?.isActive ? 'Deactivate' : 'Activate',
-          className: selectedPlan?.isActive
-            ? 'bg-red-500 hover:bg-red-600'
-            : 'bg-emerald-400 hover:bg-emerald-300',
-          onClick: onToggleActive,
+          label: 'Confirm',
+          className:
+            selectedPlan?.isActive || isDeleted
+              ? 'bg-red-500 hover:bg-red-600'
+              : 'bg-emerald-400 hover:bg-emerald-300',
+          onClick: confirmModalContent.onClick,
         }}
         secondaryAction={{
           label: 'Cancel',
-          onClick: () => {
-            setConfirmModal(false);
-            setSelectedPlan(null);
-          },
+          onClick: onCloseModal,
         }}
       >
         <p className="text-sm text-gray-600">
-          This action will immediately hidden from users.
+          This plan will immediately hidden from users.
         </p>
       </GenericModal>
     </div>
