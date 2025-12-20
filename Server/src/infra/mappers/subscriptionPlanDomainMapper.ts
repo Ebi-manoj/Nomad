@@ -27,6 +27,7 @@ export const subscriptionPlanMapper: IMapper<
       stripeId: doc.stripeId,
       isActive: doc.isActive,
       isDefault: doc.isDefault,
+      isDeleted: doc.isDeleted,
       isPopular: doc.isPopular,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
@@ -51,6 +52,7 @@ export const subscriptionPlanMapper: IMapper<
       price: domain.getPrice(),
       stripeId: domain.getStripeId(),
       isActive: domain.getIsActive(),
+      isDeleted: domain.getIsDeleted(),
       isPopular: domain.getIsPopular(),
     };
   },

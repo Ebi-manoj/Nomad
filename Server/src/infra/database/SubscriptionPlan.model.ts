@@ -24,6 +24,7 @@ export interface ISubscriptionPlanDocument extends Document {
   };
   isActive: boolean;
   isDefault: boolean;
+  isDeleted: boolean;
   isPopular: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -57,6 +58,7 @@ const SubscriptionPlanSchema = new Schema<ISubscriptionPlanDocument>(
       yearly: { type: String, required: true },
     },
     isActive: { type: Boolean, default: true, index: true },
+    isDeleted: { type: Boolean, default: false },
     isPopular: { type: Boolean, default: false },
     isDefault: { type: Boolean, default: false },
   },

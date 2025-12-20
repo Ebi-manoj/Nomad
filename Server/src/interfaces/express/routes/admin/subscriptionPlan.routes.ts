@@ -50,5 +50,16 @@ router.patch(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+router.patch(
+  '/:planId/delete',
+  authMiddleware,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      subscriptionPlanAdminComposer().deletePlan(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

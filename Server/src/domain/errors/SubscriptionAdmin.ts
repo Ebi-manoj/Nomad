@@ -12,3 +12,9 @@ export class SubscriptionPlanNotFound extends CustomError {
     super(HttpStatus.NOT_FOUND, message);
   }
 }
+
+export class FreeTierCannotBeDeletd extends CustomError {
+  constructor(message = 'Free tier Plan cannot be deleted') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}

@@ -1,4 +1,5 @@
 import { CreateSubscriptionPlanUseCase } from '../../../../application/usecases/Admin/CreateSubscriptionPlan';
+import { DeleteSubscriptionPlanUseCase } from '../../../../application/usecases/Admin/DeleteSubscriptionPlan';
 import { EditSubscriptionPlanUseCase } from '../../../../application/usecases/Admin/EditSubscriptionPlan';
 import { GetSubscriptionPlanUseCase } from '../../../../application/usecases/Admin/GetSubscriptionPlan';
 import { ToggleSubscriptionStatusUseCase } from '../../../../application/usecases/Admin/ToggleSubscriptionStatus';
@@ -19,11 +20,14 @@ export function subscriptionPlanAdminComposer(): IAdminSubscriptionPlanControlle
 
   const togglePlanUseCase = new ToggleSubscriptionStatusUseCase(planRepo);
 
+  const deletePlanUseCase = new DeleteSubscriptionPlanUseCase(planRepo);
+
   const getPlanUseCase = new GetSubscriptionPlanUseCase(planRepo);
   return new AdminSubscriptionPlanController(
     createUseCase,
     getPlanUseCase,
     editPlanusecase,
-    togglePlanUseCase
+    togglePlanUseCase,
+    deletePlanUseCase
   );
 }

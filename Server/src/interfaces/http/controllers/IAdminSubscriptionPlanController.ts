@@ -5,5 +5,6 @@ export interface IAdminSubscriptionPlanController {
   createSubscriptionPlan(httpRequest: HttpRequest): Promise<HttpResponse>;
   editSubscriptionPlan(httpRequest: HttpRequest): Promise<HttpResponse>;
   toggleActive(httpRequest: HttpRequest): Promise<HttpResponse>;
+  deletePlan(httpRequest: HttpRequest): Promise<HttpResponse>;
   getSubscriptionPlans(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

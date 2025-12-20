@@ -12,6 +12,7 @@ import { subscriptionPlanSchema } from '../../validators/subscriptionPlan';
 import { IGetSubscriptionPlanUseCase } from '../../../application/usecases/Admin/IGetSubscriptionPlans';
 import { IEditSubscriptionPlanUseCase } from '../../../application/usecases/Admin/IEditSubscriptionPlan';
 import { IToggleSubscriptionStatusUseCase } from '../../../application/usecases/Admin/IToggleSubscriptionStatus';
+import { IDeleteSubscriptionPlanUseCase } from '../../../application/usecases/Admin/IDeleteSubscriptionPlan';
 
 export class AdminSubscriptionPlanController
   implements IAdminSubscriptionPlanController
@@ -20,7 +21,8 @@ export class AdminSubscriptionPlanController
     private readonly _createPlanUseCase: ICreateSubscriptionPlanUseCase,
     private readonly _getPlanUseCase: IGetSubscriptionPlanUseCase,
     private readonly _editPlanUseCase: IEditSubscriptionPlanUseCase,
-    private readonly _togglePlanStatusUseCase: IToggleSubscriptionStatusUseCase
+    private readonly _togglePlanStatusUseCase: IToggleSubscriptionStatusUseCase,
+    private readonly _deletePlanUseCase: IDeleteSubscriptionPlanUseCase
   ) {}
 
   async createSubscriptionPlan(
@@ -71,6 +73,14 @@ export class AdminSubscriptionPlanController
     const { planId } = httpRequest.path as { planId: string };
     const result = await this._togglePlanStatusUseCase.execute(planId);
     const response = ApiResponse.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async deletePlan(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const { planId } = httpRequest.path as { planId: string };
+    const result = await this._deletePlanUseCase.execute(planId);
+    const response = ApiResponse.success(result);
+
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

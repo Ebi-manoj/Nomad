@@ -15,6 +15,11 @@ export class SubscriptionPlanRepository
     super(SubscriptionPlanModel, subscriptionPlanMapper);
   }
 
+  async findAll(): Promise<SubscriptionPlan[]> {
+    const docs = await this.model.find({ isDeleted: false });
+    return docs.map(this.mapper.toDomain);
+  }
+
   async findByTier(tier: string): Promise<SubscriptionPlan | null> {
     const doc = await SubscriptionPlanModel.findOne({
       tier: tier.toUpperCase(),
@@ -23,7 +28,10 @@ export class SubscriptionPlanRepository
   }
 
   async findAllActive(): Promise<SubscriptionPlan[]> {
-    const docs = await SubscriptionPlanModel.find({ isActive: true }).sort({
+    const docs = await SubscriptionPlanModel.find({
+      isActive: true,
+      isDeleted: false,
+    }).sort({
       'price.monthly': 1,
     });
     return docs.map(d => subscriptionPlanMapper.toDomain(d));

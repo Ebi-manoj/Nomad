@@ -20,6 +20,7 @@ export interface SubscriptionPlanProps {
   price: Pricing;
   stripeId: StripeIds;
   isActive?: boolean;
+  isDeleted?: boolean;
   isPopular?: boolean;
   isDefault?: boolean;
   createdAt?: Date;
@@ -36,6 +37,7 @@ export class SubscriptionPlan {
   private _stripeId: StripeIds;
   private _isActive: boolean;
   private _isPopular: boolean;
+  private _isDeleted: boolean;
   private readonly _isDefault: boolean;
   private _createdAt: Date;
   private _updatedAt: Date;
@@ -52,6 +54,7 @@ export class SubscriptionPlan {
     this._isActive = props.isActive ?? true;
     this._isPopular = props.isPopular ?? false;
     this._createdAt = props.createdAt || new Date();
+    this._isDeleted = props.isDeleted || false;
     this._isDefault = props.isDefault || false;
     this._updatedAt = props.updatedAt || new Date();
   }
@@ -128,5 +131,11 @@ export class SubscriptionPlan {
   }
   toggleIsActive() {
     this._isActive = !this._isActive;
+  }
+  getIsDeleted() {
+    return this._isDeleted;
+  }
+  delete() {
+    this._isDeleted = true;
   }
 }
