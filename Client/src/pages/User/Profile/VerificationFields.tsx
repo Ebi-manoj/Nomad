@@ -1,5 +1,5 @@
 import { ShieldCheck, Upload } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '../../../components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -23,7 +23,7 @@ import type { uploadDocsRequest } from '@/store/features/user/documents/doc';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { toast } from 'sonner';
-import { SubmitBtn } from './SubmitBtn';
+import { SubmitBtn } from '../../../components/SubmitBtn';
 import { ErrorMessage, FolderTypes } from '@/utils/constants';
 
 type docType = 'aadhaar' | 'licence';

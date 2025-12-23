@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Mail, Phone, User2, BadgeCheck, Bike } from 'lucide-react';
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { Field } from '@/components/ProfileInput';
-import { VerificationSection } from '@/components/VerificationFields';
+import { VerificationSection } from '@/pages/User/Profile/VerificationFields';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { UserAvatar } from '@/components/ProfilePic';
