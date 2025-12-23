@@ -16,4 +16,8 @@ export class BankAccountRepository
     const docs = await this.model.find({ userId });
     return docs.map(d => this.mapper.toDomain(d));
   }
+  async findByAccountNumber(accntnumber: string): Promise<BankAccount | null> {
+    const doc=await this.model.findOne({accountNumber:accntnumber})
+    return doc?this.mapper.toDomain(doc):null
+  }
 }

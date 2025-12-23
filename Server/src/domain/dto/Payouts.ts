@@ -17,7 +17,7 @@ export enum PayoutMode {
 export interface CreatePaymentContactDTO {
   name: string;
   email: string;
-  contact: string;
+  contact?: string;
   type: ContactType;
 }
 
@@ -25,7 +25,7 @@ export interface CreatePaymentContactResDTO {
   id: string;
   name: string;
   email: string;
-  contact: string;
+  contact?: string;
 }
 
 export interface CreateFundAccountDTO {

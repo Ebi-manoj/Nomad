@@ -7,23 +7,42 @@ import {
   CreatePaymentContactDTO,
   CreatePaymentContactResDTO,
 } from '../../domain/dto/Payouts';
-
-export interface RazorpayContactParams {
-  name: string;
-  email: string;
-  contact: string;
-  type: string;
-  reference_id?: string;
-  notes?: Record<string, any>;
-}
+import { env } from '../utils/env';
+import axios, { AxiosInstance } from 'axios';
 
 export interface RazorpayContact {
   id: string;
+  entity: string;
   name: string;
   email: string;
   contact: string;
   type: string;
   reference_id?: string;
+  batch_id?: string | null;
+  active: boolean;
+  notes: Record<string, unknown>;
+  created_at: number;
+}
+
+export interface RazorpayFundAccount {
+  id: string;
+  entity: string;
+  contact_id: string;
+  account_type: string;
+  bank_account?: {
+    name: string;
+    ifsc: string;
+    account_number: string;
+    bank_name: string;
+  };
+  vpa?: {
+    address: string;
+    username: string;
+    handle: string;
+  };
+  batch_id?: string | null;
+  active: boolean;
+  created_at: number;
 }
 
 export interface RazorpayFundAccountParams {
@@ -39,87 +58,28 @@ export interface RazorpayFundAccountParams {
   };
 }
 
-export interface RazorpayFundAccount {
-  id: string;
-  contact_id: string;
-  account_type: string;
-  bank_account?: {
-    name: string;
-    ifsc: string;
-    account_number: string;
-  };
-  vpa?: {
-    address: string;
-  };
-  active: boolean;
-}
-
-export interface RazorpayPayoutParams {
-  account_number: string;
-  fund_account_id: string;
-  amount: number;
-  currency: string;
-  mode: 'IMPS' | 'NEFT' | 'RTGS' | 'UPI';
-  purpose: string;
-  queue_if_low_balance?: boolean;
-  reference_id: string;
-  narration: string;
-  notes?: Record<string, any>;
-}
-
-export interface RazorpayPayout {
-  id: string;
-  entity: string;
-  fund_account_id: string;
-  amount: number;
-  currency: string;
-  status:
-    | 'queued'
-    | 'pending'
-    | 'processing'
-    | 'processed'
-    | 'reversed'
-    | 'cancelled';
-  purpose: string;
-  utr?: string;
-  mode: string;
-  reference_id: string;
-  narration: string;
-  fees: number;
-  tax: number;
-  created_at: number;
-  processed_at?: number;
-}
-
-export interface RazorpayClient {
-  contacts: {
-    create(params: RazorpayContactParams): Promise<RazorpayContact>;
-    fetch(contactId: string): Promise<RazorpayContact>;
-  };
-  fundAccount: {
-    create(params: RazorpayFundAccountParams): Promise<RazorpayFundAccount>;
-    fetch(fundAccountId: string): Promise<RazorpayFundAccount>;
-  };
-  payouts: {
-    create(params: RazorpayPayoutParams): Promise<RazorpayPayout>;
-    fetch(payoutId: string): Promise<RazorpayPayout>;
-  };
-}
-
 export class RazorPayPayoutService implements IPayoutService {
-  private readonly _razorpay: RazorpayClient;
+  private readonly _baseURL: string;
+  private readonly _client: AxiosInstance;
   constructor() {
-    this._razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_KEY_SECRET!,
-    }) as unknown as RazorpayClient;
+    this._baseURL = 'https://api.razorpay.com/v1';
+    this._client = axios.create({
+      baseURL: this._baseURL,
+      auth: {
+        username: env.RAZORPAY_KEY_ID,
+        password: env.RAZORPAY_SECRET,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   async createContact(
     data: CreatePaymentContactDTO
   ): Promise<CreatePaymentContactResDTO> {
     try {
-      const contact = await this._razorpay.contacts.create({
+      const response = await this._client.post<RazorpayContact>('/contacts', {
         name: data.name,
         email: data.email,
         contact: data.contact,
@@ -129,6 +89,8 @@ export class RazorPayPayoutService implements IPayoutService {
           created_at: new Date().toISOString(),
         },
       });
+
+      const contact = response.data;
 
       return {
         id: contact.id,
@@ -146,7 +108,7 @@ export class RazorPayPayoutService implements IPayoutService {
     data: CreateFundAccountDTO
   ): Promise<CreateFundAccountResDTO> {
     try {
-      const fundAccountData: Partial<RazorpayFundAccount> = {
+      const fundAccountData: RazorpayFundAccountParams = {
         contact_id: data.contactId,
         account_type: data.accountType,
       };
@@ -163,9 +125,12 @@ export class RazorPayPayoutService implements IPayoutService {
         };
       }
 
-      const fundAccount = await this._razorpay.fundAccount.create(
-        fundAccountData as RazorpayFundAccountParams
+      const response = await this._client.post<RazorpayFundAccount>(
+        '/fund_accounts',
+        fundAccountData
       );
+
+      const fundAccount = response.data;
 
       return {
         id: fundAccount.id,
