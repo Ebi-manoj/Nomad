@@ -53,9 +53,9 @@ export interface CreatePayoutDTO {
   amount: number;
   currency: string;
   mode: PayoutMode;
-  purspose: 'refund' | 'cashback' | 'payout';
+  purpose: 'refund' | 'cashback' | 'payout';
   narration: string;
-  reference_id: string;
+  referenceId: string;
 }
 
 export interface PayoutResponse {
@@ -68,7 +68,5 @@ export interface PayoutResponse {
     | 'reversed'
     | 'cancelled';
   amount: number;
-  fees: number;
-  tax: number;
   utr?: string;
 }

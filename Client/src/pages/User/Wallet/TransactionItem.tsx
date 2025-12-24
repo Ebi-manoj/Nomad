@@ -10,11 +10,22 @@ interface TransactionItemProps {
 
 export const TransactionItem = ({ transaction }: TransactionItemProps) => {
   const isIncome = transaction.type === 'CREDIT';
-
-  const statusColors = {
-    completed: 'bg-green-500 text-white ',
-    pending: 'bg-warning/10 text-warning border-warning/20',
-    failed: 'bg-destructive/10 text-destructive border-destructive/20',
+  const statusStyles: Record<
+    WalletTransactionDTO['status'],
+    { label: string; className: string }
+  > = {
+    SUCCESS: {
+      label: 'Success',
+      className: 'bg-green-400 text-white',
+    },
+    PROCESSING: {
+      label: 'Processing',
+      className: 'bg-amber-200 text-white border-warning/20',
+    },
+    FAILED: {
+      label: 'Failed',
+      className: 'bg-red-400 text-white border-destructive/20',
+    },
   };
 
   return (
@@ -38,8 +49,11 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
               <p className="font-medium text-foreground">
                 {transaction.description}
               </p>
-              <Badge variant="outline" className={statusColors['completed']}>
-                {'Completed'}
+              <Badge
+                variant="outline"
+                className={statusStyles[transaction.status].className}
+              >
+                {statusStyles[transaction.status].label}
               </Badge>
             </div>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">

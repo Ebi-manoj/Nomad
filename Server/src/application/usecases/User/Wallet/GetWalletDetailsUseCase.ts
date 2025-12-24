@@ -38,6 +38,7 @@ export class GetWalletDetailsUseCase {
         amount: t.getAmount(),
         type: t.getType(),
         description: t.getDescription(),
+        status: t.getStatus(),
         createdAt: t.getCreatedAt(),
       })),
       totalCredits,

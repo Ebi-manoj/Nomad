@@ -1,6 +1,7 @@
 import {
   TransactionReferenceType,
   WalletTransactionType,
+  WalletTransactionStatus,
 } from '../enums/Wallet';
 
 export interface WalletTransactionProps {
@@ -11,6 +12,7 @@ export interface WalletTransactionProps {
   amount: number;
   type: WalletTransactionType;
   description: string;
+  status?: WalletTransactionStatus;
   metadata?: Record<string, unknown>;
   createdAt?: Date;
   updatedAt?: Date;
@@ -24,6 +26,7 @@ export class WalletTransaction {
   private _amount: number;
   private _type: WalletTransactionType;
   private _description: string;
+  private _status: WalletTransactionStatus;
   private _metadata?: Record<string, unknown>;
   private _createdAt: Date;
   private _updatedAt: Date;
@@ -36,6 +39,7 @@ export class WalletTransaction {
     this._amount = props.amount;
     this._type = props.type;
     this._description = props.description;
+    this._status = props.status ?? WalletTransactionStatus.PROCESSING;
     this._metadata = props.metadata;
     this._createdAt = props.createdAt ?? new Date();
     this._updatedAt = props.updatedAt ?? new Date();
@@ -66,6 +70,14 @@ export class WalletTransaction {
 
   getDescription(): string {
     return this._description;
+  }
+
+  getStatus(): WalletTransactionStatus {
+    return this._status;
+  }
+
+  setStatus(status: WalletTransactionStatus): void {
+    this._status = status;
   }
 
   getMetadata(): Record<string, unknown> | undefined {

@@ -1,4 +1,3 @@
-import Razorpay from 'razorpay';
 import { IPayoutService } from '../../application/providers/IPayoutService';
 import {
   AccountType,
@@ -6,6 +5,8 @@ import {
   CreateFundAccountResDTO,
   CreatePaymentContactDTO,
   CreatePaymentContactResDTO,
+  CreatePayoutDTO,
+  PayoutResponse,
 } from '../../domain/dto/Payouts';
 import { env } from '../utils/env';
 import axios, { AxiosInstance } from 'axios';
@@ -56,6 +57,43 @@ export interface RazorpayFundAccountParams {
   vpa?: {
     address: string;
   };
+}
+
+export interface RazorpayPayoutParams {
+  account_number: string;
+  fund_account_id: string;
+  amount: number;
+  currency: string;
+  mode: 'IMPS' | 'NEFT' | 'RTGS' | 'UPI';
+  purpose: string;
+  queue_if_low_balance?: boolean;
+  reference_id: string;
+  narration?: string;
+  notes?: Record<string, any>;
+}
+
+export interface RazorpayPayout {
+  id: string;
+  entity: string;
+  fund_account_id: string;
+  amount: number;
+  currency: string;
+  status:
+    | 'queued'
+    | 'pending'
+    | 'processing'
+    | 'processed'
+    | 'reversed'
+    | 'cancelled';
+  purpose: string;
+  utr?: string;
+  mode: string;
+  reference_id: string;
+  narration: string;
+  fees: number;
+  tax: number;
+  created_at: number;
+  processed_at?: number;
 }
 
 export class RazorPayPayoutService implements IPayoutService {
@@ -141,6 +179,37 @@ export class RazorPayPayoutService implements IPayoutService {
     } catch (error) {
       console.error('Razorpay createFundAccount error:', error);
       throw new Error('Failed to create fund account');
+    }
+  }
+
+  async createPayout(data: CreatePayoutDTO): Promise<PayoutResponse> {
+    const payload: RazorpayPayoutParams = {
+      account_number: env.RAZORPAY_ACCOUNT_NUMBER,
+      fund_account_id: data.fundAccountId,
+      amount: Math.round(data.amount * 100),
+      currency: data.currency,
+      mode: data.mode,
+      purpose: data.purpose,
+      reference_id: data.referenceId,
+      narration: data.narration ?? 'Wallet withdrawal',
+      queue_if_low_balance: true,
+    };
+
+    try {
+      const response = await this._client.post<RazorpayPayout>(
+        '/payouts',
+        payload
+      );
+      const payout = response.data;
+
+      return {
+        id: payout.id,
+        amount: payout.amount / 100,
+        status: payout.status,
+      };
+    } catch (error) {
+      console.error('Razorpay payout error:', error);
+      throw new Error('Failed to create payout');
     }
   }
 }

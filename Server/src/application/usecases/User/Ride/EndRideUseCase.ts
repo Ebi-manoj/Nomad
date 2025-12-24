@@ -15,6 +15,7 @@ import { ITransactionManager } from '../../../providers/ITransactionManager';
 import {
   TransactionReferenceType,
   WalletTransactionType,
+  WalletTransactionStatus,
 } from '../../../../domain/enums/Wallet';
 import { WalletTransaction } from '../../../../domain/entities/WalletTransaction';
 import { IFindOrCreateWalletService } from '../../../services/IFindOrCreateWalletService';
@@ -91,6 +92,7 @@ export class EndRideUseCase implements IEndRideUseCase {
             amount: totalEarning,
             type: WalletTransactionType.CREDIT,
             description: `Earnings for ride`,
+            status: WalletTransactionStatus.SUCCESS,
           });
 
           await this._walletTransactionRepository.create(transaction);

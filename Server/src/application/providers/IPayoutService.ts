@@ -3,6 +3,8 @@ import {
   CreateFundAccountResDTO,
   CreatePaymentContactDTO,
   CreatePaymentContactResDTO,
+  CreatePayoutDTO,
+  PayoutResponse,
 } from '../../domain/dto/Payouts';
 
 export interface IPayoutService {
@@ -12,5 +14,5 @@ export interface IPayoutService {
   createFundAccount(
     data: CreateFundAccountDTO
   ): Promise<CreateFundAccountResDTO>;
-  //   createPayout(data: CreatePayoutDTO): Promise<PayoutResponse>;
+  createPayout(data: CreatePayoutDTO): Promise<PayoutResponse>;
 }
