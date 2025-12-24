@@ -20,5 +20,4 @@ export interface AddBankAccountDTO {
   accountHolderName: string;
   ifscCode: string;
   accountType: AccountType;
-  bankName: string;
 }

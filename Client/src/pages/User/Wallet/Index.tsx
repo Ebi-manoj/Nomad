@@ -9,6 +9,7 @@ import type { RootState } from '@/store/store';
 import { WalletSkelton } from '@/components/skeletons/WalletSkeloton';
 import { Pagination } from '@/components/Pagination';
 import { BankAccounts } from './BankAccounts';
+import { AddBankAccountModal } from './AddBankModal';
 
 export const WalletPage = () => {
   const PAGE_SIZE = 10;
@@ -86,8 +87,10 @@ export const WalletPage = () => {
           )}
         </div>
       </div>
-
-      {/* TODO: AddBankAccountDialog controlled by isAddBankModalOpen */}
+      <AddBankAccountModal
+        isOpen={isAddBankModalOpen}
+        onClose={() => setIsAddBankModalOpen(false)}
+      />
     </div>
   );
 };
