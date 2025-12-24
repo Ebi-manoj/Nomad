@@ -14,6 +14,7 @@ export const bankAccountMapper: IMapper<BankAccount, IBankAccountModel> = {
       accountType: domain.getAccountType(),
       fundAccountId: domain.getFundAccountId() ?? null,
       isVerified: domain.getIsVerified(),
+      isPrimary: domain.getIsPrimary(),
       createdAt: domain.getCreatedAt(),
       updatedAt: domain.getUpdatedAt(),
     };
@@ -30,6 +31,7 @@ export const bankAccountMapper: IMapper<BankAccount, IBankAccountModel> = {
       accountType: doc.accountType,
       fundAccountId: doc.fundAccountId ?? undefined,
       isVerified: doc.isVerified,
+      isPrimary: doc.isPrimary,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     });

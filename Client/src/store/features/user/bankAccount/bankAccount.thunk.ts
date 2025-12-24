@@ -1,5 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addBankAccountApi, fetchBankAccountsApi } from './bankAccount.api';
+import {
+  addBankAccountApi,
+  fetchBankAccountsApi,
+  setPrimaryBankAccountApi,
+  deleteBankAccountApi,
+} from './bankAccount.api';
 import { useHandleThunkError } from '@/hooks/useHandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 import type { BankAccountDTO, CreateBankAccountDTO } from './bankAccount';
@@ -32,3 +37,35 @@ export const addBankAccounts = createAsyncThunk<
     );
   }
 });
+
+export const setPrimaryBankAccount = createAsyncThunk<string, string>(
+  'bankAccount/setPrimary',
+  async (accountId, { rejectWithValue }) => {
+    try {
+      await setPrimaryBankAccountApi(accountId);
+      return accountId;
+    } catch (err: unknown) {
+      return useHandleThunkError(
+        err,
+        rejectWithValue,
+        ErrorMessage.SOMETHING_WENT_WRONG
+      );
+    }
+  }
+);
+
+export const deleteBankAccount = createAsyncThunk<string, string>(
+  'bankAccount/delete',
+  async (accountId, { rejectWithValue }) => {
+    try {
+      await deleteBankAccountApi(accountId);
+      return accountId;
+    } catch (err: unknown) {
+      return useHandleThunkError(
+        err,
+        rejectWithValue,
+        ErrorMessage.SOMETHING_WENT_WRONG
+      );
+    }
+  }
+);

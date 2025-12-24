@@ -10,6 +10,7 @@ export interface BankAccountResponseDTO {
   accountType: AccountType;
   fundAccountId?: string;
   isVerified: boolean;
+  isPrimary: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

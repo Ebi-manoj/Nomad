@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { BankAccountState } from './bankAccount';
-import { addBankAccounts, fetchBankAccounts } from './bankAccount.thunk';
+import {
+  addBankAccounts,
+  deleteBankAccount,
+  fetchBankAccounts,
+  setPrimaryBankAccount,
+} from './bankAccount.thunk';
 
 const initialState: BankAccountState = {
   loading: false,
@@ -39,6 +44,39 @@ const bankAccountSlice = createSlice({
       .addCase(addBankAccounts.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || 'Failed to add Account';
+      });
+
+    builder
+      .addCase(setPrimaryBankAccount.pending, state => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(setPrimaryBankAccount.fulfilled, (state, action) => {
+        state.loading = false;
+        const id = action.payload;
+        state.accounts = state.accounts.map(acc => ({
+          ...acc,
+          isPrimary: acc.id === id,
+        }));
+      })
+      .addCase(setPrimaryBankAccount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || 'Failed to set primary';
+      });
+
+    builder
+      .addCase(deleteBankAccount.pending, state => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(deleteBankAccount.fulfilled, (state, action) => {
+        state.loading = false;
+        const id = action.payload;
+        state.accounts = state.accounts.filter(acc => acc.id !== id);
+      })
+      .addCase(deleteBankAccount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || 'Failed to delete account';
       });
   },
 });

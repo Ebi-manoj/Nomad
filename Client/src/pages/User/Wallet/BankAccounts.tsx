@@ -1,9 +1,20 @@
-import { CreditCard, Landmark, Plus } from 'lucide-react';
+import { CreditCard, Landmark, MoreVertical, Plus } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import type { BankAccountDTO } from '@/store/features/user/bankAccount/bankAccount';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import {
+  deleteBankAccount,
+  setPrimaryBankAccount,
+} from '@/store/features/user/bankAccount/bankAccount.thunk';
 
 const formatAccountNumber = (accountNumber: string) =>
   accountNumber ? `•••• ${accountNumber.slice(-4)}` : '';
@@ -17,6 +28,7 @@ export const BankAccounts = ({
   accounts,
   handleAddClick,
 }: BankAccountsProps) => {
+  const dispatch = useAppDispatch();
   const { loading } = useSelector((state: RootState) => state.bankAccount);
 
   return (
@@ -50,7 +62,7 @@ export const BankAccounts = ({
         {/* Accounts list */}
         {!loading && accounts.length > 0 && (
           <>
-            {accounts.map((account: any) => (
+            {accounts.map((account: BankAccountDTO) => (
               <div
                 key={account.id}
                 className="flex items-center justify-between rounded-lg border border-border bg-muted/40 p-4 transition-colors hover:border-primary/40"
@@ -64,15 +76,42 @@ export const BankAccounts = ({
                       {account.bankName}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {formatAccountNumber(account.accountNumber)} · IFSC{' '}
-                      {account.ifsc}
+                      {formatAccountNumber(account.accountNumber)} · IFSC{' '} 
+                      {account.ifscCode}
                     </p>
                   </div>
                 </div>
 
-                <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700">
-                  Active
-                </span>
+                <div className="flex items-center gap-2">
+                  {account.isPrimary && (
+                    <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700">
+                      Primary
+                    </span>
+                  )}
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-40">
+                      {!account.isPrimary && (
+                        <DropdownMenuItem
+                          onClick={() => dispatch(setPrimaryBankAccount(account.id))}
+                        >
+                          Set as primary
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuItem
+                        className="text-destructive focus:text-destructive"
+                        onClick={() => dispatch(deleteBankAccount(account.id))}
+                      >
+                        Delete account
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
             ))}
           </>

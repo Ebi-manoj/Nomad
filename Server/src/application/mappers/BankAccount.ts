@@ -13,6 +13,7 @@ export class BankAccountMapper {
       ifscCode: data.getIfscCode(),
       accountHolderName: data.getAccountHolderName(),
       isVerified: data.getIsVerified(),
+      isPrimary: data.getIsPrimary(),
       createdAt: data.getCreatedAt(),
       updatedAt: data.getUpdatedAt(),
     };

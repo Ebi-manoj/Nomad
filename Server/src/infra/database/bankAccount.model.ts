@@ -10,6 +10,7 @@ export interface IBankAccountModel {
   accountType: 'savings' | 'current';
   fundAccountId?: string | null;
   isVerified: boolean;
+  isPrimary: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,8 +35,14 @@ const BankAccountSchema = new Schema<IBankAccountModel>(
     },
     fundAccountId: { type: String, default: null },
     isVerified: { type: Boolean, default: false },
+    isPrimary: { type: Boolean, default: false },
   },
   { timestamps: true }
+);
+
+BankAccountSchema.index(
+  { userId: 1, isPrimary: 1 },
+  { unique: true, partialFilterExpression: { isPrimary: true } }
 );
 
 export const BankAccountModel = model<IBankAccountModel>(

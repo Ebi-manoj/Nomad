@@ -10,6 +10,7 @@ export interface BankAccountProps {
   accountType: AccountType;
   fundAccountId?: string;
   isVerified: boolean;
+  isPrimary?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -24,6 +25,7 @@ export class BankAccount {
   private _accountType: AccountType;
   private readonly _fundAccountId?: string;
   private _isVerified: boolean;
+  private _isPrimary: boolean;
   private _createdAt: Date;
   private _updatedAt: Date;
   constructor(props: BankAccountProps) {
@@ -36,6 +38,7 @@ export class BankAccount {
     this._accountType = props.accountType;
     this._fundAccountId = props.fundAccountId;
     this._isVerified = props.isVerified;
+    this._isPrimary = props.isPrimary ?? false;
     this._createdAt = props.createdAt || new Date();
     this._updatedAt = props.updatedAt || new Date();
   }
@@ -67,6 +70,9 @@ export class BankAccount {
   getIsVerified() {
     return this._isVerified;
   }
+  getIsPrimary() {
+    return this._isPrimary;
+  }
   getCreatedAt() {
     return this._createdAt;
   }
@@ -88,6 +94,10 @@ export class BankAccount {
   }
   setVerified(verified: boolean) {
     this._isVerified = verified;
+    this._updatedAt = new Date();
+  }
+  setPrimary(primary: boolean) {
+    this._isPrimary = primary;
     this._updatedAt = new Date();
   }
 }

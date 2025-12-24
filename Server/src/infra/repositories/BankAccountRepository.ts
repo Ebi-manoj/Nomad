@@ -17,7 +17,22 @@ export class BankAccountRepository
     return docs.map(d => this.mapper.toDomain(d));
   }
   async findByAccountNumber(accntnumber: string): Promise<BankAccount | null> {
-    const doc=await this.model.findOne({accountNumber:accntnumber})
-    return doc?this.mapper.toDomain(doc):null
+    const doc = await this.model.findOne({ accountNumber: accntnumber });
+    return doc ? this.mapper.toDomain(doc) : null;
+  }
+
+  async setPrimaryForUser(userId: string, accountId: string): Promise<void> {
+    const session = this.session || undefined;
+    await this.model.updateMany(
+      { userId },
+      { $set: { isPrimary: false } },
+      { session }
+    );
+
+    await this.model.findByIdAndUpdate(
+      accountId,
+      { $set: { isPrimary: true } },
+      { session }
+    );
   }
 }

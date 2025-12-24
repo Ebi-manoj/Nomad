@@ -17,3 +17,17 @@ export async function addBankAccountApi(data: CreateBankAccountDTO) {
   );
   return res.data.data;
 }
+
+export async function setPrimaryBankAccountApi(accountId: string) {
+  const res = await axiosInstance.patch<ApiResponse<{ success: boolean }>>(
+    `${BANK_ACCOUNTS_API}/${accountId}/primary`
+  );
+  return res.data.data;
+}
+
+export async function deleteBankAccountApi(accountId: string) {
+  const res = await axiosInstance.delete<ApiResponse<{ success: boolean }>>(
+    `${BANK_ACCOUNTS_API}/${accountId}`
+  );
+  return res.data.data;
+}

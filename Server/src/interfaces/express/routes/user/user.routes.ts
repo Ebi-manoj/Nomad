@@ -116,4 +116,26 @@ router.get(
   }
 );
 
+router.patch(
+  '/bank-accounts/:accountId/primary',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      bankAccountComposer().setPrimary(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+router.delete(
+  '/bank-accounts/:accountId',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      bankAccountComposer().deleteBankAccount(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 export default router;
