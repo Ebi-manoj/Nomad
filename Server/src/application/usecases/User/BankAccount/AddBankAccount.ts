@@ -5,9 +5,11 @@ import {
 import { AccountType, ContactType } from '../../../../domain/dto/Payouts';
 import { BankAccount } from '../../../../domain/entities/BankAccount';
 import { User } from '../../../../domain/entities/User';
+import { BANKACCOUNTS_LIMITS } from '../../../../domain/enums/Constants';
 import { IFSC_VALIDATE_URL } from '../../../../domain/enums/Payout';
 import {
   InvalidIFSCCode,
+  MaximumAccountLimitReached,
   NotVerifiedForBankAccount,
 } from '../../../../domain/errors/BankAccountError';
 import { UserNotFound } from '../../../../domain/errors/CustomError';
@@ -30,13 +32,18 @@ export class AddBankAccountUseCase implements IAddBankAccountUseCase {
 
     if (!user.getIsVerifed()) throw new NotVerifiedForBankAccount();
 
-    const bankDetails = await this._validateIFSC(data.ifscCode);
-
     const isExisiting = await this._bankAccountRepository.findByAccountNumber(
       data.accountNumber
     );
     if (isExisiting) return BankAccountMapper.toJson(isExisiting);
 
+    const totalAccounts = await this._bankAccountRepository.findByUserId(
+      data.userId
+    );
+    if (totalAccounts.length >= BANKACCOUNTS_LIMITS)
+      throw new MaximumAccountLimitReached();
+
+    const bankDetails = await this._validateIFSC(data.ifscCode);
     const contactId = await this._getUserPayoutContactId(user);
 
     const fundAccount = await this._payoutService.createFundAccount({
@@ -49,6 +56,10 @@ export class AddBankAccountUseCase implements IAddBankAccountUseCase {
       },
     });
 
+    const hasPrimary = await this._bankAccountRepository.findUserPrimary(
+      data.userId
+    );
+
     const bankAccount = new BankAccount({
       userId: data.userId,
       accountHolderName: data.accountHolderName,
@@ -58,6 +69,7 @@ export class AddBankAccountUseCase implements IAddBankAccountUseCase {
       accountType: data.accountType,
       fundAccountId: fundAccount.id,
       isVerified: true,
+      isPrimary: !hasPrimary,
     });
 
     const created = await this._bankAccountRepository.create(bankAccount);

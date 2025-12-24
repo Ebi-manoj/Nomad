@@ -5,4 +5,5 @@ export interface IBankAccountRepository extends IBaseRepository<BankAccount> {
   findByUserId(userId: string): Promise<BankAccount[]>;
   findByAccountNumber(accntnumber: string): Promise<BankAccount | null>;
   setPrimaryForUser(userId: string, accountId: string): Promise<void>;
+  findUserPrimary(userId: string): Promise<BankAccount | null>;
 }

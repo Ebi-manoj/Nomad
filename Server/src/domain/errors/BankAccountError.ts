@@ -11,3 +11,8 @@ export class InvalidIFSCCode extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class MaximumAccountLimitReached extends CustomError {
+  constructor(message = 'Maximum bank account limit reached') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

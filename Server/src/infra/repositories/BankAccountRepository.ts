@@ -1,7 +1,10 @@
 import { MongoBaseRepository } from './BaseRepository';
 import { IBankAccountRepository } from '../../application/repositories/IBankAccountRepository';
 import { BankAccount } from '../../domain/entities/BankAccount';
-import { IBankAccountModel, BankAccountModel } from '../database/bankAccount.model';
+import {
+  IBankAccountModel,
+  BankAccountModel,
+} from '../database/bankAccount.model';
 import { bankAccountMapper } from '../mappers/bankAccountMapper';
 
 export class BankAccountRepository
@@ -34,5 +37,9 @@ export class BankAccountRepository
       { $set: { isPrimary: true } },
       { session }
     );
+  }
+  async findUserPrimary(userId: string): Promise<BankAccount | null> {
+    const doc = await this.model.findOne({ userId: userId, isPrimary: true });
+    return doc ? this.mapper.toDomain(doc) : null;
   }
 }

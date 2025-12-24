@@ -11,10 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import {
-  deleteBankAccount,
-  setPrimaryBankAccount,
-} from '@/store/features/user/bankAccount/bankAccount.thunk';
+import { setPrimaryBankAccount } from '@/store/features/user/bankAccount/bankAccount.thunk';
 
 const formatAccountNumber = (accountNumber: string) =>
   accountNumber ? `•••• ${accountNumber.slice(-4)}` : '';
@@ -22,11 +19,13 @@ const formatAccountNumber = (accountNumber: string) =>
 export interface BankAccountsProps {
   accounts: BankAccountDTO[];
   handleAddClick: () => void;
+  onRequestDelete: (account: BankAccountDTO) => void;
 }
 
 export const BankAccounts = ({
   accounts,
   handleAddClick,
+  onRequestDelete,
 }: BankAccountsProps) => {
   const dispatch = useAppDispatch();
   const { loading } = useSelector((state: RootState) => state.bankAccount);
@@ -39,8 +38,7 @@ export const BankAccounts = ({
           Linked accounts
         </h3>
 
-        {/* If accounts exist, show small Add button */}
-        {accounts.length > 0 && (
+        {accounts.length > 0 && accounts.length < 2 && (
           <Button
             variant="outline"
             size="sm"
@@ -76,7 +74,7 @@ export const BankAccounts = ({
                       {account.bankName}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {formatAccountNumber(account.accountNumber)} · IFSC{' '} 
+                      {formatAccountNumber(account.accountNumber)} · IFSC{' '}
                       {account.ifscCode}
                     </p>
                   </div>
@@ -91,21 +89,28 @@ export const BankAccounts = ({
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 cursor-pointer"
+                      >
                         <MoreVertical className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-40">
                       {!account.isPrimary && (
                         <DropdownMenuItem
-                          onClick={() => dispatch(setPrimaryBankAccount(account.id))}
+                          onClick={() =>
+                            dispatch(setPrimaryBankAccount(account.id))
+                          }
+                          className="cursor-pointer"
                         >
                           Set as primary
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem
-                        className="text-destructive focus:text-destructive"
-                        onClick={() => dispatch(deleteBankAccount(account.id))}
+                        className="text-destructive focus:text-destructive cursor-pointer"
+                        onClick={() => onRequestDelete(account)}
                       >
                         Delete account
                       </DropdownMenuItem>
