@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { BankAccountState } from './bankAccount';
-import { fetchBankAccounts } from './bankAccount.thunk';
+import { addBankAccounts, fetchBankAccounts } from './bankAccount.thunk';
 
 const initialState: BankAccountState = {
   loading: false,
@@ -25,6 +25,20 @@ const bankAccountSlice = createSlice({
       .addCase(fetchBankAccounts.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) || 'Failed to load accounts';
+      });
+
+    builder
+      .addCase(addBankAccounts.pending, state => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(addBankAccounts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.accounts.push(action.payload);
+      })
+      .addCase(addBankAccounts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) || 'Failed to add Account';
       });
   },
 });

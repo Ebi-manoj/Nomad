@@ -21,6 +21,8 @@ import {
   type BankAccountFormData,
 } from '@/validation/AddBankAccount';
 import { useIFSCVerification } from '@/hooks/useIFSCVerify';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { addBankAccounts } from '@/store/features/user/bankAccount/bankAccount.thunk';
 
 interface AddBankAccountModalProps {
   isOpen: boolean;
@@ -32,7 +34,7 @@ export const AddBankAccountModal = ({
   onClose,
 }: AddBankAccountModalProps) => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const dispatch = useAppDispatch();
   const {
     register,
     handleSubmit,
@@ -63,9 +65,14 @@ export const AddBankAccountModal = ({
       return;
     }
     const { confirmAccountNumber, ...payload } = data;
-
-    console.log('Submitting:', payload);
-    handleClose();
+    try {
+      await dispatch(addBankAccounts(payload)).unwrap();
+      handleClose();
+    } catch (error) {
+      toast.error(
+        typeof error == 'string' ? error : 'Failed to add bank accounts'
+      );
+    }
   };
 
   const handleClose = () => {

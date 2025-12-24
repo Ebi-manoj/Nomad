@@ -19,3 +19,10 @@ export interface BankAccountState {
   error: string;
   accounts: BankAccountDTO[];
 }
+
+export interface CreateBankAccountDTO {
+  accountNumber: string;
+  accountHolderName: string;
+  ifscCode: string;
+  accountType: 'savings' | 'current';
+}
