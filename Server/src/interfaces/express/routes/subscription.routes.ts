@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express';
 import { expressAdapter } from '../../adapters/express';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { subscriptionComposer } from '../../../infra/services/composer/user/subscription.composer';
-import { SubscriptionPlanModel } from '../../../infra/database/SubscriptionPlan.model';
 
 const router = express.Router();
 

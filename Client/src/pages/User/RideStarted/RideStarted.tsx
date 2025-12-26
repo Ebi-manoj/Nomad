@@ -34,6 +34,7 @@ export function RideStartedContent() {
   const { riderSocket } = useSocket();
   const dispatch = useAppDispatch();
   if (!rideData) return <Navigate to="/ride" replace />;
+  console.log(rideData);
   const fetchPendingReq = async () => {
     try {
       const data = await getJoinRequest(rideData.id);

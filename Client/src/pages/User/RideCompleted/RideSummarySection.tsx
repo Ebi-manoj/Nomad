@@ -46,7 +46,9 @@ export const RideSummarySection = ({
             <p className="text-sm text-green-700 font-medium mb-1">
               Avg per passenger
             </p>
-            <p className="text-3xl font-bold text-green-600">₹{avgPerPassenger}</p>
+            <p className="text-3xl font-bold text-green-600">
+              ₹{avgPerPassenger}
+            </p>
           </div>
         </div>
       </div>
@@ -147,7 +149,9 @@ export const RideSummarySection = ({
           <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
             <Wallet className="w-5 h-5 text-emerald-600" />
           </div>
-          <h3 className="text-xl font-bold text-gray-900">Financial Breakdown</h3>
+          <h3 className="text-xl font-bold text-gray-900">
+            Financial Breakdown
+          </h3>
         </div>
 
         <div className="grid grid-cols-3 gap-4 text-center bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-inner">
@@ -175,7 +179,9 @@ export const RideSummarySection = ({
               ₹{platformFee}
             </p>
             <p className="text-xs text-gray-400">
-              ({((platformFee / grossCollected) * 100).toFixed(1)}%)
+              (
+              {platformFee && ((platformFee / grossCollected) * 100).toFixed(1)}
+              %)
             </p>
           </div>
 

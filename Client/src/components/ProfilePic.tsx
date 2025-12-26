@@ -28,7 +28,6 @@ const getTierIcon = (tier: string) => {
   return null;
 };
 
-// Helper to lighten color for ring effect
 const lightenColor = (hex: string, percent: number = 40): string => {
   const num = parseInt(hex.replace('#', ''), 16);
   const r = Math.min(
@@ -74,7 +73,7 @@ export const UserAvatar = ({
   const shouldShowBadge = showBadge && BadgeIcon && subscriptionTier !== 'FREE';
 
   // Generate border and ring colors from badgeColor
-  const borderColor = badgeColor || '#d1d5db'; // default gray
+  const borderColor = badgeColor || '#d1d5db';
   const ringColor = lightenColor(borderColor, 60);
 
   return (
