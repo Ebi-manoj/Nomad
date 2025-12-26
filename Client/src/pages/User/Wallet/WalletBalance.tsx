@@ -6,9 +6,10 @@ import { useSelector } from 'react-redux';
 
 export interface WalletBalanceProps {
   canWithDraw: boolean;
+  onWithdrawClick?: () => void;
 }
 
-export const WalletBalance = ({ canWithDraw }: WalletBalanceProps) => {
+export const WalletBalance = ({ canWithDraw, onWithdrawClick }: WalletBalanceProps) => {
   const { walletData } = useSelector((state: RootState) => state.wallet);
   const formatAmount = (value: number) => `₹${value.toFixed(2)}`;
 
@@ -29,6 +30,7 @@ export const WalletBalance = ({ canWithDraw }: WalletBalanceProps) => {
             variant="ghost"
             size="sm"
             className="flex items-center gap-1 text-sm cursor-pointer bg-black text-white hover:bg-gray-800 hover:text-white"
+            onClick={onWithdrawClick}
           >
             <ArrowUpRight className="h-4 w-4" />
             Withdraw

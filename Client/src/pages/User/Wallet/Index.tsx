@@ -14,6 +14,11 @@ import { BankAccounts } from './BankAccounts';
 import { AddBankAccountModal } from './AddBankModal';
 import { Transactions } from './Transactions';
 import { GenericModal } from '@/components/GenericModel';
+import { toast } from 'sonner';
+import {
+  fetchWalletDetails,
+  withdrawWallet,
+} from '@/store/features/user/wallet/wallet.thunk';
 
 export const WalletPage = () => {
   const dispatch = useAppDispatch();
@@ -24,6 +29,9 @@ export const WalletPage = () => {
     null
   );
   const { accounts } = useSelector((state: RootState) => state.bankAccount);
+  const { walletData } = useSelector((state: RootState) => state.wallet);
+  const [withdrawModal, setWithdrawModal] = useState(false);
+  const [withdrawLoading, setWithdrawLoading] = useState(false);
 
   useEffect(() => {
     dispatch(fetchBankAccounts());
@@ -41,6 +49,28 @@ export const WalletPage = () => {
     }
   };
 
+  const handleWithdrawClick = () => {
+    if (walletData.balance < 100) {
+      toast.error('Minimum 100 required');
+      return;
+    }
+    setWithdrawModal(true);
+  };
+
+  const handleConfirmWithdraw = async () => {
+    try {
+      setWithdrawLoading(true);
+      await dispatch(withdrawWallet()).unwrap();
+      toast.success('Withdrawal initiated');
+      setWithdrawModal(false);
+      await dispatch(fetchWalletDetails(1));
+    } catch (err) {
+      toast.error(typeof err === 'string' ? err : 'Failed to withdraw');
+    } finally {
+      setWithdrawLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen bg-background">
@@ -54,7 +84,10 @@ export const WalletPage = () => {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <WalletBalance canWithDraw={accounts.length > 0} />
+            <WalletBalance
+              canWithDraw={accounts.length > 0}
+              onWithdrawClick={handleWithdrawClick}
+            />
             <BankAccounts
               accounts={accounts}
               handleAddClick={() => setIsAddBankModalOpen(true)}
@@ -100,6 +133,32 @@ export const WalletPage = () => {
             if (confirmLoading) return;
             setDeleteModal(false);
             setSelectedAccount(null);
+          },
+        }}
+      />
+
+      <GenericModal
+        isOpen={withdrawModal}
+        onClose={() => {
+          if (withdrawLoading) return;
+          setWithdrawModal(false);
+        }}
+        title="Withdraw Money"
+        titleIcon={<ShieldAlert size={20} />}
+        subtitle={`Are you sure you want to withdraw ₹${walletData.balance.toFixed(
+          2
+        )} to your primary bank account?`}
+        primaryAction={{
+          label: 'Confirm',
+          className: 'bg-gray-900 hover:bg-gray-800',
+          loading: withdrawLoading,
+          onClick: handleConfirmWithdraw,
+        }}
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => {
+            if (withdrawLoading) return;
+            setWithdrawModal(false);
           },
         }}
       />

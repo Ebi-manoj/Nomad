@@ -78,7 +78,7 @@ export const GenericModal = ({
               {secondaryAction && (
                 <button
                   onClick={secondaryAction.onClick}
-                  className={`ursor-pointer w-full py-2.5 bg-gray-100 hover:bg-gray-200 transition text-gray-700 font-medium rounded-lg ${secondaryAction.className}`}
+                  className={`cursor-pointer w-full py-2.5 bg-gray-100 hover:bg-gray-200 transition text-gray-700 font-medium rounded-lg ${secondaryAction.className}`}
                 >
                   {secondaryAction.label}
                 </button>
