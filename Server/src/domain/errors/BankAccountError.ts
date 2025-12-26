@@ -26,3 +26,8 @@ export class FundAccountIdNotFound extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class AlreadyExisitingBankAccount extends CustomError {
+  constructor(message = 'Already exisiting bank account') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

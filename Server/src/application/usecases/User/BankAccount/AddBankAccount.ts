@@ -8,6 +8,7 @@ import { User } from '../../../../domain/entities/User';
 import { BANKACCOUNTS_LIMITS } from '../../../../domain/enums/Constants';
 import { IFSC_VALIDATE_URL } from '../../../../domain/enums/Payout';
 import {
+  AlreadyExisitingBankAccount,
   InvalidIFSCCode,
   MaximumAccountLimitReached,
   NotVerifiedForBankAccount,
@@ -35,7 +36,7 @@ export class AddBankAccountUseCase implements IAddBankAccountUseCase {
     const isExisiting = await this._bankAccountRepository.findByAccountNumber(
       data.accountNumber
     );
-    if (isExisiting) return BankAccountMapper.toJson(isExisiting);
+    if (isExisiting) throw new AlreadyExisitingBankAccount();
 
     const totalAccounts = await this._bankAccountRepository.findByUserId(
       data.userId
