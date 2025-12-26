@@ -207,9 +207,20 @@ export class RazorPayPayoutService implements IPayoutService {
         amount: payout.amount / 100,
         status: payout.status,
       };
-    } catch (error) {
-      console.error('Razorpay payout error:', error);
-      throw new Error('Failed to create payout');
+    } catch (error: unknown) {
+      console.log('RazorPay payout error:', error);
+      let errorMessage = 'Failed to create payout';
+
+      if (axios.isAxiosError(error)) {
+        errorMessage =
+          error.response?.data?.error?.description ||
+          error.response?.data?.error?.field ||
+          error.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      throw new Error(errorMessage);
     }
   }
 }

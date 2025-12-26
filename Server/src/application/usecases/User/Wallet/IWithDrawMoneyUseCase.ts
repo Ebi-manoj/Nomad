@@ -1,3 +1,3 @@
 export interface IWithDrawMoneyUseCase {
-  execute(userId: string);
+  execute(userId: string): Promise<void>;
 }

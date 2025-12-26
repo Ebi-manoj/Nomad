@@ -95,6 +95,17 @@ router.get('/wallet', authMiddleware, async (req: Request, res: Response) => {
 });
 
 router.post(
+  '/wallet/withdraw',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      walletComposer().withdraw(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+router.post(
   '/bank-accounts',
   authMiddleware,
   async (req: Request, res: Response) => {

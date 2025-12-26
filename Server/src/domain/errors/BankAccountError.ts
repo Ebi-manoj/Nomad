@@ -16,3 +16,13 @@ export class MaximumAccountLimitReached extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class PrimaryAccountNotFound extends CustomError {
+  constructor(message = 'Primary bank account not found') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
+export class FundAccountIdNotFound extends CustomError {
+  constructor(message = 'Fund account id not found') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
