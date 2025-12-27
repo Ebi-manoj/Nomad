@@ -50,6 +50,7 @@ router.patch(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+
 router.patch(
   '/:planId/delete',
   authMiddleware,
