@@ -5,6 +5,13 @@ import { useSocket } from '@/context/SocketContext';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { getChatMessages, sendChatMessage } from '@/api/chat';
+// --- 1. Helper Function ---
+const formatTime = (dateString?: string) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  // Returns format like "10:30 AM"
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
 
 export default function ChatInterface({
   onBack,
@@ -132,13 +139,23 @@ export default function ChatInterface({
             }`}
           >
             <div
-              className={`px-4 py-2 max-w-[75%] rounded-2xl shadow-sm text-sm ${
+              className={`px-4 py-2 max-w-[75%] rounded-2xl shadow-sm text-sm flex flex-col ${
                 msg.from === 'me'
                   ? 'bg-black text-white rounded-br-none'
                   : 'bg-gray-200 text-black rounded-bl-none'
               }`}
             >
-              {msg.text}
+              {/* Message Text */}
+              <span>{msg.text}</span>
+
+              {/* --- 2. Time Display --- */}
+              <span
+                className={`text-[10px] mt-1 self-end ${
+                  msg.from === 'me' ? 'text-white/70' : 'text-black/60'
+                }`}
+              >
+                {formatTime(msg.createdAt)}
+              </span>
             </div>
           </div>
         ))}
@@ -152,6 +169,7 @@ export default function ChatInterface({
           className="flex-1 px-4 py-2 bg-gray-100 rounded-full outline-none text-sm"
           value={message}
           onChange={e => setMessage(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleSend()}
         />
 
         <button
