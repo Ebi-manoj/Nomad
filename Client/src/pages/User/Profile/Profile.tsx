@@ -1,12 +1,13 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Mail, Phone, User2, BadgeCheck, Bike } from 'lucide-react';
+import { Mail, Phone, User2, BadgeCheck, Bike, Lock } from 'lucide-react';
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { Field } from '@/components/ProfileInput';
 import { VerificationSection } from '@/pages/User/Profile/VerificationFields';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { UserAvatar } from '@/components/ProfilePic';
+import { Link } from 'react-router-dom';
 
 type Profile = {
   name: string;
@@ -36,10 +37,22 @@ export default function ProfilePage() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 md:py-14">
-      <header className="mb-8">
+      <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-pretty text-2xl font-semibold tracking-tight md:text-3xl">
           Profile Management
         </h1>
+
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-9 gap-2 shadow-sm"
+          asChild
+        >
+          <Link to="/change-password">
+            <Lock className="size-3.5 text-muted-foreground" />
+            <span>Security Settings</span>
+          </Link>
+        </Button>
       </header>
 
       <section aria-labelledby="profile-card" className="mb-10">
