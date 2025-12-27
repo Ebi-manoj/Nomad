@@ -10,4 +10,5 @@ export interface IauthController {
   resetPassword(httpRequest: HttpRequest): Promise<HttpResponse>;
   refreshToken(httpRequest: HttpRequest): Promise<HttpResponse>;
   googleSingup(httpRequest: HttpRequest): Promise<HttpResponse>;
+  changePassword(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

@@ -61,6 +61,13 @@ export class Unauthorized extends CustomError {
     super(HttpStatus.UNAUTHORIZED, message);
   }
 }
+export class GoogleAuthResetPasswordError extends CustomError {
+  constructor(
+    message: string = 'Google signed in users are requested to login with google'
+  ) {
+    super(HttpStatus.UNAUTHORIZED, message);
+  }
+}
 export class Forbidden extends CustomError {
   constructor(message: string = ErrorMessages.FORBIDDEN) {
     super(HttpStatus.FORBIDDEN, message);

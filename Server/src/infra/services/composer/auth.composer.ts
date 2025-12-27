@@ -7,6 +7,7 @@ import { LoginUserUsecase } from '../../../application/usecases/Auth/LoginUserCa
 import { RefreshTokenUseCase } from '../../../application/usecases/Auth/RefreshTokenUseCase';
 import { RegisterUserUseCase } from '../../../application/usecases/Auth/RegisterUserUseCase';
 import { ResetPasswordUseCase } from '../../../application/usecases/Auth/ResetPasswordUseCase';
+import { ChangePasswordUseCase } from '../../../application/usecases/Auth/ChangePasswordUseCase';
 import { SendSignupOTPUseCase } from '../../../application/usecases/Auth/SendOTPSignupUseCase';
 import { SendResetOTPUseCase } from '../../../application/usecases/Auth/SendResetOTPUseCase';
 import { VerifyOTPUseCase } from '../../../application/usecases/Auth/VerifyOTPUseCase';
@@ -67,6 +68,12 @@ export function authComposer(): IauthController {
     passwordHasher
   );
 
+  //////////////////CHANGE PASSWORD///////////////////
+  const changePasswordUseCase: ChangePasswordUseCase = new ChangePasswordUseCase(
+    userRepository,
+    passwordHasher
+  );
+
   /////////////////////REFRESH TOKEN////////////////////////////////
 
   const refreshTokenUseCase: RefreshTokenUseCase = new RefreshTokenUseCase(
@@ -91,7 +98,8 @@ export function authComposer(): IauthController {
     verifyOtpUseCase,
     resetPasswordUsecase,
     refreshTokenUseCase,
-    googleSignupUseCase
+    googleSignupUseCase,
+    changePasswordUseCase
   );
   return controller;
 }

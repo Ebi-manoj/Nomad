@@ -3,6 +3,7 @@ import { expressAdapter } from '../../adapters/express';
 import { authComposer } from '../../../infra/services/composer/auth.composer';
 import { verifyEmailToken } from '../middlewares/verifyEmailToken';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
+import { authMiddleware } from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
@@ -98,5 +99,16 @@ router.post('/google', async (req: Request, res: Response) => {
     .status(adapter.statusCode)
     .json({ ...adapter.body, data: { user, accessToken } });
 });
+
+router.post(
+  '/change-password',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpRequest =>
+      authComposer().changePassword(httpRequest)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export default router;

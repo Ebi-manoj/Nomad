@@ -3,6 +3,7 @@ import { ILoginUserUsecase } from '../../../application/usecases/Auth/ILoginUser
 import { IRefreshTokenUseCase } from '../../../application/usecases/Auth/IRefreshTokenUseCase.js';
 import { IRegisterUserUseCase } from '../../../application/usecases/Auth/IRegisterUserUseCase.js';
 import { IResetPasswordUseCase } from '../../../application/usecases/Auth/IResetPassword.js';
+import { IChangePasswordUseCase } from '../../../application/usecases/Auth/IChangePasswordUseCase.js';
 import { ISendSignupOTPUseCase } from '../../../application/usecases/Auth/ISendOTPSignupUseCase.js';
 import { ISendResetOTPUseCase } from '../../../application/usecases/Auth/ISendResetOTP.js';
 import { IVerifyOTPUseCase } from '../../../application/usecases/Auth/IVerifOTPUseCase.js';
@@ -14,7 +15,7 @@ import {
   VerifyOTPResponseDTO,
 } from '../../../domain/dto/authDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
-import { InvalidCredindatials } from '../../../domain/errors/CustomError';
+import { InvalidCredindatials, Unauthorized } from '../../../domain/errors/CustomError';
 import {
   emailSchema,
   googleCodeSchema,
@@ -24,6 +25,7 @@ import {
   signUpShema,
   verifyOTPSchema,
 } from '../../validators/authValidators';
+import { changePasswordSchema } from '../../validators/userValidators';
 import { ApiResponse } from '../helpers/implementation/apiResponse.js';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
 import { HttpResponse } from '../helpers/implementation/httpResponse';
@@ -38,7 +40,8 @@ export class AuthController implements IauthController {
     private readonly _verifyOTPUseCase: IVerifyOTPUseCase,
     private readonly _resetPasswordUseCase: IResetPasswordUseCase,
     private readonly _refreshTokenUseCase: IRefreshTokenUseCase,
-    private readonly _googleSignupUseCase: IGoogleSignupUseCase
+    private readonly _googleSignupUseCase: IGoogleSignupUseCase,
+    private readonly _changePasswordUseCase: IChangePasswordUseCase
   ) {}
 
   async signup(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -97,6 +100,19 @@ export class AuthController implements IauthController {
   async googleSingup(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = googleCodeSchema.parse(httpRequest.body);
     const result = await this._googleSignupUseCase.execute(dto);
+    const response = ApiResponse.success(result);
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async changePassword(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+    const parsed = changePasswordSchema.parse(httpRequest.body);
+    const result = await this._changePasswordUseCase.execute({
+      userId,
+      currentPassword: parsed.currentPassword,
+      newPassword: parsed.newPassword,
+    });
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
