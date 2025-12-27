@@ -25,6 +25,7 @@ import { SubscriptionRepository } from '../../../repositories/SubscriptionReposi
 import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionUsageRepository';
 import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
 import { SubscriptionService } from '../../../../application/services/SubscriptionService';
+import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
 
 export function hikeComposer(): IHikeController {
   const userRepository = new MongoUserRepository();
@@ -43,11 +44,16 @@ export function hikeComposer(): IHikeController {
 
   const subscriptionRepo = new SubscriptionRepository();
   const subscriptionUsage = new SubscriptionUsageRepository();
+  const subscriptionPlans = new SubscriptionPlanRepository();
   const geoService = new TurfGeoService();
-  const subscriptionService = new SubscriptionService(subscriptionRepo);
+  const subscriptionService = new SubscriptionService(
+    subscriptionRepo,
+    subscriptionPlans
+  );
   const usageService = new SubscriptionUsageService(subscriptionUsage);
   const subscriptionValidator = new SubscriptionValidator(
     subscriptionRepo,
+    subscriptionPlans,
     joinRequestRepository,
     usageService
   );

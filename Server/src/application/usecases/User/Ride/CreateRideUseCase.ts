@@ -1,7 +1,8 @@
-import { CreateRideDTO } from '../../../../domain/dto/RideDTO';
+import { CreateRideDTO, RideResponseDTO } from '../../../../domain/dto/RideDTO';
 import { RideLog } from '../../../../domain/entities/Ride';
 import { RideStatus } from '../../../../domain/enums/Ride';
 import { UserNotFound } from '../../../../domain/errors/CustomError';
+import { rideMapper } from '../../../mappers/RideMapper';
 import { IGoogleApi } from '../../../providers/IGoogleApi';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IUserRepository } from '../../../repositories/IUserRepository';
@@ -16,7 +17,7 @@ export class CreateRideUseCase implements ICreateRideUseCase {
     private readonly _subcriptionValidator: ISubscriptionValidator
   ) {}
 
-  async execute(data: CreateRideDTO): Promise<RideLog> {
+  async execute(data: CreateRideDTO): Promise<RideResponseDTO> {
     await this._subcriptionValidator.validateCreateRide(
       data.costSharing,
       data.userId
@@ -47,6 +48,6 @@ export class CreateRideUseCase implements ICreateRideUseCase {
       status: RideStatus.ACTIVE,
     });
     const savedRide = await this._rideRepository.create(rideLog);
-    return savedRide;
+    return rideMapper(savedRide);
   }
 }

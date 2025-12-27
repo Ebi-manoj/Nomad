@@ -8,6 +8,7 @@ export enum SubscriptionTier {
 export enum BillingCycle {
   MONTHLY = 'MONTHLY',
   YEARLY = 'YEARLY',
+  NONE = 'NONE',
 }
 
 export enum SubscriptionStatus {

@@ -11,6 +11,7 @@ export interface UserProps {
   isBlocked: boolean;
   aadhaarVerified: boolean;
   licenceVerified: boolean;
+  payoutContactId?: string;
   rating?: number;
   ratingCount?: number;
   createdAt?: Date;
@@ -29,6 +30,7 @@ export class User {
   private _licenceVerified: boolean;
   private _rating: number;
   private _ratingCount: number;
+  private _payoutContactId?: string;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
 
@@ -44,6 +46,7 @@ export class User {
     this._licenceVerified = props.licenceVerified || false;
     this._rating = props.rating || 0;
     this._ratingCount = props.ratingCount || 0;
+    this._payoutContactId = props.payoutContactId;
     this._createdAt = props.createdAt || new Date();
     this._updatedAt = props.updatedAt || new Date();
   }
@@ -103,6 +106,12 @@ export class User {
   }
   getRatingCount() {
     return this._ratingCount;
+  }
+  getPayoutContactId() {
+    return this._payoutContactId;
+  }
+  setPayoutContactId(contactId: string) {
+    this._payoutContactId = contactId;
   }
   updateRatings(newRating: number) {
     const totalRating = this._rating * this._ratingCount + newRating;

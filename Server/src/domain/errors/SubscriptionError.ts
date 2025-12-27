@@ -13,6 +13,11 @@ export class AlreadySubscribed extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class SubscriptionPlanNotFound extends CustomError {
+  constructor(message = 'Subscription plan not found') {
+    super(HttpStatus.NOT_FOUND, message);
+  }
+}
 
 export class InvalidPlanTierOrBilling extends CustomError {
   constructor(message = 'Invalid plan tier or billing cycle') {
@@ -40,5 +45,10 @@ export class RideAcceptanceLimitExceeded extends CustomError {
 export class CustomCostSharingNotEligible extends CustomError {
   constructor(message = 'Custom cost sharing not available for you') {
     super(HttpStatus.NOT_FOUND, message);
+  }
+}
+export class NoActiveSubscription extends CustomError {
+  constructor(message = 'No active subscription found') {
+    super(HttpStatus.BAD_REQUEST, message);
   }
 }

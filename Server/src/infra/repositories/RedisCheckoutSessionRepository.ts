@@ -21,9 +21,7 @@ export class RedisCheckoutSessionRepository
 
     const payload = JSON.stringify(record);
 
-    // Store the session payload with TTL
     await redisClient.set(sessionKey, payload, { EX: ttlSeconds });
-    // Index by idempotency key for quick lookup
     await redisClient.set(idempKey, record.stripeSessionId, { EX: ttlSeconds });
   }
 
@@ -57,6 +55,31 @@ export class RedisCheckoutSessionRepository
       await redisClient.set(key, payload, { EX: ttl });
     } else {
       await redisClient.set(key, payload);
+    }
+  }
+
+  async expirePendingSessionsForUser(userId: string): Promise<void> {
+    const iterator = (redisClient as any).scanIterator({ MATCH: 'checkout:session:*' });
+    for await (const key of iterator) {
+      try {
+        const data = await redisClient.get(key as string);
+        if (!data) continue;
+        const record = JSON.parse(data) as CheckoutSessionRecord;
+        if (record.userId === userId && record.status === 'pending') {
+          const ttl = await redisClient.ttl(key as string);
+          record.status = 'expired';
+          const payload = JSON.stringify(record);
+          if (ttl && ttl > 0) {
+            await redisClient.set(key as string, payload, { EX: ttl });
+          } else {
+            await redisClient.set(key as string, payload);
+          }
+          if (record.idempotencyKey) {
+            await redisClient.del(this.idempKey(record.idempotencyKey));
+          }
+        }
+      } catch (_) {
+      }
     }
   }
 }

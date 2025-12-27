@@ -1,74 +1,167 @@
 import { useEffect, useState } from 'react';
-import { TransactionItem } from './TransactionItem';
+import { ShieldAlert } from 'lucide-react';
 import { WalletBalance } from './WalletBalance';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { fetchWalletDetails } from '@/store/features/user/wallet/wallet.thunk';
+import {
+  fetchBankAccounts,
+  deleteBankAccount,
+} from '@/store/features/user/bankAccount/bankAccount.thunk';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
-import { WalletSkelton } from '@/components/skeletons/WalletSkeloton';
-import { Pagination } from '@/components/Pagination';
+import type { BankAccountDTO } from '@/store/features/user/bankAccount/bankAccount';
+
+import { BankAccounts } from './BankAccounts';
+import { AddBankAccountModal } from './AddBankModal';
+import { Transactions } from './Transactions';
+import { GenericModal } from '@/components/GenericModel';
+import { toast } from 'sonner';
+import {
+  fetchWalletDetails,
+  withdrawWallet,
+} from '@/store/features/user/wallet/wallet.thunk';
 
 export const WalletPage = () => {
   const dispatch = useAppDispatch();
-  const { walletData, loading } = useSelector(
-    (state: RootState) => state.wallet
+  const [isAddBankModalOpen, setIsAddBankModalOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<BankAccountDTO | null>(
+    null
   );
-  const [page, setPage] = useState(1);
-
-  const PAGE_SIZE = 10;
+  const { accounts } = useSelector((state: RootState) => state.bankAccount);
+  const { walletData } = useSelector((state: RootState) => state.wallet);
+  const [withdrawModal, setWithdrawModal] = useState(false);
+  const [withdrawLoading, setWithdrawLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchWalletDetails(page));
-  }, [dispatch, page]);
+    dispatch(fetchBankAccounts());
+  }, [dispatch]);
+
+  const handleDeletBankAccount = async () => {
+    if (!selectedAccount) return;
+    try {
+      setConfirmLoading(true);
+      await dispatch(deleteBankAccount(selectedAccount.id)).unwrap();
+    } finally {
+      setConfirmLoading(false);
+      setDeleteModal(false);
+      setSelectedAccount(null);
+    }
+  };
+
+  const handleWithdrawClick = () => {
+    if (walletData.balance < 100) {
+      toast.error('Minimum 100 required');
+      return;
+    }
+    setWithdrawModal(true);
+  };
+
+  const handleConfirmWithdraw = async () => {
+    try {
+      setWithdrawLoading(true);
+      await dispatch(withdrawWallet()).unwrap();
+      toast.success('Withdrawal initiated');
+      setWithdrawModal(false);
+      await dispatch(fetchWalletDetails(1));
+    } catch (err) {
+      toast.error(typeof err === 'string' ? err : 'Failed to withdraw');
+    } finally {
+      setWithdrawLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-foreground">My Wallet</h1>
-          <p className="text-muted-foreground">
-            Manage and track your transactions
-          </p>
-        </div>
-        <WalletBalance />
-
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-foreground">
-              Recent Transactions
-            </h2>
-            <span className="text-sm text-muted-foreground">
-              {walletData.pagination.total} transactions
-            </span>
+    <>
+      <div className="min-h-screen bg-background">
+        <div className="mx-auto max-w-6xl space-y-8 px-4 py-8">
+          {/* Header */}
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold text-foreground">My Wallet</h1>
+            <p className="text-muted-foreground">
+              Manage your balance, linked accounts, and transactions.
+            </p>
           </div>
 
-          <div className="space-y-3">
-            {loading && <WalletSkelton />}
-            {!loading &&
-              walletData.transactions.map(transaction => (
-                <TransactionItem
-                  key={transaction.id}
-                  transaction={transaction}
-                />
-              ))}
-            {!loading && !walletData.transactions.length && (
-              <p className="text-sm text-muted-foreground">
-                No transactions found.
-              </p>
-            )}
-          </div>
-          {walletData.pagination.total > 0 && (
-            <Pagination
-              totalPages={Math.max(
-                1,
-                Math.ceil(walletData.pagination.total / PAGE_SIZE)
-              )}
-              currentPage={page}
-              onPageChange={setPage}
+          <div className="grid gap-4 md:grid-cols-2">
+            <WalletBalance
+              canWithDraw={accounts.length > 0}
+              onWithdrawClick={handleWithdrawClick}
             />
-          )}
+            <BankAccounts
+              accounts={accounts}
+              handleAddClick={() => setIsAddBankModalOpen(true)}
+              onRequestDelete={account => {
+                setSelectedAccount(account);
+                setDeleteModal(true);
+              }}
+            />
+          </div>
+
+          <Transactions />
         </div>
+        <AddBankAccountModal
+          isOpen={isAddBankModalOpen}
+          onClose={() => setIsAddBankModalOpen(false)}
+        />
       </div>
-    </div>
+      <GenericModal
+        isOpen={deleteModal}
+        onClose={() => {
+          if (confirmLoading) return;
+          setDeleteModal(false);
+          setSelectedAccount(null);
+        }}
+        title="Delete Bank Account"
+        titleIcon={<ShieldAlert size={20} />}
+        subtitle={
+          selectedAccount
+            ? `Are you sure you want to delete ${
+                selectedAccount.bankName
+              } (${selectedAccount.accountNumber.slice(-4)})?`
+            : 'Are you sure want to delete this account'
+        }
+        primaryAction={{
+          label: 'Confirm',
+          className: 'bg-red-600 hover:bg-red-700',
+          loading: confirmLoading,
+          onClick: handleDeletBankAccount,
+        }}
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => {
+            if (confirmLoading) return;
+            setDeleteModal(false);
+            setSelectedAccount(null);
+          },
+        }}
+      />
+
+      <GenericModal
+        isOpen={withdrawModal}
+        onClose={() => {
+          if (withdrawLoading) return;
+          setWithdrawModal(false);
+        }}
+        title="Withdraw Money"
+        titleIcon={<ShieldAlert size={20} />}
+        subtitle={`Are you sure you want to withdraw ₹${walletData.balance.toFixed(
+          2
+        )} to your primary bank account?`}
+        primaryAction={{
+          label: 'Confirm',
+          className: 'bg-gray-900 hover:bg-gray-800',
+          loading: withdrawLoading,
+          onClick: handleConfirmWithdraw,
+        }}
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => {
+            if (withdrawLoading) return;
+            setWithdrawModal(false);
+          },
+        }}
+      />
+    </>
   );
 };

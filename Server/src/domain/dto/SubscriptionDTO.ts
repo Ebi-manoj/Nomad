@@ -1,12 +1,31 @@
 import { Subscription, SubscriptionFeatures } from '../entities/Subscription';
-import { SubscriptionUsage } from '../entities/SubscriptionUsage';
-import { BillingCycle, SubscriptionTier } from '../enums/subscription';
+import { BillingCycle } from '../enums/subscription';
+
+export interface SubscriptionFeaturesResDTO {
+  maxJoinRequestsPerRide: number | null;
+  maxRideAcceptancesPerMonth: number | null;
+  platformFeePercentage: number;
+  verificationBadge: boolean;
+  priorityInList: boolean;
+  customCostSharing: boolean;
+}
+
+export interface SubscriptionUsageDTO {
+  id: string;
+  userId: string;
+  month: string;
+  joinRequestsCount: number;
+  rideAcceptancesCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface SubscriptionResDTO {
   id: string;
   userId: string;
   billingCycle: BillingCycle;
-  tier: SubscriptionTier;
+  tier: string;
+  badgeColor: string;
   stripeSubscriptionId: string | undefined;
   stripeCustomerId: string | undefined;
   startDate: Date;
@@ -16,7 +35,7 @@ export interface SubscriptionResDTO {
   currency: string;
   cancelledAt: undefined | Date;
   createdAt: Date;
-  features: SubscriptionFeatures;
+  features: SubscriptionFeaturesResDTO;
 }
 
 export interface HandleWebHookReqDTO {
@@ -35,14 +54,28 @@ export interface VerifySubscriptionResDTO {
 }
 
 export interface GetSubscriptionDetailsResDTO {
-  tier: SubscriptionTier;
-  features: SubscriptionFeatures;
-  subscription?: SubscriptionResDTO | null;
-  subscriptionUsage: SubscriptionUsage;
+  tier: string;
+  features: SubscriptionFeaturesResDTO;
+  subscription?: SubscriptionResDTO;
+  subscriptionUsage: SubscriptionUsageDTO;
 }
 
 export interface SubscriptionServiceResDTO {
-  tier: SubscriptionTier;
+  tier: string;
   features: SubscriptionFeatures;
-  subscription: Subscription | null;
+  subscription: Subscription;
+}
+
+export interface CreateSubscriptionReqDTO {
+  userId: string;
+  planId: string;
+  tier: string;
+  billingCycle: BillingCycle;
+  startDate: Date;
+  price: number;
+  currency: string;
+  stripeSubscriptionId: string;
+  stripeCustomerId?: string;
+  stripePriceId: string;
+  stripeSessionId: string;
 }

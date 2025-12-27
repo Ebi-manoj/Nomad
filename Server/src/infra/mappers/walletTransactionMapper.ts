@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { WalletTransaction } from '../../domain/entities/WalletTransaction';
-import { WalletTransactionType } from '../../domain/enums/Wallet';
+import { WalletTransactionStatus, WalletTransactionType } from '../../domain/enums/Wallet';
 import { IWalletTransactionDocument } from '../database/WalletTransaction.model';
 import { IMapper } from './IMapper';
 
@@ -17,6 +17,7 @@ export const walletTransactionMapper: IMapper<
       amount: doc.amount,
       type: doc.type as WalletTransactionType,
       description: doc.description,
+      status: doc.status as WalletTransactionStatus,
       metadata: doc.metadata as Record<string, unknown> | undefined,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
@@ -33,6 +34,7 @@ export const walletTransactionMapper: IMapper<
       amount: domain.getAmount(),
       type: domain.getType(),
       description: domain.getDescription(),
+      status: domain.getStatus(),
       metadata: domain.getMetadata(),
     };
   },

@@ -20,3 +20,6 @@ export const PRO_PLATFORM_FEE = 5;
 export const FREE_PLATFORM_FEE = 5;
 export const PREMIUM_PLATFORM_FEE = 3;
 export const FREE_TIER_COST_SHARING = 5;
+
+export const BANKACCOUNTS_LIMITS = 2;
+export const MIN_PAYOUT_BALANCE = 100;

@@ -10,6 +10,7 @@ export interface IUserModel {
   aadhaarVerified: boolean;
   licenceVerified: boolean;
   rating: number;
+  payoutContactId?: string;
   ratingCount: number;
   isBlocked: boolean;
   createdAt: Date;
@@ -50,6 +51,10 @@ const userSchema = new Schema<IUserModel>(
     rating: {
       type: Number,
       default: 0,
+    },
+    payoutContactId: {
+      type: String,
+      default: null,
     },
     ratingCount: {
       type: Number,

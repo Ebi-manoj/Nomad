@@ -2,7 +2,6 @@ import {
   EditSosContactReqDTO,
   SosContactDTO,
 } from '../../../../domain/dto/SosDTO';
-import { SosContact } from '../../../../domain/entities/SosContact';
 import { Forbidden, UpdateFailed } from '../../../../domain/errors/CustomError';
 import { SosContactNotFound } from '../../../../domain/errors/SosErrors';
 import { ISosContactRepository } from '../../../repositories/ISosContactRepository';

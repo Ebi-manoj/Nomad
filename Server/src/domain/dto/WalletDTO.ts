@@ -1,4 +1,4 @@
-import { TransactionReferenceType } from '../enums/Wallet';
+import { TransactionReferenceType, WalletTransactionStatus } from '../enums/Wallet';
 
 export interface WalletTransactionDTO {
   id: string;
@@ -8,6 +8,7 @@ export interface WalletTransactionDTO {
   amount: number;
   type: string;
   description: string;
+  status: WalletTransactionStatus;
   createdAt: Date;
 }
 

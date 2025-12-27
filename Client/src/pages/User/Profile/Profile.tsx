@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Mail, Phone, User2, BadgeCheck, Bike } from 'lucide-react';
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { Field } from '@/components/ProfileInput';
-import { VerificationSection } from '@/components/VerificationFields';
+import { VerificationSection } from '@/pages/User/Profile/VerificationFields';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { UserAvatar } from '@/components/ProfilePic';
@@ -30,7 +30,9 @@ const profile: Profile = {
 
 export default function ProfilePage() {
   const { user } = useSelector((state: RootState) => state.auth);
-  const tier = useSelector((state: RootState) => state.subscription.data?.tier);
+  const data = useSelector((state: RootState) => state.subscription.data);
+  const tier = data?.tier ?? 'FREE';
+  const badgeColor = data?.subscription?.badgeColor ?? '#6b7280';
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 md:py-14">
@@ -50,6 +52,7 @@ export default function ProfilePage() {
                     fullName={user?.fullName}
                     imageUrl={''}
                     subscriptionTier={tier}
+                    badgeColor={badgeColor}
                     size="lg"
                     showBadge
                   />

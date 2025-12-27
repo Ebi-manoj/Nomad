@@ -39,4 +39,8 @@ export abstract class MongoBaseRepository<TDomain, TModel>
   setSession(session: ClientSession | null): void {
     this.session = session;
   }
+  async findAll(): Promise<TDomain[]> {
+    const docs = await this.model.find();
+    return docs.map(d => this.mapper.toDomain(d));
+  }
 }

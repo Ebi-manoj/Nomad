@@ -3,6 +3,7 @@ export interface WalletTransactionDTO {
   amount: number;
   type: string; // e.g. 'CREDIT' | 'DEBIT'
   description: string;
+  status: 'PROCESSING' | 'SUCCESS' | 'FAILED';
   createdAt: string | Date;
 }
 

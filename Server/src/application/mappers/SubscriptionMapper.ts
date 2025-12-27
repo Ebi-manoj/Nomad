@@ -6,6 +6,7 @@ export function SubscriptionMapper(sub: Subscription): SubscriptionResDTO {
     id: sub.getId()!,
     userId: sub.getUserId(),
     tier: sub.getTier(),
+    badgeColor: sub.getBadgeColor(),
     billingCycle: sub.getBillingCycle(),
     stripeCustomerId: sub.getStripeCustomerId(),
     stripeSubscriptionId: sub.getStripeSubscriptionId(),
@@ -16,6 +17,6 @@ export function SubscriptionMapper(sub: Subscription): SubscriptionResDTO {
     currency: sub.getCurrency(),
     cancelledAt: sub.getCancelledAt(),
     createdAt: sub.getCreatedAt(),
-    features: sub.getFeatures(),
+    features: sub.getFeatures().toJson(),
   };
 }

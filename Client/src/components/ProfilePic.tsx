@@ -1,13 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import type { SubscriptionTierType } from '@/types/subscription';
 import { MdWorkspacePremium } from 'react-icons/md';
 import { GiMountainClimbing, GiFullMotorcycleHelmet } from 'react-icons/gi';
 
 interface UserAvatarProps {
   fullName: string;
   imageUrl?: string;
-  subscriptionTier?: SubscriptionTierType;
+  subscriptionTier?: string;
+  badgeColor?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   showBadge?: boolean;
@@ -20,31 +20,38 @@ const sizeClasses = {
   xl: 'size-20',
 };
 
-const tierColorMap = {
-  FREE: 'bg-gray-500 text-white',
-  HIKER_PRO: 'bg-green-500 text-white',
-  RIDER_PRO: 'bg-blue-500 text-white',
-  PREMIUM_PLUS: 'bg-amber-500 text-white',
+const getTierIcon = (tier: string) => {
+  const t = tier.toUpperCase();
+  if (t.includes('PREMIUM')) return MdWorkspacePremium;
+  if (t.includes('HIKER')) return GiMountainClimbing;
+  if (t.includes('RIDER')) return GiFullMotorcycleHelmet;
+  return null;
 };
 
-const tierStyles = {
-  FREE: 'border-gray-300 ring-gray-200',
-  HIKER_PRO: 'border-green-400 ring-green-200',
-  RIDER_PRO: 'border-blue-400 ring-blue-200',
-  PREMIUM_PLUS: 'border-amber-400 ring-amber-200',
-};
-
-const tierBadges = {
-  FREE: null,
-  HIKER_PRO: GiMountainClimbing,
-  RIDER_PRO: GiFullMotorcycleHelmet,
-  PREMIUM_PLUS: MdWorkspacePremium,
+const lightenColor = (hex: string, percent: number = 40): string => {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(
+    255,
+    Math.floor((num >> 16) + ((255 - (num >> 16)) * percent) / 100)
+  );
+  const g = Math.min(
+    255,
+    Math.floor(
+      ((num >> 8) & 0x00ff) + ((255 - ((num >> 8) & 0x00ff)) * percent) / 100
+    )
+  );
+  const b = Math.min(
+    255,
+    Math.floor((num & 0x0000ff) + ((255 - (num & 0x0000ff)) * percent) / 100)
+  );
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
 };
 
 export const UserAvatar = ({
   fullName,
   imageUrl,
   subscriptionTier = 'FREE',
+  badgeColor,
   size = 'md',
   className,
   showBadge = false,
@@ -53,38 +60,45 @@ export const UserAvatar = ({
     .split(' ')
     .map(w => w[0])
     .join('')
-    .toUpperCase();
+    .toUpperCase()
+    .slice(0, 2);
 
-  const BadgeIcon = tierBadges[subscriptionTier];
-  const badgeColorClass = tierColorMap[subscriptionTier];
+  const BadgeIcon = getTierIcon(subscriptionTier);
+
   const badgeSize = size === 'sm' ? 10 : size === 'md' ? 12 : 14;
   const badgeContainerSize = size === 'sm' ? 'size-4' : 'size-5';
   const badgePosition =
     size === 'sm' ? '-bottom-0.5 -right-0.5' : 'bottom-1 -right-1';
 
+  const shouldShowBadge = showBadge && BadgeIcon && subscriptionTier !== 'FREE';
+
+  // Generate border and ring colors from badgeColor
+  const borderColor = badgeColor || '#d1d5db';
+  const ringColor = lightenColor(borderColor, 60);
+
   return (
     <div className="relative inline-block">
       <Avatar
-        className={cn(
-          sizeClasses[size],
-          'border-2 ring-1',
-          tierStyles[subscriptionTier],
-          className
-        )}
+        className={cn(sizeClasses[size], 'border-2 ring-1', className)}
+        style={{
+          borderColor: borderColor,
+          boxShadow: `0 0 0 1px ${ringColor}`,
+        }}
       >
         <AvatarImage alt={`${fullName} profile photo`} src={imageUrl} />
         <AvatarFallback className="font-semibold">{initials}</AvatarFallback>
       </Avatar>
-      {showBadge && BadgeIcon && (
+
+      {shouldShowBadge && (
         <span
           className={cn(
-            'absolute flex items-center justify-center rounded-full border-2 border-white shadow-md',
+            'absolute flex items-center justify-center rounded-full border-2 border-white shadow-md text-white',
             badgeContainerSize,
-            badgePosition,
-            badgeColorClass
+            badgePosition
           )}
+          style={{ backgroundColor: badgeColor }}
         >
-          <BadgeIcon size={badgeSize} strokeWidth={2.5} />
+          <BadgeIcon size={badgeSize} />
         </span>
       )}
     </div>

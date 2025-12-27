@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 import {
   TransactionReferenceType,
   WalletTransactionType,
+  WalletTransactionStatus,
 } from '../../domain/enums/Wallet';
 
 export interface IWalletTransactionDocument extends Document {
@@ -12,6 +13,7 @@ export interface IWalletTransactionDocument extends Document {
   amount: number;
   type: WalletTransactionType;
   description: string;
+  status: WalletTransactionStatus;
   metadata?: Record<string, unknown>;
   createdAt: Date;
   updatedAt: Date;
@@ -42,6 +44,12 @@ const WalletTransactionSchema = new Schema<IWalletTransactionDocument>(
       type: String,
       enum: Object.values(WalletTransactionType),
       required: true,
+      index: true,
+    },
+    status: {
+      type: String,
+      enum: Object.values(WalletTransactionStatus),
+      default: WalletTransactionStatus.PROCESSING,
       index: true,
     },
     description: {

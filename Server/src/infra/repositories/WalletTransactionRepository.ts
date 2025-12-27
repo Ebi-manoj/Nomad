@@ -6,7 +6,7 @@ import {
   WalletTransactionModel,
 } from '../database/WalletTransaction.model';
 import { walletTransactionMapper } from '../mappers/walletTransactionMapper';
-import { WalletTransactionType } from '../../domain/enums/Wallet';
+import { WalletTransactionStatus, WalletTransactionType } from '../../domain/enums/Wallet';
 import { Types } from 'mongoose';
 
 export class WalletTransactionRepository
@@ -38,6 +38,7 @@ export class WalletTransactionRepository
       {
         $match: {
           type: WalletTransactionType.CREDIT,
+          status: WalletTransactionStatus.SUCCESS,
           userId: new Types.ObjectId(userId),
         },
       },
@@ -56,6 +57,7 @@ export class WalletTransactionRepository
       {
         $match: {
           type: WalletTransactionType.DEBIT,
+          status: WalletTransactionStatus.SUCCESS,
           userId: new Types.ObjectId(userId),
         },
       },

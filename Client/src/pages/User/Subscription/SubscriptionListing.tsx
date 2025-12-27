@@ -1,23 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, X, Zap, Crown, ArrowLeft } from 'lucide-react';
-import { plans } from '@/utils/Plan';
 import {
   type BillingCycle,
   type CreateSubscriptionCheckoutSessionDTO,
-  type SubscriptionTierType,
 } from '@/types/subscription';
-import { getSubscriptionCheckout } from '@/api/subscription';
+import {
+  getSubscriptionCheckout,
+  getSubscriptionPlansApi,
+} from '@/api/subscription';
+import { mapSubscriptionPlans, type MappedPlan } from './planMapping';
 import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { toast } from 'sonner';
 
 export const SubscriptionListing = ({
   handleBack,
+  tier,
 }: {
   handleBack: () => void;
+  tier: string;
 }) => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('MONTHLY');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubscription = async (code: SubscriptionTierType) => {
+  const [plans, setPlans] = useState<MappedPlan[]>([]);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      setLoading(true);
+      try {
+        const data = await getSubscriptionPlansApi();
+        const mapped = mapSubscriptionPlans(data, tier);
+        setPlans(mapped);
+      } catch (error) {
+        toast.error(typeof error == 'string' ? error : 'Failed to fetch plans');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlans();
+  }, []);
+
+  const handleSubscription = async (code: string, planId: string) => {
     const dto: CreateSubscriptionCheckoutSessionDTO = {
+      planId,
       tier: code,
       billingCycle,
     };
@@ -121,7 +146,7 @@ export const SubscriptionListing = ({
                 <h3 className="text-xl font-bold text-slate-900 mb-2">
                   {plan.title}
                 </h3>
-                <p className="text-sm text-slate-600 h-10">
+                <p className="text-sm text-slate-600  line-clamp-3 h-15">
                   {plan.description}
                 </p>
               </div>
@@ -191,18 +216,25 @@ export const SubscriptionListing = ({
               </div>
 
               {/* CTA Button */}
-              <button
-                className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200 cursor-pointer
-                ${
-                  plan.popular
-                    ? 'bg-gradient-to-r from-amber-500 to-orange-600 hover:to-orange-500 text-white shadow-lg shadow-orange-500/20'
-                    : 'bg-slate-900 hover:bg-slate-800 text-white'
-                }
-              `}
-                onClick={() => handleSubscription(plan.code)}
-              >
-                {plan.cta}
-              </button>
+              {!plan.isDefault && (
+                <button
+                  disabled={plan.isDefault || plan.cta === 'Current plan'}
+                  className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200
+               ${
+                 plan.isDefault || plan.cta === 'Current plan'
+                   ? 'opacity-50 cursor-not-allowed'
+                   : 'cursor-pointer'
+               }
+              ${
+                plan.popular
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-600 hover:to-orange-500 text-white'
+                  : 'bg-slate-900 hover:bg-slate-800 text-white'
+              }`}
+                  onClick={() => handleSubscription(plan.code, plan.id)}
+                >
+                  {plan.cta}
+                </button>
+              )}
             </div>
           ))}
         </div>

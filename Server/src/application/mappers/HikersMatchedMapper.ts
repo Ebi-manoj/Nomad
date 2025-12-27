@@ -2,13 +2,12 @@ import { GetHikersMatchedResponseDTO } from '../../domain/dto/RideDTO';
 import { HikeLog } from '../../domain/entities/Hike';
 import { RideBooking } from '../../domain/entities/RideBooking';
 import { User } from '../../domain/entities/User';
-import { SubscriptionTier } from '../../domain/enums/subscription';
 
 export function hikersMatchedMapper(
   user: User,
   hike: HikeLog,
   booking: RideBooking,
-  subscriptionTier: SubscriptionTier
+  subscriptionTier: string
 ): GetHikersMatchedResponseDTO {
   return {
     user: {

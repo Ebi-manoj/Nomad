@@ -7,25 +7,8 @@ import {
   Zap,
   Lock,
 } from 'lucide-react';
-import type {
-  GetSubscriptionDetailsResDTO,
-  SubscriptionTierType,
-} from '@/types/subscription';
+import type { GetSubscriptionDetailsResDTO } from '@/types/subscription';
 import { FaMoneyCheckAlt } from 'react-icons/fa';
-
-const tierColors: Record<SubscriptionTierType, string> = {
-  FREE: 'bg-slate-500',
-  HIKER_PRO: 'bg-emerald-500',
-  RIDER_PRO: 'bg-blue-500',
-  PREMIUM_PLUS: 'bg-amber-500',
-};
-
-const tierNames: Record<SubscriptionTierType, string> = {
-  FREE: 'Free Plan',
-  HIKER_PRO: 'Hiker Pro',
-  RIDER_PRO: 'Rider Pro',
-  PREMIUM_PLUS: 'Premium Plus',
-};
 
 export const SubscriptionDetailsPage = ({
   data,
@@ -69,10 +52,15 @@ export const SubscriptionDetailsPage = ({
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <h2 className="text-2xl font-bold text-slate-900">
-                        {tierNames[tier]}
+                        {tier}
                       </h2>
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold text-white tracking-wide ${tierColors[tier]}`}
+                        style={{
+                          background: !subscription?.badgeColor
+                            ? 'gray'
+                            : subscription.badgeColor,
+                        }}
+                        className={`px-3 py-1 rounded-full text-xs font-bold text-white tracking-wide`}
                       >
                         ACTIVE
                       </span>

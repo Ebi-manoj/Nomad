@@ -19,9 +19,9 @@ export class GetSubscriptionDetailUseCase
 
     return {
       tier: subscriptionData.tier,
-      subscription: subscription ? SubscriptionMapper(subscription) : null,
-      features: subscriptionData.features,
-      subscriptionUsage: usage,
+      subscription: SubscriptionMapper(subscription),
+      features: subscriptionData.features.toJson(),
+      subscriptionUsage: usage.toJson(),
     };
   }
 }

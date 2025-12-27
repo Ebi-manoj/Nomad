@@ -1,6 +1,5 @@
 import type { SubscriptionDTO } from '@/types/subscription';
 import { formatDateWithYear } from '@/utils/dateFormater';
-import { plans } from '@/utils/Plan';
 import {
   ArrowRight,
   Calendar,
@@ -9,27 +8,21 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { formatSubscriptionFeatures, getIconForTier } from '../planMapping';
 
 export interface DetailProps {
   subscription: SubscriptionDTO;
 }
 
 export const ShowDetails = ({ subscription }: DetailProps) => {
-  const getPlanDetails = () => {
-    if (!subscription) return null;
-    return plans.find(plan => plan.code === subscription.tier);
-  };
-
   const navigate = useNavigate();
   const handleRedirect = () => {
     navigate('/hike', { replace: true });
   };
 
-  console.log(subscription);
-
-  const planDetails = getPlanDetails();
-
   if (!subscription) return null;
+  const icon = getIconForTier(subscription.tier);
+  const displayFeatures = formatSubscriptionFeatures(subscription.features);
 
   return (
     <div className="min-h-screen bg-white  selection:bg-emerald-500/30 flex flex-col items-center justify-center p-4 sm:p-6 font-sans">
@@ -76,7 +69,7 @@ export const ShowDetails = ({ subscription }: DetailProps) => {
                 </div>
               </div>
               <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-700">
-                {planDetails?.icon}
+                {icon}
               </div>
             </div>
 
@@ -119,7 +112,7 @@ export const ShowDetails = ({ subscription }: DetailProps) => {
             </div>
 
             <ul className="space-y-4">
-              {planDetails?.features.map((feature, index) => (
+              {displayFeatures.map((feature, index) => (
                 <li
                   key={index}
                   className="flex items-start gap-3 text-sm text-gray-600 group"

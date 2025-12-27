@@ -19,8 +19,10 @@ import { FaLock } from 'react-icons/fa6';
 
 export const Ride = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const tier = useSelector((state: RootState) => state.subscription.data?.tier);
-  const canCustomizeCost = tier === 'RIDER_PRO' || tier === 'PREMIUM_PLUS';
+  const features = useSelector(
+    (state: RootState) => state.subscription.data?.features
+  );
+  const canCustomizeCost = features?.customCostSharing;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

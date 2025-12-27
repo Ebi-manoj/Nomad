@@ -1,14 +1,20 @@
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import type { RootState } from '@/store/store';
-import { Wallet, TrendingUp, TrendingDown } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, ArrowUpRight } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
-export const WalletBalance = () => {
+export interface WalletBalanceProps {
+  canWithDraw: boolean;
+  onWithdrawClick?: () => void;
+}
+
+export const WalletBalance = ({ canWithDraw, onWithdrawClick }: WalletBalanceProps) => {
   const { walletData } = useSelector((state: RootState) => state.wallet);
   const formatAmount = (value: number) => `₹${value.toFixed(2)}`;
 
   return (
-    <Card className="p-6 border-border bg-card shadow-sm max-w-[80%] mx-auto">
+    <Card className="p-6 border-border bg-card shadow-sm">
       <div className="flex items-start justify-between mb-6">
         <div>
           <div className="flex items-center gap-2 text-muted-foreground mb-2">
@@ -19,6 +25,17 @@ export const WalletBalance = () => {
             {formatAmount(walletData.balance)}
           </h1>
         </div>
+        {canWithDraw && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-1 text-sm cursor-pointer bg-black text-white hover:bg-gray-800 hover:text-white"
+            onClick={onWithdrawClick}
+          >
+            <ArrowUpRight className="h-4 w-4" />
+            Withdraw
+          </Button>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">

@@ -1,15 +1,4 @@
-import {
-  FREE_PLATFORM_FEE,
-  MAX_JOIN_REQUEST,
-  MAX_RIDE_ACCEPTANCE,
-  PREMIUM_PLATFORM_FEE,
-  PRO_PLATFORM_FEE,
-} from '../enums/Constants';
-import {
-  BillingCycle,
-  SubscriptionStatus,
-  SubscriptionTier,
-} from '../enums/subscription';
+import { BillingCycle, SubscriptionStatus } from '../enums/subscription';
 
 export class SubscriptionFeatures {
   constructor(
@@ -44,14 +33,26 @@ export class SubscriptionFeatures {
   hasCustomCostSharing(): boolean {
     return this._customCostSharing;
   }
+  toJson() {
+    return {
+      maxJoinRequestsPerRide: this._maxJoinRequestsPerRide,
+      maxRideAcceptancesPerMonth: this._maxRideAcceptancesPerMonth,
+      platformFeePercentage: this._platformFeePercentage,
+      verificationBadge: this._verificationBadge,
+      priorityInList: this._priorityInList,
+      customCostSharing: this._customCostSharing,
+    };
+  }
 }
 
 export interface SubscriptionProps {
   id?: string;
   userId: string;
-  tier: SubscriptionTier;
+  planId: string;
+  tier: string;
   billingCycle: BillingCycle;
   status: SubscriptionStatus;
+  badgeColor: string;
   startDate?: Date;
   endDate?: Date;
   autoRenew?: boolean;
@@ -62,16 +63,20 @@ export interface SubscriptionProps {
   stripePriceId?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  isDefault?: boolean;
   cancelledAt?: Date;
+  features: SubscriptionFeatures;
 }
 
 export class Subscription {
   private _id?: string;
   private _userId: string;
-  private _tier: SubscriptionTier;
+  private _planId: string;
+  private _tier: string;
   private _billingCycle: BillingCycle;
   private _status: SubscriptionStatus;
   private _startDate: Date;
+  private _badgeColor: string;
   private _endDate: Date;
   private _autoRenew: boolean;
   private _price: number;
@@ -88,6 +93,8 @@ export class Subscription {
     this._id = props.id;
     this._userId = props.userId;
     this._tier = props.tier;
+    this._planId = props.planId;
+    this._badgeColor = props.badgeColor;
     this._billingCycle = props.billingCycle;
     this._status = props.status;
     this._startDate = props.startDate || new Date();
@@ -101,57 +108,7 @@ export class Subscription {
     this._createdAt = props.createdAt || new Date();
     this._updatedAt = props.updatedAt || new Date();
     this._cancelledAt = props.cancelledAt;
-    this._features = this.initializeFeatures();
-  }
-
-  private initializeFeatures(): SubscriptionFeatures {
-    switch (this._tier) {
-      case SubscriptionTier.FREE:
-        return new SubscriptionFeatures(
-          MAX_JOIN_REQUEST,
-          MAX_RIDE_ACCEPTANCE,
-          FREE_PLATFORM_FEE,
-          false,
-          false,
-          false
-        );
-      case SubscriptionTier.HIKER_PRO:
-        return new SubscriptionFeatures(
-          null,
-          null,
-          PRO_PLATFORM_FEE,
-          true,
-          true,
-          false
-        );
-      case SubscriptionTier.RIDER_PRO:
-        return new SubscriptionFeatures(
-          null,
-          null,
-          PRO_PLATFORM_FEE,
-          true,
-          true,
-          true
-        );
-      case SubscriptionTier.PREMIUM_PLUS:
-        return new SubscriptionFeatures(
-          null,
-          null,
-          PREMIUM_PLATFORM_FEE,
-          true,
-          true,
-          true
-        );
-      default:
-        return new SubscriptionFeatures(
-          MAX_JOIN_REQUEST,
-          MAX_RIDE_ACCEPTANCE,
-          FREE_PLATFORM_FEE,
-          false,
-          false,
-          false
-        );
-    }
+    this._features = props.features;
   }
 
   getId(): string | undefined {
@@ -172,8 +129,12 @@ export class Subscription {
     return new Date(startDate + duration);
   }
 
-  getTier(): SubscriptionTier {
+  getTier(): string {
     return this._tier;
+  }
+
+  getBadgeColor() {
+    return this._badgeColor;
   }
 
   getBillingCycle(): BillingCycle {
@@ -194,6 +155,10 @@ export class Subscription {
 
   isAutoRenew(): boolean {
     return this._autoRenew;
+  }
+
+  getPlanId() {
+    return this._planId;
   }
 
   getPrice(): number {
@@ -235,7 +200,6 @@ export class Subscription {
       this._status === SubscriptionStatus.ACTIVE && new Date() < this._endDate
     );
   }
-
   isExpired(): boolean {
     return new Date() >= this._endDate;
   }

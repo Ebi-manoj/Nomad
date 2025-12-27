@@ -13,3 +13,10 @@ export async function fetchWalletDetailsApi(page: number = 1) {
   );
   return res.data.data;
 }
+
+export async function withdrawApi() {
+  const res = await axiosInstance.post<ApiResponse<{ success: boolean }>>(
+    `${WALLET_API}/withdraw`
+  );
+  return res.data.data;
+}

@@ -15,6 +15,7 @@ export const userMapper: IMapper<User, IUserModel> = {
       isBlocked: domain.getIsBlocked(),
       rating: domain.getRating(),
       ratingCount: domain.getRatingCount(),
+      payoutContactId: domain.getPayoutContactId(),
       aadhaarVerified: domain.getAadhaarVerified(),
       licenceVerified: domain.getLicenceVerified(),
     };
@@ -32,6 +33,7 @@ export const userMapper: IMapper<User, IUserModel> = {
       ratingCount: userDoc.ratingCount,
       aadhaarVerified: userDoc.aadhaarVerified,
       licenceVerified: userDoc.licenceVerified,
+      payoutContactId: userDoc.payoutContactId,
       createdAt: userDoc.createdAt,
       updatedAt: userDoc.updatedAt,
     });

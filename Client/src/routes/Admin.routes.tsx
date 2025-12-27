@@ -9,6 +9,7 @@ import { AdminHikesPage } from '@/pages/Admin/Hikes/Hike';
 import { AdminRideLogsPage } from '@/pages/Admin/Rides/RideLogs';
 import AdminHikeDetailsPage from '@/pages/Admin/HikeDetail/HikeDetails';
 import AdminRideDetailsPage from '@/pages/Admin/RideDetails/RideDetails';
+import { AdminSubscriptionPage } from '@/pages/Admin/Subscriptions/Subscription';
 
 export const AdminRoutes = (
   <Route
@@ -27,5 +28,6 @@ export const AdminRoutes = (
     <Route path="hikes/:id" element={<AdminHikeDetailsPage />} />
     <Route path="rides" element={<AdminRideLogsPage />} />
     <Route path="rides/:id" element={<AdminRideDetailsPage />} />
+    <Route path="subscriptions" element={<AdminSubscriptionPage />} />
   </Route>
 );

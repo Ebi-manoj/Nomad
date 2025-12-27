@@ -2,7 +2,7 @@ import { Route } from 'react-router-dom';
 import { Protected } from './Protected';
 import { HomeLayout } from '@/layouts/HomeLayout';
 import { Hike } from '@/pages/User/Hike';
-import ProfilePage from '@/pages/User/Profile';
+import ProfilePage from '@/pages/User/Profile/Profile';
 import { RideMatching } from '@/pages/User/MatchRideToHike';
 import { Ride } from '@/pages/User/Ride';
 import { ActivityPage } from '@/pages/User/Activity/Activity';
