@@ -3,7 +3,10 @@ import {
   RefreshTokenResponseDTO,
 } from '../../../domain/dto/authDTO';
 import { ACCESS_TOKEN_EXPIRY } from '../../../domain/enums/Constants';
-import { InvalidToken } from '../../../domain/errors/CustomError';
+import {
+  InvalidToken,
+  UserIsBlocked,
+} from '../../../domain/errors/CustomError';
 import { userMapper } from '../../mappers/UserResponse.mapper';
 import { ITOkenGenerator } from '../../providers/ITokenGenerator';
 import { IUserRepository } from '../../repositories/IUserRepository';
@@ -24,6 +27,8 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
     if (!payload) throw new InvalidToken();
     const user = await this._userRepostiory.findById(payload.userId);
     if (!user) throw new InvalidToken();
+
+    if (user.getIsBlocked()) throw new UserIsBlocked();
 
     const accessToken = this._tokenGenerator.generateToken(
       { userId: user.getId(), role: user.getRole() },

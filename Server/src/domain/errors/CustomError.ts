@@ -68,6 +68,11 @@ export class GoogleAuthResetPasswordError extends CustomError {
     super(HttpStatus.UNAUTHORIZED, message);
   }
 }
+export class UserIsBlocked extends CustomError {
+  constructor(message: string = ErrorMessages.USER_BLOCKED) {
+    super(HttpStatus.FORBIDDEN, message);
+  }
+}
 export class Forbidden extends CustomError {
   constructor(message: string = ErrorMessages.FORBIDDEN) {
     super(HttpStatus.FORBIDDEN, message);

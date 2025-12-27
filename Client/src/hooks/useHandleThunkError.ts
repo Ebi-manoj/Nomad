@@ -4,7 +4,7 @@ import { isAxiosError } from 'axios';
 export function useHandleThunkError(
   error: unknown,
   rejectWithValue: any,
-  defaultMsge = ErrorMessage.SOMETHING_WENT_WRONG
+  defaultMsge: string = ErrorMessage.SOMETHING_WENT_WRONG
 ) {
   console.log('error object', error);
   if (isAxiosError(error)) {

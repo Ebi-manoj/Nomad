@@ -2,6 +2,7 @@ import { logout, refreshToken } from '@/store/features/auth/auth.thunks';
 import type { AppDispatch } from '@/store/store';
 import type { Store } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { ErrorMessage } from './constants';
 let store: Store;
 
 export const injectStore = (_store: Store) => (store = _store);
@@ -29,11 +30,19 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     const state = store.getState();
     const token = state.auth.token;
+    console.log(error);
+    const dispatch: AppDispatch = store.dispatch;
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.error?.message == ErrorMessage.USER_BLOCKED
+    ) {
+      await dispatch(logout()).unwrap();
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && token && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const dispatch: AppDispatch = store.dispatch;
       try {
         await dispatch(refreshToken()).unwrap();
         const newToken = store.getState().auth.token;

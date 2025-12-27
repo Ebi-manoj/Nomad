@@ -29,9 +29,9 @@ export function ProfilePopover() {
   async function handleLogout() {
     try {
       await dispatch(logout()).unwrap();
-      window.location.href = '/auth/sign-in';
+      navigate('/auth/sign-in', { replace: true });
     } catch (error) {
-      toast.success(typeof error == 'string' ? error : 'Logout Failed');
+      toast.error(typeof error == 'string' ? error : 'Logout Failed');
     }
   }
   return (

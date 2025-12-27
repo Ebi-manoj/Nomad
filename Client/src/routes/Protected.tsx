@@ -9,6 +9,7 @@ interface protectedProps {
 
 export const Protected = ({ children, allowedRole }: protectedProps) => {
   const payload = useAuthRole();
+  console.log(payload);
   if (!payload.role || payload.role !== allowedRole)
     return <Navigate to={'/auth/sign-in'} replace />;
   return <>{children}</>;

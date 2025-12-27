@@ -18,7 +18,7 @@ export const login = createAsyncThunk(
       return useHandleThunkError(
         error,
         rejectWithValue,
-        ErrorMessage.SIGNUP_ERROR
+        ErrorMessage.SIGNIN_ERROR
       );
     }
   }

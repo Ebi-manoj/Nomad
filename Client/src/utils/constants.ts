@@ -2,10 +2,13 @@ export const ErrorMessage = {
   LOGIN_FAILED: 'Login Failed',
   LOGOUT_FAILED: 'Logout Failed',
   SIGNUP_ERROR: 'An error occured during sign up',
+  SIGNIN_ERROR: 'An error occured during sign in',
   SERVER_ERROR: 'Unable to connect to the server. Please try again.',
   SESSION_EXPIRED: 'Session expired',
   FETCH_USERS_FAILED: 'Failed to fetch users',
   SOMETHING_WENT_WRONG: 'Something went wrong',
+  ACCOUNT_SUSPENDED: 'Your account has been supended',
+  USER_BLOCKED: 'USER_BLOCKED',
 } as const;
 
 export const FolderTypes = {
