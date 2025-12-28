@@ -7,6 +7,7 @@ export interface GetHikersMatchedResponseDTO {
     rating: number;
     profilePic: string;
     subscriptionTier: SubscriptionTierType;
+    badgeColor: string;
   };
   hikeDetails: {
     hikeId: string;

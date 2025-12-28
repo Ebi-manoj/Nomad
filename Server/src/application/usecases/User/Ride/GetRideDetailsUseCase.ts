@@ -70,6 +70,7 @@ export class GetRideDetailsUseCase implements IGetRideDetailsUseCase {
             rating: 4.5,
             verified: hiker.getIsVerifed(),
             subscriptionTier: sub.tier,
+            badgeColor: sub.subscription.getBadgeColor(),
           },
           review: review ? ReviewMapper(review) : null,
         };

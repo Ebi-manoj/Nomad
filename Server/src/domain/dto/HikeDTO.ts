@@ -63,7 +63,8 @@ export interface JoinRequestResponseDTO {
     profilePicture?: string;
     rating?: number;
     isVerified: boolean;
-    subscriptionTier: SubscriptionTier;
+    subscriptionTier: string;
+    badgeColor: string;
   };
 }
 

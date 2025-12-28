@@ -33,6 +33,7 @@ export interface RideMatchResponseDTO {
     vehicleType: string;
     vehicleModal: string;
     subscriptionTier: SubscriptionTierType;
+    badgeColor?: string;
   };
   requestStatus: null | JoinRequestStatus;
   paymentId: null | string;
@@ -56,6 +57,7 @@ export interface GetHikeDetailsResponseDTO {
     rating: number;
     profilePic: string;
     subscriptionTier: SubscriptionTierType;
+    badgeColor?: string;
   };
   bookingDetails: null | {
     bookingId: string;

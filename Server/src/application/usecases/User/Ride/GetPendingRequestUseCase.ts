@@ -27,7 +27,13 @@ export class GetPendingRequestUseCase implements IGetPendingRequestUseCase {
           const sub = await this._subscriptionService.getActiveSubscription(
             hike.getUserId()
           );
-          return joinRequestMapper(jr, hike, user, sub.tier);
+          return joinRequestMapper(
+            jr,
+            hike,
+            user,
+            sub.tier,
+            sub.subscription.getBadgeColor()
+          );
         }
         return undefined;
       })

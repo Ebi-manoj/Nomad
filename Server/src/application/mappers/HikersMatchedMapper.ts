@@ -7,12 +7,14 @@ export function hikersMatchedMapper(
   user: User,
   hike: HikeLog,
   booking: RideBooking,
-  subscriptionTier: string
+  subscriptionTier: string,
+  badgeColor: string
 ): GetHikersMatchedResponseDTO {
   return {
     user: {
       fullName: user.getFullName(),
       subscriptionTier,
+      badgeColor,
       rating: 4.5,
       profilePic: '',
       isVerified: user.getIsVerifed(),

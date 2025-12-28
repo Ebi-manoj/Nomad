@@ -8,7 +8,8 @@ export function joinRequestMapper(
   joinRequest: JoinRequest,
   hike: HikeLog,
   user: User,
-  tier: SubscriptionTier
+  tier: string,
+  badgeColor: string
 ): JoinRequestResponseDTO {
   return {
     id: joinRequest.getId()!,
@@ -30,6 +31,7 @@ export function joinRequestMapper(
       profilePicture: '',
       rating: 4.8,
       subscriptionTier: tier,
+      badgeColor,
     },
   };
 }

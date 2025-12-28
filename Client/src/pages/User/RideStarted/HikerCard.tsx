@@ -50,6 +50,7 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
             <UserAvatar
               subscriptionTier={request.hiker.subscriptionTier}
               fullName={request.hiker.fullName}
+              badgeColor={request.hiker.badgeColor}
               showBadge
             />
           </div>

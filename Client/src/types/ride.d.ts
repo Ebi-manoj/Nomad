@@ -22,6 +22,7 @@ export interface RideRequestDTO {
     isVerified: boolean;
     rating?: number;
     subscriptionTier: SubscriptionTierType;
+    badgeColor: string;
   };
 }
 
@@ -64,6 +65,7 @@ export interface HikerMatchedDTO {
     rating: number;
     verified: boolean;
     subscriptionTier: SubscriptionTierType;
+    badgeColor: string;
   };
   review: ReviewResponseDTO | null;
 }

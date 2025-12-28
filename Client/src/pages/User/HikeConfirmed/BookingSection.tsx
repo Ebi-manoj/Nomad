@@ -67,6 +67,7 @@ export const BookingSection = ({
           <div className="flex items-center gap-4 mb-6 pb-6 border-b">
             <UserAvatar
               subscriptionTier={rider.subscriptionTier}
+              badgeColor={rider.badgeColor}
               fullName={rider.name}
               showBadge
               size="lg"

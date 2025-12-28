@@ -74,6 +74,7 @@ export function RideCard({
         <div className="flex items-center gap-2.5">
           <UserAvatar
             subscriptionTier={ride.user.subscriptionTier}
+            badgeColor={ride.user.badgeColor}
             showBadge
             fullName={ride.user.fullName}
           />

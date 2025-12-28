@@ -32,7 +32,8 @@ export interface RideBookingResponseDTO {
     vehicleNumber: string;
     vehicleModel: string;
     currentLocation: { lat: number; lng: number };
-    subscriptionTier: SubscriptionTier;
+    subscriptionTier: string;
+    badgeColor: string;
   };
   rideDetails: {
     pickupAddress: string;

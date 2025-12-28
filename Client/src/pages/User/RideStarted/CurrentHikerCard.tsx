@@ -58,6 +58,7 @@ export function CurrentHikerCard({
           <div className="relative w-14 h-14">
             <UserAvatar
               subscriptionTier={hiker.user.subscriptionTier}
+              badgeColor={hiker.user.badgeColor}
               showBadge
               fullName={hiker.user.fullName}
             />

@@ -44,7 +44,13 @@ export class GetHikersMatchedUseCase implements IGetHikerMatchedUseCase {
         const sub = await this._subscriptionService.getActiveSubscription(
           user.getId()!
         );
-        const dto = hikersMatchedMapper(user, hike, booking, sub.tier);
+        const dto = hikersMatchedMapper(
+          user,
+          hike,
+          booking,
+          sub.tier,
+          sub.subscription.getBadgeColor()
+        );
         response.push(dto);
       }
     }

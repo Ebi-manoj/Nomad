@@ -1,5 +1,6 @@
 import { RideMatchResponseDTO } from '../../domain/dto/RideMatch';
 import { RideLog } from '../../domain/entities/Ride';
+import { SubscriptionTier } from '../../domain/enums/subscription';
 import { IGeoService } from '../providers/IGeoService';
 import { ILocationRepository } from '../repositories/ILocationRepository';
 import { IUserRepository } from '../repositories/IUserRepository';
@@ -114,13 +115,12 @@ export class RideMatchService implements IRideMatchService {
       this._durationCalculator.durationBetweenTwoPoints(routeDistance);
     // Get the userDetail
     const user = await this._userRepository.findById(ride.getRiderId());
-    const { tier } = await this._susbcriptionService.getActiveSubscription(
-      ride.getRiderId()
-    );
+    const { tier, subscription } =
+      await this._susbcriptionService.getActiveSubscription(ride.getRiderId());
     if (!user) return null;
 
     // Return ride match summary
-    return {
+    return ({
       rideId: ride.getRideId()!,
       rideStartLocation: ride.getPickup(),
       rideEndLocation: ride.getDestination(),
@@ -138,8 +138,9 @@ export class RideMatchService implements IRideMatchService {
         fullName: user.getFullName(),
         vehicleModal: ride.getVehicleModel(),
         vehicleType: ride.getVehicleType(),
-        subscriptionTier: tier,
+        subscriptionTier: tier as unknown as SubscriptionTier,
+        badgeColor: subscription.getBadgeColor(),
       },
-    };
+    }) as unknown as Omit<RideMatchResponseDTO, 'requestStatus' | 'paymentId'>;
   }
 }

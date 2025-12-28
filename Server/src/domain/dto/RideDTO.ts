@@ -41,6 +41,7 @@ export interface GetHikersMatchedResponseDTO {
     fullName: string;
     isVerified: boolean;
     subscriptionTier: string;
+    badgeColor: string;
     rating: number;
     profilePic: string;
   };
@@ -92,6 +93,7 @@ export interface HikerMatchedDTO {
     rating: number;
     verified: boolean;
     subscriptionTier: string;
+    badgeColor: string;
   };
   review: null | ReviewResponseDTO;
 }
