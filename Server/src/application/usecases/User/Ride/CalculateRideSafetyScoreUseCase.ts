@@ -16,7 +16,7 @@ export class CalculateRideSafetyScoreUseCase {
     );
 
     let score = 100;
-    score -= deviationCount * 10; // Deduct 10 points per deviation
+    score -= deviationCount * 10;
 
     score = Math.max(0, Math.min(100, score));
 

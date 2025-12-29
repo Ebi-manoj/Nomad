@@ -140,6 +140,7 @@ export class RideMatchService implements IRideMatchService {
         vehicleType: ride.getVehicleType(),
         subscriptionTier: tier as unknown as SubscriptionTier,
         badgeColor: subscription.getBadgeColor(),
+        safetyScore: user.getSafetyScore(),
       },
     }) as unknown as Omit<RideMatchResponseDTO, 'requestStatus' | 'paymentId'>;
   }

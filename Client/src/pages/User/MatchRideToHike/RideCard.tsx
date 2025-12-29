@@ -7,6 +7,7 @@ import {
   Clock,
   CheckCircle2,
   Sparkles,
+  ShieldCheck,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { CreateJoinRequestDTO, RideMatchResponseDTO } from '@/types/hike';
@@ -59,6 +60,16 @@ export function RideCard({
       className="relative bg-white border border-slate-200/60 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-slate-300/60 transition-all duration-300"
       whileHover={{ scale: 1.01, y: -2 }}
     >
+      {ride.user.safetyScore >= 80 && (
+        <div className="absolute -top-2 left-1/2 -translate-x-1/2">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-md text-white">
+            <ShieldCheck size={12} />
+            <span className="text-xs font-bold tracking-wide">
+              Nomad suggested
+            </span>
+          </div>
+        </div>
+      )}
       {/* Accepted Badge */}
       {requestStatus === 'accepted' && (
         <div className="absolute -top-2 right-3">
@@ -89,6 +100,11 @@ export function RideCard({
               </div>
               <span className="text-slate-300">•</span>
               <span className="text-slate-600">{ride.user.vehicleType}</span>
+              <span className="text-slate-300">•</span>
+              <div className="flex items-center gap-1 text-emerald-600">
+                <ShieldCheck size={11} />
+                <span className="font-semibold">{ride.user.safetyScore}%</span>
+              </div>
             </div>
           </div>
         </div>

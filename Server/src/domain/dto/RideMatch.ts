@@ -25,6 +25,7 @@ export interface RideMatchResponseDTO {
     vehicleModal: string;
     subscriptionTier: SubscriptionTier;
     badgeColor: string;
+    safetyScore: number;
   };
   requestStatus: null | JoinRequestStatus;
   paymentId: string | null;

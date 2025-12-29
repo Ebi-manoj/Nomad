@@ -90,4 +90,19 @@ export class RouteDeviation {
   triggerSOS(time: Date) {
     this._sosTriggeredAt = time;
   }
+  toJson() {
+    return {
+      id: this._id,
+      rideId: this._rideId,
+      hikeId: this._hikeId,
+      hikerId: this._hikerId,
+      riderId: this._riderId,
+      currentLocation: this._currentLocation,
+      deviationDistance: this._deviationDistance,
+      acknowledged: this._acknowledged,
+      detectedAt: this._detectedAt,
+      acknowledgedAt: this._acknowledgedAt,
+      sosTriggeredAt: this._sosTriggeredAt,
+    };
+  }
 }

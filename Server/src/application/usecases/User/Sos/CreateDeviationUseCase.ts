@@ -60,7 +60,7 @@ export class CreateDeviationLogUseCase implements ICreateDeviationLogUseCase {
           'ride:deviated',
           {
             message: 'Rider has been deviated from the route',
-            data: d,
+            data: d.toJson(),
           }
         );
       });
