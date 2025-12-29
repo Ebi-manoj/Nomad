@@ -30,6 +30,8 @@ import { SubscriptionUsageService } from '../../../../application/services/Subsc
 import { SubscriptionValidator } from '../../../../application/services/SubscriptionValidator';
 import { SubscriptionService } from '../../../../application/services/SubscriptionService';
 import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
+import { RouteDeviationRepository } from '../../../repositories/RouteDeviationRepository';
+import { CalculateRideSafetyScoreUseCase } from '../../../../application/usecases/User/Ride/CalculateRideSafetyScoreUseCase';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -50,6 +52,7 @@ export function rideComposer(): IRideController {
   const subscriptionPlans = new SubscriptionPlanRepository();
   const subscriptionRepository = new SubscriptionRepository();
   const subscriptionUsage = new SubscriptionUsageRepository();
+  const routeDeviationRepository = new RouteDeviationRepository();
   const transactionManager = new MongoTransactionManager([
     rideRepository,
     ridebookingRepository,
@@ -117,7 +120,9 @@ export function rideComposer(): IRideController {
     walletService,
     transactionManager,
     fareCalculator,
-    subscriptionService
+    subscriptionService,
+    userRepository,
+    new CalculateRideSafetyScoreUseCase(routeDeviationRepository)
   );
 
   const getRideDetailsUseCase = new GetRideDetailsUseCase(

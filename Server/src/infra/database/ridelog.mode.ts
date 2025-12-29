@@ -23,6 +23,7 @@ export interface IRideLog {
   updatedAt: Date;
   totalEarning?: number;
   platformFee?: number;
+  safetyScore?: number;
 }
 
 const RideLogSchema = new Schema<IRideLog>({
@@ -110,6 +111,10 @@ const RideLogSchema = new Schema<IRideLog>({
   platformFee: {
     type: Number,
     default: 0,
+  },
+  safetyScore: {
+    type: Number,
+    default: null,
   },
 });
 

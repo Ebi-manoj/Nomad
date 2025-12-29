@@ -19,6 +19,9 @@ export class RouteDeviationRepository
     const docs = await this.model.find({ rideId }).sort({ detectedAt: -1 });
     return docs.map(d => this.mapper.toDomain(d));
   }
+  async countByRideId(rideId: string): Promise<number> {
+    return await this.model.countDocuments({ rideId });
+  }
   async findByHikeIdLesserThan(
     minutes: number,
     hikeId: string

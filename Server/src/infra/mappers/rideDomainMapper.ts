@@ -28,6 +28,7 @@ export const rideMapper: IMapper<RideLog, IRideLog> = {
       status: domain.getStatus(),
       totalEarning: domain.getTotalEarning(),
       platformFee: domain.getPlatformFeeTotal(),
+      safetyScore: domain.getSafetyScore(),
     };
   },
 
@@ -54,6 +55,7 @@ export const rideMapper: IMapper<RideLog, IRideLog> = {
       updatedAt: persistence.updatedAt,
       totalEarning: persistence.totalEarning,
       platformFee: persistence.platformFee,
+      safetyScore: persistence.safetyScore,
     });
   },
 };

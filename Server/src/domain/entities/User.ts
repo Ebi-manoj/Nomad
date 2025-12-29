@@ -14,6 +14,8 @@ export interface UserProps {
   payoutContactId?: string;
   rating?: number;
   ratingCount?: number;
+  safetyScore?: number;
+  safetyScoreCount?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -30,6 +32,8 @@ export class User {
   private _licenceVerified: boolean;
   private _rating: number;
   private _ratingCount: number;
+  private _safetyScore: number;
+  private _safetyScoreCount: number;
   private _payoutContactId?: string;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
@@ -46,6 +50,8 @@ export class User {
     this._licenceVerified = props.licenceVerified || false;
     this._rating = props.rating || 0;
     this._ratingCount = props.ratingCount || 0;
+    this._safetyScore = props.safetyScore || 0;
+    this._safetyScoreCount = props.safetyScoreCount || 0;
     this._payoutContactId = props.payoutContactId;
     this._createdAt = props.createdAt || new Date();
     this._updatedAt = props.updatedAt || new Date();
@@ -107,6 +113,12 @@ export class User {
   getRatingCount() {
     return this._ratingCount;
   }
+  getSafetyScore() {
+    return this._safetyScore;
+  }
+  getSafetyScoreCount() {
+    return this._safetyScoreCount;
+  }
   getPayoutContactId() {
     return this._payoutContactId;
   }
@@ -117,6 +129,12 @@ export class User {
     const totalRating = this._rating * this._ratingCount + newRating;
     this._ratingCount++;
     this._rating = Number((totalRating / this._ratingCount).toFixed(1));
+    this._updatedAt = new Date();
+  }
+  updateSafetyScore(newScore: number) {
+    const total = this._safetyScore * this._safetyScoreCount + newScore;
+    this._safetyScoreCount++;
+    this._safetyScore = Number((total / this._safetyScoreCount).toFixed(1));
     this._updatedAt = new Date();
   }
 }

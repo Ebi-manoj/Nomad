@@ -23,6 +23,7 @@ export interface RideProps {
   route: GeoJSON.LineString;
   totalEarning?: number;
   platformFee?: number;
+  safetyScore?: number;
 }
 
 export class RideLog {
@@ -47,6 +48,7 @@ export class RideLog {
   private _route: GeoJSON.LineString;
   private _totalEarning?: number;
   private _platformFee?: number;
+  private _safetyScore?: number;
 
   constructor(props: RideProps) {
     this._id = props.id;
@@ -70,6 +72,7 @@ export class RideLog {
     this._route = props.route;
     this._totalEarning = props.totalEarning;
     this._platformFee = props.platformFee;
+    this._safetyScore = props.safetyScore;
   }
 
   getRideId() {
@@ -129,6 +132,9 @@ export class RideLog {
   getPlatformFeeTotal() {
     return this._platformFee ?? 0;
   }
+  getSafetyScore() {
+    return this._safetyScore;
+  }
   updateStatus(newStatus: RideStatus) {
     this._status = newStatus;
     this._updatedAt = new Date();
@@ -167,6 +173,10 @@ export class RideLog {
   setEarnings(totalEarning: number, platformFee: number) {
     this._totalEarning = Number(totalEarning.toFixed(2));
     this._platformFee = Number(platformFee.toFixed(2));
+    this._updatedAt = new Date();
+  }
+  setSafetyScore(score: number) {
+    this._safetyScore = Math.max(0, Math.min(100, Math.round(score)));
     this._updatedAt = new Date();
   }
   complete() {

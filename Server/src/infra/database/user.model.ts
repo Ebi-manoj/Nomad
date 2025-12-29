@@ -12,6 +12,8 @@ export interface IUserModel {
   rating: number;
   payoutContactId?: string;
   ratingCount: number;
+  safetyScore: number;
+  safetyScoreCount: number;
   isBlocked: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -49,6 +51,14 @@ const userSchema = new Schema<IUserModel>(
       default: false,
     },
     rating: {
+      type: Number,
+      default: 0,
+    },
+    safetyScore: {
+      type: Number,
+      default: 0,
+    },
+    safetyScoreCount: {
       type: Number,
       default: 0,
     },

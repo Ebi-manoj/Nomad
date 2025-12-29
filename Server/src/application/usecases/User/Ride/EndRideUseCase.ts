@@ -22,6 +22,8 @@ import { IFindOrCreateWalletService } from '../../../services/IFindOrCreateWalle
 import { IEndRideUseCase } from './IEndRideUseCase';
 import { IFareCalculator } from '../../../services/IFareCalculator';
 import { ISubscriptionService } from '../../../services/ISubscriptionService';
+import { IUserRepository } from '../../../repositories/IUserRepository';
+import { CalculateRideSafetyScoreUseCase } from './CalculateRideSafetyScoreUseCase';
 
 export class EndRideUseCase implements IEndRideUseCase {
   constructor(
@@ -33,7 +35,9 @@ export class EndRideUseCase implements IEndRideUseCase {
     private readonly _walletService: IFindOrCreateWalletService,
     private readonly _transactionManager: ITransactionManager,
     private readonly _fareCalculator: IFareCalculator,
-    private readonly _subscriptionService: ISubscriptionService
+    private readonly _subscriptionService: ISubscriptionService,
+    private readonly _userRepository: IUserRepository,
+    private readonly _calculateSafetyScore: CalculateRideSafetyScoreUseCase
   ) {}
 
   async execute(data: EndRideReqDTO): Promise<EndRideResDTO> {
@@ -67,6 +71,11 @@ export class EndRideUseCase implements IEndRideUseCase {
             platformFeePerc
           );
         ride.setEarnings(totalEarning, platformFee);
+        // compute safety score for the ride before completing
+        const { score } = await this._calculateSafetyScore.execute(
+          ride.getRideId()!
+        );
+        ride.setSafetyScore(score);
         ride.complete();
 
         const updatedRide = await this._rideRepository.update(
@@ -74,6 +83,17 @@ export class EndRideUseCase implements IEndRideUseCase {
           ride
         );
         if (!updatedRide) throw new UpdateFailed();
+
+        // update user's overall safety score
+        const riderUser = await this._userRepository.findById(ride.getRiderId());
+        if (riderUser) {
+          riderUser.updateSafetyScore(score);
+          const savedUser = await this._userRepository.update(
+            riderUser.getId()!,
+            riderUser
+          );
+          if (!savedUser) throw new UpdateFailed();
+        }
 
         if (totalEarning > 0) {
           const wallet = await this._walletService.execute(data.userId);
