@@ -86,6 +86,7 @@ export interface GetRideDetailsResDTO {
   completedAt: Date | null;
   totalCostShared: number;
   platformFee: number;
+  safetyScore?: number | null;
   hikersMatched: HikerMatchedDTO[];
 }
 

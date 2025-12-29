@@ -34,6 +34,7 @@ export default function ProfilePage() {
   const data = useSelector((state: RootState) => state.subscription.data);
   const tier = data?.tier ?? 'FREE';
   const badgeColor = data?.subscription?.badgeColor ?? '#6b7280';
+  const safetyScore = user?.safetyScore ?? 0;
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 md:py-14">
@@ -93,18 +94,18 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Safe Riding</span>
                   <span className="text-sm font-semibold">
-                    {profile.safetyScore}%
+                    {safetyScore}%
                   </span>
                 </div>
                 <div className="mt-2 h-2 w-full rounded-full bg-muted">
                   <div
                     className="h-2 rounded-full bg-chart-2"
-                    style={{ width: `${profile.safetyScore}%` }}
+                    style={{ width: `${safetyScore}%` }}
                     aria-label="Safety score progress"
                     role="progressbar"
                     aria-valuemin={0}
                     aria-valuemax={100}
-                    aria-valuenow={profile.safetyScore}
+                    aria-valuenow={safetyScore}
                   />
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-muted-foreground">

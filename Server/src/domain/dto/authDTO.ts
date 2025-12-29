@@ -16,6 +16,7 @@ export interface UserResponseDTO {
   role: string;
   isBlocked: boolean;
   rating: number;
+  safetyScore: number;
   aadhaarVerified: boolean;
   licenceVerified: boolean;
   createdAt: Date;

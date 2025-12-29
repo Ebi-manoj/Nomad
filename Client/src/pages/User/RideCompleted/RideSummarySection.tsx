@@ -1,6 +1,6 @@
 import type { GetRideDetailsResDTO } from '@/types/ride';
 import { formatDuration } from '@/utils/dateFormater';
-import { MapPin, Navigation, Car, Clock, Star, Wallet } from 'lucide-react';
+import { MapPin, Navigation, Car, Clock, Star, Wallet, Shield } from 'lucide-react';
 import { FaRupeeSign } from 'react-icons/fa6';
 
 interface RideSummarySectionProps {
@@ -129,6 +129,29 @@ export const RideSummarySection = ({
             <p className="text-xs text-muted-foreground">
               {rideData.vehicleNumber}
             </p>
+          </div>
+        </div>
+
+        {/* Safety Score */}
+        <div className="flex items-start gap-3 p-4 border rounded-xl bg-muted/30">
+          <div className="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Shield className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div className="w-full">
+            <p className="text-muted-foreground text-sm">Safety Score</p>
+            <p className="font-semibold text-base text-foreground">
+              {(rideData.safetyScore ?? 0)}%
+            </p>
+            <div className="mt-2 h-2 w-full rounded-full bg-muted">
+              <div
+                className="h-2 rounded-full bg-emerald-500"
+                style={{ width: `${rideData.safetyScore ?? 0}%` }}
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={rideData.safetyScore ?? 0}
+              />
+            </div>
           </div>
         </div>
 
