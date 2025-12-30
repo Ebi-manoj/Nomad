@@ -66,7 +66,7 @@ export const CheckoutForm = ({ totalAmount }: { totalAmount: number }) => {
               Processing...
             </span>
           ) : (
-            `Pay ₹${totalAmount}`
+            `Pay ₹${totalAmount.toFixed(2)}`
           )}
         </Button>
       </div>

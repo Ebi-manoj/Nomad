@@ -187,7 +187,9 @@ export const BookingSection = ({
               <Calendar className="w-5 h-5 text-orange-600" />
               <div>
                 <p className="text-xs text-gray-600">Amount</p>
-                <p className="font-semibold">₹{rideBooking.amount}</p>
+                <p className="font-semibold">
+                  ₹{rideBooking.amount.toFixed(2)}
+                </p>
               </div>
             </div>
           </div>

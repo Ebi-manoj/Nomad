@@ -127,6 +127,17 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
 
     if (shouldCreateTasks) {
       await this._createTasksUseCase.execute(booking);
+      await this._createNotification.execute({
+        userId: booking.getRiderId(),
+        type: 'ride_confirmed',
+        title: 'Ride confirmed',
+        message: 'A hike was confirmed. New tasks are available.',
+        data: {
+          bookingId: booking.getId()!,
+          rideId: booking.getRideId(),
+          hikeId: booking.getHikeId(),
+        },
+      });
     }
 
     await this._realtimeGateWay.emitToRoom(
@@ -141,19 +152,6 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
         amount: booking.getCostShared(),
       }
     );
-
-
-    await this._createNotification.execute({
-      userId: booking.getRiderId(),
-      type: 'ride_confirmed',
-      title: 'Ride confirmed',
-      message: 'A hike was confirmed. New tasks are available.',
-      data: {
-        bookingId: booking.getId()!,
-        rideId: booking.getRideId(),
-        hikeId: booking.getHikeId(),
-      },
-    });
 
     const response: ConfirmHikerPaymentDTO = {
       bookingId: booking.getId()!,

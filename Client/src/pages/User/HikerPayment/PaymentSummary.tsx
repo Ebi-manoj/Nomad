@@ -141,17 +141,21 @@ export const PaymentSummary = ({
             <div className="space-y-3 text-sm">
               <div className="flex justify-between items-center">
                 <span className="text-green-50">Cost Sharing</span>
-                <span className="text-white font-semibold">₹{amount}</span>
+                <span className="text-white font-semibold">
+                  ₹{amount.toFixed(2)}
+                </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-green-50">Platform Fee</span>
-                <span className="text-white font-semibold">₹{platformFee}</span>
+                <span className="text-white font-semibold">
+                  ₹{platformFee.toFixed(2)}
+                </span>
               </div>
               <div className="h-px bg-green-500 my-2" />
               <div className="flex justify-between items-center">
                 <span className="text-white font-bold">Total Payable</span>
                 <span className="text-lg md:text-xl font-bold text-white">
-                  ₹{totalAmount}
+                  ₹{totalAmount.toFixed(2)}
                 </span>
               </div>
             </div>
