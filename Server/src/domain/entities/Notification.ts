@@ -1,3 +1,4 @@
+import { NotificationDTO } from '../dto/NotificationDTO';
 import { NotificationType } from '../enums/Notification';
 
 export interface NotificationProps {
@@ -73,5 +74,18 @@ export class Notification {
 
   getUpdatedAt(): Date {
     return this._updatedAt;
+  }
+
+  toJson(): NotificationDTO {
+    return {
+      id: this._id as string,
+      userId: this._userId,
+      type: this._type,
+      title: this._title,
+      message: this._message,
+      data: this._data,
+      read: this._read,
+      createdAt: this._createdAt,
+    };
   }
 }

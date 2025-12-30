@@ -6,6 +6,7 @@ import { sessionComposer } from '../../../../infra/services/composer/session.com
 import { sosComposer } from '../../../../infra/services/composer/user/sos.composer';
 import { walletComposer } from '../../../../infra/services/composer/user/wallet.composer';
 import { bankAccountComposer } from '../../../../infra/services/composer/user/bankAccount.composer';
+import { notificationComposer } from '../../../../infra/services/composer/user/notification.composer';
 
 const router = express.Router();
 
@@ -93,6 +94,17 @@ router.get('/wallet', authMiddleware, async (req: Request, res: Response) => {
   );
   return res.status(adapter.statusCode).json(adapter.body);
 });
+
+router.get(
+  '/notifications',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      notificationComposer().getNotifications(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 router.post(
   '/wallet/withdraw',
