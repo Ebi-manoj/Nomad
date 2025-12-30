@@ -1,10 +1,10 @@
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { RiMotorbikeFill } from 'react-icons/ri';
 import { LuNotebookText } from 'react-icons/lu';
-import { IoNotificationsSharp } from 'react-icons/io5';
 
 import { ProfilePopover } from './ProfilePopover';
 import { Link, useLocation } from 'react-router-dom';
+import { NotificationBell } from './notifications/NotificationBell';
 
 export const UserNavbar = () => {
   const location = useLocation();
@@ -41,9 +41,7 @@ export const UserNavbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-colors">
-              <IoNotificationsSharp />
-            </button>
+            <NotificationBell />
             <Link to={'/activity'}>
               <button
                 className={`cursor-pointer flex items-center gap-1 pb-1   border-black hover:text-gray-600 rounded-lg font-medium transition-colors

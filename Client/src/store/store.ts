@@ -14,6 +14,7 @@ import walletReducer from './features/user/wallet/walletSlice';
 import subscriptionReducer from './features/user/subscription/subscriptionSlice';
 import adminSubscriptionPlansReducer from './features/admin/subscriptionPlans/adminSubscriptionPlans.slice';
 import bankAccountReducer from './features/user/bankAccount/bankAccountSlice';
+import notificationsReducer from './features/user/notifications/notificationsSlice';
 
 const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ const store = configureStore({
     bankAccount: bankAccountReducer,
     subscription: subscriptionReducer,
     adminSubscriptionPlans: adminSubscriptionPlansReducer,
+    notifications: notificationsReducer,
   },
 });
 
