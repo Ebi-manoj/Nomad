@@ -16,7 +16,7 @@ export class NotificationRepository
   }
 
   async findByUserId(userId: string, limit?: number): Promise<Notification[]> {
-    const query = NotificationModel.find({ userId }).sort({ createdAt: -1 });
+    const query = this.model.find({ userId }).sort({ createdAt: -1 });
     if (typeof limit === 'number') query.limit(limit);
     const docs = await query.exec();
     return docs.map(doc => this.mapper.toDomain(doc));
@@ -26,7 +26,7 @@ export class NotificationRepository
     userId: string,
     limit?: number
   ): Promise<Notification[]> {
-    const query = NotificationModel.find({ userId, read: false }).sort({
+    const query = this.model.find({ userId, read: false }).sort({
       createdAt: -1,
     });
     if (typeof limit === 'number') query.limit(limit);
@@ -35,6 +35,10 @@ export class NotificationRepository
   }
 
   async markAllAsRead(userId: string): Promise<void> {
-    await NotificationModel.updateMany({ userId, read: false }, { $set: { read: true } });
+    await this.model.updateMany({ userId, read: false }, { $set: { read: true } });
+  }
+
+  async countUnreadByUserId(userId: string): Promise<number> {
+    return this.model.countDocuments({ userId, read: false });
   }
 }

@@ -6,4 +6,5 @@ export interface INotificationRepository
   findByUserId(userId: string, limit?: number): Promise<Notification[]>;
   findUnreadByUserId(userId: string, limit?: number): Promise<Notification[]>;
   markAllAsRead(userId: string): Promise<void>;
+  countUnreadByUserId(userId: string): Promise<number>;
 }

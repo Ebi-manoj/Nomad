@@ -3,6 +3,7 @@ import http from 'http';
 import { setupRiderNameSpace } from './nameSpaces/rider.namespace';
 import { locationUpdateComposer } from '../../infra/services/composer/sockets/locationUpdate.composer';
 import { setupHikerNamespace } from './nameSpaces/hiker.namespace';
+import { setupUserNamespace } from './nameSpaces/user.namespace';
 
 export class SocketServer {
   private static io: Server;
@@ -21,6 +22,7 @@ export class SocketServer {
     const locationUpdateController = locationUpdateComposer();
     setupRiderNameSpace(io, locationUpdateController);
     setupHikerNamespace(io);
+    setupUserNamespace(io);
   }
 
   static getIo() {
