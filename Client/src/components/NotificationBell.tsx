@@ -8,9 +8,11 @@ import {
 } from '@/components/ui/popover';
 import { formatDistanceToNow } from 'date-fns';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { markAllAsRead } from '@/store/features/user/notifications/notificationsSlice';
 import type { RootState } from '@/store/store';
-import { fetchNotifications } from '@/store/features/user/notifications/notifications.thunk';
+import {
+  fetchNotifications,
+  markAllNotificationsRead,
+} from '@/store/features/user/notifications/notifications.thunk';
 
 export function NotificationBell() {
   const dispatch = useAppDispatch();
@@ -21,7 +23,7 @@ export function NotificationBell() {
   );
 
   const handleMarkAllRead = () => {
-    dispatch(markAllAsRead());
+    dispatch(markAllNotificationsRead());
   };
 
   const handleOpenChange = (nextOpen: boolean) => {
@@ -83,9 +85,14 @@ export function NotificationBell() {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+                disabled={loading}
               >
-                <CheckCheck className="w-4 h-4" />
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <CheckCheck className="w-4 h-4" />
+                )}
                 Mark all read
               </button>
             )}

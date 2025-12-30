@@ -106,6 +106,17 @@ router.get(
   }
 );
 
+router.patch(
+  '/notifications/read-all',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      notificationComposer().markAllAsRead(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 router.post(
   '/wallet/withdraw',
   authMiddleware,

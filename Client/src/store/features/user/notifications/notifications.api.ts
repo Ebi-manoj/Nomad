@@ -8,3 +8,10 @@ export async function fetchNotificationsApi() {
   );
   return res.data.data;
 }
+
+export async function markAllAsReadApi() {
+  const res = await axiosInstance.patch<ApiResponse<{ unreadCount: number }>>(
+    '/user/notifications/read-all'
+  );
+  return res.data.data;
+}

@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { NotificationItem, NotificationsState } from './notification';
-import { fetchNotifications } from './notifications.thunk';
+import { fetchNotifications, markAllNotificationsRead } from './notifications.thunk';
 
 const initialState: NotificationsState = {
   loading: false,
@@ -49,6 +49,16 @@ const notificationsSlice = createSlice({
           state.lastFetched = Date.now();
           state.hasNewNotifications = false;
         }
+      })
+      .addCase(markAllNotificationsRead.pending, state => {
+        state.loading = true;
+      })
+      .addCase(markAllNotificationsRead.fulfilled, (state, action) => {
+        state.loading = false;
+        state.unreadCount = action.payload.unreadCount;
+        state.items = state.items.map(n => ({ ...n, read: true }));
+        state.lastFetched = Date.now();
+        state.hasNewNotifications = false;
       });
   },
 });
