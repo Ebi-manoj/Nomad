@@ -11,4 +11,6 @@ export interface NotificationItem {
 export interface NotificationsState {
   unreadCount: number;
   items: NotificationItem[];
+  lastFetched?: number;
+  hasNewNotifications: boolean;
 }

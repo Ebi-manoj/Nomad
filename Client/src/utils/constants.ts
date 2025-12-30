@@ -28,3 +28,6 @@ export const Documents = {
 } as const;
 
 export type JoinRequestStatus = 'pending' | 'accepted' | 'expired' | 'declined';
+
+
+export const CACHE_DURATION = 2 * 60 * 1000;

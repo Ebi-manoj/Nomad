@@ -4,7 +4,7 @@ import { LuNotebookText } from 'react-icons/lu';
 
 import { ProfilePopover } from './ProfilePopover';
 import { Link, useLocation } from 'react-router-dom';
-import { NotificationBell } from './notifications/NotificationBell';
+import { NotificationBell } from './NotificationBell';
 
 export const UserNavbar = () => {
   const location = useLocation();
