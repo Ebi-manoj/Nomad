@@ -9,6 +9,7 @@ export interface NotificationItem {
 }
 
 export interface NotificationsState {
+  loading: boolean;
   unreadCount: number;
   items: NotificationItem[];
   lastFetched?: number;

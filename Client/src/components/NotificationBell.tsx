@@ -1,23 +1,24 @@
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Bell, CheckCheck, Loader2 } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Bell } from 'lucide-react';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@/store/store';
+import { formatDistanceToNow } from 'date-fns';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { markAllAsRead } from '@/store/features/user/notifications/notificationsSlice';
+import type { RootState } from '@/store/store';
 import { fetchNotifications } from '@/store/features/user/notifications/notifications.thunk';
-import { useState } from 'react';
 
 export function NotificationBell() {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
-  const unreadCount = useSelector(
-    (s: RootState) => s.notifications.unreadCount
+
+  const { items, unreadCount, loading } = useSelector(
+    (state: RootState) => state.notifications
   );
-  const items = useSelector((s: RootState) => s.notifications.items);
 
   const handleMarkAllRead = () => {
     dispatch(markAllAsRead());
@@ -33,59 +34,135 @@ export function NotificationBell() {
   const formatDate = (d?: string | Date) => {
     if (!d) return '';
     const date = typeof d === 'string' ? new Date(d) : d;
-    return date.toLocaleString();
+    return formatDistanceToNow(date, { addSuffix: true });
   };
 
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <button className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-colors">
-          <Bell className="w-5 h-5" />
+        <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <Bell className="w-5 h-5 text-gray-700 cursor-pointer" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1.5 rounded-full bg-red-500 text-white text-[11px] font-semibold flex items-center justify-center shadow-sm">
               {unreadCount > 99 ? '99+' : unreadCount}
             </span>
           )}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0 rounded-xl shadow-lg border-0">
-        <div className="p-4 border-b">
+
+      <PopoverContent
+        align="end"
+        sideOffset={8}
+        className="
+          w-[380px]
+          max-w-[95vw]
+          h-[80vh]
+          p-0
+          rounded-2xl
+          border
+          border-gray-200
+          shadow-xl
+          flex
+          flex-col
+        "
+      >
+        {/* Header */}
+        <div className="px-4 py-3 border-b border-gray-100 bg-white sticky top-0 z-10">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold">Notifications</h3>
-            <button
-              className="text-sm text-blue-600 hover:underline"
-              onClick={handleMarkAllRead}
-            >
-              Mark all as read
-            </button>
+            <div>
+              <h3 className="text-base font-semibold text-gray-900">
+                Notifications
+              </h3>
+              {unreadCount > 0 && (
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {unreadCount} unread
+                </p>
+              )}
+            </div>
+
+            {unreadCount > 0 && (
+              <button
+                onClick={handleMarkAllRead}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                <CheckCheck className="w-4 h-4" />
+                Mark all read
+              </button>
+            )}
           </div>
         </div>
-        <div className="max-h-80 overflow-auto">
-          {items.length === 0 ? (
-            <div className="p-4 text-sm text-gray-500">No notifications yet.</div>
+
+        {/* Scrollable Notifications */}
+        <div className="flex-1 overflow-y-auto">
+          {loading && items.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full">
+              <Loader2 className="w-7 h-7 text-gray-400 animate-spin" />
+              <p className="text-sm text-gray-500 mt-3">
+                Loading notifications...
+              </p>
+            </div>
+          ) : items.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full px-6 text-center">
+              <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                <Bell className="w-7 h-7 text-gray-400 " />
+              </div>
+              <h4 className="text-base font-medium text-gray-900 mb-1">
+                No notifications yet
+              </h4>
+              <p className="text-sm text-gray-500">
+                We'll notify you when something arrives
+              </p>
+            </div>
           ) : (
-            <ul className="divide-y">
-              {items.map(n => (
-                <li
-                  key={n.id ?? `${n.title}-${n.createdAt}`}
-                  className={`p-3 flex gap-3 ${!n.read ? 'bg-gray-50' : ''}`}
+            <div className="divide-y divide-gray-100">
+              {items.map(notification => (
+                <div
+                  key={
+                    notification.id ??
+                    `${notification.title}-${notification.createdAt}`
+                  }
+                  className={`px-4 py-3 transition-colors cursor-pointer hover:bg-gray-50 ${
+                    !notification.read ? 'bg-blue-50/50' : 'bg-white'
+                  }`}
                 >
-                  <span
-                    className={`mt-2 h-2 w-2 rounded-full ${n.read ? 'bg-gray-300' : 'bg-blue-500'}`}
-                    aria-hidden
-                  />
-                  <div className="flex-1">
-                    <div className="text-sm font-medium">{n.title}</div>
-                    <div className="text-xs text-gray-600">{n.message}</div>
-                    <div className="text-[10px] text-gray-400 mt-1">
-                      {formatDate(n.createdAt)}
+                  <div className="flex gap-3">
+                    <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                      <Bell className="w-4.5 h-4.5 text-blue-600" />
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h4 className="text-sm font-semibold text-gray-900 leading-tight">
+                          {notification.title}
+                        </h4>
+                        {!notification.read && (
+                          <span className="w-2 h-2 rounded-full bg-blue-600 mt-1" />
+                        )}
+                      </div>
+
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                        {notification.message}
+                      </p>
+
+                      <time className="text-xs text-gray-500 font-medium">
+                        {formatDate(notification.createdAt)}
+                      </time>
                     </div>
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </div>
+
+        {/* Footer */}
+        {items.length > 0 && (
+          <div className="px-4 py-2.5 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
+            <button className="w-full text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+              View all notifications
+            </button>
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );

@@ -3,6 +3,7 @@ import type { NotificationItem, NotificationsState } from './notification';
 import { fetchNotifications } from './notifications.thunk';
 
 const initialState: NotificationsState = {
+  loading: false,
   unreadCount: 0,
   items: [],
   lastFetched: undefined,
@@ -34,14 +35,21 @@ const notificationsSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.items = action.payload;
-        state.unreadCount = action.payload.filter(n => !n.read).length;
-        state.lastFetched = Date.now();
-        state.hasNewNotifications = false;
-      }
-    });
+    builder
+      .addCase(fetchNotifications.pending, state => {
+        state.loading = true;
+        state.hasNewNotifications = true;
+        state.items = [];
+      })
+      .addCase(fetchNotifications.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.loading = false;
+          state.items = action.payload;
+          state.unreadCount = action.payload.filter(n => !n.read).length;
+          state.lastFetched = Date.now();
+          state.hasNewNotifications = false;
+        }
+      });
   },
 });
 
