@@ -32,6 +32,8 @@ import { SubscriptionService } from '../../../../application/services/Subscripti
 import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
 import { RouteDeviationRepository } from '../../../repositories/RouteDeviationRepository';
 import { CalculateRideSafetyScoreUseCase } from '../../../../application/usecases/User/Ride/CalculateRideSafetyScoreUseCase';
+import { NotificationRepository } from '../../../repositories/NotificationRepository';
+import { CreateNotificationUseCase } from '../../../../application/usecases/User/Notification/CreateNotificationUseCase';
 
 export function rideComposer(): IRideController {
   const userRepository = new MongoUserRepository();
@@ -44,6 +46,11 @@ export function rideComposer(): IRideController {
   const fareCalculator = new FareCalculator();
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
+  const notificationRepository = new NotificationRepository();
+  const createNotificationUseCase = new CreateNotificationUseCase(
+    notificationRepository,
+    realtimeGateway
+  );
   const ridebookingRepository = new RideBookingRepository();
   const walletRepository = new WalletRepository();
   const walletTransactionRepository = new WalletTransactionRepository();
@@ -94,7 +101,8 @@ export function rideComposer(): IRideController {
     fareCalculator,
     realtimeGateway,
     subscriptionValidator,
-    usageService
+    usageService,
+    createNotificationUseCase
   );
 
   const declienJoinRequestUseCase = new DeclineJoinRequestUseCase(

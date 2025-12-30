@@ -18,6 +18,7 @@ import { joinRequestMapper } from '../../../mappers/JoinRequestMapper';
 import { UserNotFound } from '../../../../domain/errors/CustomError';
 import { JoinRequestStatus } from '../../../../domain/enums/Ride';
 import { ICreateJoinRequestUseCase } from './ICreateJoinRequestUseCase';
+import { ICreateNotificationUseCase } from '../Notification/ICreateNotificationUseCase';
 import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 import { ISubscriptionValidator } from '../../../services/ISubscriptionValidator';
 import { ISubscriptionUsageService } from '../../../services/ISubscriptionUsageService';
@@ -31,7 +32,8 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     private readonly _userRepository: IUserRepository,
     private readonly _realtimeGateway: IRealtimeGateway,
     private readonly _subscriptionValidator: ISubscriptionValidator,
-    private readonly _usageService: ISubscriptionUsageService
+    private readonly _usageService: ISubscriptionUsageService,
+    private readonly _createNotification: ICreateNotificationUseCase
   ) {}
 
   async execute(data: CreateJoinRequestDTO): Promise<JoinRequestResponseDTO> {
@@ -74,7 +76,7 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
     const sub = await this._subscriptionValidator.getActiveSubscription(
       hike.getUserId()
     );
-    const response = joinRequestMapper(saved, hike, user, sub.tier);
+    const response = joinRequestMapper(saved, hike, user, sub.tier,sub.subscription.getBadgeColor());
 
     await this._realtimeGateway.emitToRoom(
       'rider',
@@ -83,6 +85,19 @@ export class CreateJoinRequestUseCase implements ICreateJoinRequestUseCase {
       response
     );
     this._usageService.incrementJoinRequest(response.hiker.id);
+
+    // Notify rider via unified user namespace
+    await this._createNotification.execute({
+      userId: ride.getRiderId(),
+      type: 'join_request',
+      title: 'New join request',
+      message: 'A hiker requested to join your ride',
+      data: {
+        rideId: ride.getRideId(),
+        hikeId: hike.getHikeId(),
+        joinRequestId: saved.getId()!,
+      },
+    });
 
     return response;
   }

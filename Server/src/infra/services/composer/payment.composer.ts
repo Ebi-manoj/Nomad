@@ -20,6 +20,8 @@ import { PickupOTPService } from '../PickupOTPService';
 import { TaskPrioritizationService } from '../TaskPrioritizationService';
 import { SocketServer } from '../../../interfaces/sockets/socketInit';
 import { SocketRealtimeGateway } from '../../providers/SocketRealtimeGateway';
+import { NotificationRepository } from '../../repositories/NotificationRepository';
+import { CreateNotificationUseCase } from '../../../application/usecases/User/Notification/CreateNotificationUseCase';
 
 export function paymentComposer(): IPaymentController {
   const paymentRepository = new PaymentRepository();
@@ -37,6 +39,11 @@ export function paymentComposer(): IPaymentController {
   const logger = new WinstonLogger();
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
+  const notificationRepository = new NotificationRepository();
+  const createNotificationUseCase = new CreateNotificationUseCase(
+    notificationRepository,
+    realtimeGateway
+  );
 
   const transactionManager = new MongoTransactionManager([
     paymentRepository,
@@ -79,7 +86,8 @@ export function paymentComposer(): IPaymentController {
     transactionManager,
     createTasksUseCase,
     realtimeGateway,
-    locationRepository
+    locationRepository,
+    createNotificationUseCase
   );
 
   return new PaymentController(

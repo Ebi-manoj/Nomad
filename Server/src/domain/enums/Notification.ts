@@ -1,5 +1,6 @@
 export const NOTIFICATION_TYPES = [
   'join_request',
+  'join_request_accepted',
   'ride_confirmed',
   'booking_cancelled',
   'new_message',

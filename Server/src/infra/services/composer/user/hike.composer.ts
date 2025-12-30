@@ -26,6 +26,8 @@ import { SubscriptionUsageRepository } from '../../../repositories/SubscriptionU
 import { SubscriptionUsageService } from '../../../../application/services/SubscriptionUsageService';
 import { SubscriptionService } from '../../../../application/services/SubscriptionService';
 import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
+import { NotificationRepository } from '../../../repositories/NotificationRepository';
+import { CreateNotificationUseCase } from '../../../../application/usecases/User/Notification/CreateNotificationUseCase';
 
 export function hikeComposer(): IHikeController {
   const userRepository = new MongoUserRepository();
@@ -41,6 +43,11 @@ export function hikeComposer(): IHikeController {
   const io = SocketServer.getIo();
   const realtimeGateway = new SocketRealtimeGateway(io);
   const reviewRepository = new ReviewRepository();
+  const notificationRepository = new NotificationRepository();
+  const createNotificationUseCase = new CreateNotificationUseCase(
+    notificationRepository,
+    realtimeGateway
+  );
 
   const subscriptionRepo = new SubscriptionRepository();
   const subscriptionUsage = new SubscriptionUsageRepository();
@@ -88,7 +95,8 @@ export function hikeComposer(): IHikeController {
     userRepository,
     realtimeGateway,
     subscriptionValidator,
-    usageService
+    usageService,
+    createNotificationUseCase
   );
 
   const gethikeDetailsUseCase = new GetHikeDetailsUseCase(

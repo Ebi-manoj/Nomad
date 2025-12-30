@@ -21,6 +21,7 @@ import { IAcceptJoinRequestUseCase } from './IAcceptJoinRequest';
 import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 import { ISubscriptionUsageService } from '../../../services/ISubscriptionUsageService';
 import { ISubscriptionValidator } from '../../../services/ISubscriptionValidator';
+import { ICreateNotificationUseCase } from '../Notification/ICreateNotificationUseCase';
 
 export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
   constructor(
@@ -31,7 +32,8 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
     private readonly _fareCalculator: FareCalculator,
     private readonly _realtimeGateway: IRealtimeGateway,
     private readonly _subscriptionValidator: ISubscriptionValidator,
-    private readonly _usageService: ISubscriptionUsageService
+    private readonly _usageService: ISubscriptionUsageService,
+    private readonly _createNotification: ICreateNotificationUseCase
   ) {}
 
   async execute(data: AcceptJoinRequestDTO): Promise<AcceptJoinResponseDTO> {
@@ -103,6 +105,19 @@ export class AcceptJoinRequestUseCase implements IAcceptJoinRequestUseCase {
         'joinRequest:accepted',
         response
       );
+
+     
+      await this._createNotification.execute({
+        userId: hike.getUserId(),
+        type: 'join_request_accepted',
+        title: 'Join request accepted',
+        message: 'Your join request has been accepted',
+        data: {
+          rideId: ride.getRideId(),
+          hikeId: hike.getHikeId(),
+          joinRequestId: joinRequest.getId()!,
+        },
+      });
 
       return response;
     } catch (error) {

@@ -17,6 +17,10 @@ import { RefundService } from '../../../../application/services/RefundService';
 import { SubscriptionRepository } from '../../../repositories/SubscriptionRepository';
 import { SubscriptionService } from '../../../../application/services/SubscriptionService';
 import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
+import { SocketServer } from '../../../../interfaces/sockets/socketInit';
+import { SocketRealtimeGateway } from '../../../providers/SocketRealtimeGateway';
+import { NotificationRepository } from '../../../repositories/NotificationRepository';
+import { CreateNotificationUseCase } from '../../../../application/usecases/User/Notification/CreateNotificationUseCase';
 
 export function ridebookingComposer(): IRideBookingController {
   const rideBookinRepository = new RideBookingRepository();
@@ -29,6 +33,13 @@ export function ridebookingComposer(): IRideBookingController {
   const refundService = new RefundService(locationRepository, googleApi);
   const subscripitonRepository = new SubscriptionRepository();
   const subscriptionPlans = new SubscriptionPlanRepository();
+  const io = SocketServer.getIo();
+  const realtimeGateway = new SocketRealtimeGateway(io);
+  const notificationRepository = new NotificationRepository();
+  const createNotificationUseCase = new CreateNotificationUseCase(
+    notificationRepository,
+    realtimeGateway
+  );
 
   const subscriptionService = new SubscriptionService(
     subscripitonRepository,
@@ -69,7 +80,8 @@ export function ridebookingComposer(): IRideBookingController {
     hikeRepository,
     taskRepository,
     refundService,
-    transactionManager
+    transactionManager,
+    createNotificationUseCase
   );
 
   const reqCancelRideBookingUseCase = new ReqCancelRideBookingUseCase(

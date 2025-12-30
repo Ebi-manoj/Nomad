@@ -23,6 +23,7 @@ import { IRideRepository } from '../../../repositories/IRideRepository';
 import { IPaymentService } from '../../../services/IPaymentService';
 import { ICreateTasksUseCase } from '../Task/ICreateTaskUseCase';
 import { IConfirmHikerPayment } from './IConfirmHikerPayment';
+import { ICreateNotificationUseCase } from '../Notification/ICreateNotificationUseCase';
 
 export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
   constructor(
@@ -35,7 +36,8 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
     private readonly _transactionManager: ITransactionManager,
     private readonly _createTasksUseCase: ICreateTasksUseCase,
     private readonly _realtimeGateWay: IRealtimeGateway,
-    private readonly _locationRepository: ILocationRepository
+    private readonly _locationRepository: ILocationRepository,
+    private readonly _createNotification: ICreateNotificationUseCase
   ) {}
 
   async execute(paymentIntentId: string): Promise<ConfirmHikerPaymentDTO> {
@@ -139,6 +141,19 @@ export class ConfirmHikerPaymentUseCase implements IConfirmHikerPayment {
         amount: booking.getCostShared(),
       }
     );
+
+
+    await this._createNotification.execute({
+      userId: booking.getRiderId(),
+      type: 'ride_confirmed',
+      title: 'Ride confirmed',
+      message: 'A hike was confirmed. New tasks are available.',
+      data: {
+        bookingId: booking.getId()!,
+        rideId: booking.getRideId(),
+        hikeId: booking.getHikeId(),
+      },
+    });
 
     const response: ConfirmHikerPaymentDTO = {
       bookingId: booking.getId()!,

@@ -16,6 +16,7 @@ import { IRideRepository } from '../../../repositories/IRideRepository';
 import { ITaskRepository } from '../../../repositories/ITaskRepository';
 import { ICancelRideBookingUseCase } from './ICancelRideBookingUseCase';
 import { IRefundService } from '../../../services/IRefundService';
+import { ICreateNotificationUseCase } from '../Notification/ICreateNotificationUseCase';
 
 export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
   constructor(
@@ -24,7 +25,8 @@ export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
     private readonly _hikeRepository: IHikeRepository,
     private readonly _taskRepository: ITaskRepository,
     private readonly _refundService: IRefundService,
-    private readonly _transactionManager: ITransactionManager
+    private readonly _transactionManager: ITransactionManager,
+    private readonly _createNotification: ICreateNotificationUseCase
   ) {}
 
   async execute(
@@ -79,6 +81,20 @@ export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
 
         return { booking: updatedBooking, refundAmount, distance, duration };
       });
+
+   
+    await this._createNotification.execute({
+      userId: booking.getRiderId(),
+      type: 'booking_cancelled',
+      title: 'Booking cancelled',
+      message: 'The hiker cancelled the booking',
+      data: {
+        bookingId: booking.getId()!,
+        rideId: booking.getRideId(),
+        hikeId: booking.getHikeId(),
+        refundAmount,
+      },
+    });
 
     return {
       bookingId: booking.getId()!,
