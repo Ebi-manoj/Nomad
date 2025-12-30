@@ -21,6 +21,9 @@ import { SocketServer } from '../../../../interfaces/sockets/socketInit';
 import { SocketRealtimeGateway } from '../../../providers/SocketRealtimeGateway';
 import { NotificationRepository } from '../../../repositories/NotificationRepository';
 import { CreateNotificationUseCase } from '../../../../application/usecases/User/Notification/CreateNotificationUseCase';
+import { WalletRepository } from '../../../repositories/WalletRepository';
+import { WalletTransactionRepository } from '../../../repositories/WalletTransactionRepository';
+import { BookingCancelRefundService } from '../../../../application/services/BookingCancelRefundService';
 
 export function ridebookingComposer(): IRideBookingController {
   const rideBookinRepository = new RideBookingRepository();
@@ -31,6 +34,8 @@ export function ridebookingComposer(): IRideBookingController {
   const locationRepository = new LocationRepository();
   const taskRepository = new TaskRepository();
   const refundService = new RefundService(locationRepository, googleApi);
+  const walletRepository = new WalletRepository();
+  const walletTransactionRepository = new WalletTransactionRepository();
   const subscripitonRepository = new SubscriptionRepository();
   const subscriptionPlans = new SubscriptionPlanRepository();
   const io = SocketServer.getIo();
@@ -60,6 +65,8 @@ export function ridebookingComposer(): IRideBookingController {
     hikeRepository,
     rideRepository,
     taskRepository,
+    walletRepository,
+    walletTransactionRepository,
   ]);
 
   const markDroppOffUseCase = new MarkDropOffUseCase(
@@ -81,6 +88,11 @@ export function ridebookingComposer(): IRideBookingController {
     taskRepository,
     refundService,
     transactionManager,
+    new BookingCancelRefundService(
+      walletRepository,
+      walletTransactionRepository,
+      transactionManager
+    ),
     createNotificationUseCase
   );
 

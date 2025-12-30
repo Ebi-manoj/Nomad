@@ -17,6 +17,7 @@ import { ITaskRepository } from '../../../repositories/ITaskRepository';
 import { ICancelRideBookingUseCase } from './ICancelRideBookingUseCase';
 import { IRefundService } from '../../../services/IRefundService';
 import { ICreateNotificationUseCase } from '../Notification/ICreateNotificationUseCase';
+import { IBookingCancelRefundService } from '../../../services/IBookingCancelRefundService';
 
 export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
   constructor(
@@ -26,6 +27,7 @@ export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
     private readonly _taskRepository: ITaskRepository,
     private readonly _refundService: IRefundService,
     private readonly _transactionManager: ITransactionManager,
+    private readonly _bookingCancelRefundService: IBookingCancelRefundService,
     private readonly _createNotification: ICreateNotificationUseCase
   ) {}
 
@@ -83,6 +85,8 @@ export class CancelRideBookingUseCase implements ICancelRideBookingUseCase {
       });
 
    
+    await this._bookingCancelRefundService.execute(booking, refundAmount);
+
     await this._createNotification.execute({
       userId: booking.getRiderId(),
       type: 'booking_cancelled',

@@ -220,7 +220,7 @@ export const HikeCompletedPage = () => {
                   <div>
                     <p className="text-gray-500 text-sm">Cost Shared</p>
                     <p className="font-semibold text-base">
-                      ₹{hikeDetails.paymentDetails?.amount}
+                      ₹{hikeDetails.paymentDetails?.amount.toFixed(2)}
                     </p>
                   </div>
                 </div>
