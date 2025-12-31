@@ -9,6 +9,7 @@ import axiosInstance from '@/utils/axiosInstance';
 
 export const CREATE_HIKE_API = '/hike/create';
 export const FIND_MATCH_RIDES_API = '/hike/match-rides';
+export const CANCEL_HIKE_API = '/hike/cancel';
 const JOIN_RIDE_API = '/hike/join-ride';
 const GET_HIKE_DETAILS_API = (hikeId: string) => `/hike/${hikeId}`;
 
@@ -33,4 +34,12 @@ export const getHikes = async (page = 1, status = '') => {
   } catch (error) {
     useHandleApiError(error);
   }
+};
+
+export const cancelHike = async (hikeId: string) => {
+  const res = await axiosInstance.post<ApiResponse<{ hikeId: string; status: string }>>(
+    CANCEL_HIKE_API,
+    { hikeId }
+  );
+  return res.data.data;
 };

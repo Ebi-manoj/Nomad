@@ -39,6 +39,13 @@ router.post('/join-ride', async (req: Request, res: Response) => {
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
+router.post('/cancel', authMiddleware, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    hikeComposer().cancelHike(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
 router.get(
   '/:bookingId/booking',
   authMiddleware,

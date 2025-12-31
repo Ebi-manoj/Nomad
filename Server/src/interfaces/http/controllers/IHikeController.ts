@@ -7,4 +7,5 @@ export interface IHikeController {
   matchRides(httpRequest: HttpRequest): Promise<HttpResponse>;
   joinRideRequest(httpRequest: HttpRequest): Promise<HttpResponse>;
   getHikes(httpRequest: HttpRequest): Promise<HttpResponse>;
+  cancelHike(httpRequest: HttpRequest): Promise<HttpResponse>;
 }

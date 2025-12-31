@@ -17,3 +17,14 @@ export class HasPendingRequest extends CustomError {
     super(HttpStatus.BAD_REQUEST, message);
   }
 }
+export class ActiveHikeRequiredToCancel extends CustomError {
+  constructor(message = 'Only active hikes can be cancelled') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}
+
+export class ConfirmedHikeCannotCancel extends CustomError {
+  constructor(message = 'Hike already confirmed. Use booking cancellation.') {
+    super(HttpStatus.BAD_REQUEST, message);
+  }
+}

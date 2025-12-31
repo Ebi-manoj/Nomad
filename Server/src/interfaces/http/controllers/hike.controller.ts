@@ -14,6 +14,7 @@ import { Unauthorized } from '../../../domain/errors/CustomError';
 import { IGetHikeDetailsUseCase } from '../../../application/usecases/User/Hike/IGetHikeDetails';
 import { IGetAllHikesUseCase } from '../../../application/usecases/User/Hike/IGetAllHikesUseCase';
 import { ApiResponse } from '../helpers/implementation/apiResponse';
+import { ICancelHikeUseCase } from '../../../application/usecases/User/Hike/ICancelHikeUseCase';
 
 export class HikeController implements IHikeController {
   constructor(
@@ -21,7 +22,8 @@ export class HikeController implements IHikeController {
     private readonly _findMatchRidesUseCase: IFindMatchRideUseCase,
     private readonly _createJoinRequestUseCase: ICreateJoinRequestUseCase,
     private readonly _gethikeDetailsUseCase: IGetHikeDetailsUseCase,
-    private readonly _getAllHikesUseCase: IGetAllHikesUseCase
+    private readonly _getAllHikesUseCase: IGetAllHikesUseCase,
+    private readonly _cancelHikeUseCase: ICancelHikeUseCase
   ) {}
   async createHike(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto: CreateHikeDTO = httpRequest.body as CreateHikeDTO;
@@ -72,6 +74,15 @@ export class HikeController implements IHikeController {
 
     const response = ApiResponse.success(result);
 
+    return new HttpResponse(HttpStatus.OK, response);
+  }
+
+  async cancelHike(httpRequest: HttpRequest): Promise<HttpResponse> {
+    const userId = httpRequest.user?.id;
+    if (!userId) throw new Unauthorized();
+    const { hikeId } = httpRequest.body as { hikeId: string };
+    const result = await this._cancelHikeUseCase.execute({ userId, hikeId });
+    const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }
 }

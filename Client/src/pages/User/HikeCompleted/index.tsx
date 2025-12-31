@@ -206,7 +206,7 @@ export const HikeCompletedPage = () => {
                     <div>
                       <p className="text-gray-500 text-sm">Refund Amount</p>
                       <p className="font-semibold text-base">
-                        ₹{hikeDetails.bookingDetails?.refundAmount}
+                        ₹{hikeDetails.bookingDetails?.refundAmount ?? 0}
                       </p>
                     </div>
                   </div>
@@ -220,7 +220,7 @@ export const HikeCompletedPage = () => {
                   <div>
                     <p className="text-gray-500 text-sm">Cost Shared</p>
                     <p className="font-semibold text-base">
-                      ₹{hikeDetails.paymentDetails?.amount.toFixed(2)}
+                      ₹{hikeDetails.paymentDetails?.amount.toFixed(2) ?? 0}
                     </p>
                   </div>
                 </div>
@@ -238,7 +238,7 @@ export const HikeCompletedPage = () => {
                     </p>
                     <div className="flex items-baseline gap-2">
                       <p className="font-semibold text-base text-gray-900 dark:text-gray-100">
-                        ₹{hikeDetails.paymentDetails?.platFormFee}
+                        ₹{hikeDetails.paymentDetails?.platFormFee || 0}
                       </p>
                       <span className="text-xs text-gray-500 dark:text-gray-500 font-medium">
                         ({platformFeePerc.toFixed(0)}%)
@@ -254,14 +254,17 @@ export const HikeCompletedPage = () => {
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Rider</p>
-                    <p className="font-semibold text-base">Ebi Manoj</p>
-
-                    <div className="flex items-center gap-1 mt-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                      <span className="text-sm font-medium">
-                        {hikeDetails.rider?.rating}
-                      </span>
-                    </div>
+                    <p className="font-semibold text-base">
+                      {hikeDetails.rider?.fullname ?? 'N/A'}
+                    </p>
+                    {hikeDetails.rider?.rating && (
+                      <div className="flex items-center gap-1 mt-1">
+                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                        <span className="text-sm font-medium">
+                          {hikeDetails.rider.rating}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

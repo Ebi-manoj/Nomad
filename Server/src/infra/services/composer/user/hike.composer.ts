@@ -28,6 +28,8 @@ import { SubscriptionService } from '../../../../application/services/Subscripti
 import { SubscriptionPlanRepository } from '../../../repositories/SubscriptionPlanRepository';
 import { NotificationRepository } from '../../../repositories/NotificationRepository';
 import { CreateNotificationUseCase } from '../../../../application/usecases/User/Notification/CreateNotificationUseCase';
+import { CancelHikeUseCase } from '../../../../application/usecases/User/Hike/CancelHikeUseCase';
+import { MongoTransactionManager } from '../../../database/MongoTransactionManger';
 
 export function hikeComposer(): IHikeController {
   const userRepository = new MongoUserRepository();
@@ -110,11 +112,25 @@ export function hikeComposer(): IHikeController {
 
   const getAllHikesUseCase = new GetAllHikesUseCase(hikeRepository);
 
+  const transactionManager = new MongoTransactionManager([
+    hikeRepository,
+    joinRequestRepository,
+    rideRepository,
+  ]);
+
+  const cancelHikeUseCase = new CancelHikeUseCase(
+    hikeRepository,
+    joinRequestRepository,
+    rideRepository,
+    transactionManager
+  );
+
   return new HikeController(
     createHikeUseCase,
     findMatchRidesUseCase,
     createJoinRequestUseCase,
     gethikeDetailsUseCase,
-    getAllHikesUseCase
+    getAllHikesUseCase,
+    cancelHikeUseCase
   );
 }
