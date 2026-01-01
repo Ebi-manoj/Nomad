@@ -1,9 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   LineChart,
   Line,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -15,8 +13,6 @@ import {
   Cell,
 } from 'recharts';
 import {
-  TrendingUp,
-  TrendingDown,
   Users,
   Car,
   Footprints,
@@ -28,7 +24,11 @@ import {
   IndianRupee,
 } from 'lucide-react';
 import { getAdminDashboardOverview } from '@/api/adminDashboard';
-import type { DashboardOverviewDTO, DashboardRange } from '@/types/adminDashboard';
+import type {
+  DashboardOverviewDTO,
+  DashboardRange,
+} from '@/types/adminDashboard';
+import { StatCard } from './StatCard';
 
 const initials = (name: string) =>
   name
@@ -58,65 +58,28 @@ export const AdminDashboard = () => {
   }, [range]);
 
   const statusData = useMemo(() => {
-    if (!overview) return [] as { name: string; value: number; color: string }[];
+    if (!overview)
+      return [] as { name: string; value: number; color: string }[];
     return [
-      { name: 'Completed', value: overview.statusBreakdown.completed, color: '#10b981' },
-      { name: 'Cancelled', value: overview.statusBreakdown.cancelled, color: '#ef4444' },
-      { name: 'Active', value: overview.statusBreakdown.active, color: '#3b82f6' },
+      {
+        name: 'Completed',
+        value: overview.statusBreakdown.completed,
+        color: '#10b981',
+      },
+      {
+        name: 'Cancelled',
+        value: overview.statusBreakdown.cancelled,
+        color: '#ef4444',
+      },
+      {
+        name: 'Active',
+        value: overview.statusBreakdown.active,
+        color: '#3b82f6',
+      },
     ];
   }, [overview]);
 
   const formatChange = (n: number) => `${n >= 0 ? '+' : ''}${n}%`;
-
-  const StatCard = ({ title, value, change, icon: Icon, trend, subtitle }) => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-          <h3 className="text-3xl font-bold text-gray-900 mb-2">{value}</h3>
-          {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
-          <div className="flex items-center gap-1 mt-2">
-            {trend === 'up' ? (
-              <TrendingUp className="w-4 h-4 text-green-600" />
-            ) : (
-              <TrendingDown className="w-4 h-4 text-red-600" />
-            )}
-            <span
-              className={`text-sm font-medium ${
-                trend === 'up' ? 'text-green-600' : 'text-red-600'
-              }`}
-            >
-              {change}
-            </span>
-            <span className="text-sm text-gray-500">vs previous period</span>
-          </div>
-        </div>
-        <div
-          className={`p-3 rounded-lg ${
-            title.includes('Users')
-              ? 'bg-blue-50'
-              : title.includes('Rides')
-              ? 'bg-purple-50'
-              : title.includes('Hikes')
-              ? 'bg-green-50'
-              : 'bg-orange-50'
-          }`}
-        >
-          <Icon
-            className={`w-6 h-6 ${
-              title.includes('Users')
-                ? 'text-blue-600'
-                : title.includes('Rides')
-                ? 'text-purple-600'
-                : title.includes('Hikes')
-                ? 'text-green-600'
-                : 'text-orange-600'
-            }`}
-          />
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -135,32 +98,56 @@ export const AdminDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
             title="Total Users"
-            value={overview ? overview.stats.users.total.toLocaleString() : '--'}
-            change={overview ? formatChange(overview.stats.users.changePercent) : '+0%'}
+            value={
+              overview ? overview.stats.users.total.toLocaleString() : '--'
+            }
+            change={
+              overview
+                ? formatChange(overview.stats.users.changePercent)
+                : '+0%'
+            }
             trend={overview ? overview.stats.users.trend : 'up'}
             subtitle={overview?.stats.users.subtitle}
             icon={Users}
           />
           <StatCard
             title="Total Rides"
-            value={overview ? overview.stats.rides.total.toLocaleString() : '--'}
-            change={overview ? formatChange(overview.stats.rides.changePercent) : '+0%'}
+            value={
+              overview ? overview.stats.rides.total.toLocaleString() : '--'
+            }
+            change={
+              overview
+                ? formatChange(overview.stats.rides.changePercent)
+                : '+0%'
+            }
             trend={overview ? overview.stats.rides.trend : 'up'}
             subtitle={overview?.stats.rides.subtitle}
             icon={Car}
           />
           <StatCard
             title="Total Hikes"
-            value={overview ? overview.stats.hikes.total.toLocaleString() : '--'}
-            change={overview ? formatChange(overview.stats.hikes.changePercent) : '+0%'}
+            value={
+              overview ? overview.stats.hikes.total.toLocaleString() : '--'
+            }
+            change={
+              overview
+                ? formatChange(overview.stats.hikes.changePercent)
+                : '+0%'
+            }
             trend={overview ? overview.stats.hikes.trend : 'up'}
             subtitle={overview?.stats.hikes.subtitle}
             icon={Footprints}
           />
           <StatCard
             title="SOS Alerts"
-            value={overview ? overview.stats.sosAlerts.total.toLocaleString() : '--'}
-            change={overview ? formatChange(overview.stats.sosAlerts.changePercent) : '+0%'}
+            value={
+              overview ? overview.stats.sosAlerts.total.toLocaleString() : '--'
+            }
+            change={
+              overview
+                ? formatChange(overview.stats.sosAlerts.changePercent)
+                : '+0%'
+            }
             trend={overview ? overview.stats.sosAlerts.trend : 'down'}
             subtitle={overview?.stats.sosAlerts.subtitle}
             icon={AlertTriangle}
@@ -403,7 +390,9 @@ export const AdminDashboard = () => {
                 Recent SOS Alerts
               </h3>
               <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-semibold rounded-full">
-                {overview?.recentSOS.filter(s => s.status === 'active').length || 0} Active
+                {overview?.recentSOS.filter(s => s.status === 'active')
+                  .length || 0}{' '}
+                Active
               </span>
             </div>
             <div className="space-y-4">
@@ -437,9 +426,16 @@ export const AdminDashboard = () => {
                     )}
                   </div>
                   <p className="text-xs text-gray-600 mb-1 line-clamp-1">
-                    📍 {sos.location ? `${sos.location.lat.toFixed(4)}, ${sos.location.lng.toFixed(4)}` : 'Unknown'}
+                    📍{' '}
+                    {sos.location
+                      ? `${sos.location.lat.toFixed(
+                          4
+                        )}, ${sos.location.lng.toFixed(4)}`
+                      : 'Unknown'}
                   </p>
-                  <p className="text-xs text-gray-400">{new Date(sos.createdAt).toLocaleString()}</p>
+                  <p className="text-xs text-gray-400">
+                    {new Date(sos.createdAt).toLocaleString()}
+                  </p>
                 </div>
               ))}
             </div>
@@ -458,7 +454,9 @@ export const AdminDashboard = () => {
               </div>
               <div>
                 <p className="text-xs text-gray-500">Completion Rate</p>
-                <p className="text-lg font-bold text-gray-900">{overview ? `${overview.quickStats.completionRate}%` : '--'}</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {overview ? `${overview.quickStats.completionRate}%` : '--'}
+                </p>
               </div>
             </div>
           </div>
@@ -469,7 +467,9 @@ export const AdminDashboard = () => {
               </div>
               <div>
                 <p className="text-xs text-gray-500">Avg Rating</p>
-                <p className="text-lg font-bold text-gray-900">{overview ? overview.quickStats.avgRating : '--'}</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {overview ? overview.quickStats.avgRating : '--'}
+                </p>
               </div>
             </div>
           </div>
@@ -480,7 +480,11 @@ export const AdminDashboard = () => {
               </div>
               <div>
                 <p className="text-xs text-gray-500">Platform Revenue</p>
-                <p className="text-lg font-bold text-gray-900">{overview ? `₹${overview.quickStats.platformRevenue.toLocaleString()}` : '--'}</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {overview
+                    ? `₹${overview.quickStats.platformRevenue.toLocaleString()}`
+                    : '--'}
+                </p>
               </div>
             </div>
           </div>
@@ -491,7 +495,9 @@ export const AdminDashboard = () => {
               </div>
               <div>
                 <p className="text-xs text-gray-500">Cancel Rate</p>
-                <p className="text-lg font-bold text-gray-900">{overview ? `${overview.quickStats.cancelRate}%` : '--'}</p>
+                <p className="text-lg font-bold text-gray-900">
+                  {overview ? `${overview.quickStats.cancelRate}%` : '--'}
+                </p>
               </div>
             </div>
           </div>

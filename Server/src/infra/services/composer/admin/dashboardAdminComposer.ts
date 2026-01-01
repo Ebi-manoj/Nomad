@@ -5,7 +5,7 @@ import { MongoUserRepository } from '../../../repositories/UserRepository';
 import { RideRepository } from '../../../repositories/RideRepository';
 import { HikeRepository } from '../../../repositories/HikeRepository';
 import { SosLogRepository } from '../../../repositories/SosLogRepository';
-import { AnalyticsService } from '../../analytics/AnalyticsService';
+import { AnalyticsService } from '../../AnalyticsService';
 
 export function dashboardAdminComposer(): IAdminDashboardController {
   const userRepository = new MongoUserRepository();
