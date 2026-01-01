@@ -1,6 +1,14 @@
 import type { GetRideDetailsResDTO } from '@/types/ride';
 import { formatDuration } from '@/utils/dateFormater';
-import { MapPin, Navigation, Car, Clock, Star, Wallet, Shield } from 'lucide-react';
+import {
+  MapPin,
+  Navigation,
+  Car,
+  Clock,
+  Star,
+  Wallet,
+  Shield,
+} from 'lucide-react';
 import { FaRupeeSign } from 'react-icons/fa6';
 
 interface RideSummarySectionProps {
@@ -140,7 +148,7 @@ export const RideSummarySection = ({
           <div className="w-full">
             <p className="text-muted-foreground text-sm">Safety Score</p>
             <p className="font-semibold text-base text-foreground">
-              {(rideData.safetyScore ?? 0)}%
+              {rideData.safetyScore ?? 0}%
             </p>
             <div className="mt-2 h-2 w-full rounded-full bg-muted">
               <div
@@ -185,7 +193,7 @@ export const RideSummarySection = ({
               Total Collected
             </p>
             <p className="text-2xl font-extrabold text-blue-700">
-              ₹{grossCollected}
+              ₹{grossCollected.toFixed(2)}
             </p>
             <p className="text-xs text-gray-400">(Before fee)</p>
           </div>

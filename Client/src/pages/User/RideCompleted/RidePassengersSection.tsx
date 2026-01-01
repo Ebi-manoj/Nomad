@@ -35,7 +35,9 @@ export const RidePassengersSection = ({
         </div>
         <div className="text-right">
           <p className="text-sm text-muted-foreground">Total collected</p>
-          <p className="text-lg font-bold text-green-600">₹{grossCollected}</p>
+          <p className="text-lg font-bold text-green-600">
+            ₹{grossCollected.toFixed(2)}
+          </p>
         </div>
       </div>
 

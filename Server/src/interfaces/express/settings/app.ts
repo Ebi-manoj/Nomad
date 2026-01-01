@@ -13,6 +13,7 @@ import documentRouter from '../routes/admin/documents.routes';
 import adminSosRouter from '../routes/admin/sos.routes';
 import adminHikeRouter from '../routes/admin/hike.routes';
 import adminRideRouter from '../routes/admin/ride.routes';
+import adminDashboardRouter from '../routes/admin/dashboard.routes';
 import adminSubscriptionPlanRouter from '../routes/admin/subscriptionPlan.routes';
 import fileRouter from '../routes/file.routes';
 import subscriptionRouter from '../routes/subscription.routes';
@@ -60,6 +61,7 @@ app.use('/api/v1/admin/sos', adminSosRouter);
 app.use('/api/v1/admin/hike', adminHikeRouter);
 app.use('/api/v1/admin/ride', adminRideRouter);
 app.use('/api/v1/admin/subscription-plans', adminSubscriptionPlanRouter);
+app.use('/api/v1/admin/dashboard', adminDashboardRouter);
 
 app.use(errorHandling);
 console.log('Listener count:', process.listenerCount('uncaughtException'));
