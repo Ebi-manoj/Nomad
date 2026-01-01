@@ -22,6 +22,7 @@ import {
   CheckCircle,
   XCircle,
   IndianRupee,
+  LogOut,
 } from 'lucide-react';
 import { getAdminDashboardOverview } from '@/api/adminDashboard';
 import type {
@@ -29,6 +30,9 @@ import type {
   DashboardRange,
 } from '@/types/adminDashboard';
 import { StatCard } from './StatCard';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '@/store/features/auth/auth.thunks';
 
 const initials = (name: string) =>
   name
@@ -43,6 +47,17 @@ export const AdminDashboard = () => {
   const [range, setRange] = useState<DashboardRange>('yearly');
   const [overview, setOverview] = useState<DashboardOverviewDTO | null>(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logout()).unwrap();
+      navigate('/auth/sign-in', { replace: true });
+    } catch (_) {
+      
+    }
+  };
 
   useEffect(() => {
     const run = async () => {
@@ -85,13 +100,23 @@ export const AdminDashboard = () => {
     <div className="min-h-screen bg-white">
       <div className="max-w-[1600px] mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Dashboard Overview
-          </h1>
-          <p className="text-gray-600">
-            Monitor your platform's performance and key metrics
-          </p>
+        <div className="mb-8 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Dashboard Overview
+            </h1>
+            <p className="text-gray-600">
+              Monitor your platform's performance and key metrics
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="inline-flex cursor-pointer border border-red-500 bg-white items-center gap-2 px-4 py-2 rounded-lg  text-gray-700 hover:text-gray-500 transition-colors"
+            aria-label="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="font-medium">Logout</span>
+          </button>
         </div>
 
         {/* Stats Grid */}
