@@ -2,6 +2,7 @@ import express from 'express';
 import { connectMongo } from '../../../infra/database/connectMongo';
 import authRouter from '../routes/auth.routes';
 import userRouter from '../routes/user/user.routes';
+import userInsightRouter from '../routes/user/insight.routes';
 import paymentRouter from '../routes/payment.routes';
 import hikeRouter from '../routes/user/hike.routes';
 import rideRouter from '../routes/user/ride.routes';
@@ -46,6 +47,7 @@ startSchedules().start();
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/user/insights', userInsightRouter);
 app.use('/api/v1/hike', hikeRouter);
 app.use('/api/v1/ride', rideRouter);
 app.use('/api/v1/task', taskRouter);

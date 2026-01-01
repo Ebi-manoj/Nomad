@@ -18,6 +18,7 @@ import { RideCompletedPage } from '@/pages/User/RideCompleted/Index';
 import { SubscriptionPage } from '@/pages/User/Subscription/Subscription';
 import { SubscriptionSuccessPage } from '@/pages/User/Subscription/Successpage/Success';
 import { ChangePasswordPage } from '@/pages/User/ChangePassword';
+import { UserDashboard } from '@/pages/User/Dashboard/UserDashboard';
 
 export const UserRoutes = (
   <Route
@@ -79,5 +80,6 @@ export const UserRoutes = (
     <Route path="/wallet" element={<WalletPage />} />
     <Route path="/subscriptions" element={<SubscriptionPage />} />
     <Route path="/subscription/success" element={<SubscriptionSuccessPage />} />
+    <Route path="/insights" element={<UserDashboard />} />
   </Route>
 );
