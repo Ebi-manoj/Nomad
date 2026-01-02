@@ -21,7 +21,11 @@ const navItems = [
   { name: 'Hikes', href: '/admin/hikes', icon: Mountain },
   { name: 'SOS Logs', href: '/admin/sos-logs', icon: FileText },
   { name: 'Subscriptions', href: '/admin/subscriptions', icon: Crown },
-  { name: 'Sales report', href: '/admin/sales-report', icon: BarChart3 },
+  {
+    name: 'Revenue Insights',
+    href: '/admin/revenue-dashboard',
+    icon: BarChart3,
+  },
 ];
 
 export function AdminSidebar() {

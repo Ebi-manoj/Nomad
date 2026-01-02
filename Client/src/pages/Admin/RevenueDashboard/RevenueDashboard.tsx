@@ -19,9 +19,13 @@ import {
   Car,
   Footprints,
   CreditCard,
-  FileText,
+  Loader2,
+  Printer,
 } from 'lucide-react';
-import { getAdminRevenueOverview, getAdminRevenueReport } from '@/api/adminRevenue';
+import {
+  getAdminRevenueOverview,
+  getAdminRevenueReport,
+} from '@/api/adminRevenue';
 import type { RevenueOverviewDTO, DashboardRange } from '@/types/adminRevenue';
 import { Pagination } from '@/components/Pagination';
 import { StatCard } from './StatCard';
@@ -124,7 +128,9 @@ export const RevenueDashboard: React.FC = () => {
 
     try {
       setReportLoading(true);
-      const apiRange = (dateRange === 'custom' ? 'yearly' : dateRange) as DashboardRange;
+      const apiRange = (
+        dateRange === 'custom' ? 'yearly' : dateRange
+      ) as DashboardRange;
       const params =
         dateRange === 'custom' && fromDate && toDate
           ? { startDate: fromDate, endDate: toDate }
@@ -178,7 +184,7 @@ export const RevenueDashboard: React.FC = () => {
             <div className="flex gap-3 flex-wrap">
               <button
                 onClick={() => setDateRange('today')}
-                className={`px-6 py-2.5 rounded-xl font-medium transition-all ${
+                className={`px-6 py-2.5 rounded-xl font-medium transition-all cursor-pointer ${
                   dateRange === 'today'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -188,7 +194,7 @@ export const RevenueDashboard: React.FC = () => {
               </button>
               <button
                 onClick={() => setDateRange('monthly')}
-                className={`px-6 py-2.5 rounded-xl font-medium transition-all ${
+                className={`px-6 py-2.5 rounded-xl font-medium transition-all cursor-pointer ${
                   dateRange === 'monthly'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -198,7 +204,7 @@ export const RevenueDashboard: React.FC = () => {
               </button>
               <button
                 onClick={() => setDateRange('yearly')}
-                className={`px-6 py-2.5 rounded-xl font-medium transition-all ${
+                className={`px-6 py-2.5 rounded-xl font-medium transition-all cursor-pointer ${
                   dateRange === 'yearly'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -211,7 +217,7 @@ export const RevenueDashboard: React.FC = () => {
                   setDateRange('custom');
                   setShowCustomDatePicker(true);
                 }}
-                className={`px-6 py-2.5 rounded-xl font-medium transition-all flex items-center gap-2 ${
+                className={`px-6 py-2.5 rounded-xl font-medium transition-all flex items-center gap-2 cursor-pointer ${
                   dateRange === 'custom'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -235,7 +241,7 @@ export const RevenueDashboard: React.FC = () => {
                     value={fromDate}
                     onChange={e => setFromDate(e.target.value)}
                     max={toDate || undefined}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="cursor-pointer px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div>
@@ -247,7 +253,7 @@ export const RevenueDashboard: React.FC = () => {
                     value={toDate}
                     onChange={e => setToDate(e.target.value)}
                     min={fromDate || undefined}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="cursor-pointer px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <button
@@ -255,7 +261,7 @@ export const RevenueDashboard: React.FC = () => {
                     setPage(1);
                     setApplyTrigger(v => v + 1);
                   }}
-                  className={`mt-6 px-6 py-2 rounded-lg font-medium transition-colors ${
+                  className={`mt-6 px-6 py-2 rounded-lg font-medium transition-colors cursor-pointer ${
                     isDateRangeValid
                       ? 'bg-blue-600 text-white hover:bg-blue-700'
                       : 'bg-gray-300 text-gray-600 cursor-not-allowed'
@@ -478,20 +484,21 @@ export const RevenueDashboard: React.FC = () => {
               </div>
               <button
                 onClick={handleDownloadReport}
-                disabled={reportLoading}
+                disabled={reportLoading || transactions.length == 0}
                 className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors shadow-lg ${
-                  reportLoading ? 'bg-neutral-700 text-white cursor-wait' : 'bg-black text-white hover:bg-neutral-900'
+                  reportLoading || transactions.length === 0
+                    ? `bg-neutral-700 text-white ${
+                        reportLoading ? 'cursor-wait' : 'cursor-not-allowed'
+                      }`
+                    : 'bg-black text-white hover:bg-neutral-900'
                 }`}
               >
                 {reportLoading ? (
-                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                  </svg>
+                  <Loader2 className="animate-spin" size={20} />
                 ) : (
-                  <FileText className="w-4 h-4" />
+                  <Printer className="w-4 h-4" />
                 )}
-                {reportLoading ? 'Generating…' : 'PDF'}
+                {reportLoading ? 'Generating…' : 'Download PDF'}
               </button>
             </div>
           </div>
