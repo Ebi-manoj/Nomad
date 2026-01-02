@@ -13,4 +13,11 @@ router.get('/', authMiddleware, isAdmin, async (req: Request, res: Response) => 
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
+router.get('/report', authMiddleware, isAdmin, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    revenueAdminComposer().getReport(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
+
 export default router;

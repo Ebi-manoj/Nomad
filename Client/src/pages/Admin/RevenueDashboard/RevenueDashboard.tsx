@@ -21,7 +21,7 @@ import {
   CreditCard,
   FileText,
 } from 'lucide-react';
-import { getAdminRevenueOverview } from '@/api/adminRevenue';
+import { getAdminRevenueOverview, getAdminRevenueReport } from '@/api/adminRevenue';
 import type { RevenueOverviewDTO, DashboardRange } from '@/types/adminRevenue';
 import { Pagination } from '@/components/Pagination';
 import { StatCard } from './StatCard';
@@ -39,6 +39,7 @@ export const RevenueDashboard: React.FC = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [applyTrigger, setApplyTrigger] = useState(0);
+  const [reportLoading, setReportLoading] = useState(false);
   const isDateRangeValid = useMemo(() => {
     if (!fromDate || !toDate) return false;
     return new Date(fromDate) <= new Date(toDate);
@@ -121,24 +122,37 @@ export const RevenueDashboard: React.FC = () => {
         ? `${fromDate} to ${toDate}`
         : `${dateRange.charAt(0).toUpperCase()}${dateRange.slice(1)}`;
 
-    await generateHTMLReport(
-      transactions.map(t => ({
-        id: t.id,
-        date: t.date,
-        type: t.type,
-        userName: t.userName,
-        amount: t.amount,
-        status: t.status,
-      })),
-      {
-        totalRevenue: currentStats.totalRevenue,
-        hikeCommission: currentStats.hikeCommission,
-        rideCommission: currentStats.rideCommission,
-        subscriptions: currentStats.subscriptions,
-        totalTransactions: pagination.total || transactions.length,
-        dateRange: dateRangeLabel,
-      }
-    );
+    try {
+      setReportLoading(true);
+      const apiRange = (dateRange === 'custom' ? 'yearly' : dateRange) as DashboardRange;
+      const params =
+        dateRange === 'custom' && fromDate && toDate
+          ? { startDate: fromDate, endDate: toDate }
+          : undefined;
+      const data = await getAdminRevenueReport(apiRange, params);
+      if (!data) return;
+
+      await generateHTMLReport(
+        data.transactions.map(t => ({
+          id: t.id,
+          date: t.date,
+          type: t.type,
+          userName: t.userName,
+          amount: t.amount,
+          status: t.status,
+        })),
+        {
+          totalRevenue: data.summary.totalRevenue,
+          hikeCommission: data.summary.hikeCommission,
+          rideCommission: data.summary.rideCommission,
+          subscriptions: data.summary.subscriptions,
+          totalTransactions: data.transactions.length,
+          dateRange: dateRangeLabel,
+        }
+      );
+    } finally {
+      setReportLoading(false);
+    }
   };
 
   return (
@@ -464,10 +478,20 @@ export const RevenueDashboard: React.FC = () => {
               </div>
               <button
                 onClick={handleDownloadReport}
-                className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-xl font-medium hover:bg-neutral-900 transition-colors shadow-lg"
+                disabled={reportLoading}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors shadow-lg ${
+                  reportLoading ? 'bg-neutral-700 text-white cursor-wait' : 'bg-black text-white hover:bg-neutral-900'
+                }`}
               >
-                <FileText className="w-4 h-4" />
-                PDF
+                {reportLoading ? (
+                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                  </svg>
+                ) : (
+                  <FileText className="w-4 h-4" />
+                )}
+                {reportLoading ? 'Generating…' : 'PDF'}
               </button>
             </div>
           </div>

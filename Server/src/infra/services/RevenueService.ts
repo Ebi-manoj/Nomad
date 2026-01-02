@@ -68,7 +68,7 @@ export class RevenueService implements IRevenueService {
     if (custom) {
       start = new Date(options!.startDate!);
       end = new Date(options!.endDate!);
-      // normalize end to end of day if time not provided
+      
       if (
         end.getHours() === 0 &&
         end.getMinutes() === 0 &&
@@ -118,6 +118,39 @@ export class RevenueService implements IRevenueService {
       pagination: txData.pagination,
     };
     return overview;
+  }
+
+  // Export full report data (no pagination), with optional custom date range
+  async getReport(
+    range: DashboardRange,
+    options?: { startDate?: Date; endDate?: Date }
+  ): Promise<{ summary: RevenueSummaryDTO; transactions: RevenueTransactionDTO[] }> {
+    // determine date range
+    let start: Date;
+    let end: Date;
+    const custom = Boolean(options?.startDate && options?.endDate);
+    if (custom) {
+      start = new Date(options!.startDate!);
+      end = new Date(options!.endDate!);
+      if (
+        end.getHours() === 0 &&
+        end.getMinutes() === 0 &&
+        end.getSeconds() === 0 &&
+        end.getMilliseconds() === 0
+      ) {
+        end.setHours(23, 59, 59, 999);
+      }
+    } else {
+      const preset = getRangeDates(range);
+      start = preset.start;
+      end = preset.end;
+    }
+
+    const [summary, transactions] = await Promise.all([
+      this.computeSummary(start, end),
+      this.getAllTransactions(start, end),
+    ]);
+    return { summary, transactions };
   }
 
   private async computeSummary(start: Date, end: Date): Promise<RevenueSummaryDTO> {
@@ -457,5 +490,73 @@ export class RevenueService implements IRevenueService {
       hasPrev: page > 1,
     };
     return { transactions: pageItems, pagination };
+  }
+
+  private async getAllTransactions(
+    start: Date,
+    end: Date
+  ): Promise<RevenueTransactionDTO[]> {
+    const [payments, rides, subs] = await Promise.all([
+      PaymentModel.find({ createdAt: { $gte: start, $lte: end }, status: PaymentStatus.SUCCESS })
+        .sort({ createdAt: -1 })
+        .lean(),
+      RideLogModel.find({ createdAt: { $gte: start, $lte: end }, platformFee: { $gt: 0 }, status: RideStatus.COMPLETED })
+        .sort({ createdAt: -1 })
+        .lean(),
+      SubscriptionModel.find({ createdAt: { $gte: start, $lte: end } })
+        .sort({ createdAt: -1 })
+        .lean(),
+    ]);
+
+    const userIds = new Set<string>();
+    for (const p of payments) userIds.add(String(p.hikerId));
+    for (const r of rides) userIds.add(String(r.userId));
+    for (const s of subs) userIds.add(String(s.userId));
+    const users = await UserModel.find({ _id: { $in: Array.from(userIds).map(id => id) } })
+      .select('fullName')
+      .lean();
+    const nameMap = new Map<string, string>();
+    for (const u of users) nameMap.set(String(u._id), u.fullName);
+
+    const mapPaymentStatus = (s: PaymentStatus): RevenueTransactionStatus => {
+      if (s === PaymentStatus.SUCCESS) return 'completed';
+      if (s === PaymentStatus.PENDING) return 'pending';
+      return 'failed';
+    };
+
+    const tx: RevenueTransactionDTO[] = [];
+    for (const p of payments) {
+      tx.push({
+        id: String(p._id),
+        date: new Date(p.createdAt as Date).toISOString(),
+        type: 'Ride Commission',
+        userName: nameMap.get(String(p.hikerId)) || 'Unknown',
+        amount: p.platformFee || 0,
+        status: mapPaymentStatus(p.status as PaymentStatus),
+      });
+    }
+    for (const r of rides) {
+      tx.push({
+        id: String(r._id),
+        date: new Date(r.createdAt as Date).toISOString(),
+        type: 'Hike Commission',
+        userName: nameMap.get(String(r.userId)) || 'Unknown',
+        amount: r.platformFee || 0,
+        status: r.status === RideStatus.COMPLETED ? 'completed' : 'pending',
+      });
+    }
+    for (const s of subs) {
+      tx.push({
+        id: String(s._id),
+        date: new Date(s.createdAt as Date).toISOString(),
+        type: 'Subscription',
+        userName: nameMap.get(String(s.userId)) || 'Unknown',
+        amount: s.price || 0,
+        status: 'completed',
+      });
+    }
+
+    tx.sort((a, b) => (a.date > b.date ? -1 : 1));
+    return tx;
   }
 }

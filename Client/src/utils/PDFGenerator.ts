@@ -119,13 +119,12 @@ export const generateHTMLReport = async (
     </div>
   `;
 
-  // Render inside an isolated iframe to avoid site CSS (e.g., oklch colors) interfering
   const iframe = document.createElement('iframe');
   iframe.style.position = 'absolute';
   iframe.style.left = '-9999px';
   iframe.style.top = '0';
   iframe.style.width = '900px';
-  iframe.style.height = '1400px';
+  iframe.style.height = '1200px';
   document.body.appendChild(iframe);
 
   const doc = iframe.contentDocument;
@@ -150,10 +149,27 @@ export const generateHTMLReport = async (
     const imgData = canvas.toDataURL('image/png');
 
     const pdf = new jsPDF('p', 'mm', 'a4');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    // First page
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    // Additional pages
+    while (heightLeft > 0) {
+      position -= pageHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
     pdf.save(`revenue-report-${Date.now()}.pdf`);
   }
 
