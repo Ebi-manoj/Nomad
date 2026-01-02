@@ -269,7 +269,7 @@ export const UserDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-700">
-                      Carpool (You)
+                      Nomad (You)
                     </p>
                     <p className="text-xs text-gray-500">Smart choice!</p>
                   </div>
@@ -302,9 +302,7 @@ export const UserDashboard = () => {
                     <Car className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-700">
-                      Taxi/Uber
-                    </p>
+                    <p className="text-sm font-semibold text-gray-700">Taxi</p>
                     <p className="text-xs text-gray-500">Most expensive</p>
                   </div>
                 </div>

@@ -343,7 +343,7 @@ export class InsightService implements IInsightService {
     const km = distAgg[0]?.km || 0;
     // naive estimates
     const taxi = Math.round(km * 25);
-    const privateVehicle = Math.round(km * 12 + km * 2); // fuel + maint
+    const privateVehicle = Math.round(km * 12 + km * 2);
     const savings = Math.max(0, taxi - carpool);
     return { carpool, taxi, privateVehicle, savings };
   }
@@ -459,11 +459,11 @@ export class InsightService implements IInsightService {
       recent.push({
         id: String(r._id),
         type: 'ride',
-        from: (r as any).pickupAddress,
-        to: (r as any).destinationAddress,
-        date: humanizeSince((r as any).createdAt as Date),
-        amount: (r as any).totalEarning || 0,
-        km: (r as any).totalDistance || 0,
+        from: r.pickupAddress,
+        to: r.destinationAddress,
+        date: humanizeSince(r.createdAt as Date),
+        amount: r.totalEarning || 0,
+        km: r.totalDistance || 0,
         rating: 0,
       });
     }
@@ -480,7 +480,7 @@ export class InsightService implements IInsightService {
       });
     }
 
-    recent.sort((a, b) => (a.date > b.date ? -1 : 1)); // already humanized; rely on fetch order
+    recent.sort((a, b) => (a.date > b.date ? -1 : 1));
     return recent.slice(0, limit * 2);
   }
 
@@ -493,7 +493,7 @@ export class InsightService implements IInsightService {
       },
     ]);
     const km = distAgg[0]?.km || 0;
-    const co2Saved = Math.round(km * 0.15); // rough
+    const co2Saved = Math.round(km * 0.15);
     const treesEquivalent = Math.round(co2Saved / 22);
     const fuelSaved = Math.round(km / 15);
     return { co2Saved, treesEquivalent, fuelSaved };
