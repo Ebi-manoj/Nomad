@@ -2,7 +2,10 @@ import { IUserRepository } from '../../application/repositories/IUserRepository'
 import { User } from '../../domain/entities/User';
 import { IUserModel, UserModel } from '../database/user.model';
 import { userMapper } from '../mappers/userDomainMapper';
+import { FilterQuery } from 'mongoose';
 import { MongoBaseRepository } from './BaseRepository';
+
+type UserQuery = FilterQuery<IUserModel>;
 
 export class MongoUserRepository
   extends MongoBaseRepository<User, IUserModel>
@@ -29,7 +32,9 @@ export class MongoUserRepository
     skip: number,
     search?: string
   ): Promise<User[] | []> {
-    const query: any = { role: { $ne: 'admin' } };
+    const query: UserQuery = {
+    role: { $ne: 'admin' },
+  };
     if (search) {
       query.fullName = { $regex: search, $options: 'i' };
     }
@@ -37,7 +42,7 @@ export class MongoUserRepository
     return users.map(userDoc => userMapper.toDomain(userDoc));
   }
   async countUsers(search?: string): Promise<number> {
-    const query: any = { role: { $ne: 'admin' } };
+    const query: UserQuery = { role: { $ne: 'admin' } };
     if (search) {
       query.fullName = { $regex: search, $options: 'i' };
     }

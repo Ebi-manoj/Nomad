@@ -3,6 +3,9 @@ import { HikeLog } from '../../domain/entities/Hike';
 import { HikeLogModel, IHikeLog } from '../database/hikelog.model';
 import { hikeMapper } from '../mappers/hikeDomainMapper';
 import { MongoBaseRepository } from './BaseRepository';
+import { FilterQuery } from 'mongoose';
+
+type HikeQuery = FilterQuery<IHikeLog>;
 
 export class HikeRepository
   extends MongoBaseRepository<HikeLog, IHikeLog>
@@ -27,7 +30,7 @@ export class HikeRepository
     userId: string,
     status?: string
   ): Promise<HikeLog[]> {
-    const query: any = { userId };
+    const query: HikeQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
     }
@@ -40,7 +43,7 @@ export class HikeRepository
     return hikes.map(h => this.mapper.toDomain(h));
   }
   async findCountUserHikes(userId: string, status?: string): Promise<number> {
-    const query: any = { userId };
+    const query: HikeQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
     }
@@ -52,7 +55,7 @@ export class HikeRepository
     skip: number,
     status?: string
   ): Promise<HikeLog[]> {
-    const query: any = {};
+    const query: HikeQuery = {};
     if (status) {
       query.status = status;
     }
@@ -65,7 +68,7 @@ export class HikeRepository
     return hikes.map(h => this.mapper.toDomain(h));
   }
   async countHikes(status?: string): Promise<number> {
-    const query: any = {};
+    const query: HikeQuery = {};
     if (status) {
       query.status = status;
     }

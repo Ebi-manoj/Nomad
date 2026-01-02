@@ -1,6 +1,5 @@
 import { IAdminGetHikeDetailsUseCase } from '../../../application/usecases/Admin/IAdminHikeDetailsUseCase';
 import { IGetAllHikesUseCase } from '../../../application/usecases/Admin/IGetAllHikeUseCase';
-import { GetAllHikesResDTO } from '../../../domain/dto/adminHikesDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { ApiResponse } from '../helpers/implementation/apiResponse';
 import { HttpRequest } from '../helpers/implementation/httpRequest';

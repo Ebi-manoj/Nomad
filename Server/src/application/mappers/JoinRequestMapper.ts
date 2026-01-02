@@ -2,7 +2,6 @@ import { JoinRequestResponseDTO } from '../../domain/dto/HikeDTO';
 import { HikeLog } from '../../domain/entities/Hike';
 import { JoinRequest } from '../../domain/entities/JoinRequests';
 import { User } from '../../domain/entities/User';
-import { SubscriptionTier } from '../../domain/enums/subscription';
 
 export function joinRequestMapper(
   joinRequest: JoinRequest,

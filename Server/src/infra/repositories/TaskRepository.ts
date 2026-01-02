@@ -4,6 +4,9 @@ import { Task } from '../../domain/entities/Task';
 import { ITaskDocument, TaskModel } from '../database/Task.model';
 import { taskMapper } from '../mappers/taskMapper';
 import { TaskStatus } from '../../domain/enums/Task';
+import { FilterQuery } from 'mongoose';
+
+type TaskQuery = FilterQuery<ITaskDocument>;
 
 export class TaskRepository
   extends MongoBaseRepository<Task, ITaskDocument>
@@ -14,7 +17,7 @@ export class TaskRepository
   }
 
   async findByRiderId(riderId: string, rideId?: string): Promise<Task[]> {
-    const query: any = { riderId };
+    const query: TaskQuery = { riderId };
     if (rideId) {
       query.rideId = rideId;
     }

@@ -9,7 +9,6 @@ import { TokenGenerator } from '../../../infra/providers/tokenGenrator';
 import { env } from '../../../infra/utils/env';
 import { IUserRepository } from '../../../application/repositories/IUserRepository';
 import { MongoUserRepository } from '../../../infra/repositories/UserRepository';
-import { ErrorMessages } from '../../../domain/enums/ErrorMessage';
 
 declare global {
   namespace Express {
