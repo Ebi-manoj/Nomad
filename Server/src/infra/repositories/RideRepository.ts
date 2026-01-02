@@ -4,6 +4,9 @@ import { RideNotFound } from '../../domain/errors/RideErrors';
 import { IRideLog, RideLogModel } from '../database/ridelog.mode';
 import { rideMapper } from '../mappers/rideDomainMapper';
 import { MongoBaseRepository } from './BaseRepository';
+import { FilterQuery } from 'mongoose';
+
+type RideQuery = FilterQuery<IRideLog>;
 
 export class RideRepository
   extends MongoBaseRepository<RideLog, IRideLog>
@@ -43,7 +46,7 @@ export class RideRepository
     skip: number,
     status?: string
   ): Promise<RideLog[]> {
-    const query: any = { userId };
+    const query: RideQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
     }
@@ -57,7 +60,7 @@ export class RideRepository
   }
 
   async findCountUserRides(userId: string, status?: string): Promise<number> {
-    const query: any = { userId };
+    const query: RideQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
     }
@@ -70,7 +73,7 @@ export class RideRepository
     skip: number,
     status?: string
   ): Promise<RideLog[]> {
-    const query: any = {};
+    const query: RideQuery = {};
     if (status) {
       query.status = status;
     }
@@ -85,7 +88,7 @@ export class RideRepository
   }
 
   async countRides(status?: string): Promise<number> {
-    const query: any = {};
+    const query: RideQuery = {};
     if (status) {
       query.status = status;
     }
