@@ -14,16 +14,18 @@ import {
 } from 'recharts';
 import {
   IndianRupee,
-  Download,
   Calendar,
   Filter,
   Car,
   Footprints,
   CreditCard,
+  FileText,
 } from 'lucide-react';
 import { getAdminRevenueOverview } from '@/api/adminRevenue';
 import type { RevenueOverviewDTO, DashboardRange } from '@/types/adminRevenue';
 import { Pagination } from '@/components/Pagination';
+import { StatCard } from './StatCard';
+import { generateHTMLReport } from '@/utils/PDFGenerator';
 
 type DateRange = DashboardRange | 'custom';
 
@@ -64,7 +66,6 @@ export const RevenueDashboard: React.FC = () => {
     return () => {
       isMounted = false;
     };
-    // include applyTrigger so clicking Apply refetches for custom range
   }, [dateRange, page, limit, applyTrigger]);
 
   // reset pagination when range changes
@@ -114,46 +115,31 @@ export const RevenueDashboard: React.FC = () => {
     },
   ];
 
-  const handleDownloadReport = () => {
-    const csvContent = [
-      ['Transaction ID', 'Date', 'Type', 'User', 'Amount', 'Status'].join(','),
-      ...transactions.map(t =>
-        [t.id, t.date, t.type, t.userName, t.amount, t.status].join(',')
-      ),
-    ].join('\n');
+  const handleDownloadReport = async () => {
+    const dateRangeLabel =
+      dateRange === 'custom' && fromDate && toDate
+        ? `${fromDate} to ${toDate}`
+        : `${dateRange.charAt(0).toUpperCase()}${dateRange.slice(1)}`;
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `revenue-report-${dateRange}-${Date.now()}.csv`;
-    link.click();
-    window.URL.revokeObjectURL(url);
+    await generateHTMLReport(
+      transactions.map(t => ({
+        id: t.id,
+        date: t.date,
+        type: t.type,
+        userName: t.userName,
+        amount: t.amount,
+        status: t.status,
+      })),
+      {
+        totalRevenue: currentStats.totalRevenue,
+        hikeCommission: currentStats.hikeCommission,
+        rideCommission: currentStats.rideCommission,
+        subscriptions: currentStats.subscriptions,
+        totalTransactions: pagination.total || transactions.length,
+        dateRange: dateRangeLabel,
+      }
+    );
   };
-
-  const StatCard: React.FC<{
-    title: string;
-    value: string;
-    icon: React.ElementType;
-    gradient: string;
-    subtitle?: string;
-  }> = ({ title, value, icon: Icon, gradient, subtitle }) => (
-    <div
-      className={`relative overflow-hidden rounded-2xl p-6 ${gradient} text-white shadow-lg`}
-    >
-      <div className="absolute top-0 right-0 opacity-10">
-        <Icon className="w-32 h-32" />
-      </div>
-      <div className="relative z-10">
-        <div className="flex items-center gap-2 mb-2">
-          <Icon className="w-5 h-5" />
-          <p className="text-sm font-medium opacity-90">{title}</p>
-        </div>
-        <h3 className="text-3xl font-bold mb-1">{value}</h3>
-        {subtitle && <p className="text-sm opacity-80">{subtitle}</p>}
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-white p-4 overflow-x-hidden">
@@ -336,10 +322,12 @@ export const RevenueDashboard: React.FC = () => {
                     borderRadius: '12px',
                     boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                   }}
-                  formatter={(value: number) => [
-                    `₹${value.toLocaleString()}`,
-                    '',
-                  ]}
+                  formatter={value => {
+                    if (typeof value === 'number') {
+                      return `₹${value.toLocaleString()}`;
+                    }
+                    return value;
+                  }}
                 />
                 <Legend />
                 <Line
@@ -386,7 +374,12 @@ export const RevenueDashboard: React.FC = () => {
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(value: number) => `₹${value.toLocaleString()}`}
+                  formatter={value => {
+                    if (typeof value === 'number') {
+                      return `₹${value.toLocaleString()}`;
+                    }
+                    return value;
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -437,7 +430,12 @@ export const RevenueDashboard: React.FC = () => {
                   borderRadius: '12px',
                   boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                 }}
-                formatter={(value: number) => `₹${value.toLocaleString()}`}
+                formatter={value => {
+                  if (typeof value === 'number') {
+                    return `₹${value.toLocaleString()}`;
+                  }
+                  return value;
+                }}
               />
               <Legend />
               <Line
@@ -458,7 +456,7 @@ export const RevenueDashboard: React.FC = () => {
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-1">
-                  Recent Transactions
+                  Sales Report
                 </h3>
                 <p className="text-sm text-gray-500">
                   Latest revenue transactions
@@ -466,10 +464,10 @@ export const RevenueDashboard: React.FC = () => {
               </div>
               <button
                 onClick={handleDownloadReport}
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200"
+                className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-xl font-medium hover:bg-neutral-900 transition-colors shadow-lg"
               >
-                <Download className="w-4 h-4" />
-                Download Report
+                <FileText className="w-4 h-4" />
+                PDF
               </button>
             </div>
           </div>
