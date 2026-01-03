@@ -225,12 +225,14 @@ export const ChangePasswordPage = () => {
                   <Button
                     type="button"
                     variant="ghost"
+                    className="cursor-pointer"
                     onClick={() => form.reset()}
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
+                    className="cursor-pointer"
                     disabled={
                       !form.formState.isValid || form.formState.isSubmitting
                     }

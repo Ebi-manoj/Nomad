@@ -23,7 +23,14 @@ import {
   XCircle,
   IndianRupee,
   LogOut,
+  User,
+  LockKeyhole,
 } from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { getAdminDashboardOverview } from '@/api/adminDashboard';
 import type {
   DashboardOverviewDTO,
@@ -54,9 +61,7 @@ export const AdminDashboard = () => {
     try {
       await dispatch(logout()).unwrap();
       navigate('/auth/sign-in', { replace: true });
-    } catch (_) {
-      
-    }
+    } catch (_) {}
   };
 
   useEffect(() => {
@@ -109,14 +114,37 @@ export const AdminDashboard = () => {
               Monitor your platform's performance and key metrics
             </p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="inline-flex cursor-pointer border border-red-500 bg-white items-center gap-2 px-4 py-2 rounded-lg  text-gray-700 hover:text-gray-500 transition-colors"
-            aria-label="Logout"
-          >
-            <LogOut className="w-4 h-4" />
-            <span className="font-medium">Logout</span>
-          </button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className="inline-flex cursor-pointer items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
+                aria-label="User menu"
+              >
+                <User className="w-5 h-5 text-gray-700" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="end"
+              className="w-56 p-2 rounded-xl shadow-sm border border-gray-100"
+            >
+              <div className="flex flex-col">
+                <button
+                  className="cursor-pointer w-full text-left flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => navigate('/admin/change-password')}
+                >
+                  <LockKeyhole className="w-4 h-4" />
+                  <span>Change Password</span>
+                </button>
+                <button
+                  className="cursor-pointer w-full text-left flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 text-red-600 transition-colors"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Stats Grid */}
