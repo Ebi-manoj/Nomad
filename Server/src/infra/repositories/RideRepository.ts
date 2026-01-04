@@ -90,26 +90,43 @@ export class RideRepository
   async findAllRides(
     limit: number,
     skip: number,
-    status?: string
+    status?: string,
+    search?: string,
+    sort?: 'newest' | 'oldest'
   ): Promise<RideLog[]> {
     const query: RideQuery = {};
     if (status) {
       query.status = status;
     }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      (query as any).$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
+    }
 
+    const sortOrder = sort === 'oldest' ? 1 : -1;
     const rides = await this.model
       .find(query)
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: sortOrder });
 
     return rides.map(ride => this.mapper.toDomain(ride));
   }
 
-  async countRides(status?: string): Promise<number> {
+  async countRides(status?: string, search?: string): Promise<number> {
     const query: RideQuery = {};
     if (status) {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      (query as any).$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
 
     return this.model.countDocuments(query);

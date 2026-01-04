@@ -24,9 +24,11 @@ export interface IRideRepository extends IBaseRepository<RideLog> {
   findAllRides(
     limit: number,
     skip: number,
-    status?: string
+    status?: string,
+    search?: string,
+    sort?: 'newest' | 'oldest'
   ): Promise<RideLog[]>;
-  countRides(status?: string): Promise<number>;
+  countRides(status?: string, search?: string): Promise<number>;
   getRideMetrics(): Promise<{
     active: number;
     completed: number;

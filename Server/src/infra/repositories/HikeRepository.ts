@@ -72,24 +72,41 @@ export class HikeRepository
   async findAllHikes(
     limit: number,
     skip: number,
-    status?: string
+    status?: string,
+    search?: string,
+    sort?: 'newest' | 'oldest'
   ): Promise<HikeLog[]> {
     const query: HikeQuery = {};
     if (status) {
       query.status = status;
     }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
+    }
+    const sortOrder = sort === 'oldest' ? 1 : -1;
     const hikes = await this.model
       .find(query)
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: sortOrder });
 
     return hikes.map(h => this.mapper.toDomain(h));
   }
-  async countHikes(status?: string): Promise<number> {
+  async countHikes(status?: string, search?: string): Promise<number> {
     const query: HikeQuery = {};
     if (status) {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
     return await this.model.countDocuments(query);
   }

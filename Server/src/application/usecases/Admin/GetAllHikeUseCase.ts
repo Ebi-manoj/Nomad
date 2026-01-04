@@ -13,11 +13,22 @@ export class GetAllHikeUseCase implements IGetAllHikesUseCase {
     private readonly _hikeRepository: IHikeRepository,
     private readonly _userRepository: IUserRepository
   ) {}
-  async execute(page: number, status?: string): Promise<GetAllHikesResDTO> {
+  async execute(
+    page: number,
+    status?: string,
+    search?: string,
+    sort?: 'newest' | 'oldest'
+  ): Promise<GetAllHikesResDTO> {
     const LIMIT = 5;
     const skip = (page - 1) * LIMIT;
 
-    const hikes = await this._hikeRepository.findAllHikes(LIMIT, skip, status);
+    const hikes = await this._hikeRepository.findAllHikes(
+      LIMIT,
+      skip,
+      status,
+      search,
+      sort
+    );
     const result = await Promise.all(
       hikes.map(async h => {
         const user = await this._userRepository.findById(h.getUserId());
@@ -33,7 +44,7 @@ export class GetAllHikeUseCase implements IGetAllHikesUseCase {
     const response: adminHikeResponseDTO[] = result.filter(
       (r): r is adminHikeResponseDTO => r !== undefined
     );
-    const countHikes = await this._hikeRepository.countHikes(status);
+    const countHikes = await this._hikeRepository.countHikes(status, search);
     const hikeMetrics = await this._hikeRepository.getStatusCounts();
 
     return {

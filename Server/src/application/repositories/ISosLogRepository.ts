@@ -5,10 +5,11 @@ export interface ISosLogRepository extends IBaseRepository<SosLog> {
   findByBookingId(bookingId: string): Promise<SosLog | null>;
   findByRideId(rideId: string): Promise<SosLog | null>;
   findByRiderAndRideId(rideId: string, riderId: string): Promise<SosLog | null>;
-  findAll(
+  findAll(): Promise<SosLog[]>;
+  findAllFiltered(
     skip: number,
     limit: number,
-    filter?: { status?: string }
+    filter?: { status?: string; userIds?: string[]; sort?: 'newest' | 'oldest' }
   ): Promise<SosLog[]>;
-  countDocuments(filter?: { status?: string }): Promise<number>;
+  countDocumentsFiltered(filter?: { status?: string; userIds?: string[] }): Promise<number>;
 }

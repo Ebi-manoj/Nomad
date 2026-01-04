@@ -70,6 +70,8 @@ export interface SosLogResDTO {
 export interface GetSosLogsQuery {
   status?: string;
   page: number;
+  search?: string;
+  sort?: 'newest' | 'oldest';
 }
 
 export interface SosLogResWithUser extends SosLogResDTO {

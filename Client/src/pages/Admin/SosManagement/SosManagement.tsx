@@ -11,6 +11,15 @@ import { SosCard } from './SosCard';
 import { SosCardSkeleton } from '../../../components/skeletons/SosCardSkeleton';
 import { Pagination } from '@/components/Pagination';
 import { toast } from 'sonner';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useDebounce } from 'use-debounce';
 
 type FilterValue = 'ALL' | 'OPEN' | 'RESOLVED';
 
@@ -25,15 +34,24 @@ export const SOSManagement = () => {
 
   const [filter, setFilter] = useState<FilterValue>('ALL');
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 500);
+  const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
 
   useEffect(() => {
     dispatch(
       fetchAdminSosLogs({
         page,
         status: filter === 'ALL' ? undefined : filter,
+        search: debouncedSearch || undefined,
+        sort,
       })
     );
-  }, [dispatch, page, filter]);
+  }, [dispatch, page, filter, debouncedSearch, sort]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, sort]);
 
   const handleResolve = async (id: string) => {
     try {
@@ -67,8 +85,31 @@ export const SOSManagement = () => {
               </div>
             </div>
 
-            {/* Filter Buttons */}
-            <div className="flex items-center bg-white rounded-lg p-1 shadow-sm border border-slate-200">
+            {/* Search + Sort + Filter Buttons */}
+            <div className="flex items-center bg-white rounded-lg p-1 shadow-sm border border-slate-200 gap-2">
+              <Input
+                placeholder="Search by user name"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="w-64"
+              />
+              <Select
+                value={sort}
+                onValueChange={v => setSort(v as 'newest' | 'oldest')}
+              >
+                <SelectTrigger className="w-36 cursor-pointer">
+                  <SelectValue placeholder="Sort" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest" className="cursor-pointer">
+                    Newest
+                  </SelectItem>
+                  <SelectItem value="oldest" className="cursor-pointer">
+                    Oldest
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="w-px h-6 bg-slate-200" />
               {FILTERS.map(status => (
                 <button
                   key={status}
