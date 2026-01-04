@@ -8,13 +8,14 @@ export function setupRiderNameSpace(
   const riderNamespace = io.of('/rider');
 
   riderNamespace.on('connection', socket => {
-    console.log(`Socket connected${socket.id}`);
+    console.log(`Rider connected${socket.id}`);
 
     socket.on('location:update', data => {
       controller.handleLocationUpdate(socket.id, data);
     });
 
     socket.on('ride:join', (rideId: string) => {
+      console.log('haaai');
       socket.join(rideId);
       console.log(`Rider ${socket.id} joined ride room: ${rideId}`);
     });

@@ -55,11 +55,21 @@ export function RideStartedContent() {
   }, [rideData, dispatch]);
 
   useEffect(() => {
+    const onConnect = () => {
+      riderSocket.emit('ride:join', rideData.id);
+    };
+    riderSocket.on('connect', onConnect);
+
     if (!riderSocket.connected) {
       riderSocket.connect();
+    } else {
+      onConnect();
     }
-    riderSocket.emit('ride:join', rideData.id);
-  }, [rideData]);
+
+    return () => {
+      riderSocket.off('connect', onConnect);
+    };
+  }, [riderSocket, rideData.id]);
 
   useEffect(() => {
     riderSocket.on('join-request:new', (data: RideRequestDTO) => {

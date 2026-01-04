@@ -85,7 +85,7 @@ export function NotificationBell() {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+                className="cursor-pointer flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
                 disabled={loading}
               >
                 {loading ? (
@@ -166,7 +166,7 @@ export function NotificationBell() {
         {items.length > 0 && (
           <div className="px-4 py-2.5 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
             <button className="w-full text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-              View all notifications
+              All notifications
             </button>
           </div>
         )}

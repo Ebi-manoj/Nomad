@@ -78,10 +78,17 @@ export const HikeStartedPage = () => {
 
   useEffect(() => {
     if (!booking) return;
+    const onConnect = () => {
+      hikerSocket.emit('hike:join', booking.rideBooking.hikeId);
+    };
+
+    hikerSocket.on('connect', onConnect);
+
     if (!hikerSocket.connected) {
       hikerSocket.connect();
+    } else {
+      onConnect();
     }
-    hikerSocket.emit('hike:join', booking.rideBooking.hikeId);
 
     hikerSocket.on(
       'ride:deviated',
@@ -96,6 +103,7 @@ export const HikeStartedPage = () => {
     );
 
     return () => {
+      hikerSocket.off('connect', onConnect);
       hikerSocket.off('ride:deviated');
     };
   }, [booking, hikerSocket]);
