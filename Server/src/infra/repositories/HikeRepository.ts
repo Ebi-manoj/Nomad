@@ -28,11 +28,19 @@ export class HikeRepository
     limit: number,
     skip: number,
     userId: string,
-    status?: string
+    status?: string,
+    search?: string
   ): Promise<HikeLog[]> {
     const query: HikeQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
 
     const hikes = await this.model
@@ -42,10 +50,21 @@ export class HikeRepository
       .sort({ createdAt: -1 });
     return hikes.map(h => this.mapper.toDomain(h));
   }
-  async findCountUserHikes(userId: string, status?: string): Promise<number> {
+  async findCountUserHikes(
+    userId: string,
+    status?: string,
+    search?: string
+  ): Promise<number> {
     const query: HikeQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
     const hikesCount = await this.model.countDocuments(query);
     return hikesCount;

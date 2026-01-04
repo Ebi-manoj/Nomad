@@ -24,6 +24,7 @@ export interface GetRidesReqDTO {
   userId: string;
   page: number;
   status?: string;
+  search?: string;
 }
 
 export interface GetRidesResDTO {

@@ -45,11 +45,13 @@ export class RideController implements IRideController {
     const parsed = httpRequest.query as Record<string, unknown>;
     const page = Number(parsed.page) || 1;
     const status = parsed.status as string | undefined;
+    const search = parsed.search as string | undefined;
 
     const result = await this._getAllRidesUseCase.execute({
       userId,
       page,
       status,
+      search,
     });
 
     const response = ApiResponse.success(result);

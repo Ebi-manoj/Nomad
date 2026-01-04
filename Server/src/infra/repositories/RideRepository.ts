@@ -44,11 +44,19 @@ export class RideRepository
   async findUserRides(
     userId: string,
     skip: number,
-    status?: string
+    status?: string,
+    search?: string
   ): Promise<RideLog[]> {
     const query: RideQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ]
     }
 
     const rides = await this.model
@@ -59,10 +67,21 @@ export class RideRepository
     return rides.map(ride => this.mapper.toDomain(ride));
   }
 
-  async findCountUserRides(userId: string, status?: string): Promise<number> {
+  async findCountUserRides(
+    userId: string,
+    status?: string,
+    search?: string
+  ): Promise<number> {
     const query: RideQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      (query as any).$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
 
     return this.model.countDocuments(query);

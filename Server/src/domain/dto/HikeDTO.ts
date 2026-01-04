@@ -117,6 +117,7 @@ export interface GetHikesReqDTO {
   userId: string;
   page: number;
   status?: string;
+  search?: string;
 }
 export interface GetHikesResDTO {
   total: number;

@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { Pagination } from '@/components/Pagination';
 import { formatDate } from '@/utils/dateFormater';
 import { Calendar, Eye, MapPin, MoveRight } from 'lucide-react';
@@ -7,6 +8,7 @@ import { useEffect, useState } from 'react';
 import type { GetRidesResDTO } from '@/types/ride';
 import { getRides } from '@/api/ride';
 import { useNavigate } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
 
 type StatusFilter = 'all' | 'active' | 'completed' | 'cancelled';
 
@@ -17,18 +19,24 @@ export const RideLogs = () => {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<StatusFilter>('all');
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 500);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRides = async () => {
       setLoading(true);
       const statusParam = status === 'all' ? '' : status;
-      const data = await getRides(page, statusParam);
+      const data = await getRides(page, statusParam, debouncedSearch);
       if (data) setRideData(data);
       setLoading(false);
     };
     fetchRides();
-  }, [page, status]);
+  }, [page, status, debouncedSearch]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -69,8 +77,14 @@ export const RideLogs = () => {
             )}
           </div>
 
-          {/* Status Filter */}
-          <div className="flex gap-2">
+          {/* Status Filter + Search */}
+          <div className="flex gap-2 items-center">
+            <Input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search pickup or destination"
+              className="w-64"
+            />
             {(['all', 'active', 'completed'] as StatusFilter[]).map(s => (
               <Button
                 key={s}

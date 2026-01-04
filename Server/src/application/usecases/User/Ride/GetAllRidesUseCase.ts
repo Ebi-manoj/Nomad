@@ -12,17 +12,19 @@ export class GetAllRidesUseCase implements IGetAllRidesUseCase {
 
   async execute(data: GetRidesReqDTO): Promise<GetRidesResDTO> {
     const limit = 10;
-    const { page, userId, status } = data;
+    const { page, userId, status, search } = data;
     const skip = (page - 1) * limit;
 
     const rides = await this._rideRepository.findUserRides(
       userId,
       skip,
-      status
+      status,
+      search
     );
     const totalCount = await this._rideRepository.findCountUserRides(
       userId,
-      status
+      status,
+      search
     );
 
     const ridesData: RideResponseDTO[] = rides.map(ride => rideMapper(ride));

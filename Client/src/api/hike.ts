@@ -25,10 +25,10 @@ export const getHikeDetails = async (hikeId: string) => {
   return res.data.data;
 };
 
-export const getHikes = async (page = 1, status = '') => {
+export const getHikes = async (page = 1, status = '', search = '') => {
   try {
     const res = await axiosInstance.get<ApiResponse<GetHikesResDTO>>('/hike', {
-      params: { page, status },
+      params: { page, status, search },
     });
     return res.data.data;
   } catch (error) {

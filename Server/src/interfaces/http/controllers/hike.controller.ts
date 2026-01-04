@@ -65,11 +65,13 @@ export class HikeController implements IHikeController {
     const parsed = httpRequest.query as Record<string, unknown>;
     const page = Number(parsed.page) || 1;
     const status = parsed.status as string | undefined;
+    const search = parsed.search as string | undefined;
 
     const result = await this._getAllHikesUseCase.execute({
       userId,
       page,
       status,
+      search,
     });
 
     const response = ApiResponse.success(result);
