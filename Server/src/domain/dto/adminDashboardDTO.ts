@@ -4,13 +4,13 @@ export type DashboardRange = 'today' | 'monthly' | 'yearly';
 
 export interface StatSummaryDTO {
   total: number;
-  changePercent: number; // compared to previous period
+  changePercent: number;
   trend: 'up' | 'down';
   subtitle?: string;
 }
 
 export interface MonthlyTrendPointDTO {
-  label: string; // Month short name, day (DD), or hour (HH)
+  label: string;
   rides: number;
   hikes: number;
 }
@@ -24,25 +24,25 @@ export interface StatusBreakdownDTO {
 export interface TopPerformerDTO {
   id: string;
   name: string;
-  count: number; // rides for rider or hikes for hiker
+  count: number;
   rating: number;
-  amount: number; // earnings for rider or spent for hiker
+  amount: number;
 }
 
 export interface RecentSOSDTO {
   id: string;
   userName: string;
-  role: SosInitiator; // HIKER/RIDER
+  role: SosInitiator;
   location: { lat: number; lng: number } | null;
   status: 'active' | 'resolved';
-  createdAt: string; // ISO
+  createdAt: string;
 }
 
 export interface QuickStatsDTO {
-  completionRate: number; // percentage 0-100
-  avgRating: number; // 0-5
-  cancelRate: number; // percentage 0-100
-  platformRevenue: number; // in currency unit
+  completionRate: number;
+  avgRating: number;
+  cancelRate: number;
+  platformRevenue: number;
 }
 
 export interface DashboardOverviewDTO {

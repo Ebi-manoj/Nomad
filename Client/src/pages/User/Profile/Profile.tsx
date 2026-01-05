@@ -8,6 +8,8 @@ import {
   Bike,
   Lock,
   Upload,
+  Loader2,
+  Camera,
 } from 'lucide-react';
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { Field } from '@/components/ProfileInput';
@@ -141,14 +143,31 @@ export default function ProfilePage() {
             <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:items-start">
               <div className="flex items-center gap-4">
                 {user && (
-                  <UserAvatar
-                    fullName={user?.fullName}
-                    imageUrl={user?.profilePic ?? ''}
-                    subscriptionTier={tier}
-                    badgeColor={badgeColor}
-                    size="lg"
-                    showBadge
-                  />
+                  <div
+                    onClick={() => !uploading && fileInputRef.current?.click()}
+                    className="relative inline-block group cursor-pointer"
+                  >
+                    {uploading ? (
+                      <div className="cursor-pointer w-16 h-16 rounded-full border border-gray-700 bg-gray-100 flex items-center justify-center">
+                        <Loader2 className="animate-spin" />
+                      </div>
+                    ) : (
+                      <UserAvatar
+                        fullName={user?.fullName}
+                        imageUrl={user?.profilePic ?? ''}
+                        subscriptionTier={tier}
+                        badgeColor={badgeColor}
+                        size="lg"
+                        showBadge
+                      />
+                    )}
+                    <div
+                      className="absolute inset-0 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100
+                      transition-opacity"
+                    >
+                      <Camera className="w-5 h-5 opacity-70" />
+                    </div>
+                  </div>
                 )}
                 <div>
                   <p className="text-lg font-semibold leading-none">
@@ -222,17 +241,6 @@ export default function ProfilePage() {
                 onChange={handleImageSelected}
                 className="hidden"
               />
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                className="gap-2 cursor-pointer"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
-              >
-                <Upload className="size-4" />
-                {uploading ? 'Uploading...' : 'Change photo'}
-              </Button>
             </div>
             {editing ? (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
