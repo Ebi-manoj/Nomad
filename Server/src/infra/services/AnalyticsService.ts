@@ -13,6 +13,9 @@ import {
   TopPerformerDTO,
 } from '../../domain/dto/adminDashboardDTO';
 import { IAnalyticsService } from '../../application/services/IAnalyticsService';
+import { RideBookingStatus } from '../../domain/enums/RideBooking';
+import { RideStatus } from '../../domain/enums/Ride';
+import { ADMIN } from '../../domain/enums/Constants';
 
 function startOfDay(d: Date) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
@@ -79,11 +82,11 @@ export class AnalyticsService implements IAnalyticsService {
     const { start, end, prevStart, prevEnd } = getRangeDates(range);
     const [current, previous] = await Promise.all([
       UserModel.countDocuments({
-        role: { $ne: 'admin' },
+        role: { $ne: ADMIN },
         createdAt: { $gte: start, $lte: end },
       }),
       UserModel.countDocuments({
-        role: { $ne: 'admin' },
+        role: { $ne: ADMIN },
         createdAt: { $gte: prevStart, $lte: prevEnd },
       }),
     ]);
@@ -218,8 +221,8 @@ export class AnalyticsService implements IAnalyticsService {
     const res: StatusBreakdownDTO = { active: 0, cancelled: 0, completed: 0 };
     for (const r of agg) {
       if (r._id === 'active') res.active = r.count;
-      else if (r._id === 'completed') res.completed = r.count;
-      else if (r._id === 'cancelled') res.cancelled = r.count;
+      else if (r._id === RideStatus.COMPLETED) res.completed = r.count;
+      else if (r._id === RideStatus.CANCELLED) res.cancelled = r.count;
     }
     return res;
   }
@@ -231,7 +234,10 @@ export class AnalyticsService implements IAnalyticsService {
 
     const ridersAgg = await RideLogModel.aggregate([
       {
-        $match: { createdAt: { $gte: start, $lte: end }, status: 'completed' },
+        $match: {
+          createdAt: { $gte: start, $lte: end },
+          status: RideStatus.COMPLETED,
+        },
       },
       {
         $group: {
@@ -264,7 +270,10 @@ export class AnalyticsService implements IAnalyticsService {
 
     const hikersAgg = await RideBookingModel.aggregate([
       {
-        $match: { createdAt: { $gte: start, $lte: end }, status: 'COMPLETED' },
+        $match: {
+          createdAt: { $gte: start, $lte: end },
+          status: RideBookingStatus.COMPLETED,
+        },
       },
       {
         $group: {
@@ -311,14 +320,16 @@ export class AnalyticsService implements IAnalyticsService {
       avgRatingAgg,
       revenueAgg,
     ] = await Promise.all([
-      RideLogModel.countDocuments({ createdAt: { $gte: start, $lte: end } }),
-      RideLogModel.countDocuments({
+      RideBookingModel.countDocuments({
         createdAt: { $gte: start, $lte: end },
-        status: 'completed',
       }),
-      RideLogModel.countDocuments({
+      RideBookingModel.countDocuments({
         createdAt: { $gte: start, $lte: end },
-        status: 'cancelled',
+        status: RideBookingStatus.COMPLETED,
+      }),
+      RideBookingModel.countDocuments({
+        createdAt: { $gte: start, $lte: end },
+        status: RideBookingStatus.CANCELLED,
       }),
       ReviewModel.aggregate([
         { $match: { createdAt: { $gte: start, $lte: end } } },

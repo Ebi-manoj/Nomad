@@ -223,7 +223,7 @@ export const AdminDashboard = () => {
               <div className="flex gap-2">
                 <button
                   onClick={() => setRange('today')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     range === 'today'
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -233,7 +233,7 @@ export const AdminDashboard = () => {
                 </button>
                 <button
                   onClick={() => setRange('monthly')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     range === 'monthly'
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -243,7 +243,7 @@ export const AdminDashboard = () => {
                 </button>
                 <button
                   onClick={() => setRange('yearly')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     range === 'yearly'
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -344,7 +344,10 @@ export const AdminDashboard = () => {
               <h3 className="text-lg font-semibold text-gray-900">
                 Top Riders
               </h3>
-              <span className="text-sm text-blue-600 hover:underline cursor-pointer font-medium">
+              <span
+                className="text-sm text-blue-600 hover:underline cursor-pointer font-medium"
+                onClick={() => navigate('/admin/rides', { replace: true })}
+              >
                 View all
               </span>
             </div>
@@ -393,7 +396,10 @@ export const AdminDashboard = () => {
               <h3 className="text-lg font-semibold text-gray-900">
                 Top Hikers
               </h3>
-              <span className="text-sm text-blue-600 hover:underline cursor-pointer font-medium">
+              <span
+                className="text-sm text-blue-600 hover:underline cursor-pointer font-medium"
+                onClick={() => navigate('/admin/hikes', { replace: true })}
+              >
                 View all
               </span>
             </div>
@@ -492,7 +498,10 @@ export const AdminDashboard = () => {
                 </div>
               ))}
             </div>
-            <button className="w-full mt-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+            <button
+              className="w-full mt-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              onClick={() => navigate('/admin/sos-logs', { replace: true })}
+            >
               View All Alerts
             </button>
           </div>
