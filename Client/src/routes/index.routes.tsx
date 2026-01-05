@@ -3,6 +3,7 @@ import { AuthRoutes } from './Auth.routes';
 import { UserRoutes } from './User.routes';
 import { Landing } from '@/pages/Landing';
 import { AdminRoutes } from './Admin.routes';
+import { NotFound } from '@/pages/NotFound';
 
 export function AppRouter() {
   return (
@@ -11,6 +12,7 @@ export function AppRouter() {
       {AuthRoutes}
       {UserRoutes}
       {AdminRoutes}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
