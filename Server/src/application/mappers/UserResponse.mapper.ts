@@ -7,6 +7,7 @@ export function userMapper(user: User): UserResponseDTO {
     fullName: user.getFullName(),
     email: user.getEmail(),
     mobile: user.getMobile() || undefined,
+    profilePic: user.getProfilePic(),
     role: user.getRole(),
     rating: user.getRating(),
     safetyScore: user.getSafetyScore(),

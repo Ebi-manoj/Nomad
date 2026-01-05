@@ -181,7 +181,6 @@ export const VerificationModal = ({
   if (!type) return null;
 
   async function onSubmit(data: docSchemaType) {
-    console.log(data);
     const file = data.file?.[0];
     if (!file) return;
     const fileName = file.name;

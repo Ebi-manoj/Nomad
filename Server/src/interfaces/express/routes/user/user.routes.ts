@@ -40,6 +40,17 @@ router.patch(
   }
 );
 
+router.patch(
+  '/profile/image',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      profileComposer().updateProfileImage(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 router.get('/sos', authMiddleware, async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpReq =>
     sosComposer().getContacts(httpReq)

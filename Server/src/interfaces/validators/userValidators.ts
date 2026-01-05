@@ -9,6 +9,10 @@ export const changePasswordSchema = z.object({
     .min(6, { message: 'Password must be at least 6 characters long' }),
 });
 
+export const updateProfileImageSchema = z.object({
+  fileURL: z.string().url({ message: 'fileURL must be a valid URL' }),
+});
+
 export const updateProfileSchema = z.object({
   fullName: z
     .string()

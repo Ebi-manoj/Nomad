@@ -1,6 +1,14 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Mail, Phone, User2, BadgeCheck, Bike, Lock } from 'lucide-react';
+import {
+  Mail,
+  Phone,
+  User2,
+  BadgeCheck,
+  Bike,
+  Lock,
+  Upload,
+} from 'lucide-react';
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { Field } from '@/components/ProfileInput';
 import { VerificationSection } from '@/pages/User/Profile/VerificationFields';
@@ -8,8 +16,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { UserAvatar } from '@/components/ProfilePic';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { fetchUserProfile, updateUserProfile } from '@/api/profile';
+import { useEffect, useRef, useState } from 'react';
+import {
+  fetchUserProfile,
+  updateUserProfile,
+  getProfileUploadPresignedUrl,
+  updateUserProfileImage,
+} from '@/api/profile';
 import { setUser } from '@/store/features/auth/authSlice';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,6 +31,9 @@ import {
   type UpdateProfileFormValues,
 } from '@/validation/profile';
 import { toast } from 'sonner';
+import axios from 'axios';
+import { profileImageSchema } from '@/validation/profileImage';
+import { useHandleApiError } from '@/hooks/useHandleApiError';
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
@@ -29,6 +45,8 @@ export default function ProfilePage() {
   const [rideCount, setRideCount] = useState(0);
   const [hikeCount, setHikeCount] = useState(0);
   const [editing, setEditing] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const {
     register,
@@ -72,6 +90,31 @@ export default function ProfilePage() {
     }
   }
 
+  async function handleImageSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    try {
+      const files = e.target.files;
+      profileImageSchema.parse({ file: files });
+      if (!files) return;
+      const file = files[0];
+      setUploading(true);
+      const { uploadURL, fileURL } = await getProfileUploadPresignedUrl(
+        file.name,
+        file.type
+      );
+      await axios.put(uploadURL, file, {
+        headers: { 'Content-Type': file.type },
+      });
+      const res = await updateUserProfileImage(fileURL);
+      dispatch(setUser(res.user));
+      toast.success('Profile photo updated');
+    } catch (err) {
+      useHandleApiError(err);
+    } finally {
+      setUploading(false);
+      if (e.target) e.target.value = '';
+    }
+  }
+
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 md:py-14">
       <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -100,7 +143,7 @@ export default function ProfilePage() {
                 {user && (
                   <UserAvatar
                     fullName={user?.fullName}
-                    imageUrl={''}
+                    imageUrl={user?.profilePic ?? ''}
                     subscriptionTier={tier}
                     badgeColor={badgeColor}
                     size="lg"
@@ -171,6 +214,26 @@ export default function ProfilePage() {
           </CardHeader>
 
           <CardContent className="pt-6">
+            <div className="mb-4 flex items-center gap-3">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageSelected}
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                className="gap-2 cursor-pointer"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+              >
+                <Upload className="size-4" />
+                {uploading ? 'Uploading...' : 'Change photo'}
+              </Button>
+            </div>
             {editing ? (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">

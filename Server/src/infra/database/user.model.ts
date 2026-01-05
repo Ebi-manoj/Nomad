@@ -5,6 +5,7 @@ export interface IUserModel {
   fullName: string;
   email: string;
   mobile?: string;
+  profilePic?: string;
   password?: string;
   role: string;
   aadhaarVerified: boolean;
@@ -30,6 +31,10 @@ const userSchema = new Schema<IUserModel>(
       required: true,
     },
     mobile: {
+      type: String,
+      default: null,
+    },
+    profilePic: {
       type: String,
       default: null,
     },

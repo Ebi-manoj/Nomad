@@ -6,6 +6,7 @@ export interface UserProps {
   fullName: string;
   email: Email;
   mobile?: Mobile;
+  profilePic?: string;
   password?: string;
   role: string;
   isBlocked: boolean;
@@ -25,6 +26,7 @@ export class User {
   private _fullName: string;
   private _email: Email;
   private _mobile: Mobile | null;
+  private _profilePic?: string | null;
   private _password: string | null;
   private _role: string;
   private _isBlocked: boolean;
@@ -43,6 +45,7 @@ export class User {
     this._fullName = props.fullName;
     this._email = props.email;
     this._mobile = props.mobile || null;
+    this._profilePic = props.profilePic || null;
     this._password = props.password || null;
     this._role = props.role;
     this._isBlocked = props.isBlocked || false;
@@ -70,6 +73,9 @@ export class User {
 
   getMobile() {
     return this._mobile && this._mobile.getValue();
+  }
+  getProfilePic() {
+    return this._profilePic || undefined;
   }
   getPassword() {
     return this._password;
@@ -143,6 +149,10 @@ export class User {
   }
   setMobile(mobile: string) {
     this._mobile = mobile ? new Mobile(mobile) : null;
+    this._updatedAt = new Date();
+  }
+  setProfilePic(url: string | null) {
+    this._profilePic = url || null;
     this._updatedAt = new Date();
   }
 }
