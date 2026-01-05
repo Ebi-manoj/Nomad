@@ -19,10 +19,12 @@ import {
   Car,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Landing = () => {
   const [activeSection, setActiveSection] = useState('');
   const [roleTab, setRoleTab] = useState<'rider' | 'hiker'>('rider');
+  const navigate = useNavigate();
 
   // Smooth scroll handler
   const handleNavClick = (
@@ -168,7 +170,10 @@ export const Landing = () => {
                   <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black"></span>
                 )}
               </a>
-              <button className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all hover:scale-105 cursor-pointer font-medium shadow-md">
+              <button
+                className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all hover:scale-105 cursor-pointer font-medium shadow-md"
+                onClick={() => navigate('/hike')}
+              >
                 Get Started
               </button>
             </div>
@@ -228,7 +233,10 @@ export const Landing = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="group px-8 py-4 bg-black text-white rounded-xl font-bold text-lg hover:bg-gray-800 transition-all hover:scale-105 cursor-pointer shadow-lg flex items-center justify-center gap-2">
+                <button
+                  className="group px-8 py-4 bg-black text-white rounded-xl font-bold text-lg hover:bg-gray-800 transition-all hover:scale-105 cursor-pointer shadow-lg flex items-center justify-center gap-2"
+                  onClick={() => navigate('/hike')}
+                >
                   Start Your Journey
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
@@ -564,7 +572,10 @@ export const Landing = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="group px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:bg-gray-100 transition-all hover:scale-105 cursor-pointer shadow-lg flex items-center justify-center gap-2">
+            <button
+              className="group px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:bg-gray-100 transition-all hover:scale-105 cursor-pointer shadow-lg flex items-center justify-center gap-2"
+              onClick={() => navigate('/hike')}
+            >
               Start Riding Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
