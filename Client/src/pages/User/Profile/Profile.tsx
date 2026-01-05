@@ -4,37 +4,34 @@ import { Mail, Phone, User2, BadgeCheck, Bike, Lock } from 'lucide-react';
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { Field } from '@/components/ProfileInput';
 import { VerificationSection } from '@/pages/User/Profile/VerificationFields';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { UserAvatar } from '@/components/ProfilePic';
 import { Link } from 'react-router-dom';
-
-type Profile = {
-  name: string;
-  email: string;
-  phone: string;
-  memberSince: string;
-  safetyScore: number;
-  ridesCompleted: number;
-  hoursCompleted: number;
-};
-
-const profile: Profile = {
-  name: 'Cristiano',
-  email: 'bimonaaj28@gmail.com',
-  phone: '9993314473',
-  memberSince: '2023',
-  safetyScore: 86,
-  ridesCompleted: 30,
-  hoursCompleted: 70,
-};
+import { useEffect, useState } from 'react';
+import { fetchUserProfile } from '@/api/profile';
+import { setUser } from '@/store/features/auth/authSlice';
 
 export default function ProfilePage() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const data = useSelector((state: RootState) => state.subscription.data);
   const tier = data?.tier ?? 'FREE';
   const badgeColor = data?.subscription?.badgeColor ?? '#6b7280';
   const safetyScore = user?.safetyScore ?? 0;
+  const [rideCount, setRideCount] = useState(0);
+  const [hikeCount, setHikeCount] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetchUserProfile();
+        dispatch(setUser(res.user));
+        setRideCount(res.totalRides);
+        setHikeCount(res.totalHikes);
+      } catch {}
+    })();
+  }, [dispatch]);
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 md:py-14">
@@ -93,9 +90,7 @@ export default function ProfilePage() {
               <div className="w-full max-w-sm md:w-[360px]">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Safe Riding</span>
-                  <span className="text-sm font-semibold">
-                    {safetyScore}%
-                  </span>
+                  <span className="text-sm font-semibold">{safetyScore}%</span>
                 </div>
                 <div className="mt-2 h-2 w-full rounded-full bg-muted">
                   <div
@@ -116,7 +111,7 @@ export default function ProfilePage() {
                     />
                     <span>
                       <span className="font-semibold text-foreground">
-                        {profile.ridesCompleted}
+                        {rideCount || 0}
                       </span>{' '}
                       rides
                     </span>
@@ -126,7 +121,7 @@ export default function ProfilePage() {
 
                     <span>
                       <span className="font-semibold text-foreground">
-                        {profile.hoursCompleted}
+                        {hikeCount || 0}
                       </span>{' '}
                       hikes
                     </span>

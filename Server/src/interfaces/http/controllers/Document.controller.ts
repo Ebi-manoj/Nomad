@@ -29,7 +29,6 @@ export class DocumentController implements IDocumentController {
   async findUserDocuments(httpRequest: HttpRequest): Promise<HttpResponse> {
     const dto = httpRequest.user?.id;
     if (!dto) throw new Unauthorized();
-    console.log(dto);
     const result = await this._fetchUserDocsUseCase.execute(dto);
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);

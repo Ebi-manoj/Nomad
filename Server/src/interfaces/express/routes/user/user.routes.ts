@@ -7,6 +7,7 @@ import { sosComposer } from '../../../../infra/services/composer/user/sos.compos
 import { walletComposer } from '../../../../infra/services/composer/user/wallet.composer';
 import { bankAccountComposer } from '../../../../infra/services/composer/user/bankAccount.composer';
 import { notificationComposer } from '../../../../infra/services/composer/user/notification.composer';
+import { profileComposer } from '../../../../infra/services/composer/user/profile.composer';
 
 const router = express.Router();
 
@@ -20,6 +21,13 @@ router.get(
     return res.status(adapter.statusCode).json(adapter.body);
   }
 );
+
+router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
+  const adapter = await expressAdapter(req, httpReq =>
+    profileComposer().getProfile(httpReq)
+  );
+  return res.status(adapter.statusCode).json(adapter.body);
+});
 
 router.get('/sos', authMiddleware, async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpReq =>
