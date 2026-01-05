@@ -137,4 +137,12 @@ export class User {
     this._safetyScore = Number((total / this._safetyScoreCount).toFixed(1));
     this._updatedAt = new Date();
   }
+  setFullName(name: string) {
+    this._fullName = name;
+    this._updatedAt = new Date();
+  }
+  setMobile(mobile: string) {
+    this._mobile = mobile ? new Mobile(mobile) : null;
+    this._updatedAt = new Date();
+  }
 }

@@ -9,8 +9,15 @@ import type { RootState } from '@/store/store';
 import { UserAvatar } from '@/components/ProfilePic';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { fetchUserProfile } from '@/api/profile';
+import { fetchUserProfile, updateUserProfile } from '@/api/profile';
 import { setUser } from '@/store/features/auth/authSlice';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  updateProfileSchema,
+  type UpdateProfileFormValues,
+} from '@/validation/profile';
+import { toast } from 'sonner';
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
@@ -21,6 +28,20 @@ export default function ProfilePage() {
   const safetyScore = user?.safetyScore ?? 0;
   const [rideCount, setRideCount] = useState(0);
   const [hikeCount, setHikeCount] = useState(0);
+  const [editing, setEditing] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<UpdateProfileFormValues>({
+    resolver: zodResolver(updateProfileSchema),
+    defaultValues: {
+      fullName: user?.fullName ?? '',
+      mobile: user?.mobile ?? '',
+    },
+  });
 
   useEffect(() => {
     (async () => {
@@ -32,6 +53,24 @@ export default function ProfilePage() {
       } catch {}
     })();
   }, [dispatch]);
+
+  useEffect(() => {
+    reset({ fullName: user?.fullName ?? '', mobile: user?.mobile ?? '' });
+  }, [user, reset]);
+
+  async function onSubmit(values: UpdateProfileFormValues) {
+    try {
+      const res = await updateUserProfile({
+        fullName: values.fullName,
+        mobile: values.mobile === '' ? undefined : values.mobile,
+      });
+      dispatch(setUser(res.user));
+      toast.success('Profile updated successfully');
+      setEditing(false);
+    } catch (e) {
+      toast.error('Failed to update profile');
+    }
+  }
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 md:py-14">
@@ -132,30 +171,104 @@ export default function ProfilePage() {
           </CardHeader>
 
           <CardContent className="pt-6">
-            <div className="grid gap-4 md:grid-cols-2">
-              <Field
-                icon={<User2 className="size-4" aria-hidden="true" />}
-                label="Full name"
-                value={user?.fullName ?? ''}
-              />
-              <div />
-              <Field
-                icon={<Mail className="size-4" aria-hidden="true" />}
-                label="Email"
-                value={user?.email ?? ''}
-              />
-              <Field
-                icon={<Phone className="size-4" aria-hidden="true" />}
-                label="Mobile"
-                value={user?.mobile ?? 'nill'}
-              />
-            </div>
+            {editing ? (
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      <User2 className="size-4" aria-hidden="true" /> Full name
+                    </span>
+                    <input
+                      type="text"
+                      className="w-full rounded-md border border-black px-3 py-2 font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-black"
+                      {...register('fullName')}
+                    />
+                    {errors.fullName && (
+                      <p className="mt-1 text-xs text-red-600">
+                        {errors.fullName.message?.toString()}
+                      </p>
+                    )}
+                  </label>
+                  <div />
+                  <Field
+                    icon={<Mail className="size-4" aria-hidden="true" />}
+                    label="Email"
+                    value={user?.email ?? ''}
+                  />
+                  <label className="block">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      <Phone className="size-4" aria-hidden="true" /> Mobile
+                    </span>
+                    <input
+                      type="text"
+                      className="w-full rounded-md border border-black px-3 py-2 font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-black"
+                      placeholder="Enter 10-digit mobile number"
+                      {...register('mobile')}
+                    />
+                    {errors.mobile && (
+                      <p className="mt-1 text-xs text-red-600">
+                        {errors.mobile.message?.toString()}
+                      </p>
+                    )}
+                  </label>
+                </div>
+                <div className="mt-6 flex items-center gap-3">
+                  <Button
+                    type="submit"
+                    className="px-5 cursor-pointer"
+                    variant="default"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Updating...' : 'Update profile'}
+                  </Button>
+                  <Button
+                    type="button"
+                    className="px-5 cursor-pointer"
+                    variant="outline"
+                    onClick={() => {
+                      reset({
+                        fullName: user?.fullName ?? '',
+                        mobile: user?.mobile ?? '',
+                      });
+                      setEditing(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field
+                    icon={<User2 className="size-4" aria-hidden="true" />}
+                    label="Full name"
+                    value={user?.fullName ?? ''}
+                  />
+                  <div />
+                  <Field
+                    icon={<Mail className="size-4" aria-hidden="true" />}
+                    label="Email"
+                    value={user?.email ?? ''}
+                  />
+                  <Field
+                    icon={<Phone className="size-4" aria-hidden="true" />}
+                    label="Mobile"
+                    value={user?.mobile ?? 'nill'}
+                  />
+                </div>
 
-            <div className="mt-6 flex justify-center md:justify-start">
-              <Button className="px-5 cursor-pointer" variant="default">
-                Edit profile
-              </Button>
-            </div>
+                <div className="mt-6 flex justify-center md:justify-start">
+                  <Button
+                    className="px-5 cursor-pointer"
+                    variant="default"
+                    onClick={() => setEditing(true)}
+                  >
+                    Edit profile
+                  </Button>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </section>

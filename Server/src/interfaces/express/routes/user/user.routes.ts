@@ -29,6 +29,17 @@ router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
   return res.status(adapter.statusCode).json(adapter.body);
 });
 
+router.patch(
+  '/profile',
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    const adapter = await expressAdapter(req, httpReq =>
+      profileComposer().updateProfile(httpReq)
+    );
+    return res.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 router.get('/sos', authMiddleware, async (req: Request, res: Response) => {
   const adapter = await expressAdapter(req, httpReq =>
     sosComposer().getContacts(httpReq)
