@@ -51,7 +51,26 @@ export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
     );
   }, [pickup, destination]);
 
-  // Simulate movement
+  // Real-time geolocation updates
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    const watchId = navigator.geolocation.watchPosition(
+      pos => {
+        setCurrentPosition({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      },
+      err => console.error(err),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000 }
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
+
+  /*
+  // Simulate movement 
   useEffect(() => {
     if (!directions) return;
     const routePath = directions.routes[0].overview_path;
@@ -66,6 +85,7 @@ export const RideMap = ({ pickup, destination, rideId }: RideMapProps) => {
 
     return () => clearInterval(simulator);
   }, [directions]);
+  */
 
   //  location to backend
   useEffect(() => {
