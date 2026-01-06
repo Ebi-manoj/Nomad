@@ -16,9 +16,13 @@ export class PresignedUrlService implements IPresignedUrlService {
   async getUploadUrl(
     data: presignedURLRequestDTO
   ): Promise<presignURLResponseDTO> {
+    if (!IMAGE_FOLDERS.includes(data.type)) throw new InvalidFolderType();
+    // Restrict profiles folder strictly to images
+    if (data.type === 'profiles' && !data.fileType.startsWith('image/')) {
+      throw new InvalidFileFormat();
+    }
     if (!allowedMimeTypes.includes(data.fileType))
       throw new InvalidFileFormat();
-    if (!IMAGE_FOLDERS.includes(data.type)) throw new InvalidFolderType();
     const urls = this._fileUploader.getPresignedURL(data);
     return urls;
   }

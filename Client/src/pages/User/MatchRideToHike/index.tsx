@@ -38,10 +38,18 @@ export function RideMatching() {
 
   const { hikerSocket } = useSocket();
   useEffect(() => {
+    const onConnect = () => {
+      hikerSocket.emit('hike:join', hikeData.id);
+    };
+
+    // register first to avoid race
+    hikerSocket.on('connect', onConnect);
+
     if (!hikerSocket.connected) {
       hikerSocket.connect();
+    } else {
+      onConnect();
     }
-    hikerSocket.emit('hike:join', hikeData.id);
 
     hikerSocket.on('joinRequest:accepted', (data: AcceptJoinResponseDTO) => {
       console.log('Join accepted', data);
@@ -62,11 +70,11 @@ export function RideMatching() {
       });
     });
     return () => {
-      hikerSocket.off('join-request:accepted');
-      hikerSocket.off('join-request:declined');
-      hikerSocket.disconnect();
+      hikerSocket.off('connect', onConnect);
+      hikerSocket.off('joinRequest:accepted');
+      hikerSocket.off('joinRequest:declined');
     };
-  }, [hikeData, hikerSocket]);
+  }, [hikeData.id, hikerSocket, navigate]);
 
   const fetchRides = async () => {
     if (!hikeData?.id) return;

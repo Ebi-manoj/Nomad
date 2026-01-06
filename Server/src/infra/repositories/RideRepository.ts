@@ -4,6 +4,9 @@ import { RideNotFound } from '../../domain/errors/RideErrors';
 import { IRideLog, RideLogModel } from '../database/ridelog.mode';
 import { rideMapper } from '../mappers/rideDomainMapper';
 import { MongoBaseRepository } from './BaseRepository';
+import { FilterQuery } from 'mongoose';
+
+type RideQuery = FilterQuery<IRideLog>;
 
 export class RideRepository
   extends MongoBaseRepository<RideLog, IRideLog>
@@ -41,11 +44,19 @@ export class RideRepository
   async findUserRides(
     userId: string,
     skip: number,
-    status?: string
+    status?: string,
+    search?: string
   ): Promise<RideLog[]> {
-    const query: any = { userId };
+    const query: RideQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ]
     }
 
     const rides = await this.model
@@ -56,10 +67,21 @@ export class RideRepository
     return rides.map(ride => this.mapper.toDomain(ride));
   }
 
-  async findCountUserRides(userId: string, status?: string): Promise<number> {
-    const query: any = { userId };
+  async findCountUserRides(
+    userId: string,
+    status?: string,
+    search?: string
+  ): Promise<number> {
+    const query: RideQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      (query as any).$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
 
     return this.model.countDocuments(query);
@@ -68,26 +90,43 @@ export class RideRepository
   async findAllRides(
     limit: number,
     skip: number,
-    status?: string
+    status?: string,
+    search?: string,
+    sort?: 'newest' | 'oldest'
   ): Promise<RideLog[]> {
-    const query: any = {};
+    const query: RideQuery = {};
     if (status) {
       query.status = status;
     }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      (query as any).$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
+    }
 
+    const sortOrder = sort === 'oldest' ? 1 : -1;
     const rides = await this.model
       .find(query)
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: sortOrder });
 
     return rides.map(ride => this.mapper.toDomain(ride));
   }
 
-  async countRides(status?: string): Promise<number> {
-    const query: any = {};
+  async countRides(status?: string, search?: string): Promise<number> {
+    const query: RideQuery = {};
     if (status) {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      (query as any).$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
 
     return this.model.countDocuments(query);

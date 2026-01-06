@@ -1,5 +1,5 @@
-import type { AuthState } from '@/types/auth';
-import { createSlice } from '@reduxjs/toolkit';
+import type { AuthState, User } from '@/types/auth';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { googleSignup, login, logout, refreshToken } from './auth.thunks';
 
 const initialState: AuthState = {
@@ -11,7 +11,11 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setUser(state, action: PayloadAction<User | null>) {
+      state.user = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, action) => {
       state.token = action.payload.accessToken;
@@ -48,5 +52,5 @@ const authSlice = createSlice({
     });
   },
 });
-
+export const { setUser } = authSlice.actions;
 export default authSlice.reducer;

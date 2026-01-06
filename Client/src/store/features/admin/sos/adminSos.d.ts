@@ -27,4 +27,6 @@ export interface AdminSosState {
 export interface FetchAdminSosQuery {
   page: number;
   status?: string;
+  search?: string;
+  sort?: 'newest' | 'oldest';
 }

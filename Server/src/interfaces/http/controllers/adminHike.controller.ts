@@ -1,6 +1,5 @@
 import { IAdminGetHikeDetailsUseCase } from '../../../application/usecases/Admin/IAdminHikeDetailsUseCase';
 import { IGetAllHikesUseCase } from '../../../application/usecases/Admin/IGetAllHikeUseCase';
-import { GetAllHikesResDTO } from '../../../domain/dto/adminHikesDTO';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { ApiResponse } from '../helpers/implementation/apiResponse';
 import { HttpRequest } from '../helpers/implementation/httpRequest';
@@ -17,8 +16,15 @@ export class AdminHikeController implements IAdminHikeController {
 
     const page = Number(query.page) || 1;
     const status = (query.status as string) || undefined;
+    const search = (query.search as string) || undefined;
+    const sort = (query.sort as 'newest' | 'oldest') || undefined;
 
-    const result = await this._getAllHikeUseCase.execute(page, status);
+    const result = await this._getAllHikeUseCase.execute(
+      page,
+      status,
+      search,
+      sort
+    );
     const response = ApiResponse.success(result);
     return new HttpResponse(HttpStatus.OK, response);
   }

@@ -8,12 +8,17 @@ import axiosInstance from '@/utils/axiosInstance';
 
 export const FETCH_ADMIN_RIDES_API = '/admin/ride';
 
-export const getAdminRides = async (page = 1, status = '') => {
+export const getAdminRides = async (
+  page = 1,
+  status = '',
+  search = '',
+  sort: 'newest' | 'oldest' = 'newest'
+) => {
   try {
     const res = await axiosInstance.get<ApiResponse<GetAdminRidesResDTO>>(
       FETCH_ADMIN_RIDES_API,
       {
-        params: { page, status },
+        params: { page, status, search, sort },
       }
     );
     return res.data.data;

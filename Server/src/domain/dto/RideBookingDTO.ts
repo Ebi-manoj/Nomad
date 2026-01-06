@@ -1,6 +1,5 @@
 import { Position } from 'geojson';
 import { RideBookingStatus } from '../enums/RideBooking';
-import { SubscriptionTier } from '../enums/subscription';
 
 export interface BookingResponseDTO {
   bookingId: string;

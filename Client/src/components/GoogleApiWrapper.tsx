@@ -8,6 +8,7 @@ export const GoogleApiWrapper = ({ children }: { children: ReactElement }) => {
     <LoadScriptNext
       googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
       libraries={libraries}
+      loadingElement={<></>}
     >
       <>{children}</>
     </LoadScriptNext>

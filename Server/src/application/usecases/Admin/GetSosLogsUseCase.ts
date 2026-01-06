@@ -19,11 +19,25 @@ export class GetSosLogsUseCase implements IGetSosLogsUseCase {
     const limit = 5;
     const skip = (query.page - 1) * limit;
 
-    const logs = await this._sosLogRepository.findAll(skip, limit, {
+    let userIds: string[] | undefined = undefined;
+    if (query.search && query.search.trim()) {
+      const users = await this._userRepository.fetchUsers(100, 0, query.search);
+      userIds = users
+        .map(u => u.getId())
+        .filter((id): id is string => typeof id === 'string');
+      if (userIds.length === 0) {
+        return { logs: [], totalCount: 0 };
+      }
+    }
+
+    const logs = await this._sosLogRepository.findAllFiltered(skip, limit, {
       status: query.status,
+      userIds,
+      sort: query.sort,
     });
-    const totalCount = await this._sosLogRepository.countDocuments({
-      status: query.status,
+    const totalCount = await this._sosLogRepository.countDocumentsFiltered({
+      status: query.status ,
+      userIds,
     });
 
     const result = await Promise.all(

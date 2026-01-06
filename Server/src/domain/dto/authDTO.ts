@@ -13,6 +13,7 @@ export interface UserResponseDTO {
   fullName: string;
   email: string;
   mobile: string | undefined;
+  profilePic?: string;
   role: string;
   isBlocked: boolean;
   rating: number;

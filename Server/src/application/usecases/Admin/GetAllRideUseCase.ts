@@ -14,12 +14,23 @@ export class GetAllRideUseCase implements IGetAllRideUseCase {
     private readonly _userRepository: IUserRepository
   ) {}
 
-  async execute(page: number, status?: string): Promise<GetAdminRidesResDTO> {
+  async execute(
+    page: number,
+    status?: string,
+    search?: string,
+    sort?: 'newest' | 'oldest'
+  ): Promise<GetAdminRidesResDTO> {
     const LIMIT = 5;
     const skip = (page - 1) * LIMIT;
 
-    const rides = await this._rideRepository.findAllRides(LIMIT, skip, status);
-    const total = await this._rideRepository.countRides(status);
+    const rides = await this._rideRepository.findAllRides(
+      LIMIT,
+      skip,
+      status,
+      search,
+      sort
+    );
+    const total = await this._rideRepository.countRides(status, search);
 
     const result = await Promise.all(
       rides.map(async r => {

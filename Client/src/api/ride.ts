@@ -81,10 +81,10 @@ export async function endRide(rideId: string) {
   return res.data.data;
 }
 
-export async function getRides(page = 1, status = '') {
+export async function getRides(page = 1, status = '', search = '') {
   try {
     const res = await axiosInstance.get<ApiResponse<GetRidesResDTO>>('/ride', {
-      params: { page, status },
+      params: { page, status, search },
     });
     return res.data.data;
   } catch (error) {

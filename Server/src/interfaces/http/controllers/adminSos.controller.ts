@@ -18,7 +18,9 @@ export class AdminSosController implements IAdminSosController {
 
     const page = Number(parsed?.page) || 1;
     const status = (parsed?.status as string) || undefined;
-    const query: GetSosLogsQuery = { page, status };
+    const search = (parsed?.search as string) || undefined;
+    const sort = (parsed?.sort as 'newest' | 'oldest') || undefined;
+    const query: GetSosLogsQuery = { page, status, search, sort };
 
     const result = await this._getSosLogsUseCase.execute(query);
     const response = ApiResponse.success(result);

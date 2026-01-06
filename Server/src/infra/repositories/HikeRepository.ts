@@ -3,6 +3,9 @@ import { HikeLog } from '../../domain/entities/Hike';
 import { HikeLogModel, IHikeLog } from '../database/hikelog.model';
 import { hikeMapper } from '../mappers/hikeDomainMapper';
 import { MongoBaseRepository } from './BaseRepository';
+import { FilterQuery } from 'mongoose';
+
+type HikeQuery = FilterQuery<IHikeLog>;
 
 export class HikeRepository
   extends MongoBaseRepository<HikeLog, IHikeLog>
@@ -25,11 +28,19 @@ export class HikeRepository
     limit: number,
     skip: number,
     userId: string,
-    status?: string
+    status?: string,
+    search?: string
   ): Promise<HikeLog[]> {
-    const query: any = { userId };
+    const query: HikeQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
 
     const hikes = await this.model
@@ -39,10 +50,21 @@ export class HikeRepository
       .sort({ createdAt: -1 });
     return hikes.map(h => this.mapper.toDomain(h));
   }
-  async findCountUserHikes(userId: string, status?: string): Promise<number> {
-    const query: any = { userId };
+  async findCountUserHikes(
+    userId: string,
+    status?: string,
+    search?: string
+  ): Promise<number> {
+    const query: HikeQuery = { userId };
     if (status && status !== 'all') {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
     const hikesCount = await this.model.countDocuments(query);
     return hikesCount;
@@ -50,24 +72,41 @@ export class HikeRepository
   async findAllHikes(
     limit: number,
     skip: number,
-    status?: string
+    status?: string,
+    search?: string,
+    sort?: 'newest' | 'oldest'
   ): Promise<HikeLog[]> {
-    const query: any = {};
+    const query: HikeQuery = {};
     if (status) {
       query.status = status;
     }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
+    }
+    const sortOrder = sort === 'oldest' ? 1 : -1;
     const hikes = await this.model
       .find(query)
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: sortOrder });
 
     return hikes.map(h => this.mapper.toDomain(h));
   }
-  async countHikes(status?: string): Promise<number> {
-    const query: any = {};
+  async countHikes(status?: string, search?: string): Promise<number> {
+    const query: HikeQuery = {};
     if (status) {
       query.status = status;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { pickupAddress: regex },
+        { destinationAddress: regex },
+      ];
     }
     return await this.model.countDocuments(query);
   }

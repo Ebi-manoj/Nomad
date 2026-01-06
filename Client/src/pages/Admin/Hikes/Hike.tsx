@@ -6,6 +6,15 @@ import type { GetAdminHikesResDTO } from '@/types/adminHike';
 import { getAdminHikes } from '@/api/adminHike';
 import { HikeCard } from './HikeCard';
 import { useNavigate } from 'react-router-dom';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useDebounce } from 'use-debounce';
 
 type StatusFilter = 'all' | 'active' | 'completed' | 'cancelled';
 const PAGE_SIZE = 5;
@@ -15,13 +24,21 @@ export const AdminHikesPage = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hikeData, setHikeData] = useState<GetAdminHikesResDTO | undefined>();
+  const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 500);
+  const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHikes = async () => {
       setLoading(true);
       const statusParam = status === 'all' ? '' : status;
-      const data = await getAdminHikes(page, statusParam);
+      const data = await getAdminHikes(
+        page,
+        statusParam,
+        debouncedSearch,
+        sort
+      );
       if (data) {
         setHikeData(data);
       } else {
@@ -31,7 +48,11 @@ export const AdminHikesPage = () => {
     };
 
     fetchHikes();
-  }, [page, status]);
+  }, [page, status, debouncedSearch, sort]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, sort]);
 
   const filteredHikes = hikeData?.hikes ?? [];
 
@@ -57,8 +78,30 @@ export const AdminHikesPage = () => {
             </p>
           </div>
 
-          {/* Status Filter Tabs */}
-          <div className="flex p-1 gap-1 w-full sm:w-auto overflow-x-auto">
+          {/* Status Filter Tabs + Search + Sort */}
+          <div className="flex p-1 gap-2 w-full sm:w-auto overflow-x-auto items-center">
+            <Input
+              placeholder="Search pickup or destination"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-64"
+            />
+            <Select
+              value={sort}
+              onValueChange={v => setSort(v as 'newest' | 'oldest')}
+            >
+              <SelectTrigger className="w-36 cursor-pointer">
+                <SelectValue placeholder="Sort" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest" className="cursor-pointer">
+                  Newest
+                </SelectItem>
+                <SelectItem value="oldest" className="cursor-pointer">
+                  Oldest
+                </SelectItem>
+              </SelectContent>
+            </Select>
             {(
               ['all', 'cancelled', 'active', 'completed'] as StatusFilter[]
             ).map(s => (

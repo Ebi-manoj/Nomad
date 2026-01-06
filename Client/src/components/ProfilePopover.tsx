@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import { logout } from '@/store/features/auth/auth.thunks';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
-import { Crown } from 'lucide-react';
+import { Crown, TrendingUp } from 'lucide-react';
 
 export function ProfilePopover() {
   const dispatch = useAppDispatch();
@@ -110,6 +110,18 @@ export function ProfilePopover() {
               Subscription
             </span>
           </button>
+
+          {user?.role === 'user' && (
+            <button
+              className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
+              onClick={() => navigate('/insights')}
+            >
+              <span className="flex items-center gap-2">
+                <TrendingUp size={18} />
+                Insights
+              </span>
+            </button>
+          )}
 
           <button
             className="cursor-pointer flex justify-between items-center hover:bg-gray-100
