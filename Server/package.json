@@ -6,7 +6,7 @@
     "dev": "tsx --watch src/interfaces/express/settings/app.ts",
     "build": "tsc",
     "start": "node dist/interfaces/express/settings/app.js",
-    "typecheck": "tsc --pretty false --noEmit"
+    "typecheck": "tsc --pretty  --noEmit"
   },
   "keywords": [],
   "author": "",
