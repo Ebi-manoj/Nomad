@@ -83,7 +83,6 @@ export class HandleSubscriptionWebhookUseCase
   private async _handleCheckoutSessionCompleted(
     data: CheckoutSessionData
   ): Promise<void> {
-    console.log(data);
     const dto: CreateSubscriptionReqDTO = {
       userId: data.metadata.userId,
       planId: data.metadata.planId,

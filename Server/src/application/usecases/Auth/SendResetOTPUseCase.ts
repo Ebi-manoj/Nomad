@@ -36,7 +36,6 @@ export class SendResetOTPUseCase implements ISendResetOTPUseCase {
       emailVO.getValue(),
       otpVO.getValue()
     );
-    console.log(otp);
 
     return {
       message: SuccessMessages.OTP_SENT_SUCCESS,

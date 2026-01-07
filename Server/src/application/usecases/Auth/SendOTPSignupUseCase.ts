@@ -35,7 +35,7 @@ export class SendSignupOTPUseCase implements ISendSignupOTPUseCase {
       emailVO.getValue(),
       otpVO.getValue()
     );
-    console.log(otp);
+
     return {
       email: emailVO.getValue(),
       expiry: Date.now() + OTP_EXPIRY * 1000,

@@ -27,7 +27,7 @@ export class LoginUserUsecase implements ILoginUserUsecase {
   ) {}
 
   async execute(data: LoginUserRequestDTO): Promise<LoginuserResponseDTO> {
-    this._logger.info('Login UseCase executing with', data);
+    this._logger.info('Login UseCase executing with', { data });
     const email = new Email(data.email);
     const user = await this._userRepository.findByEmail(email.getValue());
     if (!user) throw new InvalidCredindatials();

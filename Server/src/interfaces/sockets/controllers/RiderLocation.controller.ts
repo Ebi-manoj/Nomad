@@ -23,7 +23,6 @@ export class RiderLocationController implements IRiderLocationController {
         }
       );
     } catch (error) {
-      console.log(error);
       await this._realtimeGateway.emitToSocket(
         socketId,
         'location:update:error',
