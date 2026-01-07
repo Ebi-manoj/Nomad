@@ -34,7 +34,7 @@ export function HikeDetailsMapper(
   booking: RideBooking | null,
   user: User | null,
   review: Review | null,
-  subscriptionTier?: SubscriptionTier
+  subscriptionTier?: string
 ): GetHikeDetailsResponseDTO {
   return {
     hikeId: hike.getHikeId()!,
