@@ -44,8 +44,6 @@ export class WithDrawMoneyUseCase implements IWithDrawMoneyUseCase {
       if (!wallet || wallet.getBalance() < MIN_PAYOUT_BALANCE)
         throw new InsufficientBalanceForWithDraw();
 
-      console.log(userId);
-
       const primaryBank = await this._bankRepository.findUserPrimary(userId);
       if (!primaryBank) throw new PrimaryAccountNotFound();
 

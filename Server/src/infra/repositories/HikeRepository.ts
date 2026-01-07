@@ -37,10 +37,7 @@ export class HikeRepository
     }
     if (search && search.trim()) {
       const regex = new RegExp(search.trim(), 'i');
-      query.$or = [
-        { pickupAddress: regex },
-        { destinationAddress: regex },
-      ];
+      query.$or = [{ pickupAddress: regex }, { destinationAddress: regex }];
     }
 
     const hikes = await this.model
@@ -61,10 +58,7 @@ export class HikeRepository
     }
     if (search && search.trim()) {
       const regex = new RegExp(search.trim(), 'i');
-      query.$or = [
-        { pickupAddress: regex },
-        { destinationAddress: regex },
-      ];
+      query.$or = [{ pickupAddress: regex }, { destinationAddress: regex }];
     }
     const hikesCount = await this.model.countDocuments(query);
     return hikesCount;
@@ -82,10 +76,7 @@ export class HikeRepository
     }
     if (search && search.trim()) {
       const regex = new RegExp(search.trim(), 'i');
-      query.$or = [
-        { pickupAddress: regex },
-        { destinationAddress: regex },
-      ];
+      query.$or = [{ pickupAddress: regex }, { destinationAddress: regex }];
     }
     const sortOrder = sort === 'oldest' ? 1 : -1;
     const hikes = await this.model
@@ -103,10 +94,7 @@ export class HikeRepository
     }
     if (search && search.trim()) {
       const regex = new RegExp(search.trim(), 'i');
-      query.$or = [
-        { pickupAddress: regex },
-        { destinationAddress: regex },
-      ];
+      query.$or = [{ pickupAddress: regex }, { destinationAddress: regex }];
     }
     return await this.model.countDocuments(query);
   }
@@ -124,7 +112,6 @@ export class HikeRepository
         },
       },
     ]);
-    console.log(result);
     const response = {
       active: 0,
       cancelled: 0,

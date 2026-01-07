@@ -25,7 +25,6 @@ export class UpdateLocationUseCase implements IUpdateLocationUseCase {
     // data.lng = 76.24;
     const deviation = await this.calculateDeviation(data);
     if (deviation > 2) {
-      console.log('Devaited true');
       this._realtimeGateway.emitToRoom('rider', data.rideId, 'ride:deviated', {
         message: 'Ride deviated',
       });
