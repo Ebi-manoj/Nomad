@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nomad-backend
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - REDIS_URI=redis://redis:6379
+
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    networks:
+      - nomad-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: nomad-redis
+    ports:
+      - '6379:6379'
+    networks:
+      - nomad-network
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+networks:
+  nomad-network:
+    driver: bridge
+
+volumes:
+  redis-data:
