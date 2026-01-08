@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { toast } from 'sonner';
 import { ErrorMessage } from '@/utils/constants';
+import { TableSkeleton } from './skeletons/TableSkeleton';
 
 type docTableProps = {
   documents: AdminDocument[];
@@ -21,7 +22,7 @@ type docTableProps = {
 
 export function DocumentTable({ documents, handleImageModal }: docTableProps) {
   const dispatch = useAppDispatch();
-  const { loading } = useSelector((state: RootState) => state.documents);
+  const { loading } = useSelector((state: RootState) => state.adminDocs);
   const handleVerify = async (data: verifyDocReqDTO) => {
     try {
       await dispatch(verifyDocument(data)).unwrap();
@@ -45,7 +46,10 @@ export function DocumentTable({ documents, handleImageModal }: docTableProps) {
           </tr>
         </thead>
         <tbody>
-          {documents.map((doc: AdminDocument) => (
+          {loading ? (
+            <TableSkeleton />
+          ) : (
+            documents.map((doc: AdminDocument) => (
             <tr
               key={doc.id}
               className="border-b last:border-none hover:bg-gray-50 transition-colors"
@@ -144,7 +148,8 @@ export function DocumentTable({ documents, handleImageModal }: docTableProps) {
                 </div>
               </td>
             </tr>
-          ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

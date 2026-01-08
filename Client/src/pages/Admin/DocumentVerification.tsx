@@ -7,6 +7,7 @@ import type { RootState } from '@/store/store';
 import axiosInstance from '@/utils/axiosInstance';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Pagination } from '@/components/Pagination';
 
 export default function DocumentVerification() {
   const [filters, setFilters] = useState({
@@ -15,9 +16,12 @@ export default function DocumentVerification() {
     status: 'All',
   });
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const LIMIT = 10;
   useEffect(() => {
     const timer = setTimeout(() => {
       setFilters(f => ({ ...f, q: search }));
+      setPage(1);
     }, 500);
     return () => clearTimeout(timer);
   }, [search]);
@@ -50,14 +54,15 @@ export default function DocumentVerification() {
   useEffect(() => {
     dispatch(
       fetchAllDocs({
-        page: 1,
+        page,
         search: filters.q,
         status:
           filters.status !== 'All' ? filters.status.toLowerCase() : undefined,
         type: filters.type !== 'All' ? filters.type.toLowerCase() : undefined,
+        limit: String(LIMIT),
       })
     );
-  }, [filters]);
+  }, [filters, page]);
 
   return (
     <main className="mx-auto w-full max-w-6xl">
@@ -81,7 +86,10 @@ export default function DocumentVerification() {
           />
           <select
             value={filters.type}
-            onChange={e => setFilters(f => ({ ...f, type: e.target.value }))}
+            onChange={e => {
+              setFilters(f => ({ ...f, type: e.target.value }));
+              setPage(1);
+            }}
             className="rounded-md border border-border bg-background px-3 py-2 text-sm"
           >
             <option>All</option>
@@ -90,7 +98,10 @@ export default function DocumentVerification() {
           </select>
           <select
             value={filters.status}
-            onChange={e => setFilters(f => ({ ...f, status: e.target.value }))}
+            onChange={e => {
+              setFilters(f => ({ ...f, status: e.target.value }));
+              setPage(1);
+            }}
             className="rounded-md border border-border bg-background px-3 py-2 text-sm"
           >
             <option>All</option>
@@ -102,6 +113,11 @@ export default function DocumentVerification() {
         <DocumentTable
           documents={documents}
           handleImageModal={handleOpenModal}
+        />
+        <Pagination
+          currentPage={page}
+          totalPages={page + (documents.length === LIMIT ? 1 : 0)}
+          onPageChange={setPage}
         />
       </section>
       <ImageModal
