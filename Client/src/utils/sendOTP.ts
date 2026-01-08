@@ -1,9 +1,9 @@
 import axiosInstance from '@/utils/axiosInstance';
 import type { emailFormData } from '@/validation/auth';
-import { handleApiError } from '../utils/HandleApiError';
+import { handleApiError } from './HandleApiError';
 import type { otpPurpose } from '@/types/auth';
 
-export async function useSendOTP(
+export async function SendOTP(
   data: emailFormData,
   purpose: otpPurpose
 ): Promise<{ success: boolean }> {

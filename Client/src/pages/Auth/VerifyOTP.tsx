@@ -11,7 +11,7 @@ import {
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSendOTP } from '@/hooks/useSendOTP';
+import { SendOTP } from '@/utils/sendOTP';
 import axiosInstance from '@/utils/axiosInstance';
 import { handleApiError } from '@/utils/HandleApiError';
 import type { otpPurpose } from '@/types/auth';
@@ -72,7 +72,7 @@ export const VerifyOTP = () => {
     if (!email || !purpose) return;
     try {
       setIsResending(true);
-      const result = await useSendOTP({ email }, purpose);
+      const result = await SendOTP({ email }, purpose);
       if (!result.success) return;
       initiliazeTimer();
     } finally {

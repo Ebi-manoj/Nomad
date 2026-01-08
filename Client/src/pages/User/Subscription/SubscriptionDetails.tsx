@@ -240,8 +240,20 @@ export const SubscriptionDetailsPage = ({
   );
 };
 
+interface FeatureItemProps {
+  label: string;
+  value: string | React.ReactNode;
+  icon: React.ReactNode;
+  highlight?: boolean;
+}
+
 // Small Sub-component for Feature Grid
-const FeatureItem = ({ label, value, icon, highlight = false }: any) => (
+const FeatureItem = ({
+  label,
+  value,
+  icon,
+  highlight = false,
+}: FeatureItemProps) => (
   <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
     <div className="flex items-center gap-2">
       {icon}

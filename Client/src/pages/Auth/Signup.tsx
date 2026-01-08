@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { emailSchema } from '../../validation/auth';
 import type { emailFormData } from '../../validation/auth';
-import { useSendOTP } from '@/hooks/useSendOTP';
+import { SendOTP } from '@/utils/sendOTP';
 
 export const Signup = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export const Signup = () => {
   } = useForm<emailFormData>({ resolver: zodResolver(emailSchema) });
 
   async function onSubmit(data: emailFormData) {
-    const result = await useSendOTP(data, 'signup');
+    const result = await SendOTP(data, 'signup');
     if (!result.success) return;
     navigate('/auth/verify-otp');
   }

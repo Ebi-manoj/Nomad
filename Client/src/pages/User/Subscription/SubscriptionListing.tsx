@@ -20,7 +20,7 @@ export const SubscriptionListing = ({
   tier: string;
 }) => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('MONTHLY');
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
 
   const [plans, setPlans] = useState<MappedPlan[]>([]);
 

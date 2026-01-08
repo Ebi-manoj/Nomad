@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (!token) {
           await dispatch(refreshToken()).unwrap();
         }
-      } catch (error) {}
+      } catch (_error) {}
 
       setIschecking(false);
     };

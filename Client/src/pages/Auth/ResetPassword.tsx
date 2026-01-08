@@ -1,6 +1,6 @@
 import { AuthInput } from '@/components/Input';
 import { SubmitBtn } from '@/components/SubmitBtn';
-import { useSendOTP } from '@/hooks/useSendOTP';
+import { SendOTP } from '@/utils/sendOTP';
 import { emailSchema, type emailFormData } from '@/validation/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -15,7 +15,7 @@ export const ResetPassword = () => {
   } = useForm<emailFormData>({ resolver: zodResolver(emailSchema) });
 
   async function onSubmit(data: emailFormData) {
-    const result = await useSendOTP(data, 'reset');
+    const result = await SendOTP(data, 'reset');
     if (!result.success) return;
     navigate('/auth/verify-otp');
   }

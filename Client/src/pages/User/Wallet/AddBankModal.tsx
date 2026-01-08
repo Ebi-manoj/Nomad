@@ -64,7 +64,7 @@ export const AddBankAccountModal = ({
       toast.error('Please enter a valid IFSC code');
       return;
     }
-    const { confirmAccountNumber, ...payload } = data;
+    const { confirmAccountNumber: _, ...payload } = data;
     try {
       await dispatch(addBankAccounts(payload)).unwrap();
       handleClose();
