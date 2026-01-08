@@ -1,4 +1,8 @@
-import { DashboardOverviewDTO, DashboardRange, RecentSOSDTO } from '../../../domain/dto/adminDashboardDTO';
+import {
+  DashboardOverviewDTO,
+  DashboardRange,
+  RecentSOSDTO,
+} from '../../../domain/dto/adminDashboardDTO';
 import { IUserRepository } from '../../repositories/IUserRepository';
 import { IRideRepository } from '../../repositories/IRideRepository';
 import { IHikeRepository } from '../../repositories/IHikeRepository';
@@ -38,19 +42,22 @@ export class GetDashboardOverviewUseCase {
       this._analyticsService.getTopPerformers(range),
       this._analyticsService.getStatusBreakdown(range),
       this._analyticsService.getQuickStats(range),
-      this._sosRepository.findAll(0, 3),
+      this._sosRepository.findAll(),
     ]);
 
     const recentSOS: RecentSOSDTO[] = await Promise.all(
       recentSOSLogs.map(async log => {
         const user = await this._userRepository.findById(log.getUserId());
-        const coords = log.getLocation()?.coordinates as [number, number] | undefined;
+        const coords = log.getLocation()?.coordinates as
+          | [number, number]
+          | undefined;
         return {
           id: log.getId()!,
           userName: user ? user.getFullName() : 'Unknown',
           role: log.getInitiatedBy(),
           location: coords ? { lat: coords[1], lng: coords[0] } : null,
-          status: log.getStatus() === SosLogStatus.RESOLVED ? 'resolved' : 'active',
+          status:
+            log.getStatus() === SosLogStatus.RESOLVED ? 'resolved' : 'active',
           createdAt: log.getCreatedAt().toISOString(),
         };
       })

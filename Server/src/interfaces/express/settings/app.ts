@@ -27,6 +27,7 @@ import cookieparser from 'cookie-parser';
 import { createServer } from 'http';
 import { SocketServer } from '../../sockets/socketInit';
 import { startSchedules } from '../../../infra/services/composer/scheduler.composer';
+import { env } from '../../../infra/utils/env';
 
 connectMongo();
 connectRedis();
@@ -45,6 +46,14 @@ app.use(
 
 SocketServer.init(server, ['http://localhost:5173']);
 startSchedules().start();
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'nomad-backend',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
@@ -70,4 +79,6 @@ app.use('/api/v1/admin/revenue', adminRevenueRouter);
 app.use(errorHandling);
 console.log('Listener count:', process.listenerCount('uncaughtException'));
 
-server.listen(3000, () => console.log('Server running on Port 3000'));
+server.listen(Number(env.PORT), '0.0.0.0', () =>
+  console.log(`Server running on Port ${env.PORT}`)
+);
