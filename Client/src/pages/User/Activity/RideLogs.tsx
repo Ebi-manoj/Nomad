@@ -9,6 +9,7 @@ import type { GetRidesResDTO } from '@/types/ride';
 import { getRides } from '@/api/ride';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
+import { ActivityListSkeleton } from '@/components/skeletons/ActivityListSkeleton';
 
 type StatusFilter = 'all' | 'active' | 'completed' | 'cancelled';
 
@@ -104,11 +105,7 @@ export const RideLogs = () => {
 
         {/* Compact Rides List */}
         <div className="space-y-2">
-          {loading && (
-            <p className="text-center text-sm text-muted-foreground">
-              Loading rides...
-            </p>
-          )}
+          {loading && <ActivityListSkeleton items={5} />}
 
           {!loading && rideData && rideData.rides.length === 0 && (
             <p className="text-center text-sm text-muted-foreground">

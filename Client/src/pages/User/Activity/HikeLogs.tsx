@@ -9,6 +9,7 @@ import { getHikes } from '@/api/hike';
 import { Pagination } from '@/components/Pagination';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
+import { ActivityListSkeleton } from '@/components/skeletons/ActivityListSkeleton';
 
 type StatusFilter = 'all' | 'active' | 'completed' | 'cancelled';
 
@@ -106,11 +107,7 @@ export const HikeLogs = () => {
 
         {/* Compact Hikes List */}
         <div className="space-y-2">
-          {loading && (
-            <p className="text-center text-sm text-muted-foreground">
-              Loading hikes...
-            </p>
-          )}
+          {loading && <ActivityListSkeleton items={5} />}
 
           {!loading && hikeData && hikeData.hikes.length === 0 && (
             <p className="text-center text-sm text-muted-foreground">
