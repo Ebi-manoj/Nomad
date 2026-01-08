@@ -6,7 +6,7 @@ import {
   getAdminSubscriptionPlansApi,
   toggleSubscriptionPlanStatusApi,
 } from '@/api/adminSubscriptionPlan';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 import type {
   AdminSubscriptionPlanDTO,
@@ -22,7 +22,7 @@ export const fetchAdminSubscriptionPlans = createAsyncThunk<
     const res = await getAdminSubscriptionPlansApi();
     return res;
   } catch (error) {
-    return useHandleThunkError(
+    return handleThunkError(
       error,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG
@@ -37,7 +37,7 @@ export const createSubscriptionPlan = createAsyncThunk<
   try {
     return await createSubscriptionPlanApi(data);
   } catch (error) {
-    return useHandleThunkError(
+    return handleThunkError(
       error,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG
@@ -52,7 +52,7 @@ export const editSubscriptionPlan = createAsyncThunk<
   try {
     return await editSubscriptionPlanApi(data);
   } catch (error) {
-    return useHandleThunkError(
+    return handleThunkError(
       error,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG
@@ -67,7 +67,7 @@ export const toggleSubscriptionPlanStatus = createAsyncThunk<
   try {
     return await toggleSubscriptionPlanStatusApi(data);
   } catch (error) {
-    return useHandleThunkError(
+    return handleThunkError(
       error,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG
@@ -81,7 +81,7 @@ export const deleteSubscriptionPlan = createAsyncThunk<
   try {
     return await deleteSubscriptionPlanApi(data);
   } catch (error) {
-    return useHandleThunkError(
+    return handleThunkError(
       error,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getSubscriptionDetailsApi } from '@/api/subscription';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 import type { GetSubscriptionDetailsResDTO } from '@/types/subscription';
 
@@ -11,7 +11,7 @@ export const fetchSubscriptionDetails = createAsyncThunk<
   try {
     return await getSubscriptionDetailsApi();
   } catch (error) {
-    return useHandleThunkError(
+    return handleThunkError(
       error,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG

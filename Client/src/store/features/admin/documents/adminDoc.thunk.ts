@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { fetchAllDocsQuery, verifyDocReqDTO } from './adminDoc';
 import { fetchAllDocsApi, verifyDocumentApi } from './adminDoc.api';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 
 export const fetchAllDocs = createAsyncThunk(
@@ -10,7 +10,7 @@ export const fetchAllDocs = createAsyncThunk(
     try {
       return await fetchAllDocsApi(query);
     } catch (error) {
-      useHandleThunkError(
+      handleThunkError(
         error,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG
@@ -25,7 +25,7 @@ export const verifyDocument = createAsyncThunk(
     try {
       return await verifyDocumentApi(data);
     } catch (error) {
-      useHandleThunkError(
+      handleThunkError(
         error,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG

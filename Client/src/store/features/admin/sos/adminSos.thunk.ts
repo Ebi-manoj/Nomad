@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { AdminSosLog, FetchAdminSosQuery } from './adminSos.d';
 import { fetchAdminSosApi, resolveSosApi } from './adminSos.api';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 
 export const fetchAdminSosLogs = createAsyncThunk(
@@ -10,7 +10,7 @@ export const fetchAdminSosLogs = createAsyncThunk(
     try {
       return await fetchAdminSosApi(query);
     } catch (error) {
-      return useHandleThunkError(
+      return handleThunkError(
         error,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG
@@ -25,7 +25,7 @@ export const resolveSosLog = createAsyncThunk<AdminSosLog, string>(
     try {
       return await resolveSosApi(id);
     } catch (error) {
-      return useHandleThunkError(
+      return handleThunkError(
         error,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG

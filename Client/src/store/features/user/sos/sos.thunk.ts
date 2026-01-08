@@ -6,7 +6,7 @@ import {
   editSosContactApi,
   deleteSosContactApi,
 } from './sos.api';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 import type { EditContactPayload } from './sos';
 
@@ -16,7 +16,7 @@ export const fetchSosContacts = createAsyncThunk<SosContactDTO[], void>(
     try {
       return await fetchSosContactsApi();
     } catch (err: unknown) {
-      return useHandleThunkError(
+      return handleThunkError(
         err,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG
@@ -32,7 +32,7 @@ export const addSosContact = createAsyncThunk<
   try {
     return await addSosContactApi(contact);
   } catch (err: unknown) {
-    return useHandleThunkError(
+    return handleThunkError(
       err,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG
@@ -47,7 +47,7 @@ export const editSosContact = createAsyncThunk<
   try {
     return await editSosContactApi(id, contact);
   } catch (err: unknown) {
-    return useHandleThunkError(
+    return handleThunkError(
       err,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG
@@ -62,7 +62,7 @@ export const deleteSosContact = createAsyncThunk<
   try {
     return await deleteSosContactApi(id);
   } catch (err: unknown) {
-    return useHandleThunkError(
+    return handleThunkError(
       err,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG

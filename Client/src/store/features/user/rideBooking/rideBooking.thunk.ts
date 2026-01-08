@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { BookingLiveResDTO, RideBookingResponseDTO } from './rideBooking';
 import { getRideBookingDetails, getRideBookingLive } from '@/api/rideBooking';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 
 export const getRideBookingThunk = createAsyncThunk<
@@ -11,11 +11,7 @@ export const getRideBookingThunk = createAsyncThunk<
   try {
     return await getRideBookingDetails(id);
   } catch (error) {
-    useHandleThunkError(
-      error,
-      rejectWithValue,
-      ErrorMessage.SOMETHING_WENT_WRONG
-    );
+    handleThunkError(error, rejectWithValue, ErrorMessage.SOMETHING_WENT_WRONG);
   }
 });
 
@@ -25,7 +21,7 @@ export const getBookingLiveThunk = createAsyncThunk<BookingLiveResDTO, string>(
     try {
       return await getRideBookingLive(id);
     } catch (error) {
-      useHandleThunkError(
+      handleThunkError(
         error,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG

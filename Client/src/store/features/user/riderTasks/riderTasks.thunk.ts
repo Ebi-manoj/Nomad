@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { completeTaskApi, getTasks } from '@/api/ride';
 import type { Task } from '@/types/task';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 import type { CompleteTaskReqDTO, CompleteTaskResponseDTO } from './riderTasks';
 
@@ -11,7 +11,7 @@ export const fetchRiderTasks = createAsyncThunk<Task[], string>(
     try {
       return await getTasks(rideId);
     } catch (error) {
-      return useHandleThunkError(
+      return handleThunkError(
         error,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG
@@ -27,7 +27,7 @@ export const completeTask = createAsyncThunk<
   try {
     return await completeTaskApi(data);
   } catch (error) {
-    return useHandleThunkError(
+    return handleThunkError(
       error,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG

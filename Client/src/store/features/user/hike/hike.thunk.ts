@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { CreateHikeDTO, HikeResponseDTO } from './hike';
 import { createHikeApi } from './hike.api';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 
 export const createHike = createAsyncThunk<HikeResponseDTO, CreateHikeDTO>(
@@ -10,7 +10,7 @@ export const createHike = createAsyncThunk<HikeResponseDTO, CreateHikeDTO>(
     try {
       return await createHikeApi(data);
     } catch (err: unknown) {
-      return useHandleThunkError(
+      return handleThunkError(
         err,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG

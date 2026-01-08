@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchUsersAPI, toggleBlockAPI } from './userSlice.api';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 import type { PaginationDTO } from '@/types/pagination';
 
@@ -10,11 +10,7 @@ export const fetchUsers = createAsyncThunk(
     try {
       return await fetchUsersAPI(data);
     } catch (error) {
-      useHandleThunkError(
-        error,
-        rejectWithValue,
-        ErrorMessage.FETCH_USERS_FAILED
-      );
+      handleThunkError(error, rejectWithValue, ErrorMessage.FETCH_USERS_FAILED);
     }
   }
 );
@@ -25,7 +21,7 @@ export const toggleBlock = createAsyncThunk(
     try {
       return await toggleBlockAPI(id);
     } catch (error) {
-      useHandleThunkError(
+      handleThunkError(
         error,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG

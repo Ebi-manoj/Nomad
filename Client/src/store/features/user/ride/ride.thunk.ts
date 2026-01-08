@@ -1,4 +1,4 @@
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { CreateRideDTO, RideData } from './ride';
@@ -10,7 +10,7 @@ export const createRide = createAsyncThunk<RideData, CreateRideDTO>(
     try {
       return await createRideApi(data);
     } catch (error: unknown) {
-      return useHandleThunkError(
+      return handleThunkError(
         error,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG

@@ -5,7 +5,7 @@ import {
   setPrimaryBankAccountApi,
   deleteBankAccountApi,
 } from './bankAccount.api';
-import { useHandleThunkError } from '@/hooks/useHandleThunkError';
+import { handleThunkError } from '@/utils/HandleThunkError';
 import { ErrorMessage } from '@/utils/constants';
 import type { BankAccountDTO, CreateBankAccountDTO } from './bankAccount';
 
@@ -15,7 +15,7 @@ export const fetchBankAccounts = createAsyncThunk<BankAccountDTO[], void>(
     try {
       return await fetchBankAccountsApi();
     } catch (err: unknown) {
-      return useHandleThunkError(
+      return handleThunkError(
         err,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG
@@ -30,7 +30,7 @@ export const addBankAccounts = createAsyncThunk<
   try {
     return await addBankAccountApi(data);
   } catch (err: unknown) {
-    return useHandleThunkError(
+    return handleThunkError(
       err,
       rejectWithValue,
       ErrorMessage.SOMETHING_WENT_WRONG
@@ -45,7 +45,7 @@ export const setPrimaryBankAccount = createAsyncThunk<string, string>(
       await setPrimaryBankAccountApi(accountId);
       return accountId;
     } catch (err: unknown) {
-      return useHandleThunkError(
+      return handleThunkError(
         err,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG
@@ -61,7 +61,7 @@ export const deleteBankAccount = createAsyncThunk<string, string>(
       await deleteBankAccountApi(accountId);
       return accountId;
     } catch (err: unknown) {
-      return useHandleThunkError(
+      return handleThunkError(
         err,
         rejectWithValue,
         ErrorMessage.SOMETHING_WENT_WRONG
