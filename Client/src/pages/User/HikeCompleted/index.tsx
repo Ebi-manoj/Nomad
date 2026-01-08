@@ -12,7 +12,7 @@ import {
 import type { GetHikeDetailsResponseDTO } from '@/types/hike';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getHikeDetails } from '@/api/hike';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { HomeSkeleton } from '@/components/skeletons/HomeSkeleton';
 import { formatDuration } from '@/utils/dateFormater';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
@@ -47,7 +47,7 @@ export const HikeCompletedPage = () => {
         console.log(data);
         setHikeDetails(data);
       } catch (error) {
-        useHandleApiError(error);
+        handleApiError(error);
       } finally {
         setLoading(false);
       }

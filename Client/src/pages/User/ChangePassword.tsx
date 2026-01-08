@@ -35,7 +35,7 @@ import {
 } from '@/validation/changePassword';
 import axiosInstance from '@/utils/axiosInstance';
 import { toast } from 'sonner';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 
 export const ChangePasswordPage = () => {
   const [showCurrent, setShowCurrent] = useState(false);
@@ -83,7 +83,7 @@ export const ChangePasswordPage = () => {
       toast.success('Password updated successfully');
       form.reset();
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   };
 

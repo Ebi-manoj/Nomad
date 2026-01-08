@@ -5,10 +5,9 @@ import { RideStats } from './RideStats';
 import type { RideData } from '@/store/features/user/ride/ride';
 import { endRide } from '@/api/ride';
 import { useNavigate } from 'react-router-dom';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-
 
 interface RidePanelProps {
   rideData: RideData;
@@ -30,7 +29,7 @@ export function RidePanel({
       await endRide(rideData.id);
       navigate(`/ride/${rideData.id}`, { replace: true });
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     } finally {
       setLoading(false);
     }
@@ -57,7 +56,7 @@ export function RidePanel({
           totalDistance={rideData?.totalDistance.toFixed(2)}
           costSharing={rideData?.costSharing}
         />
-   
+
         <Button
           className="mt-6 bg-gradient-to-r from-red-600 to-red-500 text-white font-semibold w-full py-3 rounded-xl shadow-md hover:shadow-lg
          hover:from-red-700 hover:to-red-600 transition cursor-pointer"

@@ -23,7 +23,7 @@ import { updateSeats } from '@/store/features/user/ride/rideSlice';
 import { SosButton } from '@/components/SosButton';
 import type { TriggerSosRiderDTO } from '@/types/sos';
 import { triggerSosRider } from '@/api/sos';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 
 export function RideStartedContent() {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
@@ -131,7 +131,7 @@ export function RideStartedContent() {
         description: 'Our support team reach you soon',
       });
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   };
 

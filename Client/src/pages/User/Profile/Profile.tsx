@@ -35,7 +35,7 @@ import {
 import { toast } from 'sonner';
 import axios from 'axios';
 import { profileImageSchema } from '@/validation/profileImage';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
@@ -110,7 +110,7 @@ export default function ProfilePage() {
       dispatch(setUser(res.user));
       toast.success('Profile photo updated');
     } catch (err) {
-      useHandleApiError(err);
+      handleApiError(err);
     } finally {
       setUploading(false);
       if (e.target) e.target.value = '';

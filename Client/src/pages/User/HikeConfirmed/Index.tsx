@@ -14,7 +14,7 @@ import type { ChatInterfaceProps } from '@/types/chat';
 import ChatInterface from '../../../components/ChatInterface';
 import { AlertCircle, CheckCircle, Loader2, RotateCw } from 'lucide-react';
 import { cancelBooking, markDropOff, reqCancel } from '@/api/rideBooking';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { GenericModal } from '@/components/GenericModel';
 import type { ReqCancelBookingResDTO } from '@/types/hike';
 import { RefundModel } from './RefundModel';
@@ -153,7 +153,7 @@ export const HikeStartedPage = () => {
       await markDropOff(bookingId);
       navigate(`/hike/${booking.rideBooking.hikeId}`, { replace: true });
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   };
 
@@ -170,7 +170,7 @@ export const HikeStartedPage = () => {
       setRefundData(data);
       setIsOpen(true);
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     } finally {
       setReqCancelLoading(false);
     }
@@ -183,7 +183,7 @@ export const HikeStartedPage = () => {
       await cancelBooking(bookingId);
       navigate(`/hike/${booking.rideBooking.hikeId}`, { replace: true });
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     } finally {
       setReqCancelLoading(false);
     }
@@ -200,7 +200,7 @@ export const HikeStartedPage = () => {
         description: 'Our support team reach you soon',
       });
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   };
 

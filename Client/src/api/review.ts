@@ -1,4 +1,4 @@
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import type { ApiResponse } from '@/types/ApiResponse';
 import type { RateUserReqDTO, ReviewResponseDTO } from '@/types/review';
 import axiosInstance from '@/utils/axiosInstance';
@@ -11,6 +11,6 @@ export const rateUser = async (data: RateUserReqDTO) => {
     );
     return res.data.data;
   } catch (error) {
-    useHandleApiError(error);
+    handleApiError(error);
   }
 };

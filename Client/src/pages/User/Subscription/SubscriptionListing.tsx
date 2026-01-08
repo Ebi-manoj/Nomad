@@ -9,7 +9,7 @@ import {
   getSubscriptionPlansApi,
 } from '@/api/subscription';
 import { mapSubscriptionPlans, type MappedPlan } from './planMapping';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { toast } from 'sonner';
 
 export const SubscriptionListing = ({
@@ -50,7 +50,7 @@ export const SubscriptionListing = ({
       const data = await getSubscriptionCheckout(dto);
       window.location.assign(data.url);
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   };
   return (

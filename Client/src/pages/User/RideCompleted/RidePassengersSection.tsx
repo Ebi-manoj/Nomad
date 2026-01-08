@@ -118,7 +118,7 @@ export const RidePassengersSection = ({
                     )
                   }
                 >
-                  {!!booking.review ? (
+                  {booking.review ? (
                     'Rated'
                   ) : (
                     <span className="flex items-center gap-1">

@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSendOTP } from '@/hooks/useSendOTP';
 import axiosInstance from '@/utils/axiosInstance';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import type { otpPurpose } from '@/types/auth';
 
 type VerifyOTPDTO = { otp: string; email: string };
@@ -64,7 +64,7 @@ export const VerifyOTP = () => {
         state: { email, token: resData.verificationToken },
       });
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   }
 

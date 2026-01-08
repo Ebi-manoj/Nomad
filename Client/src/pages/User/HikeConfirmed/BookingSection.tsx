@@ -11,7 +11,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { getRideBookingOTP } from '@/api/rideBooking';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { UserAvatar } from '@/components/ProfilePic';
 
 export type RideOTPState = {
@@ -46,7 +46,7 @@ export const BookingSection = ({
       const data = await getRideBookingOTP(rideBooking.bookingId);
       setRideOtp({ ...rideOtp, otp: data.otp });
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     } finally {
       setRideOtp(prev => {
         return { ...prev, loading: false };

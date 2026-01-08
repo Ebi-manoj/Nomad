@@ -7,7 +7,7 @@ import type { signupDetailsFormData } from '../../validation/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axiosInstance from '@/utils/axiosInstance';
 import { toast } from 'sonner';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { useEffect } from 'react';
 
 type RequestDTO = signupDetailsFormData & {
@@ -49,7 +49,7 @@ export const SignupDetails = () => {
       });
       navigate('/auth/sign-in');
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   }
 

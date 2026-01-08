@@ -1,7 +1,4 @@
-import type {
-  SubscriptionDTO,
-  GetSubscriptionDetailsResDTO,
-} from '@/types/subscription';
+import type { GetSubscriptionDetailsResDTO } from '@/types/subscription';
 
 export interface SubscriptionState {
   data: GetSubscriptionDetailsResDTO | null;

@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { joinRide } from '@/api/hike';
 import { toast } from 'sonner';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserAvatar } from '@/components/ProfilePic';
@@ -46,7 +46,7 @@ export function RideCard({
       setRequestStatus('pending');
       toast.success('Request sent to the rider');
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   };
   const navigate = useNavigate();

@@ -5,7 +5,7 @@ import { CurrentHikersList } from './CurrentHikersList';
 import type { RideRequestDTO } from '@/types/ride';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';
 import { acceptJoinRequest, declineJoinRequest } from '@/api/ride';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 
@@ -39,7 +39,7 @@ export function RideTabs({
         )
       );
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   };
 
@@ -52,7 +52,7 @@ export function RideTabs({
         )
       );
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   };
 

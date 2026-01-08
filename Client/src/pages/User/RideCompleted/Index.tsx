@@ -1,7 +1,7 @@
 import { getRideDetails } from '@/api/ride';
 import { rateUser } from '@/api/review';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { clearRideData } from '@/store/features/user/ride/rideSlice';
 import type { GetRideDetailsResDTO } from '@/types/ride';
 import { ReviewType, type RateUserReqDTO } from '@/types/review';
@@ -44,7 +44,7 @@ export const RideCompletedPage = () => {
         const data = await getRideDetails(rideId);
         setRideData(data);
       } catch (error) {
-        useHandleApiError(error);
+        handleApiError(error);
       }
     };
     fetch();
@@ -154,4 +154,4 @@ export const RideCompletedPage = () => {
       </div>
     </div>
   );
-}
+};

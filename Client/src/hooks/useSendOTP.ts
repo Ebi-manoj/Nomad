@@ -1,6 +1,6 @@
 import axiosInstance from '@/utils/axiosInstance';
 import type { emailFormData } from '@/validation/auth';
-import { useHandleApiError } from './useHandleApiError';
+import { handleApiError } from '../utils/HandleApiError';
 import type { otpPurpose } from '@/types/auth';
 
 export async function useSendOTP(
@@ -17,7 +17,7 @@ export async function useSendOTP(
     );
     return { success: true };
   } catch (error) {
-    useHandleApiError(error);
+    handleApiError(error);
     return { success: false };
   }
 }

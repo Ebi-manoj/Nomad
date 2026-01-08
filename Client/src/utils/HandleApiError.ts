@@ -2,7 +2,7 @@ import { ErrorMessage } from '@/utils/constants';
 import { isAxiosError } from 'axios';
 import { toast } from 'sonner';
 
-export function useHandleApiError(error: unknown) {
+export function handleApiError(error: unknown) {
   if (isAxiosError(error)) {
     const message =
       error.response?.data?.error?.message || ErrorMessage.SOMETHING_WENT_WRONG;

@@ -1,4 +1,4 @@
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import type { ApiResponse } from '@/types/ApiResponse';
 import type {
   AdminHikeDetailsResDTO,
@@ -23,7 +23,7 @@ export const getAdminHikes = async (
     );
     return res.data.data;
   } catch (error) {
-    useHandleApiError(error);
+    handleApiError(error);
   }
 };
 
@@ -37,6 +37,6 @@ export const getAdminHikeDetails = async (hikeId: string) => {
     );
     return res.data.data;
   } catch (error) {
-    useHandleApiError(error);
+    handleApiError(error);
   }
 };

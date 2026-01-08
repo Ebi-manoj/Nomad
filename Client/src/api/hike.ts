@@ -1,4 +1,4 @@
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import type { ApiResponse } from '@/types/ApiResponse';
 import type {
   CreateJoinRequestDTO,
@@ -32,14 +32,13 @@ export const getHikes = async (page = 1, status = '', search = '') => {
     });
     return res.data.data;
   } catch (error) {
-    useHandleApiError(error);
+    handleApiError(error);
   }
 };
 
 export const cancelHike = async (hikeId: string) => {
-  const res = await axiosInstance.post<ApiResponse<{ hikeId: string; status: string }>>(
-    CANCEL_HIKE_API,
-    { hikeId }
-  );
+  const res = await axiosInstance.post<
+    ApiResponse<{ hikeId: string; status: string }>
+  >(CANCEL_HIKE_API, { hikeId });
   return res.data.data;
 };

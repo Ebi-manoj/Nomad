@@ -1,8 +1,4 @@
-import type {
-  GetRideDetailsResDTO,
-  HikerMatchedDTO,
-  RideActivityItemDTO,
-} from '@/types/ride';
+import type { GetRideDetailsResDTO, RideActivityItemDTO } from '@/types/ride';
 import type { User } from '@/types/auth';
 
 export interface AdminRideResponseDTO extends RideActivityItemDTO {

@@ -1,6 +1,6 @@
 import { AuthInput } from '@/components/Input';
 import { SubmitBtn } from '@/components/SubmitBtn';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import axiosInstance from '@/utils/axiosInstance';
 import {
   changePasswordSchema,
@@ -43,7 +43,7 @@ export const ChangePassword = () => {
       toast.success(successMessage, { description: 'Login to continue' });
       navigate('/auth/sign-in');
     } catch (error) {
-      useHandleApiError(error);
+      handleApiError(error);
     }
   }
 

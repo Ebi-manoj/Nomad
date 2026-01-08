@@ -9,7 +9,7 @@ import { createPaymentIntent, getHikePayment } from '@/api/payment';
 import { PaymentNotFound } from './PaymentNotFound';
 import { PaymentExpired } from './PaymentExpired';
 import { PaymentSummary } from './PaymentSummary';
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import { Elements } from '@stripe/react-stripe-js';
 import {
   appearance,
@@ -55,7 +55,7 @@ export const Payment = () => {
       setShowPayment(true);
     } catch (error) {
       console.log(error);
-      useHandleApiError(error);
+      handleApiError(error);
     } finally {
       setLoading(false);
     }

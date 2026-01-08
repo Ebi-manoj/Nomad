@@ -1,4 +1,4 @@
-import { useHandleApiError } from '@/hooks/useHandleApiError';
+import { handleApiError } from '@/utils/HandleApiError';
 import type { ApiResponse } from '@/types/ApiResponse';
 import type {
   AcceptJoinResponseDTO,
@@ -88,6 +88,6 @@ export async function getRides(page = 1, status = '', search = '') {
     });
     return res.data.data;
   } catch (error) {
-    useHandleApiError(error);
+    handleApiError(error);
   }
 }
