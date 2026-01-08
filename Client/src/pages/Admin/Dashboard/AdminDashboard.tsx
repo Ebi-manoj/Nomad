@@ -25,6 +25,7 @@ import {
   LogOut,
   User,
   LockKeyhole,
+  Loader2,
 } from 'lucide-react';
 import {
   Popover,
@@ -56,12 +57,16 @@ export const AdminDashboard = () => {
   const [_loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
     try {
+      setLoggingOut(true);
       await dispatch(logout()).unwrap();
       navigate('/auth/sign-in', { replace: true });
-    } catch (_) {}
+    } catch (_) {
+      setLoggingOut(false);
+    }
   };
 
   useEffect(() => {
@@ -129,18 +134,24 @@ export const AdminDashboard = () => {
             >
               <div className="flex flex-col">
                 <button
-                  className="cursor-pointer w-full text-left flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors"
+                  disabled={loggingOut}
+                  className={`${loggingOut ? 'opacity-50' : 'cursor-pointer'} w-full text-left flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors`}
                   onClick={() => navigate('/admin/change-password')}
                 >
                   <LockKeyhole className="w-4 h-4" />
                   <span>Change Password</span>
                 </button>
                 <button
-                  className="cursor-pointer w-full text-left flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 text-red-600 transition-colors"
+                  disabled={loggingOut}
+                  className={`${loggingOut ? 'opacity-50' : 'cursor-pointer'} w-full text-left flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 text-red-600 transition-colors`}
                   onClick={handleLogout}
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
+                  {loggingOut ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <LogOut className="w-4 h-4" />
+                  )}
+                  <span>{loggingOut ? 'Logging out...' : 'Logout'}</span>
                 </button>
               </div>
             </PopoverContent>
