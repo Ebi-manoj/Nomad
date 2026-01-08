@@ -11,6 +11,7 @@ import {
 import { mapSubscriptionPlans, type MappedPlan } from './planMapping';
 import { handleApiError } from '@/utils/HandleApiError';
 import { toast } from 'sonner';
+import { SubscriptionListingSkeleton } from '@/components/skeletons/SubscriptionListingSkeleton';
 
 export const SubscriptionListing = ({
   handleBack,
@@ -20,7 +21,7 @@ export const SubscriptionListing = ({
   tier: string;
 }) => {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('MONTHLY');
-  const [_loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [plans, setPlans] = useState<MappedPlan[]>([]);
 
@@ -69,8 +70,12 @@ export const SubscriptionListing = ({
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        {loading ? (
+          <SubscriptionListingSkeleton />
+        ) : (
+          <>
+            {/* Header */}
+            <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-emerald-600 text-sm font-medium mb-4">
             <Zap className="w-4 h-4" />
             <span>Ride Smarter, Travel Further</span>
@@ -251,6 +256,8 @@ export const SubscriptionListing = ({
             <div className="h-8 w-24 bg-slate-200 rounded animate-pulse"></div>
           </div>
         </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SubscriptionListing } from './SubscriptionListing';
 import { SubscriptionDetailsPage } from './SubscriptionDetails';
-import { Loader2 } from 'lucide-react';
+import { SubscriptionDetailsSkeleton } from '@/components/skeletons/SubscriptionDetailsSkeleton';
 
 export const SubscriptionPage = () => {
   const [page, setPage] = useState<'list' | 'details'>('details');
@@ -14,11 +14,7 @@ export const SubscriptionPage = () => {
   const handleManage = () => setPage('list');
   const handleBack = () => setPage('details');
   if (loading || !data) {
-    return (
-      <div className="flex items-center w-full h-full justify-center">
-        <Loader2 className="bg-gray-400 animate-spin" />
-      </div>
-    );
+    return <SubscriptionDetailsSkeleton />;
   }
   return (
     <>
