@@ -46,6 +46,14 @@ app.use(
 
 SocketServer.init(server, ['http://localhost:5173']);
 startSchedules().start();
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'nomad-backend',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
