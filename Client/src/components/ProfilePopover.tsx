@@ -17,7 +17,8 @@ import { toast } from 'sonner';
 import { logout } from '@/store/features/auth/auth.thunks';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
-import { Crown, TrendingUp } from 'lucide-react';
+import { Crown, TrendingUp, Loader2 } from 'lucide-react';
+import { useState } from 'react';
 
 export function ProfilePopover() {
   const dispatch = useAppDispatch();
@@ -25,13 +26,16 @@ export function ProfilePopover() {
   const { user } = useSelector((state: RootState) => state.auth);
   const location = useLocation();
   const path = location.pathname;
+  const [loggingOut, setLoggingOut] = useState(false);
 
   async function handleLogout() {
     try {
+      setLoggingOut(true);
       await dispatch(logout()).unwrap();
       navigate('/auth/sign-in', { replace: true });
     } catch (error) {
       toast.error(typeof error == 'string' ? error : 'Logout Failed');
+      setLoggingOut(false);
     }
   }
   return (
@@ -72,65 +76,85 @@ export function ProfilePopover() {
 
         {/* Menu Options */}
         <div className="flex flex-col gap-3 text-sm">
-          <button
-            className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
-            onClick={() => navigate('/profile')}
-          >
-            <span className="flex items-center gap-2">
-              <RiProfileLine size={18} />
-              Profile management
-            </span>
-          </button>
-
-          <button
-            className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
-            onClick={() => navigate('/wallet')}
-          >
-            <span className="flex items-center gap-2">
-              <BsWallet2 size={18} />
-              Wallet management
-            </span>
-          </button>
-
-          <button
-            className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
-            onClick={() => navigate('/sos')}
-          >
-            <span className="flex items-center gap-2">
-              <IoIosWarning size={18} />
-              SOS
-            </span>
-          </button>
-          <button
-            className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
-            onClick={() => navigate('/subscriptions')}
-          >
-            <span className="flex items-center gap-2">
-              <Crown className="text-amber-500" size={18} />
-              Subscription
-            </span>
-          </button>
-
-          {user?.role === 'user' && (
+          <PopoverPrimitive.Close asChild>
             <button
-              className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
-              onClick={() => navigate('/insights')}
+              disabled={loggingOut}
+              className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => navigate('/profile')}
             >
               <span className="flex items-center gap-2">
-                <TrendingUp size={18} />
-                Insights
+                <RiProfileLine size={18} />
+                Profile management
               </span>
             </button>
+          </PopoverPrimitive.Close>
+
+          <PopoverPrimitive.Close asChild>
+            <button
+              disabled={loggingOut}
+              className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => navigate('/wallet')}
+            >
+              <span className="flex items-center gap-2">
+                <BsWallet2 size={18} />
+                Wallet management
+              </span>
+            </button>
+          </PopoverPrimitive.Close>
+
+          <PopoverPrimitive.Close asChild>
+            <button
+              disabled={loggingOut}
+              className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => navigate('/sos')}
+            >
+              <span className="flex items-center gap-2">
+                <IoIosWarning size={18} />
+                SOS
+              </span>
+            </button>
+          </PopoverPrimitive.Close>
+
+          <PopoverPrimitive.Close asChild>
+            <button
+              disabled={loggingOut}
+              className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => navigate('/subscriptions')}
+            >
+              <span className="flex items-center gap-2">
+                <Crown className="text-amber-500" size={18} />
+                Subscription
+              </span>
+            </button>
+          </PopoverPrimitive.Close>
+
+          {user?.role === 'user' && (
+            <PopoverPrimitive.Close asChild>
+              <button
+                disabled={loggingOut}
+                className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => navigate('/insights')}
+              >
+                <span className="flex items-center gap-2">
+                  <TrendingUp size={18} />
+                  Insights
+                </span>
+              </button>
+            </PopoverPrimitive.Close>
           )}
 
           <button
-            className="cursor-pointer flex justify-between items-center hover:bg-gray-100
-           rounded-md px-2 py-2 text-red-600 transition-colors"
+            disabled={loggingOut}
+            className="cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleLogout}
           >
             <span className="flex items-center gap-2">
-              <MdLogout size={18} />
-              Logout
+              {loggingOut ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <MdLogout size={18} />
+              )}
+              {loggingOut ? 'Logging out...' : 'Logout'}
             </span>
           </button>
         </div>
