@@ -37,7 +37,7 @@ export const RevenueDashboard: React.FC = () => {
   const [dateRange, setDateRange] = useState<DateRange>('monthly');
   const [showCustomDatePicker, setShowCustomDatePicker] = useState(false);
   const [overview, setOverview] = useState<RevenueOverviewDTO | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [fromDate, setFromDate] = useState('');

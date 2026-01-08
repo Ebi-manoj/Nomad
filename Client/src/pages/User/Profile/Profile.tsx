@@ -7,7 +7,6 @@ import {
   BadgeCheck,
   Bike,
   Lock,
-  Upload,
   Loader2,
   Camera,
 } from 'lucide-react';

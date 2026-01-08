@@ -1,11 +1,4 @@
-import {
-  MapPin,
-  MapPinOff,
-  Route,
-  MessageCircle,
-  Star,
-  CheckCircle,
-} from 'lucide-react';
+import { MapPin, MapPinOff, Route, MessageCircle, Star } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { GetHikersMatchedResponseDTO } from '@/types/matchedHiker';

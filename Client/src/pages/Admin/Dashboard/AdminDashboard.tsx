@@ -53,7 +53,7 @@ const initials = (name: string) =>
 export const AdminDashboard = () => {
   const [range, setRange] = useState<DashboardRange>('yearly');
   const [overview, setOverview] = useState<DashboardOverviewDTO | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
