@@ -35,16 +35,18 @@ const app = express();
 const server = createServer(app);
 app.use(cookieparser());
 
+const allowedOrgins = ['http://localhost:5173', env.CLIENT_URL];
+
 app.use('/api/v1/webhook', webhookRouter);
 app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:5173'],
+    origin: allowedOrgins,
   })
 );
 
-SocketServer.init(server, ['http://localhost:5173']);
+SocketServer.init(server, allowedOrgins);
 startSchedules().start();
 app.get('/health', (req, res) => {
   res.status(200).json({
