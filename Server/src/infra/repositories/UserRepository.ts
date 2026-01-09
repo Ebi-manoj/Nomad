@@ -30,15 +30,18 @@ export class MongoUserRepository
   async fetchUsers(
     limit: number,
     skip: number,
-    search?: string
+    search?: string,
+    sort?: 'newest' | 'oldest'
   ): Promise<User[] | []> {
-    const query: UserQuery = {
-    role: { $ne: 'admin' },
-  };
+    const query: UserQuery = { role: { $ne: 'admin' } };
     if (search) {
       query.fullName = { $regex: search, $options: 'i' };
     }
-    const users = await UserModel.find(query).skip(skip).limit(limit).lean();
+    const users = await UserModel.find(query)
+      .sort({ createdAt: sort === 'oldest' ? 1 : -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
     return users.map(userDoc => userMapper.toDomain(userDoc));
   }
   async countUsers(search?: string): Promise<number> {

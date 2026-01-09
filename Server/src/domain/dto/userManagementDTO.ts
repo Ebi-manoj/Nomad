@@ -4,6 +4,7 @@ export interface GetAllUsersRequestDTO {
   limit: number;
   page: number;
   search?: string;
+  sort?: 'newest' | 'oldest';
 }
 
 export interface GetAllUsersResponseDTO {

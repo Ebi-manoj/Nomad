@@ -10,9 +10,14 @@ export class GetAllUsersUseCase implements IGetAllUsersUseCase {
   constructor(private readonly _userRepository: IUserRepository) {}
 
   async execute(data: GetAllUsersRequestDTO): Promise<GetAllUsersResponseDTO> {
-    const { page, limit, search } = data;
+    const { page, limit, search, sort } = data;
     const skip = (page - 1) * limit;
-    const users = await this._userRepository.fetchUsers(limit, skip, search);
+    const users = await this._userRepository.fetchUsers(
+      limit,
+      skip,
+      search,
+      sort
+    );
     const mappedUsers = users.map(userDoc => userMapper(userDoc));
     const totalCount = await this._userRepository.countUsers(search);
     return {

@@ -21,9 +21,12 @@ export class userManagementController implements IUserManagementController {
     const parsed = httpRequest.query as Record<string, unknown>;
     const page = Number(parsed.page) || 1;
     const limit = Number(parsed.limit) || 2;
-    const search = parsed.search as string | undefined;
+    const rawSearch = (parsed.search as string | undefined) ?? undefined;
+    const trimmed = rawSearch?.toString().trim();
+    const search = trimmed ? trimmed : undefined;
+    const sortParam = (parsed.sort as string) === 'oldest' ? 'oldest' : 'newest';
 
-    const dto: GetAllUsersRequestDTO = { page, limit, search };
+    const dto: GetAllUsersRequestDTO = { page, limit, search, sort: sortParam };
     const result = await this._getAllUserUseCase.execute(dto);
     const response = ApiResponse.success<GetAllUsersResponseDTO>(result);
     return new HttpResponse(HttpStatus.OK, response);

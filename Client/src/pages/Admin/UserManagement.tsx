@@ -9,35 +9,71 @@ import type { RootState } from '@/store/store';
 import { useEffect, useState } from 'react';
 import type { PaginationDTO } from '@/types/pagination';
 import { fetchUsers } from '@/store/features/admin/users/usersSlice.thunk';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export const UserMangement = () => {
   const dispatch = useAppDispatch();
   const { totalPages } = useSelector((state: RootState) => state.users);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
   const limit = 10;
   useEffect(() => {
     const fetch = setTimeout(async () => {
       try {
-        const dto: PaginationDTO = { page: currentPage, limit, search };
+        const trimmed = search.trim();
+        const dto: PaginationDTO = {
+          page: currentPage,
+          limit,
+          search: trimmed ? trimmed : undefined,
+          sort,
+        };
         await dispatch(fetchUsers(dto));
       } catch (error) {}
     }, 400);
     return () => clearTimeout(fetch);
-  }, [currentPage, search]);
+  }, [currentPage, search, sort]);
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-        <Input
-          type="search"
-          placeholder="Search users"
-          className="pl-10"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative sm:w-80">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+          <Input
+            type="search"
+            placeholder="Search users"
+            className="pl-10"
+            value={search}
+            onChange={e => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
+        <div className="w-44">
+          <Select
+            value={sort}
+            onValueChange={v => {
+              setSort(v as 'newest' | 'oldest');
+              setCurrentPage(1);
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="newest">Newest</SelectItem>
+              <SelectItem value="oldest">Oldest</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <UserTable />
