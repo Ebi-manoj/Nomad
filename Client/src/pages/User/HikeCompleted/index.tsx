@@ -13,7 +13,7 @@ import type { GetHikeDetailsResponseDTO } from '@/types/hike';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getHikeDetails } from '@/api/hike';
 import { handleApiError } from '@/utils/HandleApiError';
-import { HomeSkeleton } from '@/components/skeletons/HomeSkeleton';
+import { DetailsPageSkeleton } from '@/components/skeletons/DetailsPageSkeleton';
 import { formatDuration } from '@/utils/dateFormater';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { clearHikeData } from '@/store/features/user/hike/hikeSlice';
@@ -34,7 +34,7 @@ export const HikeCompletedPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { hikeId } = useParams();
 
@@ -55,7 +55,7 @@ export const HikeCompletedPage = () => {
     fetch();
   }, [hikeId]);
 
-  if (loading) return <HomeSkeleton />;
+  if (loading) return <DetailsPageSkeleton />;
 
   if (!hikeDetails) return <div>Hike Details not Found</div>;
 

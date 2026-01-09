@@ -10,6 +10,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DetailsPageSkeleton } from '@/components/skeletons/DetailsPageSkeleton';
 import { RideCompletedHeader } from './RideCompletedHeader';
 import { RideSummarySection } from './RideSummarySection';
 import { RidePassengersSection } from './RidePassengersSection';
@@ -29,6 +30,7 @@ export const RideCompletedPage = () => {
     null
   );
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
   const handleRedirect = () => {
     navigate('/ride', { replace: true });
@@ -40,16 +42,20 @@ export const RideCompletedPage = () => {
   useEffect(() => {
     if (!rideId) return;
     const fetch = async () => {
+      setLoading(true);
       try {
         const data = await getRideDetails(rideId);
         setRideData(data);
       } catch (error) {
         handleApiError(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetch();
   }, []);
 
+  if (loading) return <DetailsPageSkeleton />;
   if (!rideData) return <div>No Ride Found</div>;
   const grossCollected = rideData.totalCostShared + rideData.platformFee;
   const netEarnings = rideData.totalCostShared;

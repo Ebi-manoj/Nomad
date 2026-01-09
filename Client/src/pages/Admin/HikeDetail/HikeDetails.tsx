@@ -17,13 +17,14 @@ import { getAdminHikeDetails } from '@/api/adminHike';
 import { SectionHeader } from './SectionHeader';
 import { InfoRow } from './InfoRow';
 import { UserProfileCard } from './UserProfileCard';
+import { DetailsPageSkeleton } from '@/components/skeletons/DetailsPageSkeleton';
 
 export default function AdminHikeDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [data, setData] = useState<AdminHikeDetailsResDTO | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
@@ -47,7 +48,9 @@ export default function AdminHikeDetailsPage() {
     navigate(-1);
   };
 
-  if (!data) return <>Not Found</>;
+  if (loading) return <DetailsPageSkeleton />;
+  if (!data && !loading) return <>Not Found</>;
+  if (!data) return null;
 
   return (
     <div className="min-h-screen font-sans">

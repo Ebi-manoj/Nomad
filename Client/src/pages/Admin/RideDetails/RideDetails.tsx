@@ -16,12 +16,13 @@ import { Badge } from '@/components/ui/badge';
 import { getStatusColor } from '@/utils/getStatusColor';
 import { InfoItem, MetricCard } from './RideDetailsComponents';
 import { HikersSection } from './HikersSection';
+import { DetailsPageSkeleton } from '@/components/skeletons/DetailsPageSkeleton';
 
 export default function AdminRideDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState<AdminRideDetailsResDTO | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
@@ -45,6 +46,7 @@ export default function AdminRideDetailsPage() {
     navigate(-1);
   };
 
+  if (loading) return <DetailsPageSkeleton />;
   if (!data && !loading) return <>Not Found</>;
   if (!data) return null;
 
