@@ -4,9 +4,10 @@ import { authComposer } from '../../../infra/services/composer/auth.composer';
 import { verifyEmailToken } from '../middlewares/verifyEmailToken';
 import { HttpStatus } from '../../../domain/enums/HttpStatusCode';
 import { authMiddleware } from '../middlewares/authMiddleware';
+import { env } from '../../../infra/utils/env';
 
 const router = express.Router();
-
+const isProdcution = process.env.NODE_ENV === 'production';
 router.post(
   '/signup',
   verifyEmailToken,
@@ -26,7 +27,7 @@ router.post('/login', async (req: Request, res: Response) => {
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none',
+    sameSite: isProdcution ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   return res
@@ -77,7 +78,7 @@ router.post('/logout', async (req: Request, res: Response) => {
   res.clearCookie('refreshToken', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none',
+    sameSite: isProdcution ? 'none' : 'lax',
   });
   res
     .status(HttpStatus.OK)
@@ -91,8 +92,8 @@ router.post('/google', async (req: Request, res: Response) => {
   const { accessToken, refreshToken, user } = adapter.body.data;
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none',
+    secure: isProdcution,
+    sameSite: isProdcution ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   return res
