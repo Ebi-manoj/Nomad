@@ -20,7 +20,7 @@ import { useRideRoute } from '@/context/RiderHikesRoutesContext';
 interface TaskCardProps {
   task: Task;
   displayPriority: number;
-  onComplete: (taskId: string, otp?: string) => void;
+  onComplete: (taskId: string, otp?: string) => Promise<void>;
 }
 
 export function TaskCard({ task, displayPriority, onComplete }: TaskCardProps) {
@@ -31,9 +31,9 @@ export function TaskCard({ task, displayPriority, onComplete }: TaskCardProps) {
     setIsCompleting(true);
     try {
       if (task.taskType === 'PICKUP') {
-        onComplete(task.id, otpInput);
+        await onComplete(task.id, otpInput);
       } else {
-        onComplete(task.id);
+        await onComplete(task.id);
       }
     } finally {
       setIsCompleting(false);

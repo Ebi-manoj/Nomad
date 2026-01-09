@@ -14,7 +14,7 @@ interface RideTabsProps {
   hikers: RideRequestDTO[];
   seatsRemaining: number;
   setRideRequest: React.Dispatch<React.SetStateAction<RideRequestDTO[]>>;
-  onCompleteTask: (taskId: string, otp?: string) => void;
+  onCompleteTask: (taskId: string, otp?: string) => Promise<void>;
   onChatClick: (hiker: GetHikersMatchedResponseDTO) => void;
   handleRefresh: () => void;
 }

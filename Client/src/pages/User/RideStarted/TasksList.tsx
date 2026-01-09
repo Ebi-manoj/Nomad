@@ -6,7 +6,7 @@ import { Package } from 'lucide-react';
 
 interface TasksListProps {
   tasks: Task[];
-  onCompleteTask: (taskId: string, otp?: string) => void;
+  onCompleteTask: (taskId: string, otp?: string) => Promise<void>;
 }
 
 export function TasksList({ tasks, onCompleteTask }: TasksListProps) {
