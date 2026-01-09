@@ -67,7 +67,9 @@ export const RideSummarySection = ({
         </div>
         <div>
           <h2 className="text-xl font-bold text-foreground">Trip Details</h2>
-          <p className="text-xs text-muted-foreground">ID: {rideData.rideId}</p>
+          <p className="text-xs text-muted-foreground">
+            ID: RID-{rideData.rideId.slice(-8).toUpperCase()}
+          </p>
         </div>
       </div>
 

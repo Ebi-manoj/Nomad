@@ -18,6 +18,9 @@ export const PaymentSuccess = ({
   const fullPageContainer =
     'min-h-screen w-full flex flex-col items-center justify-center p-4 text-center';
   const { width, height } = useWindowSize();
+  const formattedPaymentId = `PNX-${bookingDetails.paymentId
+    .slice(-8)
+    .toUpperCase()}`;
   return (
     <>
       <Confetti
@@ -64,7 +67,7 @@ export const PaymentSuccess = ({
            
               <p>
                 <span className="font-medium text-gray-800">Payment ID:</span>{' '}
-                {bookingDetails.paymentId}
+                {formattedPaymentId}
               </p>
               <p>
                 <span className="font-medium text-gray-800">Seats Booked:</span>{' '}

@@ -69,7 +69,7 @@ export default function AdminRideDetailsPage() {
               {endCity}
             </h1>
             <p className="text-sm text-gray-500 font-mono">
-              Ride ID: {data.rideId.slice(-8)} • Date:{' '}
+              Ride ID: RID-{data.rideId.slice(-8).toUpperCase()} • Date:{' '}
               {formatDate(data.createdAt)}
             </p>
           </div>
