@@ -1,7 +1,12 @@
 import z from 'zod';
 
 export const docSchema = z.object({
-  doc_number: z.string().min(5, { message: 'Provide a valid doc number' }),
+  doc_number: z
+    .string()
+    .min(5, { message: 'Provide a valid doc number' })
+    .refine(v => !/^[_\s]+$/.test(v.trim()), {
+      message: 'Provide a valid doc number',
+    }),
   file: z
     .any()
     .refine(file => file?.length > 0, 'Image is required')
