@@ -5,6 +5,7 @@ export const sosContactFormSchema = z.object({
     .string({ message: 'Name is required' })
     .trim()
     .min(2, { message: 'Name must be at least 2 characters' })
+    .max(50, { message: 'Maximum 50 characters' })
     .refine(v => !/^[_\s]+$/.test(v), {
       message: 'Invalid name',
     }),

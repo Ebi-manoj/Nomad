@@ -13,9 +13,15 @@ export const rideSchema = z.object({
   }),
   vehicleType: z.enum(['bike', 'car'], { message: 'Select vehicle type' }),
   seatsRequested: z.number().min(1).max(4),
-  hasHelmet: z.boolean().optional(), // optional, not required
-  vehicleModel: z.string().min(5, 'Vehicle model is required'),
-  vehicleNumber: z.string().min(5, 'Vehicle number is required'),
+  hasHelmet: z.boolean().optional(), 
+  vehicleModel: z
+    .string()
+    .min(5, 'Vehicle model is required')
+    .max(15, 'Maximum 15 characters'),
+  vehicleNumber: z
+    .string()
+    .min(5, 'Vehicle number is required')
+    .max(15, 'Maximum 15 characters'),
   costPerKm: z.number().min(1, 'Cost per km required').max(15, 'Max 15'),
 });
 

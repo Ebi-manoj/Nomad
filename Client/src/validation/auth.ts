@@ -5,6 +5,7 @@ export const signupDetailsSchema = z
     fullName: z
       .string()
       .min(3, { message: 'Name must be at least 3 characters long' })
+      .max(50, { message: 'Name must be at most 50 characters' })
       .regex(/^[A-Za-z ]+$/, 'Name must contain only letters and spaces'),
     mobile: z
       .string()

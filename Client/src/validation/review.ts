@@ -9,7 +9,7 @@ export const reviewSchema = z.object({
     .string()
     .trim()
     .min(10, { message: 'Please write at least 10 characters' })
-    .max(500, { message: 'Feedback must be under 500 characters' }),
+    .max(100, { message: 'Feedback must be under 100 characters' }),
 });
 
 export type ReviewFormData = z.infer<typeof reviewSchema>;

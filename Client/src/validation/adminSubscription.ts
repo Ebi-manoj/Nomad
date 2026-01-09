@@ -1,8 +1,19 @@
 import { z } from 'zod';
 
 export const subscriptionPlanSchema = z.object({
-  tier: z.string().min(1, 'Tier name is required'),
-  description: z.string().min(10, 'Description must be at least 10 characters'),
+  tier: z
+    .string()
+    .min(1, 'Tier name is required')
+    .max(50, 'Maximum 50 characters')
+    .regex(
+      /^(?=.*[A-Za-z])[A-Za-z ]+$/,
+      'Tier can contain only letters and spaces'
+    ),
+  description: z
+    .string()
+    .min(10, 'Description must be at least 10 characters')
+    .max(50, 'Maximum 50 characters')
+    .refine(v => /[A-Za-z]/.test(v), 'Description must include letters'),
   badgeColor: z
     .string()
     .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Invalid color'),

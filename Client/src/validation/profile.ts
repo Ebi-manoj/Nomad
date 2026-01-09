@@ -6,7 +6,10 @@ export const updateProfileSchema = z.object({
     .trim()
     .min(2, 'Full name must be at least 2 characters')
     .max(50, 'Full name is too long')
-    .refine(v => !/^[_\s]+$/.test(v), 'Invalid full name'),
+    .regex(
+      /^(?=.*[A-Za-z])[A-Za-z ]+$/,
+      'Full name can contain only letters and spaces'
+    ),
   mobile: z
     .union([z.string().trim().regex(/^[6-9]\d{9}$/, 'Invalid mobile number'), z.literal('')])
     .optional(),

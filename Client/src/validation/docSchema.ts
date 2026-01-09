@@ -4,6 +4,7 @@ export const docSchema = z.object({
   doc_number: z
     .string()
     .min(5, { message: 'Provide a valid doc number' })
+    .max(50, { message: 'Maximum 50 characters' })
     .refine(v => !/^[_\s]+$/.test(v.trim()), {
       message: 'Provide a valid doc number',
     }),
