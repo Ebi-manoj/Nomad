@@ -30,7 +30,6 @@ export class FindMatchRideUseCase implements IFindMatchRideUseCase {
     const activeRiders = await this._rideRepository.findActiveNearbyRiders(
       pickup
     );
-
     const filteredRidersMap = new Map<string, RideLog>();
 
     for (const ride of activeRiders) {

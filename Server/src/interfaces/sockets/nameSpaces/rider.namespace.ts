@@ -15,7 +15,6 @@ export function setupRiderNameSpace(
     });
 
     socket.on('ride:join', (rideId: string) => {
-      console.log('haaai');
       socket.join(rideId);
       console.log(`Rider ${socket.id} joined ride room: ${rideId}`);
     });

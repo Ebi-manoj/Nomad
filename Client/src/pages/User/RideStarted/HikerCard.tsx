@@ -1,4 +1,4 @@
-import { Check, X, MapPin, MapPinOff, Route, Clock } from 'lucide-react';
+import { Check, X, MapPin, MapPinOff, Route, Clock, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { RideRequestDTO } from '@/types/ride';
@@ -10,9 +10,11 @@ interface HikerCardProps {
   request: RideRequestDTO;
   onAccept: (requestId: string) => void;
   onDecline: (requestId: string) => void;
+  processingId?: string;
+  processingAction?: 'accept' | 'decline';
 }
 
-export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
+export function HikerCard({ request, onAccept, onDecline, processingId, processingAction }: HikerCardProps) {
   const { selectedHikerId, showRoute, hideRoute } = useRideRoute();
   const handleToggleRoute = () => {
     const route = {
@@ -142,20 +144,40 @@ export function HikerCard({ request, onAccept, onDecline }: HikerCardProps) {
                   <Button
                     onClick={() => onAccept(request.id)}
                     size="sm"
-                    className="h-7 px-2.5 bg-gradient-to-r cursor-pointer from-gray-900 to-black dark:from-gray-100 dark:to-white hover:from-black hover:to-gray-900 dark:hover:from-white dark:hover:to-gray-100 text-white dark:text-black text-[11px] min-w-0 shadow-sm hover:shadow transition-all duration-200"
+                    disabled={processingId === request.id}
+                    className="h-7 px-2.5 bg-gradient-to-r cursor-pointer from-gray-900 to-black dark:from-gray-100 dark:to-white hover:from-black hover:to-gray-900 dark:hover:from-white dark:hover:to-gray-100 text-white dark:text-black text-[11px] min-w-0 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
                   >
-                    <Check size={13} className="mr-1" />
-                    Accept
+                    {processingId === request.id && processingAction === 'accept' ? (
+                      <>
+                        <Loader2 size={13} className="mr-1 animate-spin" />
+                        Accepting...
+                      </>
+                    ) : (
+                      <>
+                        <Check size={13} className="mr-1" />
+                        Accept
+                      </>
+                    )}
                   </Button>
 
                   <Button
                     onClick={() => onDecline(request.id)}
                     variant="outline"
                     size="sm"
-                    className="h-7 px-2.5 border-red-200 cursor-pointer dark:border-red-900 text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-300 dark:hover:border-red-800 text-[11px] min-w-0 transition-all duration-200"
+                    disabled={processingId === request.id}
+                    className="h-7 px-2.5 border-red-200 cursor-pointer dark:border-red-900 text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-300 dark:hover:border-red-800 text-[11px] min-w-0 transition-all duration-200 disabled:opacity-60"
                   >
-                    <X size={13} className="mr-1" />
-                    Decline
+                    {processingId === request.id && processingAction === 'decline' ? (
+                      <>
+                        <Loader2 size={13} className="mr-1 animate-spin" />
+                        Declining...
+                      </>
+                    ) : (
+                      <>
+                        <X size={13} className="mr-1" />
+                        Decline
+                      </>
+                    )}
                   </Button>
                 </>
               )}

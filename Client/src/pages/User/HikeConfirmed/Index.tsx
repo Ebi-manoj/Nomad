@@ -33,6 +33,7 @@ export const HikeStartedPage = () => {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [reqCancelLoading, setReqCancelLoading] = useState(false);
+  const [dropoffLoading, setDropoffLoading] = useState(false);
   const [refundData, setRefundData] = useState<ReqCancelBookingResDTO | null>(
     null
   );
@@ -150,10 +151,13 @@ export const HikeStartedPage = () => {
   const handleMarkDropOff = async () => {
     if (!bookingId) return;
     try {
+      setDropoffLoading(true);
       await markDropOff(bookingId);
       navigate(`/hike/${booking.rideBooking.hikeId}`, { replace: true });
     } catch (error) {
       handleApiError(error);
+    } finally {
+      setDropoffLoading(false);
     }
   };
 
@@ -235,13 +239,23 @@ export const HikeStartedPage = () => {
             <button
               className="cursor-pointer group relative px-4 py-3 rounded-xl text-white font-bold overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleMarkDropOff}
+              disabled={dropoffLoading}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 bg-[length:200%_100%] group-hover:bg-[position:100%_0] transition-all duration-500" />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
 
               <div className="relative flex items-center justify-center gap-2">
-                <CheckCircle className="w-5 h-5 'group-hover:scale-110 transition-transform" />
-                <span className="text-base">Mark as Completed</span>
+                {dropoffLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span className="text-base">Marking...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <span className="text-base">Mark as Completed</span>
+                  </>
+                )}
               </div>
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-white/40 rounded-full blur-sm group-hover:w-full transition-all duration-300" />
             </button>

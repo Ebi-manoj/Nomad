@@ -8,6 +8,7 @@ import { acceptJoinRequest, declineJoinRequest } from '@/api/ride';
 import { handleApiError } from '@/utils/HandleApiError';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
+import { useState } from 'react';
 
 interface RideTabsProps {
   hikers: RideRequestDTO[];
@@ -30,8 +31,12 @@ export function RideTabs({
   const currentHikers = useSelector(
     (state: RootState) => state.matchedHikers.hikers
   );
+  const [processingId, setProcessingId] = useState<string | null>(null);
+  const [processingAction, setProcessingAction] = useState<'accept' | 'decline' | null>(null);
   const handleAccept = async (requestId: string) => {
     try {
+      setProcessingId(requestId);
+      setProcessingAction('accept');
       const data = await acceptJoinRequest(requestId);
       setRideRequest(prev =>
         prev.map(req =>
@@ -40,11 +45,16 @@ export function RideTabs({
       );
     } catch (error) {
       handleApiError(error);
+    } finally {
+      setProcessingId(null);
+      setProcessingAction(null);
     }
   };
 
   const handleDecline = async (requestId: string) => {
     try {
+      setProcessingId(requestId);
+      setProcessingAction('decline');
       await declineJoinRequest(requestId);
       setRideRequest(prev =>
         prev.map(req =>
@@ -53,6 +63,9 @@ export function RideTabs({
       );
     } catch (error) {
       handleApiError(error);
+    } finally {
+      setProcessingId(null);
+      setProcessingAction(null);
     }
   };
 
@@ -85,6 +98,8 @@ export function RideTabs({
           seatsRemaining={seatsRemaining}
           onAccept={handleAccept}
           onDecline={handleDecline}
+          processingId={processingId ?? undefined}
+          processingAction={processingAction ?? undefined}
           handleRefresh={handleRefresh}
         />
       </TabsContent>

@@ -11,6 +11,8 @@ interface HikerListProps {
   onDecline: (requestId: string) => void;
   isLoading?: boolean;
   handleRefresh: () => void;
+  processingId?: string;
+  processingAction?: 'accept' | 'decline';
 }
 
 export function HikerList({
@@ -20,6 +22,8 @@ export function HikerList({
   onDecline,
   isLoading = false,
   handleRefresh,
+  processingId,
+  processingAction,
 }: HikerListProps) {
   return (
     <Card className="h-full border border-gray-200 flex flex-col overflow-hidden w-full">
@@ -61,6 +65,8 @@ export function HikerList({
                     request={request}
                     onAccept={onAccept}
                     onDecline={onDecline}
+                    processingId={processingId}
+                    processingAction={processingAction}
                   />
                 ))
               ) : (
