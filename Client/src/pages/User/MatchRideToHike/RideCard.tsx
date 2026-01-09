@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Sparkles,
   ShieldCheck,
+  Loader2,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { CreateJoinRequestDTO, RideMatchResponseDTO } from '@/types/hike';
@@ -30,12 +31,14 @@ export function RideCard({
   const { hikeData } = useSelector((state: RootState) => state.hike);
   if (!hikeData) return;
   const [requestStatus, setRequestStatus] = useState(ride.requestStatus);
+  const [joinLoading, setJoinLoading] = useState(false);
   useEffect(() => {
     setRequestStatus(ride.requestStatus);
   }, [ride]);
 
   const handleJoinRide = async () => {
     try {
+      setJoinLoading(true);
       const payload: CreateJoinRequestDTO = {
         rideId: ride.rideId,
         hikeId: hikeData?.id,
@@ -47,6 +50,8 @@ export function RideCard({
       toast.success('Request sent to the rider');
     } catch (error) {
       handleApiError(error);
+    } finally {
+      setJoinLoading(false);
     }
   };
   const navigate = useNavigate();
@@ -167,10 +172,18 @@ export function RideCard({
 
         {requestStatus === null ? (
           <button
-            className="cursor-pointer flex-1 bg-black text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-900 transition-all duration-200 shadow-md active:scale-[0.98]"
+            className="cursor-pointer flex-1 bg-black text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-900 transition-all duration-200 shadow-md active:scale-[0.98] disabled:opacity-60"
             onClick={handleJoinRide}
+            disabled={joinLoading}
+            type="button"
           >
-            Join Ride
+            {joinLoading ? (
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" /> Sending...
+              </span>
+            ) : (
+              'Join Ride'
+            )}
           </button>
         ) : requestStatus === 'pending' ? (
           <div className="flex-1 flex items-center justify-center py-1.5 rounded-lg bg-amber-50 text-amber-700 font-semibold text-sm border border-amber-200 select-none">
