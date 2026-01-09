@@ -24,6 +24,7 @@ import { triggerSosHiker } from '@/api/sos';
 import { toast } from 'sonner';
 import { hikerSocket } from '@/config/socket';
 import DeviationAlertModal from './DeviationModel';
+import { setBookingStatus } from '@/store/features/user/rideBooking/rideBookingSlice';
 
 export const HikeStartedPage = () => {
   const [currLocation, setCurrLocation] = useState<{
@@ -103,9 +104,16 @@ export const HikeStartedPage = () => {
       }
     );
 
+    const handlePickedUp = () => {
+      dispatch(setBookingStatus('PICKED UP'));
+      toast.success('Pickup completed');
+    };
+    hikerSocket.on('ride:picked_up', handlePickedUp);
+
     return () => {
       hikerSocket.off('connect', onConnect);
       hikerSocket.off('ride:deviated');
+      hikerSocket.off('ride:picked_up', handlePickedUp);
     };
   }, [booking, hikerSocket]);
 

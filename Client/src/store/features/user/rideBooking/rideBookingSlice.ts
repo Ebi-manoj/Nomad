@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { RideBookingState } from './rideBooking';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { RideBookingState, RideBookingStatus } from './rideBooking';
 import { getBookingLiveThunk, getRideBookingThunk } from './rideBooking.thunk';
 
 const initialState: RideBookingState = {
@@ -11,7 +11,13 @@ const initialState: RideBookingState = {
 const rideBookingSlice = createSlice({
   name: 'rideBooking',
   initialState,
-  reducers: {},
+  reducers: {
+    setBookingStatus: (state, action: PayloadAction<RideBookingStatus>) => {
+      if (state.booking) {
+        state.booking.rideBooking.status = action.payload;
+      }
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getRideBookingThunk.pending, state => {
       state.loading = true;
@@ -40,3 +46,4 @@ const rideBookingSlice = createSlice({
 });
 
 export default rideBookingSlice.reducer;
+export const { setBookingStatus } = rideBookingSlice.actions;

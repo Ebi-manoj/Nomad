@@ -21,12 +21,14 @@ import { IRideBookingRepository } from '../../../repositories/IRideBooking';
 import { IRideRepository } from '../../../repositories/IRideRepository';
 import { ITaskRepository } from '../../../repositories/ITaskRepository';
 import { ICompleteTaskUseCase } from './ICompleteTaskUseCase';
+import { IRealtimeGateway } from '../../../providers/IRealtimeGateway';
 
 export class CompleteTaskUseCase implements ICompleteTaskUseCase {
   constructor(
     private readonly _taskRepository: ITaskRepository,
     private readonly _bookingRepository: IRideBookingRepository,
-    private readonly _rideRepository: IRideRepository
+    private readonly _rideRepository: IRideRepository,
+    private readonly _realtime: IRealtimeGateway
   ) {}
 
   async execute(data: CompleteTaskReqDTO): Promise<CompleteTaskResponseDTO> {
@@ -75,6 +77,20 @@ export class CompleteTaskUseCase implements ICompleteTaskUseCase {
       this._rideRepository.update(ride.getRideId(), ride),
     ]);
     if (!updatedTask || !updatedRide) throw new UpdateFailed();
+
+    
+    if (bookingStatus === RideBookingStatus.PICKEDUP) {
+      await this._realtime.emitToRoom(
+        '/hiker',
+        booking.getHikeId(),
+        'ride:picked_up',
+        {
+          bookingId: booking.getId(),
+          rideId: booking.getRideId(),
+          status: booking.getStatus(),
+        }
+      );
+    }
 
     return {
       taskId: updatedTask.getId()!,

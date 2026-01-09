@@ -7,12 +7,16 @@ import { RideBookingRepository } from '../../../repositories/RideBookingReposito
 import { RideRepository } from '../../../repositories/RideRepository';
 import { TaskRepository } from '../../../repositories/TaskRepository';
 import { MongoUserRepository } from '../../../repositories/UserRepository';
+import { SocketServer } from '../../../../interfaces/sockets/socketInit';
+import { SocketRealtimeGateway } from '../../../providers/SocketRealtimeGateway';
 
 export function taskComposer(): ITaskController {
   const userRepository = new MongoUserRepository();
   const rideRepository = new RideRepository();
   const taskRepository = new TaskRepository();
   const bookingRepository = new RideBookingRepository();
+  const io = SocketServer.getIo();
+  const realtimeGateway = new SocketRealtimeGateway(io);
 
   const getTasksUseCase = new GetTasksUseCase(
     taskRepository,
@@ -25,7 +29,8 @@ export function taskComposer(): ITaskController {
   const completeTaskUseCase = new CompleteTaskUseCase(
     taskRepository,
     bookingRepository,
-    rideRepository
+    rideRepository,
+    realtimeGateway
   );
 
   return new TaskController(
