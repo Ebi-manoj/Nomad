@@ -17,7 +17,7 @@ export const AuthLayout = () => {
 
       <main className="mx-auto max-w-5xl px-3 py-6 md:py-8">
         <section className="grid grid-cols-1 md:grid-cols-2 items-stretch">
-          <figure className="rounded-l-lg overflow-hidden">
+          <figure className="rounded-t-lg md:rounded-l-lg md:rounded-tr-none overflow-hidden">
             <img
               src={image}
               alt="Dark-themed ride-hailing app screens with teal accents"
@@ -25,7 +25,7 @@ export const AuthLayout = () => {
             />
           </figure>
 
-          <section className="rounded-r-lg border border-l-0 border-slate-800 bg-white backdrop-blur p-5 md:p-6 lg:p-8 flex">
+          <section className="rounded-b-lg md:rounded-r-lg md:rounded-bl-none border border-slate-800 border-t-0 md:border-t md:border-l-0 bg-white backdrop-blur p-5 md:p-6 lg:p-8 flex">
             <div className="w-full max-w-sm mx-auto">
               <div className="flex justify-center mb-4">
                 <div className="h-14 w-14 rounded-full grid place-content-center font-bold">
