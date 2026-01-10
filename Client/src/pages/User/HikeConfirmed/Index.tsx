@@ -285,7 +285,7 @@ export const HikeStartedPage = () => {
               </div>
             </button>
           )}
-          <SosButton handleClick={handleTriggerSos} />
+          
         </div>
       </div>
 
@@ -337,6 +337,7 @@ export const HikeStartedPage = () => {
           {refundData && <RefundModel refundData={refundData} />}
         </GenericModal>
       </div>
+      <SosButton className="bottom-6 right-6" handleClick={handleTriggerSos} />
     </div>
   );
 };

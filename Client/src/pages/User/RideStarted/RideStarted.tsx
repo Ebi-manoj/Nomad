@@ -238,9 +238,7 @@ export function RideStartedContent() {
         )}
       </AnimatePresence>
 
-      <div className="fixed rounded-full w-12 h-12 bottom-10 right-6 z-10 md:z-0">
-        <SosButton handleClick={handleTriggerSos} />
-      </div>
+      <SosButton className="bottom-10 right-6" handleClick={handleTriggerSos} />
     </div>
   );
 }
