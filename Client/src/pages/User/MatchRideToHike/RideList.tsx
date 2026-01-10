@@ -15,7 +15,7 @@ export function RideList({
   setSelectedRide: (ride: RideMatchResponseDTO) => void;
 }) {
   return (
-    <div className="w-[45%] h-screen flex flex-col border-r border-slate-200/60 bg-white/80 backdrop-blur-sm">
+    <div className="flex flex-col h-full bg-white/80 backdrop-blur-sm">
       <div className="bg-white/95 backdrop-blur-md px-5 py-4 border-b border-slate-200/60 flex items-center justify-between shadow-sm">
         <div>
           <h2 className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">

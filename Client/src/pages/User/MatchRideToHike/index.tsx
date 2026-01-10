@@ -6,10 +6,11 @@ import { FIND_MATCH_RIDES_API } from '@/api/hike';
 import { toast } from 'sonner';
 import type { RideMatchResponseDTO } from '@/types/hike';
 import type { RootState } from '@/store/store';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { HikePanel } from './HikePanel';
 import { TogglePanelButton } from './TogglePanelButton';
 import { RideList } from './RideList';
+import { ToggleRideButton } from './ToggleRideButton';
 import { MatchRideMap } from './MatchRideMap';
 import { useSocket } from '@/context/SocketContext';
 import type {
@@ -28,6 +29,7 @@ export function RideMatching() {
     null
   );
   const [loading, setLoading] = useState(false);
+  const [showRideList, setShowRideList] = useState(false);
 
   if (!hikeData) return <Navigate to="/hike" replace />;
   useEffect(() => {
@@ -108,14 +110,58 @@ export function RideMatching() {
         setShowHikePanel={setShowHikePanel}
       />
 
-      <div className="flex flex-1 h-screen">
-        <RideList
-          loading={loading}
-          availableRides={availableRides}
-          fetchRides={fetchRides}
-          setSelectedRide={setSelectedRide}
-        />
-        <div className="w-[55%] h-screen flex justify-center items-center bg-slate-50/30">
+      <ToggleRideButton
+        showRideList={showRideList}
+        setShowRideList={setShowRideList}
+        availableCount={availableRides.length}
+      />
+
+      <div className="flex flex-1 h-screen relative">
+        {/* Desktop Ride List */}
+        <div className="hidden md:block w-[45%] h-full border-r border-slate-200/60 relative z-10">
+          <RideList
+            loading={loading}
+            availableRides={availableRides}
+            fetchRides={fetchRides}
+            setSelectedRide={setSelectedRide}
+          />
+        </div>
+
+        {/* Mobile Ride List Drawer */}
+        <AnimatePresence>
+          {showRideList && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowRideList(false)}
+                className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 md:hidden"
+              />
+              {/* Drawer */}
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                className="fixed right-0 top-0 bottom-0 w-[85%] sm:w-[400px] bg-white z-40 md:hidden shadow-2xl border-l border-slate-200"
+              >
+                <div className="h-full pt-16 sm:pt-0">
+                  <RideList
+                    loading={loading}
+                    availableRides={availableRides}
+                    fetchRides={fetchRides}
+                    setSelectedRide={setSelectedRide}
+                  />
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Map Container - Full screen on mobile, Right side on desktop */}
+        <div className="w-full md:w-[55%] h-screen flex justify-center items-center bg-slate-50/30 absolute md:static inset-0 z-0">
           <MatchRideMap hike={hikeData} selectedRide={selectedRide} />
         </div>
       </div>
