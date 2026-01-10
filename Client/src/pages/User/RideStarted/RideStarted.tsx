@@ -24,10 +24,13 @@ import { SosButton } from '@/components/SosButton';
 import type { TriggerSosRiderDTO } from '@/types/sos';
 import { triggerSosRider } from '@/api/sos';
 import { handleApiError } from '@/utils/HandleApiError';
+import { ToggleRightPanelButton } from './ToggleRightPanelButton';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export function RideStartedContent() {
   const [showChat, setShowChat] = useState<ChatInterfaceProps | null>(null);
   const [showDetails, setShowDetails] = useState(true);
+  const [showRightPanel, setShowRightPanel] = useState(false);
   const { rideData } = useSelector((state: RootState) => state.ride);
   const [rideRequests, setRideRequest] = useState<RideRequestDTO[]>([]);
 
@@ -137,8 +140,15 @@ export function RideStartedContent() {
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-white text-black overflow-hidden relative">
-      {/* LEFT SECTION */}
+      <ToggleRightPanelButton
+        showRightPanel={showRightPanel}
+        setShowRightPanel={setShowRightPanel}
+        requestCount={rideRequests.length}
+      />
+
+      {/* LEFT SECTION WITH MAP AND PANEL */}
       <div className="relative flex-1 bg-gray-100 overflow-hidden">
+        {/* Toggle Button for Left Panel - Visible on Mobile if panel is hidden, or always on Desktop if panel hidden logic applies there (keeping existing logic for desktop, ensuring mobile access) */}
         {!showDetails && (
           <button
             onClick={() => setShowDetails(true)}
@@ -147,11 +157,15 @@ export function RideStartedContent() {
             <ArrowRightCircle size={22} />
           </button>
         )}
+        
+        {/* Map takes full space */}
         <RideMap
           pickup={rideData.pickupAddress}
           destination={rideData.destinationAddress}
           rideId={rideData.id}
         />
+
+        {/* Left Panel - Responsive Drawer */}
         <RidePanel
           rideData={rideData}
           showDetails={showDetails}
@@ -159,8 +173,8 @@ export function RideStartedContent() {
         />
       </div>
 
-      {/* RIGHT SIDEBAR */}
-      <div className="w-full sm:w-[600px] border-l border-gray-200 bg-white shadow-sm p-4 flex flex-col">
+      {/* RIGHT SIDEBAR - DESKTOP */}
+      <div className="hidden md:flex w-full sm:w-[500px] lg:w-[600px] border-l border-gray-200 bg-white shadow-sm p-4 flex-col z-20">
         {!showChat && (
           <RideTabs
             hikers={rideRequests}
@@ -180,7 +194,51 @@ export function RideStartedContent() {
           />
         )}
       </div>
-      <div className="fixed rounded-full w-12 h-12 bottom-10 right-6">
+
+      {/* RIGHT SIDEBAR - MOBILE DRAWER */}
+      <AnimatePresence>
+        {showRightPanel && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowRightPanel(false)}
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 md:hidden"
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-[85%] sm:w-[400px] bg-white z-40 md:hidden shadow-2xl border-l border-slate-200 flex flex-col pt-16"
+            >
+              <div className="flex-1 overflow-y-auto p-4">
+                  {!showChat && (
+                    <RideTabs
+                      hikers={rideRequests}
+                      seatsRemaining={rideData.seatsAvailable}
+                      setRideRequest={setRideRequest}
+                      onCompleteTask={handleCompleteTask}
+                      onChatClick={handleChatClick}
+                      handleRefresh={handleRefresh}
+                    />
+                  )}
+
+                  {showChat && (
+                    <ChatInterface
+                      onBack={handleChatBack}
+                      role={showChat.role}
+                      user={showChat.user}
+                    />
+                  )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <div className="fixed rounded-full w-12 h-12 bottom-10 right-6 z-10 md:z-0">
         <SosButton handleClick={handleTriggerSos} />
       </div>
     </div>

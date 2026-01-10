@@ -37,7 +37,7 @@ export function RidePanel({
 
   return (
     <div
-      className={`absolute top-0 left-0 h-full w-[400px] sm:w-[40%]
+      className={`absolute top-0 left-0 h-full w-[85%] sm:w-[400px]
       bg-gradient-to-br from-white/95 to-gray-100/90 backdrop-blur-lg
       border-r border-gray-300 shadow-[6px_0_30px_-10px_rgba(0,0,0,0.2)]
       z-40 transform transition-transform duration-500 ease-in-out
