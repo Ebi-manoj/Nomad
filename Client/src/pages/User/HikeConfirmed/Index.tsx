@@ -12,7 +12,7 @@ import { latlangFormat } from '@/utils/LatLangFormater';
 import { BookingSection } from './BookingSection';
 import type { ChatInterfaceProps } from '@/types/chat';
 import ChatInterface from '../../../components/ChatInterface';
-import { AlertCircle, CheckCircle, Loader2, RotateCw } from 'lucide-react';
+import { AlertCircle, CheckCircle, Loader2, RotateCw, Car } from 'lucide-react';
 import { cancelBooking, markDropOff, reqCancel } from '@/api/rideBooking';
 import { handleApiError } from '@/utils/HandleApiError';
 import { GenericModal } from '@/components/GenericModel';
@@ -230,62 +230,90 @@ export const HikeStartedPage = () => {
         />
       )}
       {/* Header */}
-      <div className="bg-white shadow-sm p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div>
-            <h1 className="text-lg font-semibold">Ride in Progress</h1>
-            <p className="text-sm text-gray-500">
-              Booking Number: {rideBooking.bookingNumber}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="px-3 py-1 bg-yellow-100 text-green-700 text-sm font-medium rounded-full">
-            {rideBooking.status}
-          </span>
-          {rideBooking.status == 'PICKED UP' ? (
-            <button
-              className="cursor-pointer group relative px-4 py-3 rounded-xl text-white font-bold overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleMarkDropOff}
-              disabled={dropoffLoading}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 bg-[length:200%_100%] group-hover:bg-[position:100%_0] transition-all duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-
-              <div className="relative flex items-center justify-center gap-2">
-                {dropoffLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span className="text-base">Marking...</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    <span className="text-base">Mark as Completed</span>
-                  </>
-                )}
+      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200/60 shadow-sm transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          {/* Title Section */}
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="bg-slate-900 text-white p-2.5 rounded-xl shadow-lg shadow-slate-900/20">
+              <Car
+                size={20}
+                className={
+                  rideBooking.status === 'PICKED UP' ? 'animate-pulse' : ''
+                }
+              />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold text-slate-900 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+                Ride in Progress
+              </h1>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 font-medium">
+                <span className="uppercase tracking-wider">ID:</span>
+                <span className="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">
+                  {rideBooking.bookingNumber}
+                </span>
               </div>
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-white/40 rounded-full blur-sm group-hover:w-full transition-all duration-300" />
-            </button>
-          ) : (
-            <button className="cursor-pointer group relative px-4 py-2 h-10 sm:h-11 rounded-xl text-white font-semibold overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-              <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-rose-600 to-red-600 bg-[length:200%_100%] group-hover:bg-[position:100%_0] transition-all duration-500" />
-              <div
-                className="relative flex items-center justify-center gap-2"
+            </div>
+          </div>
+
+          {/* Action & Status Section */}
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            <div
+              className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm border ${
+                rideBooking.status === 'PICKED UP'
+                  ? 'bg-blue-50 text-blue-700 border-blue-100'
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-100'
+              }`}
+            >
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  rideBooking.status === 'PICKED UP'
+                    ? 'bg-blue-500 animate-pulse'
+                    : 'bg-emerald-500'
+                }`}
+              />
+              {rideBooking.status}
+            </div>
+
+            {rideBooking.status == 'PICKED UP' ? (
+              <button
+                className="cursor-pointer group relative px-4 py-2 sm:py-2.5 rounded-xl text-white font-bold overflow-hidden shadow-lg hover:shadow-xl hover:shadow-emerald-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                onClick={handleMarkDropOff}
+                disabled={dropoffLoading}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600 bg-[length:200%_100%] group-hover:bg-[position:100%_0] transition-all duration-500" />
+                <div className="relative flex items-center justify-center gap-2">
+                  {dropoffLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Marking...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      <span>Complete Ride</span>
+                    </>
+                  )}
+                </div>
+              </button>
+            ) : (
+              <button
+                className="cursor-pointer group relative px-4 py-2 rounded-xl text-white font-semibold overflow-hidden shadow-md hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                 onClick={handleReqCancel}
               >
-                {reqCancelLoading ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  <>
-                    <AlertCircle className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                    <span className="text-sm sm:text-base">Cancel Ride</span>
-                  </>
-                )}
-              </div>
-            </button>
-          )}
-          
+                <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-rose-500 to-red-600 bg-[length:200%_100%] group-hover:bg-[position:100%_0] transition-all duration-500" />
+                <div className="relative flex items-center justify-center gap-2">
+                  {reqCancelLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      <AlertCircle className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                      <span>Cancel</span>
+                    </>
+                  )}
+                </div>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
