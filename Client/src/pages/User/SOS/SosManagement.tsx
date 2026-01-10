@@ -10,6 +10,10 @@ import {
   Shield,
   Pencil,
   ShieldAlert,
+  User,
+  Phone,
+  Mail,
+  Heart,
 } from 'lucide-react';
 import ContactCard from './ContactCard';
 import {
@@ -199,86 +203,115 @@ export const SosManagementPage = () => {
 
         {/* Add Contact Modal */}
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent>
+          <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              {!editContact && <DialogTitle>Add SOS contact</DialogTitle>}
-              {editContact && (
-                <DialogTitle className="flex gap-1 items-center">
-                  <Pencil size={20} />
-                  Edit SOS contact
-                </DialogTitle>
-              )}
+              <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+                {editContact ? (
+                  <>
+                    <Pencil className="h-5 w-5 text-nomad-dark" />
+                    Edit Contact
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="h-5 w-5 text-nomad-dark" />
+                    Add Emergency Contact
+                  </>
+                )}
+              </DialogTitle>
+              <p className="text-sm text-muted-foreground">
+                {editContact
+                  ? 'Update the details of your emergency contact.'
+                  : 'Add someone you trust to be notified in case of emergency.'}
+              </p>
             </DialogHeader>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Name
-                </label>
-                <Input
-                  type="text"
-                  {...register('name')}
-                  placeholder="Contact name"
-                />
-                {errors.name && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {errors.name.message}
-                  </p>
-                )}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 mt-4">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Full Name
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      {...register('name')}
+                      placeholder="e.g. John Doe"
+                      className="pl-9"
+                    />
+                  </div>
+                  {errors.name && (
+                    <p className="text-xs text-red-500 font-medium">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="tel"
+                      {...register('phone')}
+                      placeholder="e.g. +91 98765 43210"
+                      className="pl-9"
+                    />
+                  </div>
+                  {errors.phone && (
+                    <p className="text-xs text-red-500 font-medium">
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="email"
+                      {...register('email')}
+                      placeholder="e.g. john@example.com"
+                      className="pl-9"
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-xs text-red-500 font-medium">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Relation <span className="text-muted-foreground">(Optional)</span>
+                  </label>
+                  <div className="relative">
+                    <Heart className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      {...register('relation')}
+                      placeholder="e.g. Mother, Spouse, Friend"
+                      className="pl-9"
+                    />
+                  </div>
+                  {errors.relation && (
+                    <p className="text-xs text-red-500 font-medium">
+                      {errors.relation.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Phone
-                </label>
-                <Input
-                  type="tel"
-                  {...register('phone')}
-                  placeholder="Contact phone"
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Email
-                </label>
-                <Input
-                  type="email"
-                  {...register('email')}
-                  placeholder="Contact email"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Relation (optional)
-                </label>
-                <Input
-                  type="text"
-                  {...register('relation')}
-                  placeholder="e.g. Mother, Friend"
-                />
-                {errors.relation && (
-                  <p className="mt-1 text-xs text-red-500">
-                    {errors.relation.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-3 pt-4 border-t mt-6">
                 <Button
                   type="button"
                   variant="outline"
-                  className="cursor-pointer"
+                  className="cursor-pointer font-medium"
                   onClick={() => {
                     setOpen(false);
                     reset();
@@ -288,10 +321,17 @@ export const SosManagementPage = () => {
                 </Button>
                 <Button
                   type="submit"
-                  className="cursor-pointer"
+                  className="cursor-pointer font-medium min-w-[100px]"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Saving...' : 'Save contact'}
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-2">
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                      Saving
+                    </div>
+                  ) : (
+                    'Save Contact'
+                  )}
                 </Button>
               </div>
             </form>
