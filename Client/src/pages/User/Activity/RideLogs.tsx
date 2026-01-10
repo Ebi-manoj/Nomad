@@ -66,7 +66,7 @@ export const RideLogs = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto p-4 sm:p-6">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-foreground tracking-tight">
               Ride Logs
@@ -79,27 +79,29 @@ export const RideLogs = () => {
           </div>
 
           {/* Status Filter + Search */}
-          <div className="flex gap-2 items-center">
+          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center w-full sm:w-auto">
             <Input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search pickup or destination"
-              className="w-64"
+              className="w-full sm:w-64"
             />
-            {(['all', 'active', 'completed'] as StatusFilter[]).map(s => (
-              <Button
-                key={s}
-                size="sm"
-                variant={status === s ? 'default' : 'outline'}
-                className="cursor-pointer text-xs"
-                onClick={() => {
-                  setStatus(s);
-                  setPage(1);
-                }}
-              >
-                {s.charAt(0).toUpperCase() + s.slice(1)}
-              </Button>
-            ))}
+            <div className="flex gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
+              {(['all', 'active', 'completed'] as StatusFilter[]).map(s => (
+                <Button
+                  key={s}
+                  size="sm"
+                  variant={status === s ? 'default' : 'outline'}
+                  className="cursor-pointer text-xs whitespace-nowrap"
+                  onClick={() => {
+                    setStatus(s);
+                    setPage(1);
+                  }}
+                >
+                  {s.charAt(0).toUpperCase() + s.slice(1)}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
 
