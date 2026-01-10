@@ -19,7 +19,7 @@ export const UserNavbar = () => {
             </h1>
           </div>
 
-          <div className="hidden md:flex items-center space-x-20">
+          <div className="flex items-center gap-6 md:gap-20">
             <Link
               to={'/hike'}
               className={`flex items-center gap-1 text-gray-900 font-medium ${
@@ -40,9 +40,9 @@ export const UserNavbar = () => {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <NotificationBell />
-            <Link to={'/activity'}>
+            <Link to={'/activity'} className="hidden md:block">
               <button
                 className={`cursor-pointer flex items-center gap-1 pb-1   border-black hover:text-gray-600 rounded-lg font-medium transition-colors
                   ${path == '/activity' && 'border-b-2 rounded-b-none'}

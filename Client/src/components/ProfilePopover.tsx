@@ -5,6 +5,7 @@ import {
 } from '@/components/ui/popover';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { LuNotebookText } from 'react-icons/lu';
 import { FaUserLarge } from 'react-icons/fa6';
 import { MdLogout } from 'react-icons/md';
 import { BsWallet2 } from 'react-icons/bs';
@@ -142,6 +143,19 @@ export function ProfilePopover() {
               </button>
             </PopoverPrimitive.Close>
           )}
+
+          <PopoverPrimitive.Close asChild>
+            <button
+              disabled={loggingOut}
+              className="block md:hidden cursor-pointer flex justify-between items-center hover:bg-gray-100 rounded-md px-2 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => navigate('/activity')}
+            >
+              <span className="flex items-center gap-2">
+                <LuNotebookText size={18} />
+                Activity
+              </span>
+            </button>
+          </PopoverPrimitive.Close>
 
           <button
             disabled={loggingOut}
