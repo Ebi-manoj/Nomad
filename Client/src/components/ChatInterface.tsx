@@ -5,11 +5,11 @@ import { useSocket } from '@/context/SocketContext';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
 import { getChatMessages, sendChatMessage } from '@/api/chat';
-// --- 1. Helper Function ---
+
 const formatTime = (dateString?: string) => {
   if (!dateString) return '';
   const date = new Date(dateString);
-  // Returns format like "10:30 AM"
+
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
