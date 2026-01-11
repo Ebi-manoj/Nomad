@@ -3,7 +3,6 @@ import {
   MapPin,
   MapPinOff,
   Clock,
-  User,
   CheckCircle,
   Package,
   TrendingUp,
@@ -16,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { Task } from '@/types/task';
 import { useRideRoute } from '@/context/RiderHikesRoutesContext';
+import { UserAvatar } from '@/components/ProfilePic';
 
 interface TaskCardProps {
   task: Task;
@@ -119,11 +119,14 @@ export function TaskCard({ task, displayPriority, onComplete }: TaskCardProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center shadow-md">
-                  <User className="w-6 h-6 text-gray-600" />
-                </div>
+                <UserAvatar
+                  fullName={task.user.fullName}
+                  imageUrl={task.user.profilePic}
+                  showBadge={false}
+                  size="md"
+                />
                 {task.user.isVerified && (
-                  <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-0.5 shadow-md">
+                  <div className="absolute -bottom-1 -right-1 bg-blue-600 rounded-full p-0.5 shadow-sm border border-white">
                     <CheckCircle className="w-3.5 h-3.5 text-white" />
                   </div>
                 )}

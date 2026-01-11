@@ -57,7 +57,7 @@ export function ProfilePopover() {
         <div className="flex justify-between items-center mb-3">
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarImage src="" alt="Cristiano" />
+              <AvatarImage src={user?.profilePic} alt="Cristiano" />
               <AvatarFallback>
                 <div className="w-20 h-20 rounded-full bg-gray-400 flex items-center justify-center text-white">
                   {user?.fullName
