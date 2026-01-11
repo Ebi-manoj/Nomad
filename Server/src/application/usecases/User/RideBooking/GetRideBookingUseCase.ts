@@ -74,11 +74,12 @@ export class GetRideBookingUseCase implements IGetRideBookingUseCase {
       rideBooking: RideBookingMapper(booking),
       rider: {
         name: rider.getFullName(),
-        rating: 4.5,
+        rating: rider.getRating(),
         subscriptionTier: sub.tier,
         badgeColor: sub.subscription.getBadgeColor(),
         vehicleNumber: ride.getVehicleNumber(),
         vehicleModel: ride.getVehicleModel(),
+        profilePic: rider.getProfilePic() ?? '',
         currentLocation: riderLocationCoord,
       },
       rideDetails: {

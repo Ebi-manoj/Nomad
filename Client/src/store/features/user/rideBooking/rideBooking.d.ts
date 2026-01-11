@@ -30,6 +30,7 @@ export interface RideBookingResponseDTO {
     currentLocation: { lat: number; lng: number };
     subscriptionTier: SubscriptionTierType;
     badgeColor: string;
+    profilePic?: string;
   };
   rideDetails: {
     pickupAddress: string;
