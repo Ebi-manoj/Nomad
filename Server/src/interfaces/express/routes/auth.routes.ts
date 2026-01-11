@@ -29,6 +29,8 @@ router.post('/login', async (req: Request, res: Response) => {
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: '/',
+    ...(isProduction && { partitioned: true }),
   });
   return res
     .status(adapter.statusCode)
@@ -79,6 +81,8 @@ router.post('/logout', async (req: Request, res: Response) => {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'lax',
+    path: '/',
+    ...(isProduction && { partitioned: true }),
   });
   res
     .status(HttpStatus.OK)
@@ -95,6 +99,8 @@ router.post('/google', async (req: Request, res: Response) => {
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: '/',
+    ...(isProduction && { partitioned: true }),
   });
   return res
     .status(adapter.statusCode)
