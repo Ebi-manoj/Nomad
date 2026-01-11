@@ -172,8 +172,24 @@ export const RideSummarySection = ({
             <Star className="w-4 h-4 md:w-5 md:h-5 text-yellow-600 fill-yellow-600" />
           </div>
           <div>
-            <p className="text-muted-foreground text-[10px] md:text-sm">Your Rating</p>
-            <p className="font-semibold text-sm md:text-base text-foreground">4.8 / 5.0</p>
+            <p className="text-muted-foreground text-[10px] md:text-sm">
+              Your Rating Given
+            </p>
+            {rideData.hikersMatched.filter(h => h.review).length > 0 ? (
+              <p className="font-semibold text-sm md:text-base text-foreground">
+                {(
+                  rideData.hikersMatched
+                    .filter(h => h.review)
+                    .reduce((acc, current) => acc + (current.review?.rating || 0), 0) /
+                  rideData.hikersMatched.filter(h => h.review).length
+                ).toFixed(1)}{' '}
+                / 5.0
+              </p>
+            ) : (
+              <p className="text-[10px] md:text-xs text-muted-foreground italic mt-1">
+                Not reviewed yet
+              </p>
+            )}
           </div>
         </div>
       </div>

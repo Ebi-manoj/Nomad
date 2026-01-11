@@ -270,6 +270,24 @@ export const HikeCompletedPage = () => {
                     )}
                   </div>
                 </div>
+                {/* Trip Rating */}
+                <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
+                  <div className="w-9 h-9 bg-yellow-100 rounded-lg flex items-center justify-center shrink-0">
+                    <Star className="w-5 h-5 text-yellow-600 fill-yellow-600" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Your Trip Rating</p>
+                    {hikeDetails.review ? (
+                      <p className="font-semibold text-base">
+                        {hikeDetails.review.rating} / 5.0
+                      </p>
+                    ) : (
+                      <p className="text-xs text-gray-400 italic mt-1">
+                        Not reviewed yet
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 
