@@ -1,7 +1,7 @@
 export const SuccessHeader=()=>{
     return(
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-3">
+            <h1 className="text-2xl md:text-4xl font-bold mb-3">
               Journey <span className="text-emerald-500">completed</span>
               <span className="ml-2">🎉</span>
             </h1>

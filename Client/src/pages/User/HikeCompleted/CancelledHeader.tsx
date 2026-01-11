@@ -1,7 +1,7 @@
 export const CancelledHeader = () => {
   return (
     <div className="text-center mb-8">
-      <h1 className="text-4xl font-bold mb-3">
+      <h1 className="text-2xl md:text-4xl font-bold mb-3">
         Hike <span className="text-red-500">cancelled</span>
         <span className="ml-2">⚠️</span>
       </h1>

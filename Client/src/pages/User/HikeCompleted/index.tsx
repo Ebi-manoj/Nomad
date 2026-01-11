@@ -92,9 +92,9 @@ export const HikeCompletedPage = () => {
   }
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       {/* Header Section */}
-      <div className="bg-white  p-8 pb-4 mb-6 relative overflow-hidden">
+      <div className="bg-white p-4 md:p-8 pb-4 mb-6 relative overflow-hidden">
         <div className="relative z-10">
           {/* Success Badge */}
           {status === 'completed' && (
@@ -110,11 +110,11 @@ export const HikeCompletedPage = () => {
             </>
           )}
           {/* Trip Summary Card */}
-          <div className="flex gap-6 p-2">
+          <div className="flex flex-col md:flex-row gap-6">
             {/* Trip Summary */}
             <div
               className={`bg-white rounded-2xl p-6 text-black w-full ${
-                !hikeDetails.review && 'basis-[65%]'
+                !hikeDetails.review ? 'md:basis-[65%]' : ''
               } shadow-xs mx-auto`}
             >
               <div className="flex items-center gap-3 mb-5">
@@ -274,7 +274,7 @@ export const HikeCompletedPage = () => {
             {hikeDetails.bookingDetails &&
               hikeDetails.riderId &&
               !hikeDetails.review && (
-                <div className="bg-white rounded-2xl p-6 basis-[35%] shadow-xs flex justify-center items-center">
+                <div className="bg-white rounded-2xl p-6 md:basis-[35%] shadow-xs flex justify-center items-center">
                   <ReviewForm onSubmitted={reviewOnSubmit} />
                 </div>
               )}
