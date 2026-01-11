@@ -16,7 +16,7 @@ export function hikersMatchedMapper(
       subscriptionTier,
       badgeColor,
       rating: 4.5,
-      profilePic: '',
+      profilePic: user.getProfilePic() || '',
       isVerified: user.getIsVerifed(),
     },
     hikeDetails: {

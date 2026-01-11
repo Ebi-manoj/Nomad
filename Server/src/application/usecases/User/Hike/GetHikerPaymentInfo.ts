@@ -74,7 +74,7 @@ export class GetHikerPaymentInfoUseCase implements IGetHikerPaymentInfoUseCase {
     return {
       rider: {
         fullName: rider.getFullName(),
-        profilePic: '',
+        profilePic: rider.getProfilePic() || '',
         rating: 4.6,
       },
       route: {

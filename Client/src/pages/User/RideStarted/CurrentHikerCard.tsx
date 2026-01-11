@@ -53,6 +53,7 @@ export function CurrentHikerCard({
               subscriptionTier={hiker.user.subscriptionTier}
               badgeColor={hiker.user.badgeColor}
               showBadge
+              imageUrl={hiker.user.profilePic}
               fullName={hiker.user.fullName}
             />
           </div>
