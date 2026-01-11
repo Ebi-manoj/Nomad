@@ -243,7 +243,7 @@ export const HikeStartedPage = () => {
               />
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              <h1 className="text-lg sm:text-xl font-bold text-slate-900 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text">
                 Ride in Progress
               </h1>
               <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 font-medium">
@@ -317,25 +317,27 @@ export const HikeStartedPage = () => {
         </div>
       </div>
 
-      <div className="w-full mx-auto p-4 grid md:grid-cols-2 gap-4 items-stretch min-h-[80vh]">
-        {/* Left Panel */}
-        {!showChat && (
-          <BookingSection booking={booking} onChatClick={handleChatClick} />
-        )}
-        {showChat && (
-          <div className="space-y-4 h-full">
-            <ChatInterface
-              onBack={onChatBack}
-              role={showChat.role}
-              user={showChat.user}
-            />
-          </div>
-        )}
+      <div className="w-full mx-auto p-0 md:p-4 flex flex-col md:grid md:grid-cols-2 gap-0 md:gap-4 items-stretch">
+        {/* Left Panel (Booking/Chat) */}
+        <div className="order-2 md:order-1 w-full h-[calc(100vh-80px)] md:h-auto flex flex-col">
+          {!showChat && (
+            <BookingSection booking={booking} onChatClick={handleChatClick} />
+          )}
+          {showChat && (
+            <div className="w-full h-full">
+              <ChatInterface
+                onBack={onChatBack}
+                role={showChat.role}
+                user={showChat.user}
+              />
+            </div>
+          )}
+        </div>
 
         {/* Map Section */}
-        <div className="space-y-4 h-full relative">
+        <div className="order-1 md:order-2 w-full h-[calc(100vh-80px)] md:h-auto md:min-h-[80vh] relative space-y-0 md:space-y-4">
           <button
-            className="absolute bottom-2 left-2 z-10 bg-white rounded-full p-2 cursor-pointer"
+            className="absolute bottom-4 left-4 z-10 bg-white rounded-full p-2 cursor-pointer shadow-lg"
             onClick={handleRefresh}
           >
             <RotateCw size={20} />
