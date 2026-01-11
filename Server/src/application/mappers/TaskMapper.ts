@@ -15,7 +15,7 @@ export function GetTasksMapper(task: Task, user: User): GetTaskResponseDTO {
       fullName: user.getFullName(),
       isVerified: user.getAadhaarVerified() && user.getLicenceVerified(),
       rating: 4.5,
-      profilePic: '',
+      profilePic: user.getProfilePic() || '',
     },
   };
 }

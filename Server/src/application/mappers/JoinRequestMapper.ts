@@ -27,7 +27,7 @@ export function joinRequestMapper(
       id: user.getId()!,
       fullName: user.getFullName(),
       isVerified: user.getIsVerifed(),
-      profilePicture: '',
+      profilePicture: user.getProfilePic() || '',
       rating: 4.8,
       subscriptionTier: tier,
       badgeColor,

@@ -1,4 +1,12 @@
-import { Check, X, MapPin, MapPinOff, Route, Clock, Loader2 } from 'lucide-react';
+import {
+  Check,
+  X,
+  MapPin,
+  MapPinOff,
+  Route,
+  Clock,
+  Loader2,
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { RideRequestDTO } from '@/types/ride';
@@ -14,7 +22,13 @@ interface HikerCardProps {
   processingAction?: 'accept' | 'decline';
 }
 
-export function HikerCard({ request, onAccept, onDecline, processingId, processingAction }: HikerCardProps) {
+export function HikerCard({
+  request,
+  onAccept,
+  onDecline,
+  processingId,
+  processingAction,
+}: HikerCardProps) {
   const { selectedHikerId, showRoute, hideRoute } = useRideRoute();
   const handleToggleRoute = () => {
     const route = {
@@ -52,6 +66,7 @@ export function HikerCard({ request, onAccept, onDecline, processingId, processi
             <UserAvatar
               subscriptionTier={request.hiker.subscriptionTier}
               fullName={request.hiker.fullName}
+              imageUrl={request.hiker.profilePicture}
               badgeColor={request.hiker.badgeColor}
               showBadge
             />
@@ -108,13 +123,19 @@ export function HikerCard({ request, onAccept, onDecline, processingId, processi
               <div className="flex items-center justify-center gap-1 border-x border-gray-200 dark:border-gray-700 p-1">
                 <MdOutlineAirlineSeatReclineExtra />
                 <span>
-                  {seatsRequested} <span className="hidden sm:inline">seat{seatsRequested > 1 ? 's' : ''}</span>
+                  {seatsRequested}{' '}
+                  <span className="hidden sm:inline">
+                    seat{seatsRequested > 1 ? 's' : ''}
+                  </span>
                 </span>
               </div>
               {totalDistance && (
                 <div className="flex items-center justify-center gap-1 p-1">
                   <Route size={12} className="" />
-                  <span>{totalDistance.toFixed(1)} <span className="hidden sm:inline">km</span></span>
+                  <span>
+                    {totalDistance.toFixed(1)}{' '}
+                    <span className="hidden sm:inline">km</span>
+                  </span>
                 </div>
               )}
             </div>
@@ -146,7 +167,8 @@ export function HikerCard({ request, onAccept, onDecline, processingId, processi
                     disabled={processingId === request.id}
                     className="h-7 px-2.5 bg-gradient-to-r flex-1 min-w-[80px] cursor-pointer from-gray-900 to-black dark:from-gray-100 dark:to-white hover:from-black hover:to-gray-900 dark:hover:from-white dark:hover:to-gray-100 text-white dark:text-black text-[11px] shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
                   >
-                    {processingId === request.id && processingAction === 'accept' ? (
+                    {processingId === request.id &&
+                    processingAction === 'accept' ? (
                       <>
                         <Loader2 size={13} className="mr-1 animate-spin" />
                         Accepting...
@@ -166,7 +188,8 @@ export function HikerCard({ request, onAccept, onDecline, processingId, processi
                     disabled={processingId === request.id}
                     className="h-7 px-2.5 border-red-200 flex-1 min-w-[80px] cursor-pointer dark:border-red-900 text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-300 dark:hover:border-red-800 text-[11px] transition-all duration-200 disabled:opacity-60"
                   >
-                    {processingId === request.id && processingAction === 'decline' ? (
+                    {processingId === request.id &&
+                    processingAction === 'decline' ? (
                       <>
                         <Loader2 size={13} className="mr-1 animate-spin" />
                         Declining...
