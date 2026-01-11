@@ -9,6 +9,8 @@ import {
   Lock,
   Loader2,
   Camera,
+  Star,
+  Calendar,
 } from 'lucide-react';
 import { PiPersonSimpleHikeBold } from 'react-icons/pi';
 import { Field } from '@/components/ProfileInput';
@@ -168,21 +170,35 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 )}
-                <div>
-                  <p className="text-lg font-semibold leading-none">
-                    {user?.fullName}
-                  </p>
-                  <p className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
-                    <BadgeCheck
-                      className="size-4 text-chart-2"
-                      aria-hidden="true"
-                    />
-                    <span>
-                      Member since{' '}
-                      {user?.createdAt &&
-                        new Date(user?.createdAt).getFullYear()}
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center gap-2">
+                    <p className="text-lg font-semibold tracking-tight text-foreground">
+                      {user?.fullName}
+                    </p>
+                    {user?.aadhaarVerified && user?.licenceVerified && (
+                      <BadgeCheck className="size-5 text-blue-600 fill-blue-600/10" />
+                    )}
+                  </div>
+                  
+                  {user?.rating !== undefined && (
+                    <div className="flex items-center gap-2 py-0.5 text-muted-foreground/80">
+                      <div className="flex items-center justify-center p-0.5 bg-yellow-50/50 rounded-md shrink-0">
+                        <Star className="size-3 text-yellow-600/70 fill-yellow-500/10" />
+                      </div>
+                      <span className="text-xs">
+                        Rating: <span className="font-semibold text-foreground/80">{user.rating.toFixed(1)}</span>
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-2 py-0.5 text-muted-foreground/80">
+                    <div className="flex items-center justify-center p-0.5 bg-muted/50 rounded-md shrink-0">
+                      <Calendar className="size-3 text-foreground/50" />
+                    </div>
+                    <span className="text-xs">
+                      Nomad since {user?.createdAt && new Date(user?.createdAt).getFullYear()}
                     </span>
-                  </p>
+                  </div>
                 </div>
               </div>
 
