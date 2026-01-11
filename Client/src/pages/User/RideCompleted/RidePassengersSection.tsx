@@ -1,6 +1,7 @@
 import type { GetRideDetailsResDTO } from '@/types/ride';
 import { formatDate, formatDuration } from '@/utils/dateFormater';
 import { Users, Navigation, Clock, Star } from 'lucide-react';
+import { UserAvatar } from '@/components/ProfilePic';
 
 interface RidePassengersSectionProps {
   hikersMatched: GetRideDetailsResDTO['hikersMatched'];
@@ -47,9 +48,12 @@ export const RidePassengersSection = ({
             key={booking.bookingId}
             className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4 p-3 md:p-4 border rounded-xl bg-gradient-to-r from-muted/30 to-muted/10 hover:from-muted/50 hover:to-muted/30 transition-colors"
           >
-            <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white font-semibold text-xs md:text-sm flex-shrink-0">
-              {booking.hiker.profilePic}
-            </div>
+             <UserAvatar
+              fullName={booking.hiker.fullName}
+              imageUrl={booking.hiker.profilePic}
+              showBadge={false}
+              size="md"
+            />
             <div className="flex-1 min-w-0">
               <div className="flex items-center flex-wrap md:flex-nowrap gap-2">
                 <h4 className="font-semibold text-sm md:text-base text-foreground truncate">

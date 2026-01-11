@@ -4,7 +4,6 @@ import {
   Navigation,
   Clock,
   DollarSign,
-  User,
   Star,
   ArrowLeft,
   TicketPercent,
@@ -27,6 +26,7 @@ import { ReviewType, type RateUserReqDTO } from '@/types/review';
 import { rateUser } from '@/api/review';
 import { toast } from 'sonner';
 import type { ReviewFormData } from '@/validation/review';
+import { UserAvatar } from '@/components/ProfilePic';
 
 export const HikeCompletedPage = () => {
   const [hikeDetails, setHikeDetails] =
@@ -249,9 +249,12 @@ export const HikeCompletedPage = () => {
 
                 {/* Rider */}
                 <div className="flex items-start gap-3 p-4 border rounded-xl bg-gray-50">
-                  <div className="w-9 h-9 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <User className="w-5 h-5 text-yellow-600" />
-                  </div>
+                  <UserAvatar
+                    fullName={hikeDetails.rider?.fullname ?? 'N/A'}
+                    imageUrl={hikeDetails.rider?.profilePic}
+                    showBadge={false}
+                    size="sm"
+                  />
                   <div>
                     <p className="text-gray-500 text-sm">Rider</p>
                     <p className="font-semibold text-base">
