@@ -12,7 +12,7 @@ import { latlangFormat } from '@/utils/LatLangFormater';
 import { BookingSection } from './BookingSection';
 import type { ChatInterfaceProps } from '@/types/chat';
 import ChatInterface from '../../../components/ChatInterface';
-import { AlertCircle, CheckCircle, Loader2, RotateCw, Car } from 'lucide-react';
+import { AlertCircle, CheckCircle, Loader2, Car, RotateCw } from 'lucide-react';
 import { cancelBooking, markDropOff, reqCancel } from '@/api/rideBooking';
 import { handleApiError } from '@/utils/HandleApiError';
 import { GenericModal } from '@/components/GenericModel';
@@ -47,6 +47,7 @@ export const HikeStartedPage = () => {
     data: null,
     message: '',
   });
+  const [refreshing, setRefreshing] = useState(false);
   const dispatch = useAppDispatch();
   const { bookingId } = useParams();
   const { booking, loading } = useSelector(
@@ -169,9 +170,11 @@ export const HikeStartedPage = () => {
     }
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     if (!bookingId) return;
-    dispatch(getBookingLiveThunk(bookingId));
+    setRefreshing(true);
+    await dispatch(getBookingLiveThunk(bookingId));
+    setRefreshing(false);
   };
 
   const handleReqCancel = async () => {
@@ -321,7 +324,10 @@ export const HikeStartedPage = () => {
         {/* Left Panel (Booking/Chat) */}
         <div className="order-2 md:order-1 w-full h-[calc(100vh-80px)] md:h-auto flex flex-col">
           {!showChat && (
-            <BookingSection booking={booking} onChatClick={handleChatClick} />
+            <BookingSection
+              booking={booking}
+              onChatClick={handleChatClick}
+            />
           )}
           {showChat && (
             <div className="w-full h-full">
@@ -337,10 +343,11 @@ export const HikeStartedPage = () => {
         {/* Map Section */}
         <div className="order-1 md:order-2 w-full h-[calc(100vh-80px)] md:h-auto md:min-h-[80vh] relative space-y-0 md:space-y-4">
           <button
-            className="absolute bottom-4 left-4 z-10 bg-white rounded-full p-2 cursor-pointer shadow-lg"
+            className={`absolute bottom-4 left-4 z-10 bg-white rounded-full p-2 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 ${refreshing ? 'opacity-80 cursor-not-allowed' : ''}`}
             onClick={handleRefresh}
+            disabled={refreshing}
           >
-            <RotateCw size={20} />
+            <RotateCw size={20} className={`${refreshing ? 'animate-spin' : ''}`} />
           </button>
           <HikeStartedMap
             bookingStatus={rideBooking.status}

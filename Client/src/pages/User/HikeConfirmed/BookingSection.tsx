@@ -83,13 +83,15 @@ export const BookingSection = ({
               </div>
             </div>
             
-            <button
-              className="p-3 bg-slate-900 text-white rounded-xl shadow-lg shadow-slate-900/20 hover:scale-105 hover:bg-black transition-all duration-300 cursor-pointer group"
-              onClick={onChatClick}
-              aria-label="Chat"
-            >
-              <MessageCircle className="w-5 h-5 group-hover:rotate-[-10deg] transition-transform" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                className="p-3 bg-slate-900 text-white rounded-xl shadow-lg shadow-slate-900/20 hover:scale-105 hover:bg-black transition-all duration-300 cursor-pointer group"
+                onClick={onChatClick}
+                aria-label="Chat"
+              >
+                <MessageCircle className="w-5 h-5 group-hover:rotate-[-10deg] transition-transform" />
+              </button>
+            </div>
           </div>
         </div>
 
