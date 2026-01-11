@@ -20,16 +20,16 @@ export const RideCompletedHeader = ({
         </div>
       </div>
 
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-foreground mb-3">
+      <div className="text-center mb-8 px-2">
+        <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-3 leading-tight">
           Ride <span className="text-blue-600">delivered</span>
           <span className="ml-2">🚗</span>
         </h1>
-        <p className="text-muted-foreground text-lg">
+        <p className="text-muted-foreground text-base md:text-lg">
           Excellent work! You've earned{' '}
           <span className="font-bold text-green-600">₹{totalCostShared}</span>
         </p>
-        <p className="text-muted-foreground text-sm mt-1">
+        <p className="text-muted-foreground text-xs md:text-sm mt-1">
           Thanks for being a reliable Nomad driver
         </p>
       </div>

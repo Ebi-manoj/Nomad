@@ -112,14 +112,14 @@ export const RideCompletedPage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header Section */}
-      <div className="bg-card p-8 pb-4 mb-6 relative overflow-hidden">
+      <div className="bg-card p-4 md:p-8 pb-4 mb-6 relative overflow-hidden">
         <div className="relative z-10">
           <RideCompletedHeader totalCostShared={rideData.totalCostShared} />
 
           {/* Main Content Grid */}
-          <div className="flex gap-6 max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto">
             {/* Ride Summary - Left Side */}
-            <div className="bg-card rounded-2xl p-6 border shadow-sm w-full">
+            <div className="bg-card rounded-2xl p-4 md:p-6 border shadow-sm w-full">
               <RideSummarySection
                 rideData={rideData}
                 grossCollected={grossCollected}
@@ -137,7 +137,7 @@ export const RideCompletedPage = () => {
 
           {/* Back Button */}
           <button
-            className="cursor-pointer flex items-center justify-center gap-2 mx-auto mt-8 text-muted-foreground hover:text-foreground font-medium transition-colors group"
+            className="cursor-pointer flex items-center justify-center gap-2 mx-auto mt-6 md:mt-8 text-muted-foreground hover:text-foreground font-medium transition-colors group"
             onClick={handleRedirect}
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
